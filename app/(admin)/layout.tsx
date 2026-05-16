@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const { sessionClaims } = await auth()
-  if (sessionClaims?.metadata?.role !== 'admin') redirect('/')
+  const role = (sessionClaims?.metadata as { role?: string } | undefined)?.role
+  if (role !== 'admin') redirect('/')
   return <>{children}</>
 }
