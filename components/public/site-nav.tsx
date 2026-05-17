@@ -2,9 +2,12 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import { useAuth } from '@clerk/nextjs'
 
 export function SiteNav() {
   const [open, setOpen] = useState(false)
+  const { sessionClaims } = useAuth()
+  const isAdmin = (sessionClaims?.metadata as { role?: string } | undefined)?.role === 'admin'
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '1.25rem', paddingLeft: '1rem', paddingRight: '1rem', position: 'relative', zIndex: 100 }}>
@@ -60,6 +63,28 @@ export function SiteNav() {
 
         {/* Right side */}
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Admin shortcut — only visible when signed in as admin */}
+          {isAdmin && (
+            <Link
+              href="/admin/dashboard"
+              style={{
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.6rem',
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--color-crimson)',
+                textDecoration: 'none',
+                padding: '0.35rem 0.75rem',
+                border: '1px solid rgba(192,41,58,0.35)',
+                borderRadius: '9999px',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s',
+              }}
+            >
+              Admin ⟶
+            </Link>
+          )}
           {/* Mobile hamburger */}
           <button
             onClick={() => setOpen(!open)}
