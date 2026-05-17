@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { bookings, customers } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 
 export interface CreateBookingParams {
   customerId: string
@@ -51,6 +51,34 @@ export async function getBookingById(id: string) {
     .from(bookings)
     .where(eq(bookings.id, id))
   return booking ?? null
+}
+
+export async function getBookingWithCustomer(id: string) {
+  const [row] = await db
+    .select({ booking: bookings, customer: customers })
+    .from(bookings)
+    .leftJoin(customers, eq(bookings.customerId, customers.id))
+    .where(eq(bookings.id, id))
+  return row ?? null
+}
+
+export async function getAllBookings() {
+  return db
+    .select({ booking: bookings, customer: customers })
+    .from(bookings)
+    .leftJoin(customers, eq(bookings.customerId, customers.id))
+    .orderBy(desc(bookings.eventDate))
+}
+
+export async function updateBookingStatus(
+  id: string,
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed',
+) {
+  await db.update(bookings).set({ status }).where(eq(bookings.id, id))
+}
+
+export async function updateBookingNotes(id: string, notes: string) {
+  await db.update(bookings).set({ notes }).where(eq(bookings.id, id))
 }
 
 export async function confirmBooking(stripePaymentIntentId: string) {

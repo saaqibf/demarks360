@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { bookings, availabilityBlocks } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, asc } from 'drizzle-orm'
 
 export interface BookedSlot {
   startTime: string
@@ -45,4 +45,33 @@ export async function getAvailabilityForDate(date: string): Promise<Availability
     bookingCount: activeBookings.length,
     isDateFull: activeBookings.length >= 2,
   }
+}
+
+export async function getAllBlocks() {
+  return db
+    .select()
+    .from(availabilityBlocks)
+    .orderBy(asc(availabilityBlocks.blockedDate))
+}
+
+export async function blockDate(
+  date: string,
+  startTime?: string,
+  endTime?: string,
+  reason?: string,
+) {
+  const [block] = await db
+    .insert(availabilityBlocks)
+    .values({
+      blockedDate: date,
+      startTime: startTime ?? null,
+      endTime: endTime ?? null,
+      reason: reason ?? null,
+    })
+    .returning()
+  return block
+}
+
+export async function unblockDate(id: string) {
+  await db.delete(availabilityBlocks).where(eq(availabilityBlocks.id, id))
 }
