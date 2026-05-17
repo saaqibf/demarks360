@@ -92,7 +92,7 @@ export function Hero() {
               paddingLeft: i > 0 ? '1.5rem' : undefined,
             }}>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', letterSpacing: '0.02em', lineHeight: 1 }}>
-                <span style={{ background: 'var(--grad)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                <span style={{ background: 'linear-gradient(90deg,#EC4899,#8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                   {val}
                 </span>
               </div>
