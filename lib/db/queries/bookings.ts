@@ -1,0 +1,74 @@
+import { db } from '@/lib/db'
+import { bookings, customers } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
+
+export interface CreateBookingParams {
+  customerId: string
+  eventDate: string
+  startTime: string
+  endTime: string
+  durationMinutes: number
+  addOns: string[]
+  eventType: string
+  locationAddress: string
+  locationCity: string
+  travelSurcharge: number
+  depositAmount: number
+  balanceAmount: number
+  balanceChargeDate: string
+  stripePaymentIntentId: string
+  stripeCustomerId: string
+}
+
+export async function createBookingRecord(params: CreateBookingParams) {
+  const [booking] = await db
+    .insert(bookings)
+    .values({
+      customerId: params.customerId,
+      eventDate: params.eventDate,
+      startTime: params.startTime,
+      endTime: params.endTime,
+      durationMinutes: params.durationMinutes,
+      addOns: params.addOns,
+      status: 'pending',
+      eventType: params.eventType,
+      locationAddress: params.locationAddress,
+      locationCity: params.locationCity,
+      travelSurcharge: String(params.travelSurcharge),
+      depositAmount: String(params.depositAmount),
+      balanceAmount: String(params.balanceAmount),
+      balanceChargeDate: params.balanceChargeDate,
+      stripePaymentIntentId: params.stripePaymentIntentId,
+      stripeCustomerId: params.stripeCustomerId,
+    })
+    .returning()
+  return booking
+}
+
+export async function getBookingById(id: string) {
+  const [booking] = await db
+    .select()
+    .from(bookings)
+    .where(eq(bookings.id, id))
+  return booking ?? null
+}
+
+export async function confirmBooking(stripePaymentIntentId: string) {
+  await db
+    .update(bookings)
+    .set({ status: 'confirmed' })
+    .where(eq(bookings.stripePaymentIntentId, stripePaymentIntentId))
+}
+
+export async function getOrCreateCustomer(clerkUserId: string, name: string, email: string, phone: string) {
+  const existing = await db
+    .select()
+    .from(customers)
+    .where(eq(customers.id, clerkUserId))
+  if (existing.length > 0) return existing[0]
+  const [created] = await db
+    .insert(customers)
+    .values({ id: clerkUserId, name, email, phone })
+    .returning()
+  return created
+}
