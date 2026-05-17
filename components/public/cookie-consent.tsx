@@ -17,6 +17,8 @@ export function CookieConsent() {
 
   return (
     <div
+      role="region"
+      aria-label="Cookie consent"
       style={{
         position: 'fixed', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)',
         zIndex: 1000, background: '#0F0F0F', color: 'rgba(255,255,255,0.65)',
@@ -28,6 +30,7 @@ export function CookieConsent() {
       <span>We use cookies to make this site work.</span>
       <button
         onClick={accept}
+        aria-label="Accept cookies"
         style={{
           background: 'linear-gradient(135deg, #EC4899, #8B5CF6)',
           color: '#fff', border: 'none', padding: '0.4rem 1rem',
