@@ -82,10 +82,12 @@ export async function updateBookingNotes(id: string, notes: string) {
 }
 
 export async function confirmBooking(stripePaymentIntentId: string) {
-  await db
+  const rows = await db
     .update(bookings)
     .set({ status: 'confirmed' })
     .where(eq(bookings.stripePaymentIntentId, stripePaymentIntentId))
+    .returning({ id: bookings.id })
+  return rows[0] ?? null
 }
 
 export async function getOrCreateCustomer(clerkUserId: string, name: string, email: string, phone: string) {
