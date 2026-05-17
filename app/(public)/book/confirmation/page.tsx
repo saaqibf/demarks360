@@ -39,10 +39,10 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
 
   if (!booking) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF8F4', paddingTop: '66px' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-ink)' }}>
         <div style={{ textAlign: 'center' }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', color: '#0F0F0F', marginBottom: '1rem' }}>Booking Not Found</h1>
-          <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: '#8B5CF6', textDecoration: 'underline' }}>Return to Home</Link>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', color: 'var(--color-text)', marginBottom: '1rem' }}>Booking Not Found</h1>
+          <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-crimson)', textDecoration: 'underline' }}>Return to Home</Link>
         </div>
       </div>
     )
@@ -56,32 +56,32 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
     : null
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FAF8F4', paddingTop: '66px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '4rem 3rem' }}>
         <div style={{ marginBottom: '3rem' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg,#EC4899,#8B5CF6)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-crimson)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <span style={{ color: '#fff', fontSize: '1.25rem' }}>✓</span>
           </div>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888880', marginBottom: '0.5rem' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', marginBottom: '0.5rem' }}>
             Booking Confirmed
           </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: '#0F0F0F' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)' }}>
             You&apos;re Booked!
           </h1>
-          <p style={{ fontSize: '0.88rem', color: '#3A3A3A', lineHeight: 1.75, fontWeight: 300, marginTop: '1rem' }}>
+          <p style={{ fontSize: '0.88rem', color: 'rgba(245,240,234,0.5)', lineHeight: 1.75, fontWeight: 300, marginTop: '1rem' }}>
             A confirmation email has been sent. Check your inbox for the receipt and event details.
           </p>
         </div>
 
-        <div style={{ border: '1px solid rgba(15,15,15,0.10)', background: '#fff', marginBottom: '1.5rem' }}>
-          <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(15,15,15,0.10)' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888880', marginBottom: '0.5rem' }}>Event Details</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: '#0F0F0F' }}>{eventDate}</p>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', color: '#3A3A3A', marginTop: '0.25rem' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', marginBottom: '1.5rem' }}>
+          <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>Event Details</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: 'var(--color-text)' }}>{eventDate}</p>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', color: 'rgba(245,240,234,0.6)', marginTop: '0.25rem' }}>
               {formatTime(booking.startTime)} → {formatTime(booking.endTime)}
               {' · '}{booking.eventType}
             </p>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: '#888880', marginTop: '0.15rem' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)', marginTop: '0.15rem' }}>
               {booking.locationAddress}, {booking.locationCity}
             </p>
           </div>
@@ -92,14 +92,14 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             { label: 'Balance Charge Date', value: balanceDate ?? '—' },
             { label: 'Booking Reference', value: booking.id.slice(0, 12).toUpperCase() },
           ].map(({ label, value }) => (
-            <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(15,15,15,0.06)', display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: '#888880' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: '#0F0F0F', fontWeight: 600 }}>{value}</span>
+            <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)' }}>{label}</span>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text)', fontWeight: 600 }}>{value}</span>
             </div>
           ))}
 
-          <div style={{ padding: '1rem 1.5rem', background: 'rgba(15,15,15,0.02)' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: '#888880', lineHeight: 1.6 }}>
+          <div style={{ padding: '1rem 1.5rem', background: 'rgba(255,255,255,0.02)' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)', lineHeight: 1.6 }}>
               Your card is saved for the balance charge on {balanceDate}. It will be automatically deleted 7 days after your event.
             </p>
           </div>
@@ -113,7 +113,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             style={{
               fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700,
               letterSpacing: '0.1em', textTransform: 'uppercase',
-              color: '#fff', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)',
+              color: '#fff', background: 'var(--color-crimson)',
               padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block',
             }}
           >
@@ -124,7 +124,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             style={{
               fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600,
               letterSpacing: '0.1em', textTransform: 'uppercase',
-              color: '#0F0F0F', border: '1px solid rgba(15,15,15,0.2)',
+              color: 'var(--color-text)', border: '1px solid rgba(255,255,255,0.15)',
               padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block',
             }}
           >

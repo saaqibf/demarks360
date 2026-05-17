@@ -32,7 +32,7 @@ export function CookieConsent() {
         onClick={accept}
         aria-label="Accept cookies"
         style={{
-          background: 'linear-gradient(135deg, #EC4899, #8B5CF6)',
+          background: 'var(--color-crimson)',
           color: '#fff', border: 'none', padding: '0.4rem 1rem',
           fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700,
           letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',

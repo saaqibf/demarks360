@@ -65,38 +65,38 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888880', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)' }} />
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-crimson)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-crimson)' }} />
         Step 1
       </p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: '#0F0F0F', marginBottom: '2.5rem' }}>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)', marginBottom: '2.5rem' }}>
         Pick a Date
       </h2>
 
-      <div style={{ maxWidth: '480px', border: '1px solid rgba(15,15,15,0.10)', background: '#fff' }}>
+      <div style={{ maxWidth: '480px', border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)' }}>
         {/* Month nav */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(15,15,15,0.10)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <button
             onClick={prevMonth}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: '#3A3A3A', padding: '0.25rem 0.5rem' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'rgba(245,240,234,0.55)', padding: '0.25rem 0.5rem' }}
           >
             ←
           </button>
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: '#0F0F0F' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: 'var(--color-text)' }}>
             {MONTH_NAMES[viewMonth]} {viewYear}
           </span>
           <button
             onClick={nextMonth}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: '#3A3A3A', padding: '0.25rem 0.5rem' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'rgba(245,240,234,0.55)', padding: '0.25rem 0.5rem' }}
           >
             →
           </button>
         </div>
 
         {/* Day headers */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid rgba(15,15,15,0.10)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           {DAY_NAMES.map(d => (
-            <div key={d} style={{ padding: '0.6rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#888880' }}>
+            <div key={d} style={{ padding: '0.6rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)' }}>
               {d}
             </div>
           ))}
@@ -121,8 +121,8 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
                   padding: '0.6rem 0', margin: '2px', borderRadius: '2px',
                   textAlign: 'center',
                   fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: selected ? 700 : 400,
-                  background: selected ? 'linear-gradient(135deg,#EC4899,#8B5CF6)' : 'transparent',
-                  color: selected ? '#fff' : disabled ? 'rgba(15,15,15,0.2)' : isFull ? '#EC4899' : '#0F0F0F',
+                  background: selected ? 'var(--color-crimson)' : 'transparent',
+                  color: selected ? '#fff' : disabled ? 'rgba(245,240,234,0.15)' : isFull ? 'var(--color-crimson)' : 'var(--color-text)',
                   transition: 'background 0.15s',
                 }}
                 title={isFull ? 'Fully booked' : undefined}
@@ -134,13 +134,13 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
         </div>
 
         {/* Legend */}
-        <div style={{ padding: '0.75rem 1.5rem 1.25rem', borderTop: '1px solid rgba(15,15,15,0.10)', display: 'flex', gap: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: '#888880' }}>
-            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#EC4899' }} />
+        <div style={{ padding: '0.75rem 1.5rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.35)' }}>
+            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-crimson)' }} />
             Fully booked
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: '#888880' }}>
-            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(15,15,15,0.15)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.35)' }}>
+            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
             Unavailable (7-day lead time)
           </div>
         </div>

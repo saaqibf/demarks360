@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { SiteNav } from '@/components/public/site-nav'
 import { DatePicker } from '@/components/public/book/date-picker'
 import { TimePicker } from '@/components/public/book/time-picker'
 import { AddonsStep } from '@/components/public/book/addons-step'
@@ -46,9 +47,11 @@ export default function BookPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FAF8F4', paddingTop: '66px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
+      <SiteNav />
+
       {/* Step indicator */}
-      <div style={{ borderBottom: '1px solid rgba(15,15,15,0.10)', background: '#FAF8F4', position: 'sticky', top: '66px', zIndex: 100 }}>
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'var(--color-ink)', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 3rem', display: 'flex', alignItems: 'center', gap: '0' }}>
           {STEP_LABELS.map((label, i) => {
             const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5
@@ -60,9 +63,9 @@ export default function BookPage() {
                   <span style={{
                     width: '22px', height: '22px', borderRadius: '50%', display: 'inline-flex',
                     alignItems: 'center', justifyContent: 'center',
-                    background: done ? 'linear-gradient(135deg,#EC4899,#8B5CF6)' : active ? '#0F0F0F' : 'transparent',
-                    border: active || done ? 'none' : '1.5px solid rgba(15,15,15,0.25)',
-                    color: active || done ? '#fff' : '#888880',
+                    background: done ? 'var(--color-crimson)' : active ? '#fff' : 'transparent',
+                    border: active || done ? 'none' : '1.5px solid rgba(255,255,255,0.18)',
+                    color: active ? '#080808' : done ? '#fff' : 'rgba(245,240,234,0.3)',
                     fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
                   }}>
                     {done ? '✓' : stepNum}
@@ -70,13 +73,13 @@ export default function BookPage() {
                   <span style={{
                     fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600,
                     letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: active ? '#0F0F0F' : '#888880',
+                    color: active ? 'var(--color-text)' : 'rgba(245,240,234,0.3)',
                   }}>
                     {label}
                   </span>
                 </div>
                 {i < STEP_LABELS.length - 1 && (
-                  <div style={{ flex: 1, height: '1px', background: 'rgba(15,15,15,0.12)', margin: '0 0.75rem' }} />
+                  <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)', margin: '0 0.75rem' }} />
                 )}
               </div>
             )

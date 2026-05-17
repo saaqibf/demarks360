@@ -55,14 +55,14 @@ function PaymentForm({ bookingId, onBack }: { bookingId: string; onBack: () => v
     <form onSubmit={handleSubmit}>
       <PaymentElement />
       {error && (
-        <p style={{ color: '#EC4899', fontSize: '0.78rem', marginTop: '1rem' }}>{error}</p>
+        <p style={{ color: 'var(--color-crimson)', fontSize: '0.78rem', marginTop: '1rem' }}>{error}</p>
       )}
       <button
         type="submit"
         disabled={!stripe || submitting}
         style={{
           marginTop: '1.5rem', width: '100%',
-          background: submitting ? '#ccc' : 'linear-gradient(90deg,#EC4899,#8B5CF6)',
+          background: submitting ? 'rgba(192,41,58,0.4)' : 'var(--color-crimson)',
           color: '#fff', border: 'none', padding: '1rem 2rem',
           fontFamily: 'var(--font-ui)', fontSize: '0.75rem', fontWeight: 700,
           letterSpacing: '0.12em', textTransform: 'uppercase', cursor: submitting ? 'not-allowed' : 'pointer',
@@ -73,7 +73,7 @@ function PaymentForm({ bookingId, onBack }: { bookingId: string; onBack: () => v
       <button
         type="button"
         onClick={onBack}
-        style={{ marginTop: '0.75rem', display: 'block', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: '#888880', textDecoration: 'underline' }}
+        style={{ marginTop: '0.75rem', display: 'block', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.4)', textDecoration: 'underline' }}
       >
         ← Back
       </button>
@@ -137,7 +137,7 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
 
   if (loading) {
     return (
-      <div style={{ padding: '4rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: '#888880' }}>
+      <div style={{ padding: '4rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.4)' }}>
         Preparing your checkout…
       </div>
     )
@@ -146,8 +146,8 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
   if (initError) {
     return (
       <div>
-        <p style={{ color: '#EC4899', fontSize: '0.85rem', marginBottom: '1rem' }}>{initError}</p>
-        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: '#888880', textDecoration: 'underline' }}>
+        <p style={{ color: 'var(--color-crimson)', fontSize: '0.85rem', marginBottom: '1rem' }}>{initError}</p>
+        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.4)', textDecoration: 'underline' }}>
           ← Back
         </button>
       </div>
@@ -164,55 +164,55 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '3rem', alignItems: 'start' }}>
       {/* Order summary */}
       <div>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888880', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-          <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)' }} />
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-crimson)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+          <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-crimson)' }} />
           Step 5
         </p>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: '#0F0F0F', marginBottom: '2rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)', marginBottom: '2rem' }}>
           Checkout
         </h2>
 
-        <div style={{ border: '1px solid rgba(15,15,15,0.10)', background: '#fff' }}>
-          <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(15,15,15,0.10)' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888880', marginBottom: '0.5rem' }}>Booking Summary</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: '#0F0F0F' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)' }}>
+          <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>Booking Summary</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: 'var(--color-text)' }}>
               {state.date ? new Date(state.date + 'T00:00:00').toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''}
             </p>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: '#3A3A3A', marginTop: '0.25rem' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.6)', marginTop: '0.25rem' }}>
               {state.startTime && formatTime(state.startTime)} → {state.endTime && formatTime(state.endTime)}
               {' · '}{(durationMinutes / 60).toFixed(1).replace('.0', '')} hours
             </p>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: '#888880', marginTop: '0.15rem' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)', marginTop: '0.15rem' }}>
               {state.locationAddress}, {state.locationCity}
             </p>
           </div>
 
           {lineItems.map(({ label, amount }) => (
-            <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(15,15,15,0.06)', display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: '#3A3A3A' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: '#0F0F0F', fontWeight: 600 }}>${amount.toFixed(2)}</span>
+            <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.55)' }}>{label}</span>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text)', fontWeight: 600 }}>${amount.toFixed(2)}</span>
             </div>
           ))}
 
-          <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(15,15,15,0.10)', display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: '#888880' }}>Subtotal</span>
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: '#0F0F0F' }}>${subtotal.toFixed(2)}</span>
+          <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)' }}>Subtotal</span>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text)' }}>${subtotal.toFixed(2)}</span>
           </div>
 
-          <div style={{ padding: '1.25rem 1.5rem', background: '#0F0F0F', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ padding: '1.25rem 1.5rem', background: '#0a0a0a', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>Deposit Due Today (30%)</p>
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.1rem' }}>
                 Balance of ${balance.toFixed(2)} auto-charged on {balanceChargeDate}
               </p>
             </div>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', color: 'var(--color-crimson)', fontWeight: 800 }}>
               ${deposit.toFixed(2)}
             </span>
           </div>
 
-          <div style={{ padding: '1rem 1.5rem', background: 'rgba(255,255,255,0.5)' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: '#888880', lineHeight: 1.6 }}>
+          <div style={{ padding: '1rem 1.5rem', background: 'rgba(255,255,255,0.02)' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)', lineHeight: 1.6 }}>
               Your card will be saved for the balance charge. It will be automatically deleted 7 days after your event. Your deposit is non-refundable.
             </p>
           </div>
@@ -220,9 +220,9 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
       </div>
 
       {/* Payment form */}
-      <div style={{ position: 'sticky', top: '140px' }}>
-        <div style={{ border: '1px solid rgba(15,15,15,0.10)', background: '#fff', padding: '2rem' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888880', marginBottom: '1.25rem' }}>
+      <div style={{ position: 'sticky', top: '80px' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', padding: '2rem' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '1.25rem' }}>
             Payment Details
           </p>
           {clientSecret && bookingId ? (
@@ -231,15 +231,15 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
               options={{
                 clientSecret,
                 appearance: {
-                  theme: 'stripe',
-                  variables: { fontFamily: 'DM Sans, sans-serif', colorPrimary: '#8B5CF6' },
+                  theme: 'night',
+                  variables: { fontFamily: 'DM Sans, sans-serif', colorPrimary: '#C0293A', colorBackground: '#111111', colorText: '#F5F0EA' },
                 },
               }}
             >
               <PaymentForm bookingId={bookingId} onBack={onBack} />
             </Elements>
           ) : (
-            <p style={{ color: '#888880', fontSize: '0.78rem' }}>Payment unavailable — Stripe not configured.</p>
+            <p style={{ color: 'rgba(245,240,234,0.4)', fontSize: '0.78rem' }}>Payment unavailable — Stripe not configured.</p>
           )}
         </div>
       </div>

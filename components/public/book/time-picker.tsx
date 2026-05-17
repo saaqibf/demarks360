@@ -82,7 +82,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
   if (loading) {
     return (
-      <div style={{ padding: '4rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: '#888880' }}>
+      <div style={{ padding: '4rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.4)' }}>
         Loading availability…
       </div>
     )
@@ -97,14 +97,14 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888880', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)' }} />
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-crimson)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-crimson)' }} />
         Step 2
       </p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: '#0F0F0F', marginBottom: '0.75rem' }}>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)', marginBottom: '0.75rem' }}>
         {phase === 'start' ? 'Pick a Start Time' : 'Pick an End Time'}
       </h2>
-      <p style={{ fontSize: '0.82rem', color: '#888880', fontWeight: 300, marginBottom: '2.5rem' }}>
+      <p style={{ fontSize: '0.82rem', color: 'rgba(245,240,234,0.4)', fontWeight: 300, marginBottom: '2.5rem' }}>
         {phase === 'start'
           ? `${date} · Select when your event starts`
           : `Started at ${selectedStart ? formatTime(selectedStart) : ''} · Minimum 1.5 hours`}
@@ -129,11 +129,9 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
               }}
               style={{
                 padding: '0.75rem 0.5rem', border: '1px solid',
-                borderColor: isSelected ? 'transparent' : blocked ? 'rgba(15,15,15,0.05)' : 'rgba(15,15,15,0.12)',
-                background: isSelected
-                  ? 'linear-gradient(135deg,#EC4899,#8B5CF6)'
-                  : blocked ? '#F5F3EF' : '#fff',
-                color: isSelected ? '#fff' : blocked ? 'rgba(15,15,15,0.2)' : '#0F0F0F',
+                borderColor: isSelected ? 'var(--color-crimson)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
+                background: isSelected ? 'var(--color-crimson)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
+                color: isSelected ? '#fff' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text)',
                 cursor: isDisabled ? 'not-allowed' : 'pointer',
                 fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: 600,
                 transition: 'all 0.15s',
@@ -146,8 +144,8 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
       </div>
 
       {phase === 'end' && selectedStart && selectedEnd && (
-        <div style={{ marginTop: '2rem', padding: '1.25rem', border: '1px solid rgba(15,15,15,0.10)', background: '#fff', maxWidth: '560px' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: '#0F0F0F' }}>
+        <div style={{ marginTop: '2rem', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', maxWidth: '560px' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text)' }}>
             <strong>{formatTime(selectedStart)}</strong> → <strong>{formatTime(selectedEnd)}</strong>
             {' · '}
             {Math.round((timeToMinutes(selectedEnd) - timeToMinutes(selectedStart)) / 60 * 10) / 10} hrs
@@ -157,7 +155,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
           <button
             onClick={() => onSelect(selectedStart, selectedEnd)}
             style={{
-              marginTop: '1rem', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)',
+              marginTop: '1rem', background: 'var(--color-crimson)',
               color: '#fff', border: 'none', padding: '0.85rem 2rem',
               fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700,
               letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
@@ -170,7 +168,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
       <button
         onClick={() => { if (phase === 'end') { setPhase('start'); setSelectedEnd(null) } else { onBack() } }}
-        style={{ marginTop: '1.5rem', display: 'block', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: '#888880', textDecoration: 'underline' }}
+        style={{ marginTop: '1.5rem', display: 'block', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.4)', textDecoration: 'underline' }}
       >
         ← Back
       </button>
