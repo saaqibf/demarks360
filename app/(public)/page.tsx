@@ -14,7 +14,6 @@ export default function HomePage() {
   return (
     <>
       <PromoBar />
-      <SiteNav />
       <main>
         <Hero />
         <Pricing />

@@ -1,54 +1,158 @@
+'use client'
 import Link from 'next/link'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 
 export function SiteNav() {
-  return (
-    <nav style={{
-      position: 'sticky', top: 0, zIndex: 200,
-      background: 'rgba(239,236,231,0.88)',
-      backdropFilter: 'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
-      borderBottom: '1px solid rgba(15,15,15,0.10)',
-      height: '66px',
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '0 3rem',
-    }}>
-      <Link href="/" style={{ display: 'flex', flexDirection: 'column', gap: '1px', textDecoration: 'none' }}>
-        <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', letterSpacing: '0.04em', color: '#0F0F0F' }}>
-          DEMARKS{' '}
-          <span style={{ background: 'linear-gradient(90deg,#EC4899,#8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>360</span>
-        </span>
-        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.47rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: '#9B9590' }}>
-          Calgary 360 Video Booth
-        </span>
-      </Link>
+  const [open, setOpen] = useState(false)
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '2.25rem' }}>
-        {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((label) => (
-          <a
-            key={label}
-            href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '1.25rem', paddingLeft: '1rem', paddingRight: '1rem', position: 'relative', zIndex: 100 }}>
+      <nav style={{
+        background: 'rgba(8,8,8,0.72)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: '9999px',
+        padding: '0.45rem 0.45rem 0.45rem 1.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        maxWidth: '760px',
+        position: 'relative',
+      }}>
+        {/* Logo */}
+        <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
+          <span style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '1.15rem',
+            fontWeight: 800,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: '#fff',
+          }}>
+            DEMARKS <span style={{ color: 'var(--color-crimson)' }}>360</span>
+          </span>
+        </Link>
+
+        {/* Desktop links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginLeft: '2.5rem' }} className="nav-links-desktop">
+          {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((label) => (
+            <a
+              key={label}
+              href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
+              style={{
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.62rem',
+                fontWeight: 600,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'rgba(245,240,234,0.55)',
+                textDecoration: 'none',
+                transition: 'color 0.2s',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+
+        {/* Right side */}
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="nav-hamburger"
             style={{
-              fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600,
-              letterSpacing: '0.12em', textTransform: 'uppercase',
-              color: '#3A3A3A', textDecoration: 'none',
+              background: 'none',
+              border: 'none',
+              color: 'rgba(245,240,234,0.7)',
+              cursor: 'pointer',
+              padding: '0.4rem',
+              display: 'none',
             }}
           >
-            {label}
-          </a>
-        ))}
-      </div>
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
 
-      <Link
-        href="/book"
-        style={{
-          fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 700,
-          letterSpacing: '0.12em', textTransform: 'uppercase',
-          color: '#fff', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)',
-          padding: '0.62rem 1.5rem', textDecoration: 'none', display: 'inline-block',
-        }}
-      >
-        Book Now
-      </Link>
-    </nav>
+          <Link
+            href="/book"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#fff',
+              background: 'var(--color-crimson)',
+              padding: '0.55rem 1.35rem',
+              borderRadius: '9999px',
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+              transition: 'background 0.2s',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}
+          >
+            Book Now
+            <span style={{
+              width: '20px', height: '20px',
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.2)',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '0.7rem',
+            }}>→</span>
+          </Link>
+        </div>
+
+        {/* Mobile dropdown */}
+        {open && (
+          <div style={{
+            position: 'absolute',
+            top: 'calc(100% + 8px)',
+            left: 0,
+            right: 0,
+            background: 'rgba(14,14,14,0.96)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '1rem',
+            padding: '0.75rem',
+            zIndex: 200,
+          }}>
+            {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((label) => (
+              <a
+                key={label}
+                href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
+                onClick={() => setOpen(false)}
+                style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(245,240,234,0.7)',
+                  textDecoration: 'none',
+                  padding: '0.65rem 1rem',
+                  borderRadius: '0.5rem',
+                }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        )}
+      </nav>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .nav-links-desktop { display: none !important; }
+          .nav-hamburger { display: flex !important; }
+        }
+      `}</style>
+    </div>
   )
 }

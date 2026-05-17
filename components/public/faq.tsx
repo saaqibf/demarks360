@@ -1,6 +1,8 @@
 import { Reveal } from './reveal'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
+const D = 'rgba(255,255,255,0.07)'
+
 const faqs = [
   { q: 'How much does it cost?', a: '$150 per hour with a 1.5-hour minimum. So the minimum booking is $225. Add firecrackers for $75 flat.' },
   { q: 'How far in advance do I need to book?', a: 'We require at least 7 days notice. This gives us time to prepare, confirm your slot, and make sure everything is perfect for your event.' },
@@ -13,13 +15,10 @@ const faqs = [
 
 export function Faq() {
   return (
-    <section id="faq" style={{ padding: '6rem 3rem', borderBottom: '1px solid rgba(15,15,15,0.10)' }}>
+    <section id="faq" style={{ padding: '6rem 3rem', background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888880', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-          <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)' }} />
-          FAQ
-        </p>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: '#0F0F0F', marginBottom: '3rem' }}>
+        <p className="section-label" style={{ marginBottom: '0.75rem' }}>FAQ</p>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '3rem' }}>
           Common Questions
         </h2>
       </Reveal>
@@ -27,11 +26,11 @@ export function Faq() {
       <Reveal delay={100}>
         <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`item-${i}`} style={{ borderBottom: '1px solid rgba(15,15,15,0.10)' }}>
-              <AccordionTrigger style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9rem', fontWeight: 600, color: '#0F0F0F', textAlign: 'left', padding: '1.5rem 0' }}>
+            <AccordionItem key={i} value={`item-${i}`} style={{ borderBottom: `1px solid ${D}` }}>
+              <AccordionTrigger style={{ fontFamily: 'var(--font-ui)', fontSize: '0.92rem', fontWeight: 600, color: 'var(--color-text)', textAlign: 'left', padding: '1.5rem 0' }}>
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent style={{ fontSize: '0.85rem', color: '#3A3A3A', lineHeight: 1.8, fontWeight: 300, paddingBottom: '1.5rem' }}>
+              <AccordionContent style={{ fontSize: '0.85rem', color: 'rgba(245,240,234,0.55)', lineHeight: 1.85, fontWeight: 300, paddingBottom: '1.5rem' }}>
                 {faq.a}
               </AccordionContent>
             </AccordionItem>

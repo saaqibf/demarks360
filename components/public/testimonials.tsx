@@ -1,5 +1,7 @@
 import { Reveal } from './reveal'
 
+const D = 'rgba(255,255,255,0.07)'
+
 const testimonials = [
   { name: 'Aisha M.', event: 'Birthday Party · Calgary', quote: 'The 360 booth was the highlight of my birthday — everyone was obsessed. The video quality was incredible and we had our gallery link the same night.' },
   { name: 'Jordan & Kezia T.', event: 'Wedding Reception · Airdrie', quote: 'We added firecrackers and honestly it was the most fun part of the whole reception. Worth every penny. The team was professional and so easy to work with.' },
@@ -8,27 +10,24 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section style={{ padding: '6rem 3rem', borderBottom: '1px solid rgba(15,15,15,0.10)', background: '#0F0F0F' }}>
+    <section style={{ padding: '6rem 3rem', background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-          <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'linear-gradient(90deg,#EC4899,#8B5CF6)' }} />
-          Testimonials
-        </p>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: '#fff', marginBottom: '4rem' }}>
+        <p className="section-label" style={{ marginBottom: '0.75rem' }}>Testimonials</p>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '4rem' }}>
           What People Say
         </h2>
       </Reveal>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: D }}>
         {testimonials.map((t, i) => (
           <Reveal key={t.name} delay={i * 80}>
-            <div style={{ padding: '2.5rem', background: '#0F0F0F' }}>
-              <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.8, fontWeight: 300, fontStyle: 'italic', marginBottom: '2rem' }}>
+            <div style={{ padding: '2.5rem', background: 'var(--color-surface)' }}>
+              <p style={{ fontSize: '0.9rem', color: 'rgba(245,240,234,0.65)', lineHeight: 1.85, fontWeight: 300, fontStyle: 'italic', marginBottom: '2rem' }}>
                 &ldquo;{t.quote}&rdquo;
               </p>
-              <div>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>{t.name}</p>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginTop: '0.25rem' }}>{t.event}</p>
+              <div style={{ borderTop: `1px solid ${D}`, paddingTop: '1.25rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-text)' }}>{t.name}</p>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-crimson)', marginTop: '0.3rem' }}>{t.event}</p>
               </div>
             </div>
           </Reveal>

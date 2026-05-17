@@ -7,7 +7,7 @@ export function SiteFooter() {
         <div>
           <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: '#fff' }}>
             DEMARKS{' '}
-            <span style={{ background: 'linear-gradient(90deg,#EC4899,#8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>360</span>
+            <span style={{ color: 'var(--color-crimson)' }}>360</span>
           </p>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginTop: '0.25rem' }}>
             Calgary 360 Video Booth
