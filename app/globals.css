@@ -54,3 +54,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .reveal { transition: none; }
 }
+
+.hiw-step-row:hover { background: #fff; }
+.hiw-step-row:hover [data-hiw-num] { opacity: 1 !important; }
