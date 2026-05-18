@@ -92,6 +92,7 @@ export default async function BookingDetailPage({ params }: Props) {
             { label: 'Deposit Paid', value: `$${Number(b.depositAmount ?? 0).toFixed(2)}` },
             { label: 'Balance Due', value: `$${Number(b.balanceAmount ?? 0).toFixed(2)}` },
             { label: 'Balance Date', value: balanceDate ?? '—' },
+            { label: 'Gallery Token', value: b.galleryToken ?? '—' },
           ].map(({ label, value }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
@@ -108,6 +109,25 @@ export default async function BookingDetailPage({ params }: Props) {
         </p>
         <BookingActions bookingId={b.id} currentStatus={b.status} currentNotes={b.notes ?? ''} />
       </div>
+
+      {/* Gallery link */}
+      {b.galleryToken && (
+        <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '0.75rem' }}>
+            Client Gallery Link
+          </p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.45)', marginBottom: '0.75rem', wordBreak: 'break-all' }}>
+            {process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'}/gallery/{b.galleryToken}
+          </p>
+          <Link
+            href={`/gallery/${b.galleryToken}`}
+            target="_blank"
+            style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-crimson)', textDecoration: 'none' }}
+          >
+            Preview Gallery →
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
