@@ -1,4 +1,4 @@
-import { resend, FROM_EMAIL } from './resend'
+import { getResend, FROM_EMAIL } from './resend'
 import { bookingConfirmationHtml } from './templates/booking-confirmation'
 import { getBookingWithCustomer } from '@/lib/db/queries/bookings'
 
@@ -8,7 +8,7 @@ export async function sendBookingConfirmationEmail(bookingId: string) {
 
   const { booking: b, customer: c } = row
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: c.email,
     subject: `Booking Confirmed — Demarks 360`,
