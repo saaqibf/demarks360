@@ -1,9 +1,14 @@
+import { getPublicShowcaseItems } from '@/lib/db/queries/gallery'
 import { Reveal } from './reveal'
+import { ShowcasePlayer } from './showcase-player'
 
 const D = 'rgba(255,255,255,0.07)'
 
-export function GalleryShowcase() {
-  const placeholders = Array.from({ length: 6 }, (_, i) => i)
+const GRID_SIZE = 6
+
+export async function GalleryShowcase() {
+  const showcaseItems = await getPublicShowcaseItems()
+  const slots = Array.from({ length: GRID_SIZE }, (_, i) => showcaseItems[i] ?? null)
 
   return (
     <section id="gallery" style={{ padding: '6rem 3rem', background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
@@ -15,15 +20,19 @@ export function GalleryShowcase() {
       </Reveal>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: D }}>
-        {placeholders.map((i) => (
-          <Reveal key={i} delay={i * 60}>
+        {slots.map((item, i) => (
+          <Reveal key={item?.id ?? i} delay={i * 60}>
             <div style={{
               aspectRatio: '9/16',
               background: i % 2 === 0 ? '#111111' : '#161616',
               position: 'relative', overflow: 'hidden',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: '4rem', fontWeight: 900, opacity: 0.06, color: '#fff' }}>360</span>
+              {item ? (
+                <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
+              ) : (
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: '4rem', fontWeight: 900, opacity: 0.06, color: '#fff' }}>360</span>
+              )}
             </div>
           </Reveal>
         ))}

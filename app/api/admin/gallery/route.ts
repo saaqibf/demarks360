@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAdmin } from '@/lib/auth/roles'
 import { addGalleryItem, setShowcaseStatus, publishGallery } from '@/lib/db/queries/gallery'
+import { sendGalleryReadyEmail } from '@/lib/email/send-gallery-ready'
 
 export async function POST(req: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
   if (body.action === 'publish_gallery') {
     if (!body.bookingId) return NextResponse.json({ error: 'bookingId required' }, { status: 400 })
     await publishGallery(body.bookingId)
+    try { await sendGalleryReadyEmail(body.bookingId) } catch { /* non-fatal */ }
     return NextResponse.json({ ok: true })
   }
 
