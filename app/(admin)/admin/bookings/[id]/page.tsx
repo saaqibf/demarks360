@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getBookingWithCustomer } from '@/lib/db/queries/bookings'
 import { BookingActions } from './booking-actions'
+import { DriveImport } from './drive-import'
 
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
   pending:   { bg: 'rgba(251,191,36,0.12)',   color: '#FBB724' },
@@ -108,6 +109,11 @@ export default async function BookingDetailPage({ params }: Props) {
           Update Status
         </p>
         <BookingActions bookingId={b.id} currentStatus={b.status} currentNotes={b.notes ?? ''} />
+      </div>
+
+      {/* Drive import */}
+      <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
+        <DriveImport bookingId={b.id} />
       </div>
 
       {/* Gallery link */}

@@ -13,6 +13,7 @@
   "dependencies": {
     "@base-ui/react": "^1.4.1",
     "@clerk/nextjs": "^7.3.4",
+    "@mux/mux-node": "^14.1.0",
     "@mux/mux-player-react": "^3.13.0",
     "@neondatabase/serverless": "^1.1.0",
     "@paralleldrive/cuid2": "^3.3.0",
@@ -28,6 +29,7 @@
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
+    "googleapis": "^171.4.0",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "react": "19.2.4",
