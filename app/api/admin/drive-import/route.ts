@@ -10,7 +10,7 @@ export const maxDuration = 300
 export async function POST(req: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
 
-  let body: { action?: string; folderId?: string; bookingId?: string; fileId?: string; fileName?: string }
+  let body: { action?: string; folderId?: string; bookingId?: string; fileId?: string; fileName?: string; uploadId?: string }
   try { body = await req.json() } catch { return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 }) }
 
   // ── List videos in a Drive folder ────────────────────────────────────────
@@ -80,6 +80,48 @@ export async function POST(req: NextRequest) {
       title: fileName ? fileName.replace(/\.[^.]+$/, '') : undefined,
     })
 
+    return NextResponse.json({ item })
+  }
+
+  // ── Create a Mux upload URL for direct browser → Mux upload ─────────────
+  if (body.action === 'create_upload_url') {
+    const upload = await getMux().video.uploads.create({
+      cors_origin: '*',
+      new_asset_settings: { playback_policies: ['public'] },
+    })
+    return NextResponse.json({ uploadId: upload.id, uploadUrl: upload.url })
+  }
+
+  // ── Finalize: poll for asset, create gallery_item ────────────────────────
+  if (body.action === 'finalize_upload') {
+    const { uploadId, bookingId, fileName } = body
+    if (!uploadId || !bookingId) {
+      return NextResponse.json({ error: 'uploadId and bookingId required' }, { status: 400 })
+    }
+
+    const mux = getMux()
+    let assetId: string | undefined
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => setTimeout(r, 2000))
+      const u = await mux.video.uploads.retrieve(uploadId)
+      if (u.asset_id) { assetId = u.asset_id; break }
+    }
+    if (!assetId) {
+      return NextResponse.json({ error: 'Mux asset not ready — try again in a moment' }, { status: 504 })
+    }
+
+    const asset = await mux.video.assets.retrieve(assetId)
+    const playbackId = asset.playback_ids?.[0]?.id
+    if (!playbackId) {
+      return NextResponse.json({ error: 'No playback ID on Mux asset' }, { status: 500 })
+    }
+
+    const item = await addGalleryItem({
+      bookingId,
+      muxAssetId: assetId,
+      muxPlaybackId: playbackId,
+      title: fileName ? fileName.replace(/\.[^.]+$/, '') : undefined,
+    })
     return NextResponse.json({ item })
   }
 
