@@ -1,13 +1,24 @@
 'use client'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
 import { useAuth } from '@clerk/nextjs'
 
 export function SiteNav() {
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('')
   const { sessionClaims } = useAuth()
   const isAdmin = (sessionClaims?.metadata as { role?: string } | undefined)?.role === 'admin'
+
+  useEffect(() => {
+    const ids = ['how-it-works', 'pricing', 'gallery', 'faq']
+    const obs = new IntersectionObserver(
+      (entries) => { entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id) }) },
+      { rootMargin: '-20% 0px -60% 0px' }
+    )
+    ids.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el) })
+    return () => obs.disconnect()
+  }, [])
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '1.25rem', paddingLeft: '1rem', paddingRight: '1rem', position: 'relative', zIndex: 100 }}>
@@ -40,25 +51,28 @@ export function SiteNav() {
 
         {/* Desktop links */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginLeft: '2.5rem' }} className="nav-links-desktop">
-          {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((label) => (
-            <a
-              key={label}
-              href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
-              style={{
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.62rem',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'rgba(245,240,234,0.55)',
-                textDecoration: 'none',
-                transition: 'color 0.2s',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {label}
-            </a>
-          ))}
+          {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((label) => {
+            const id = label.toLowerCase().replace(/\s+/g, '-')
+            return (
+              <a
+                key={label}
+                href={`#${id}`}
+                className={`nav-link${active === id ? ' nav-link-active' : ''}`}
+                style={{
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.62rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: active === id ? 'var(--color-crimson)' : 'rgba(245,240,234,0.55)',
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {label}
+              </a>
+            )
+          })}
         </div>
 
         {/* Right side */}
@@ -147,27 +161,31 @@ export function SiteNav() {
             padding: '0.75rem',
             zIndex: 200,
           }}>
-            {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((label) => (
-              <a
-                key={label}
-                href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
-                onClick={() => setOpen(false)}
-                style={{
-                  display: 'block',
-                  fontFamily: 'var(--font-ui)',
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(245,240,234,0.7)',
-                  textDecoration: 'none',
-                  padding: '0.65rem 1rem',
-                  borderRadius: '0.5rem',
-                }}
-              >
-                {label}
-              </a>
-            ))}
+            {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((label) => {
+              const id = label.toLowerCase().replace(/\s+/g, '-')
+              return (
+                <a
+                  key={label}
+                  href={`#${id}`}
+                  onClick={() => setOpen(false)}
+                  className="nav-link"
+                  style={{
+                    display: 'block',
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: active === id ? 'var(--color-crimson)' : 'rgba(245,240,234,0.7)',
+                    textDecoration: 'none',
+                    padding: '0.65rem 1rem',
+                    borderRadius: '0.5rem',
+                  }}
+                >
+                  {label}
+                </a>
+              )
+            })}
           </div>
         )}
       </nav>

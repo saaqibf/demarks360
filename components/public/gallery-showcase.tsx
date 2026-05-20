@@ -14,7 +14,7 @@ export async function GalleryShowcase() {
     <section id="gallery" className="sec-pad" style={{ background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Gallery</p>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '3rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '3rem' }}>
           From Our Events
         </h2>
       </Reveal>

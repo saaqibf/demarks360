@@ -122,7 +122,7 @@ export function Hero() {
               }}
             >
               CAPTURE<br />
-              <span style={{ color: 'var(--color-crimson)' }}>EVERY</span><br />
+              <span className="crimson-glow" style={{ color: 'var(--color-crimson)' }}>EVERY</span><br />
               ANGLE
             </h1>
 

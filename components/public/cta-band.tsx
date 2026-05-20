@@ -6,9 +6,9 @@ export function CtaBand() {
       <Reveal>
         <div className="cta-flex">
           <div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5.5rem)', fontWeight: 900, letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)' }}>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-text)' }}>
               Ready to Make it<br />
-              <span style={{ color: 'var(--color-crimson)' }}>Unforgettable?</span>
+              <span className="crimson-glow" style={{ color: 'var(--color-crimson)' }}>Unforgettable?</span>
             </h2>
             <p style={{ fontSize: '0.88rem', color: 'rgba(245,240,234,0.45)', fontWeight: 300, marginTop: '1.25rem', maxWidth: '380px', lineHeight: 1.75 }}>
               Book your 360 experience — $150/hr, 1.5 hr minimum. Calgary and surrounding areas.

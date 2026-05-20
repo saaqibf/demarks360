@@ -13,7 +13,7 @@ export function Testimonials() {
     <section className="sec-pad" style={{ background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Testimonials</p>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '4rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '4rem' }}>
           What People Say
         </h2>
       </Reveal>
@@ -21,7 +21,7 @@ export function Testimonials() {
       <div className="three-col-grid">
         {testimonials.map((t, i) => (
           <Reveal key={t.name} delay={i * 80}>
-            <div style={{ padding: '2.5rem', background: 'var(--color-surface)' }}>
+            <div className="card-hover" style={{ padding: '2.5rem', background: 'var(--color-surface)' }}>
               <p style={{ fontSize: '0.9rem', color: 'rgba(245,240,234,0.65)', lineHeight: 1.85, fontWeight: 300, fontStyle: 'italic', marginBottom: '2rem' }}>
                 &ldquo;{t.quote}&rdquo;
               </p>

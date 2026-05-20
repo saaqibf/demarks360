@@ -34,7 +34,7 @@ export function HowItWorks() {
     <section id="how-it-works" className="sec-pad" style={{ background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Process</p>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-text)' }}>
           How It Works
         </h2>
       </Reveal>
@@ -42,7 +42,7 @@ export function HowItWorks() {
       <div style={{ display: 'flex', flexDirection: 'column', border: `1px solid ${D}`, marginTop: '4rem' }}>
         {steps.map((step, i) => (
           <Reveal key={step.num} delay={i * 80}>
-            <div className="hiw-step-row hiw-step" style={{ borderBottom: i < steps.length - 1 ? `1px solid ${D}` : undefined }}>
+            <div className="hiw-step-row hiw-step card-hover" style={{ borderBottom: i < steps.length - 1 ? `1px solid ${D}` : undefined }}>
               <div className="hiw-num-cell" style={{ padding: '3rem 2rem', borderRight: `1px solid ${D}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span style={{ fontFamily: 'var(--font-display)', fontSize: '5rem', fontWeight: 900, lineHeight: 1, color: 'var(--color-crimson)', opacity: 0.15, display: 'block' }}>
                   {step.num}
