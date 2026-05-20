@@ -58,7 +58,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '2.5rem' }}>
+      <div className="admin-stats-grid">
         {stats.map(({ label, value }) => (
           <div key={label} style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>
@@ -84,6 +84,7 @@ export default async function DashboardPage() {
             No bookings yet
           </div>
         ) : (
+          <div className="admin-table-wrap">
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
@@ -132,6 +133,7 @@ export default async function DashboardPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

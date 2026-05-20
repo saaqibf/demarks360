@@ -15,7 +15,7 @@ const faqs = [
 
 export function Faq() {
   return (
-    <section id="faq" style={{ padding: '6rem 3rem', background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
+    <section id="faq" className="sec-pad" style={{ background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>FAQ</p>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '3rem' }}>

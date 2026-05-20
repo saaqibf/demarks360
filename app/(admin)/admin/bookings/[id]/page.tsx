@@ -66,7 +66,7 @@ export default async function BookingDetailPage({ params }: Props) {
         </span>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '1px' }}>
+      <div className="admin-2col" style={{ marginBottom: '1px' }}>
         {/* Event info */}
         <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '1rem' }}>Event</p>
@@ -113,7 +113,7 @@ export default async function BookingDetailPage({ params }: Props) {
       </div>
 
       {/* Video upload */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'rgba(255,255,255,0.06)', marginTop: '1px' }}>
+      <div className="admin-2col" style={{ marginTop: '1px' }}>
         <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
           <DeviceUpload bookingId={b.id} />
         </div>

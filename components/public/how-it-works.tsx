@@ -31,7 +31,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" style={{ padding: '6rem 3rem', background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
+    <section id="how-it-works" className="sec-pad" style={{ background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Process</p>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)' }}>
@@ -42,37 +42,20 @@ export function HowItWorks() {
       <div style={{ display: 'flex', flexDirection: 'column', border: `1px solid ${D}`, marginTop: '4rem' }}>
         {steps.map((step, i) => (
           <Reveal key={step.num} delay={i * 80}>
-            <div
-              className="hiw-step-row"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '110px 1fr 1fr',
-                alignItems: 'center',
-                borderBottom: i < steps.length - 1 ? `1px solid ${D}` : undefined,
-                cursor: 'default',
-              }}
-            >
-              <div style={{ padding: '3rem 2rem', borderRight: `1px solid ${D}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{
-                  fontFamily: 'var(--font-display)', fontSize: '5rem', fontWeight: 900, lineHeight: 1,
-                  color: 'var(--color-crimson)',
-                  opacity: 0.15, transition: 'opacity 0.4s',
-                  display: 'block',
-                }} data-hiw-num>
+            <div className="hiw-step-row hiw-step" style={{ borderBottom: i < steps.length - 1 ? `1px solid ${D}` : undefined }}>
+              <div className="hiw-num-cell" style={{ padding: '3rem 2rem', borderRight: `1px solid ${D}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: '5rem', fontWeight: 900, lineHeight: 1, color: 'var(--color-crimson)', opacity: 0.15, display: 'block' }}>
                   {step.num}
                 </span>
               </div>
-
-              <div style={{ padding: '2.5rem 3rem', borderRight: `1px solid ${D}` }}>
+              <div className="hiw-title-cell" style={{ padding: '2.5rem', borderRight: `1px solid ${D}` }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-crimson)', marginBottom: '0.5rem' }}>{step.num}</p>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--color-text)', marginBottom: '0.75rem' }}>
                   {step.title}
                 </h3>
-                <p style={{ fontSize: '0.85rem', color: 'rgba(245,240,234,0.55)', lineHeight: 1.75, fontWeight: 300 }}>
-                  {step.desc}
-                </p>
+                <p style={{ fontSize: '0.85rem', color: 'rgba(245,240,234,0.55)', lineHeight: 1.75, fontWeight: 300 }}>{step.desc}</p>
               </div>
-
-              <div style={{ padding: '2.5rem 3rem' }}>
+              <div style={{ padding: '2.5rem' }}>
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                   {step.bullets.map((b) => (
                     <li key={b} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'rgba(245,240,234,0.5)' }}>

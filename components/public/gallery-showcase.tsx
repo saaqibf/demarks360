@@ -11,7 +11,7 @@ export async function GalleryShowcase() {
   const slots = Array.from({ length: GRID_SIZE }, (_, i) => showcaseItems[i] ?? null)
 
   return (
-    <section id="gallery" style={{ padding: '6rem 3rem', background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
+    <section id="gallery" className="sec-pad" style={{ background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Gallery</p>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '3rem' }}>
@@ -19,7 +19,7 @@ export async function GalleryShowcase() {
         </h2>
       </Reveal>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: D }}>
+      <div className="gallery-grid">
         {slots.map((item, i) => (
           <Reveal key={item?.id ?? i} delay={i * 60}>
             <div style={{

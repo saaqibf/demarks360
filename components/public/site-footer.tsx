@@ -2,22 +2,21 @@ import Link from 'next/link'
 
 export function SiteFooter() {
   return (
-    <footer style={{ background: '#0F0F0F', padding: '3rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+    <footer style={{ background: '#0F0F0F', padding: '3rem 3rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="footer-inner">
         <div>
           <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: '#fff' }}>
-            DEMARKS{' '}
-            <span style={{ color: 'var(--color-crimson)' }}>360</span>
+            DEMARKS <span style={{ color: 'var(--color-crimson)' }}>360</span>
           </p>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginTop: '0.25rem' }}>
             Calgary 360 Video Booth
           </p>
-          <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', marginTop: '1rem', fontWeight: 300 }}>
+          <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', marginTop: '1rem', fontWeight: 300, lineHeight: 1.7 }}>
             Serving Calgary, Airdrie, Cochrane,<br />Chestermere, Okotoks & Rocky View County
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '3rem' }}>
+        <div className="footer-links">
           <div>
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: '0.75rem' }}>Navigation</p>
             {['How It Works', 'Pricing', 'Gallery', 'FAQ'].map((l) => (
@@ -36,7 +35,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="footer-bottom" style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>
           © {new Date().getFullYear()} Demarks 360. All rights reserved.
         </p>

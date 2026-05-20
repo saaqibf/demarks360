@@ -68,12 +68,11 @@ export function Hero() {
           <SiteNav />
 
           {/* Hero text content */}
-          <div style={{
+          <div className="hero-body" style={{
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-end',
-            padding: '0 2.5rem 0',
           }}>
             {/* Badge */}
             <div className="hero-label" style={{

@@ -2,9 +2,9 @@ import { Reveal } from './reveal'
 
 export function CtaBand() {
   return (
-    <section style={{ padding: '6rem 3rem', background: 'var(--color-surface)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+    <section className="sec-pad" style={{ background: 'var(--color-surface)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
       <Reveal>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem' }}>
+        <div className="cta-flex">
           <div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5.5rem)', fontWeight: 900, letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)' }}>
               Ready to Make it<br />

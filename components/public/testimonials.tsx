@@ -10,7 +10,7 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section style={{ padding: '6rem 3rem', background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
+    <section className="sec-pad" style={{ background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Testimonials</p>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 5rem)', letterSpacing: '0.01em', lineHeight: 0.9, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '4rem' }}>
@@ -18,7 +18,7 @@ export function Testimonials() {
         </h2>
       </Reveal>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: D }}>
+      <div className="three-col-grid">
         {testimonials.map((t, i) => (
           <Reveal key={t.name} delay={i * 80}>
             <div style={{ padding: '2.5rem', background: 'var(--color-surface)' }}>
