@@ -5,7 +5,12 @@ import { ShowcasePlayer } from './showcase-player'
 const GRID_SIZE = 6
 
 export async function GalleryShowcase() {
-  const showcaseItems = await getPublicShowcaseItems()
+  let showcaseItems: Awaited<ReturnType<typeof getPublicShowcaseItems>> = []
+  try {
+    showcaseItems = await getPublicShowcaseItems()
+  } catch {
+    // DB unavailable in local dev — render empty slots
+  }
   const slots = Array.from({ length: GRID_SIZE }, (_, i) => showcaseItems[i] ?? null)
 
   return (
