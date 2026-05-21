@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getGalleryByToken } from '@/lib/db/queries/gallery'
+import { resolveGalleryAccess } from '@/lib/gallery-access'
 import { GalleryPlayer } from './gallery-player'
 
 interface Props {
@@ -21,10 +21,12 @@ function fmtTime(t: string): string {
 
 export default async function GalleryPage({ params }: Props) {
   const { token } = await params
-  const data = await getGalleryByToken(token)
-  if (!data) notFound()
+  const result = await resolveGalleryAccess(token)
 
-  const { booking: b, items } = data
+  if (result.status === 'not-found' || result.status === 'cancelled') notFound()
+
+  const b = result.booking
+  const items = result.status === 'published' ? result.items : []
   const hasVideos = items.length > 0
 
   return (

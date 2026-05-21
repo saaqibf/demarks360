@@ -24,7 +24,7 @@ export async function sendBookingConfirmationEmail(bookingId: string) {
         depositAmount: b.depositAmount,
         balanceAmount: b.balanceAmount,
         balanceChargeDate: b.balanceChargeDate,
-        addOns: b.addOns as string[],
+        addOns: b.addOns,
         galleryToken: b.galleryToken,
       },
       customer: { name: c.name, email: c.email },

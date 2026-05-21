@@ -1,9 +1,23 @@
-import { SignIn } from '@clerk/nextjs'
+'use client'
+import { SignIn, useAuth } from '@clerk/nextjs'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function SignInPage() {
+  const { isSignedIn, isLoaded } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      const params = new URLSearchParams(window.location.search)
+      const redirectUrl = params.get('redirect_url') || '/account'
+      router.replace(redirectUrl)
+    }
+  }, [isLoaded, isSignedIn, router])
+
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-ink)' }}>
-      <SignIn appearance={{ variables: { colorPrimary: '#C0293A', colorBackground: '#111111', colorText: '#F5F0EA', colorInputBackground: '#1a1a1a', colorInputText: '#F5F0EA', colorNeutral: '#F5F0EA' } }} />
+    <div style={{ minHeight: '100vh', background: 'var(--color-sand)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <SignIn appearance={{ variables: { colorPrimary: '#C0293A', fontFamily: 'Nunito, sans-serif' } }} />
     </div>
   )
 }

@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   if (body.action === 'publish_gallery') {
     if (!body.bookingId) return NextResponse.json({ error: 'bookingId required' }, { status: 400 })
     await publishGallery(body.bookingId)
-    try { await sendGalleryReadyEmail(body.bookingId) } catch { /* non-fatal */ }
+    try { await sendGalleryReadyEmail(body.bookingId) } catch (e) { console.error('[gallery] sendGalleryReadyEmail failed:', e) }
     return NextResponse.json({ ok: true })
   }
 

@@ -2,95 +2,107 @@ import { Reveal } from './reveal'
 
 const steps = [
   {
-    num: '01',
+    num: '1',
     title: 'Book Online',
-    desc: 'Pick your date, hours, and add-ons. Pay 30% to lock in your date — the remaining 70% is auto-charged 7 days before your event. No surprises.',
+    desc: 'Pick your date, hours, and add-ons. Pay a 30% deposit to lock in your date. The remaining 70% is auto-charged 7 days before your event. No surprises.',
   },
   {
-    num: '02',
-    title: 'We Set Up',
-    desc: 'Our team arrives, sets up the 360° booth, and runs the whole experience from start to finish. You focus on the party — we handle everything else.',
+    num: '2',
+    title: 'We Show Up',
+    desc: 'Our team arrives early, sets up the 360° booth, and runs the whole experience for you. You focus on the party. We handle everything else.',
   },
   {
-    num: '03',
-    title: 'Get Your Gallery',
-    desc: 'Every take is captured. Your shareable gallery link is ready the same day — download, share, and relive every moment. No login required.',
+    num: '3',
+    title: 'Keep the Memories',
+    desc: 'Every take is captured and saved. Your shareable gallery link is ready the same day so you can download, share, and relive every moment. No login needed.',
   },
 ]
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="sec-pad sec-light-2" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
+    <section id="how-it-works" className="sec-pad" style={{ background: 'var(--color-sand-2)', borderBottom: '1px solid var(--color-border-light)' }}>
       <Reveal>
-        <p className="section-label" style={{ marginBottom: '0.75rem' }}>Process</p>
+        <p className="section-label" style={{ marginBottom: '0.85rem' }}>How It Works</p>
         <h2 style={{
           fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(3rem, 6vw, 6rem)',
-          fontWeight: 700,
-          fontStyle: 'italic',
-          letterSpacing: '0.01em',
-          lineHeight: 0.92,
-          color: 'var(--color-ink-warm)',
-          marginBottom: '3.5rem',
+          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+          fontWeight: 400,
+          lineHeight: 1.0,
+          color: 'var(--color-charcoal)',
+          marginBottom: '0.5rem',
+          letterSpacing: '-0.02em',
         }}>
-          Three Steps.<br />
-          <em style={{ fontStyle: 'normal', color: 'var(--color-crimson)', fontFamily: 'var(--font-display)', fontSize: '0.85em', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-            Zero Stress.
-          </em>
+          Three steps.
         </h2>
+        <p style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+          fontWeight: 400,
+          fontStyle: 'italic',
+          lineHeight: 1.0,
+          color: 'var(--color-amber)',
+          marginBottom: '0',
+          letterSpacing: '-0.02em',
+        }}>
+          Zero stress.
+        </p>
       </Reveal>
 
-      <div>
+      <div className="hiw-steps" style={{ marginTop: '4rem', border: '1px solid var(--color-border-light)', borderRadius: '16px', overflow: 'hidden' }}>
         {steps.map((step, i) => (
           <Reveal key={step.num} delay={i * 100}>
-            <div className="hiw-row-editorial">
+            <div
+              className="hiw-step-card"
+              style={{
+                padding: '2.5rem 2rem',
+                borderLeft: i > 0 ? '1px solid var(--color-border-light)' : 'none',
+                background: 'var(--color-sand-3)',
+                height: '100%',
+              }}
+            >
               <div style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '2.75rem',
-                fontWeight: 900,
+                fontFamily: 'var(--font-serif)',
+                fontSize: '3.5rem',
+                fontWeight: 400,
+                fontStyle: 'italic',
                 lineHeight: 1,
-                color: 'var(--color-crimson)',
-                letterSpacing: '-0.02em',
-                paddingTop: '0.15rem',
+                color: 'var(--color-amber)',
+                marginBottom: '1.5rem',
+                opacity: 0.8,
               }}>
                 {step.num}
               </div>
-
-              <div>
-                <h3 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1.6rem, 2.5vw, 2.25rem)',
-                  fontWeight: 700,
-                  fontStyle: 'italic',
-                  lineHeight: 1.05,
-                  color: 'var(--color-ink-warm)',
-                }}>
-                  {step.title}
-                </h3>
-              </div>
-
-              <div>
-                <p style={{
-                  fontSize: '0.88rem',
-                  color: 'var(--color-muted-warm)',
-                  lineHeight: 1.85,
-                  fontWeight: 300,
-                }}>
-                  {step.desc}
-                </p>
-              </div>
+              <h3 style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: '1.6rem',
+                fontWeight: 400,
+                lineHeight: 1.15,
+                color: 'var(--color-charcoal)',
+                marginBottom: '1rem',
+                letterSpacing: '-0.01em',
+              }}>
+                {step.title}
+              </h3>
+              <p style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.9rem',
+                color: 'var(--color-muted)',
+                lineHeight: 1.75,
+                fontWeight: 400,
+              }}>
+                {step.desc}
+              </p>
             </div>
           </Reveal>
         ))}
-        <div style={{ borderTop: '1px solid rgba(28,25,23,0.08)' }} />
       </div>
 
       <Reveal delay={300}>
-        <div style={{ marginTop: '3rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-          <a href="/book" className="btn-primary" style={{ padding: '1rem 2.25rem', fontSize: '0.88rem' }}>
+        <div style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <a href="/book" className="btn-primary">
             Book Your Experience
           </a>
-          <span style={{ fontSize: '0.78rem', color: 'var(--color-muted-warm)', fontWeight: 300 }}>
+          <span style={{ fontSize: '0.82rem', color: 'var(--color-muted)', fontWeight: 400 }}>
             $150/hr · 1.5 hr minimum · Calgary &amp; area
           </span>
         </div>

@@ -1,3 +1,5 @@
+import { ADDON_CATALOG } from '@/lib/pricing'
+
 interface BookingEmailData {
   booking: {
     id: string
@@ -52,12 +54,13 @@ function googleCalendarUrl(data: BookingEmailData['booking']): string {
   return `https://calendar.google.com/calendar/render?${params.toString()}`
 }
 
-const ADDON_LABELS: Record<string, string> = { firecrackers: 'Firecrackers (+$75)' }
-
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'
 
 export function bookingConfirmationHtml({ booking: b, customer: c }: BookingEmailData): string {
-  const addOnsList = (b.addOns as string[]).map(id => ADDON_LABELS[id] ?? id)
+  const addOnsList = b.addOns.map(id => {
+    const a = ADDON_CATALOG[id]
+    return a ? `${a.name} (+$${a.price})` : id
+  })
   const deposit = Number(b.depositAmount ?? 0).toFixed(2)
   const balance = Number(b.balanceAmount ?? 0).toFixed(2)
   const balanceDate = b.balanceChargeDate ? fmtDateShort(b.balanceChargeDate) : null

@@ -30,6 +30,8 @@ const labelStyle: React.CSSProperties = {
 
 export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const isOtherMode = !EVENT_TYPES.filter(t => t !== 'Other').includes(state.eventType) && state.eventType !== ''
+  const dropdownValue = isOtherMode ? 'Other' : state.eventType
 
   function validate(): boolean {
     const e: Record<string, string> = {}
@@ -37,7 +39,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
     if (!state.customerEmail.includes('@')) e.customerEmail = 'Valid email required'
     if (state.customerPhone.replace(/\D/g, '').length < 10) e.customerPhone = 'Valid phone required'
     if (!state.locationAddress.trim()) e.locationAddress = 'Address is required'
-    if (!state.eventType) e.eventType = 'Event type is required'
+    if (!state.eventType.trim()) e.eventType = 'Event type is required'
     if (!state.agreedToTerms) e.agreedToTerms = 'You must agree to the Terms of Service'
     setErrors(e)
     return Object.keys(e).length === 0
@@ -121,14 +123,29 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
           <label style={labelStyle}>Event Type</label>
           <select
             style={{ ...inputStyle, cursor: 'pointer' }}
-            value={state.eventType}
-            onChange={e => onChange({ eventType: e.target.value })}
+            value={dropdownValue}
+            onChange={e => {
+              if (e.target.value === 'Other') {
+                onChange({ eventType: ' ' })
+              } else {
+                onChange({ eventType: e.target.value })
+              }
+            }}
           >
             <option value="">Select event type…</option>
             {EVENT_TYPES.map(t => (
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
+          {isOtherMode && (
+            <input
+              style={{ ...inputStyle, marginTop: '0.5rem' }}
+              placeholder="Describe your event…"
+              value={state.eventType.trim()}
+              onChange={e => onChange({ eventType: e.target.value })}
+              autoFocus
+            />
+          )}
           {errors.eventType && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventType}</p>}
         </div>
 

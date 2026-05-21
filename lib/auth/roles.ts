@@ -1,8 +1,8 @@
-import { auth } from '@clerk/nextjs/server'
+import { currentUser } from '@clerk/nextjs/server'
 
 export async function getRole(): Promise<string | undefined> {
-  const { sessionClaims } = await auth()
-  return (sessionClaims?.metadata as { role?: string } | undefined)?.role
+  const user = await currentUser()
+  return (user?.publicMetadata as { role?: string } | undefined)?.role
 }
 
 export async function isAdmin(): Promise<boolean> {

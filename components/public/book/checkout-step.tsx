@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import type { BookingState } from '@/app/(public)/book/page'
+import { calculateBookingCost, balanceChargeDate, PRICING } from '@/lib/pricing'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')
 
@@ -22,9 +23,6 @@ function formatTime(t: string): string {
   const hour = h > 12 ? h - 12 : h === 0 ? 12 : h
   return `${hour}:${String(m).padStart(2, '0')} ${period}`
 }
-
-const ADDON_PRICES: Record<string, number> = { firecrackers: 75 }
-const ADDON_NAMES: Record<string, string> = { firecrackers: 'Firecrackers' }
 
 function PaymentForm({ bookingId, onBack }: { bookingId: string; onBack: () => void }) {
   const stripe = useStripe()
@@ -90,20 +88,16 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
   const durationMinutes = state.startTime && state.endTime
     ? timeToMinutes(state.endTime) - timeToMinutes(state.startTime)
     : 0
-  const durationHours = durationMinutes / 60
-  const hourlySubtotal = durationHours * 150
-  const addOnSubtotal = state.addOnIds.reduce((sum, id) => sum + (ADDON_PRICES[id] ?? 0), 0)
-  const travelSurcharge = state.locationCity !== 'Calgary' ? 50 : 0
-  const subtotal = hourlySubtotal + addOnSubtotal + travelSurcharge
-  const deposit = Math.round(subtotal * 0.30 * 100) / 100
-  const balance = Math.round(subtotal * 0.70 * 100) / 100
 
-  const balanceChargeDate = (() => {
-    if (!state.date) return ''
-    const d = new Date(state.date + 'T00:00:00')
-    d.setDate(d.getDate() - 7)
-    return d.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })
-  })()
+  const pricing = calculateBookingCost({
+    durationMinutes,
+    addOnIds: state.addOnIds,
+    locationCity: state.locationCity ?? 'Calgary',
+  })
+
+  const chargeDateDisplay = state.date
+    ? new Date(balanceChargeDate(state.date) + 'T00:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })
+    : ''
 
   useEffect(() => {
     if (!state.date || !state.startTime || !state.endTime) return
@@ -154,11 +148,7 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
     )
   }
 
-  const lineItems = [
-    { label: `${durationHours.toFixed(1).replace('.0', '')} hrs × $150/hr`, amount: hourlySubtotal },
-    ...state.addOnIds.map(id => ({ label: ADDON_NAMES[id] ?? id, amount: ADDON_PRICES[id] ?? 0 })),
-    ...(travelSurcharge > 0 ? [{ label: 'Travel surcharge', amount: travelSurcharge }] : []),
-  ]
+  const { lineItems, depositAmount: deposit, balanceAmount: balance, subtotal, durationHours } = pricing
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '3rem', alignItems: 'start' }}>
@@ -201,9 +191,9 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
 
           <div style={{ padding: '1.25rem 1.5rem', background: '#0a0a0a', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>Deposit Due Today (30%)</p>
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>Deposit Due Today ({PRICING.DEPOSIT_PERCENT * 100}%)</p>
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.1rem' }}>
-                Balance of ${balance.toFixed(2)} auto-charged on {balanceChargeDate}
+                Balance of ${balance.toFixed(2)} auto-charged on {chargeDateDisplay}
               </p>
             </div>
             <span style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', color: 'var(--color-crimson)', fontWeight: 800 }}>

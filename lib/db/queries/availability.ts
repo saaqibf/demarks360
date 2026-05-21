@@ -12,7 +12,6 @@ export interface AvailabilityResult {
   bookedSlots: BookedSlot[]
   adminBlocks: { startTime: string | null; endTime: string | null; reason: string | null }[]
   bookingCount: number
-  isDateFull: boolean
 }
 
 export async function getAvailabilityForDate(date: string): Promise<AvailabilityResult> {
@@ -43,7 +42,6 @@ export async function getAvailabilityForDate(date: string): Promise<Availability
     bookedSlots: activeBookings,
     adminBlocks,
     bookingCount: activeBookings.length,
-    isDateFull: activeBookings.length >= 2,
   }
 }
 

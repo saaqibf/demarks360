@@ -1,125 +1,128 @@
 import { Reveal } from './reveal'
 
 const events = [
-  {
-    type: 'Birthday',
-    tag: 'Milestones & Celebrations',
-    bg: 'linear-gradient(160deg, #1a0d1f 0%, #2d1040 50%, #0d0810 100%)',
-  },
-  {
-    type: 'Wedding',
-    tag: 'The Most Important Day',
-    bg: 'linear-gradient(160deg, #0d1a14 0%, #1a3028 50%, #080d0a 100%)',
-  },
-  {
-    type: 'Corporate',
-    tag: 'Brand Moments & Team Events',
-    bg: 'linear-gradient(160deg, #0a0f1a 0%, #111e36 50%, #080a10 100%)',
-  },
-  {
-    type: 'Graduation',
-    tag: 'Years of Work. One Moment.',
-    bg: 'linear-gradient(160deg, #1a1205 0%, #2e1f08 50%, #0d0c08 100%)',
-  },
+  { num: '01', type: 'Birthday', tag: 'Milestones & Celebrations', emoji: '🎉' },
+  { num: '02', type: 'Wedding', tag: 'Your Most Important Day', emoji: '💍' },
+  { num: '03', type: 'Corporate', tag: 'Brand Moments & Team Events', emoji: '🏢' },
+  { num: '04', type: 'Graduation', tag: 'Years of Work. One Moment.', emoji: '🎓' },
 ]
 
 export function EventTypes() {
   return (
-    <section className="sec-pad sec-light" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
+    <section className="sec-pad" style={{ background: 'var(--color-sand)', borderBottom: '1px solid var(--color-border-light)' }}>
       <Reveal>
-        <p className="section-label" style={{ marginBottom: '0.75rem' }}>What We Do</p>
+        <p className="section-label" style={{ marginBottom: '0.85rem' }}>What We Do</p>
         <h2 style={{
           fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.8rem, 5vw, 5.5rem)',
-          fontWeight: 700,
-          letterSpacing: '0.04em',
-          lineHeight: 0.95,
-          textTransform: 'uppercase',
-          color: 'var(--color-ink-warm)',
+          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+          fontWeight: 400,
+          lineHeight: 1.0,
+          color: 'var(--color-charcoal)',
+          marginBottom: '0.5rem',
+          letterSpacing: '-0.02em',
         }}>
-          The 360 Experience<br />
-          <span style={{ color: 'var(--color-crimson)' }}>For Every Occasion</span>
+          The 360 Experience
         </h2>
+        <p style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+          fontWeight: 400,
+          fontStyle: 'italic',
+          lineHeight: 1.0,
+          color: 'var(--color-amber)',
+          marginBottom: '3.5rem',
+          letterSpacing: '-0.02em',
+        }}>
+          For Every Occasion
+        </p>
       </Reveal>
 
       <div className="events-grid">
         {events.map((ev, i) => (
-          <Reveal key={ev.type} delay={i * 80}>
+          <Reveal key={ev.type} delay={i * 70}>
             <a
               href="/book"
+              aria-label={`Book a 360 booth for your ${ev.type.toLowerCase()} event`}
+              className="event-card"
               style={{
                 display: 'block',
-                aspectRatio: '3/4',
-                background: ev.bg,
-                position: 'relative',
-                overflow: 'hidden',
                 textDecoration: 'none',
-                cursor: 'pointer',
+                aspectRatio: '3/4',
+                position: 'relative',
+                background: 'var(--color-charcoal)',
+                borderRadius: '16px',
+                overflow: 'hidden',
               }}
-              className="card-hover"
             >
-              {/* Crimson corner accent */}
+              {/* Warm ambient gradient */}
               <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '3px',
-                height: '40px',
-                background: 'var(--color-crimson)',
+                position: 'absolute', inset: 0,
+                background: 'radial-gradient(ellipse at 50% 20%, rgba(168,117,48,0.08) 0%, transparent 60%)',
+                pointerEvents: 'none',
               }} />
-
-              {/* Event number */}
-              <span style={{
-                position: 'absolute',
-                top: '1.25rem',
-                right: '1.25rem',
-                fontFamily: 'var(--font-display)',
-                fontSize: '0.55rem',
-                fontWeight: 700,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.2)',
-              }}>
-                0{i + 1}
-              </span>
 
               {/* Bottom gradient */}
               <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: '60%',
-                background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)',
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '65%',
+                background: 'linear-gradient(to top, rgba(26,23,20,0.96) 0%, rgba(26,23,20,0.5) 50%, transparent 100%)',
+                pointerEvents: 'none',
               }} />
 
-              {/* Text */}
-              <div style={{
+              {/* Faded watermark */}
+              <div aria-hidden="true" style={{
                 position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                padding: '1.5rem',
+                top: '50%', left: '50%',
+                transform: 'translate(-50%, -55%)',
+                fontFamily: 'var(--font-serif)',
+                fontSize: '6rem',
+                fontWeight: 400,
+                fontStyle: 'italic',
+                color: 'var(--color-sand)',
+                opacity: 0.04,
+                userSelect: 'none',
+                whiteSpace: 'nowrap',
+                pointerEvents: 'none',
               }}>
+                360°
+              </div>
+
+              {/* Step number */}
+              <div style={{ position: 'absolute', top: '1.25rem', left: '1.25rem' }}>
+                <span style={{
+                  fontFamily: 'var(--font-body)', fontSize: '0.6rem', fontWeight: 700,
+                  letterSpacing: '0.2em', textTransform: 'uppercase',
+                  color: 'rgba(237,232,223,0.25)',
+                }}>
+                  {ev.num}
+                </span>
+              </div>
+
+              {/* Arrow chip */}
+              <div style={{
+                position: 'absolute', top: '1.1rem', right: '1.1rem',
+                width: '32px', height: '32px', borderRadius: '50%',
+                background: 'rgba(237,232,223,0.1)',
+                border: '1px solid rgba(237,232,223,0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '0.75rem', color: 'rgba(237,232,223,0.55)',
+                transition: 'background 0.25s ease',
+              }}>
+                →
+              </div>
+
+              {/* Bottom text */}
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1.5rem 1.25rem 1.5rem' }}>
                 <p style={{
-                  fontFamily: 'var(--font-ui)',
-                  fontSize: '0.5rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-crimson)',
-                  marginBottom: '0.4rem',
+                  fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 500,
+                  color: 'rgba(237,232,223,0.45)', marginBottom: '0.4rem', lineHeight: 1.4,
+                  letterSpacing: '0.01em',
                 }}>
                   {ev.tag}
                 </p>
                 <p style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.6rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  color: '#fff',
-                  lineHeight: 1,
+                  fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.6rem, 2.5vw, 2rem)',
+                  fontWeight: 400, color: 'var(--color-sand)', lineHeight: 1,
+                  letterSpacing: '-0.01em',
                 }}>
                   {ev.type}
                 </p>
@@ -129,14 +132,12 @@ export function EventTypes() {
         ))}
       </div>
 
-      <Reveal delay={200}>
-        <p style={{
-          marginTop: '1.5rem',
-          fontSize: '0.78rem',
-          color: 'var(--color-muted-warm)',
-          fontWeight: 300,
-        }}>
-          Not sure which fits? <a href="/book" style={{ color: 'var(--color-crimson)', textDecoration: 'none', fontWeight: 500 }}>Book a consultation →</a>
+      <Reveal delay={250}>
+        <p style={{ marginTop: '1.75rem', fontSize: '0.82rem', color: 'var(--color-muted)', fontWeight: 400 }}>
+          Not sure what fits your event?{' '}
+          <a href="/book" style={{ color: 'var(--color-amber)', textDecoration: 'none', fontWeight: 600 }}>
+            Book a consultation →
+          </a>
         </p>
       </Reveal>
     </section>

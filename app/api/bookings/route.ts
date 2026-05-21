@@ -1,22 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createBookingSchema } from '@/lib/validations/booking'
-import { getTravelSurcharge } from '@/lib/validations/cities'
-import { getAvailabilityForDate } from '@/lib/db/queries/availability'
+import { checkBookingAvailability } from '@/lib/availability'
 import { createBookingRecord, getOrCreateCustomer } from '@/lib/db/queries/bookings'
-import { stripe } from '@/lib/stripe'
-
-function timeToMinutes(t: string): number {
-  const [h, m] = t.split(':').map(Number)
-  return h * 60 + m
-}
-
-function addDays(dateStr: string, days: number): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  d.setDate(d.getDate() + days)
-  return d.toISOString().split('T')[0]
-}
-
-const ADDON_PRICES: Record<string, number> = { firecrackers: 75 }
+import { calculateBookingCost, balanceChargeDate, timeToMinutes, PRICING } from '@/lib/pricing'
+import { createBookingIntent } from '@/lib/stripe/booking-intent'
 
 export async function POST(req: NextRequest) {
   let body: unknown
@@ -29,65 +16,38 @@ export async function POST(req: NextRequest) {
 
   const input = parsed.data
 
-  // Re-check availability to prevent races
-  const availability = await getAvailabilityForDate(input.eventDate)
-  if (availability.isDateFull) {
-    return NextResponse.json({ error: 'This date is fully booked. Please choose another date.' }, { status: 409 })
+  const availability = await checkBookingAvailability(input.eventDate)
+  if (availability.status !== 'available') {
+    const message =
+      availability.status === 'full' ? 'This date is fully booked. Please choose another date.' :
+      availability.status === 'too-soon' ? `Bookings must be made at least ${PRICING.LEAD_TIME_DAYS} days in advance.` :
+      'This date is unavailable.'
+    return NextResponse.json({ error: message }, { status: 409 })
   }
 
-  // Calculate pricing
   const durationMinutes = timeToMinutes(input.endTime) - timeToMinutes(input.startTime)
-  if (durationMinutes < 90) {
-    return NextResponse.json({ error: 'Minimum booking duration is 1.5 hours.' }, { status: 422 })
+  if (durationMinutes < PRICING.MIN_DURATION_MINUTES) {
+    return NextResponse.json({ error: `Minimum booking duration is ${PRICING.MIN_DURATION_MINUTES / 60} hours.` }, { status: 422 })
   }
 
-  const durationHours = durationMinutes / 60
-  const hourlySubtotal = durationHours * 150
-  const addOnSubtotal = input.addOnIds.reduce((sum, id) => sum + (ADDON_PRICES[id] ?? 0), 0)
-  const travelSurcharge = getTravelSurcharge(input.locationCity)
-  const subtotal = hourlySubtotal + addOnSubtotal + travelSurcharge
-  const depositAmount = Math.round(subtotal * 0.30 * 100) / 100
-  const balanceAmount = Math.round(subtotal * 0.70 * 100) / 100
-  const depositCents = Math.round(depositAmount * 100)
-  const balanceChargeDate = addDays(input.eventDate, -7)
-
-  // Create or find Stripe customer
-  const existingStripeCustomers = await stripe.customers.list({ email: input.customerEmail, limit: 1 })
-  let stripeCustomer: { id: string }
-  if (existingStripeCustomers.data.length > 0) {
-    stripeCustomer = existingStripeCustomers.data[0]
-  } else {
-    stripeCustomer = await stripe.customers.create({
-      name: input.customerName,
-      email: input.customerEmail,
-      phone: input.customerPhone,
-    })
-  }
-
-  // Create PaymentIntent — setup_future_usage saves the card for balance charge
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: depositCents,
-    currency: 'cad',
-    customer: stripeCustomer.id,
-    setup_future_usage: 'off_session',
-    statement_descriptor_suffix: 'D360',
-    metadata: {
-      eventDate: input.eventDate,
-      startTime: input.startTime,
-      endTime: input.endTime,
-      customerEmail: input.customerEmail,
-    },
+  const pricing = calculateBookingCost({
+    durationMinutes,
+    addOnIds: input.addOnIds,
+    locationCity: input.locationCity,
   })
 
-  // Upsert customer in our DB (using Stripe customer ID as stand-in until Clerk auth is wired in Plan 5)
-  const customer = await getOrCreateCustomer(
-    stripeCustomer.id,
-    input.customerName,
-    input.customerEmail,
-    input.customerPhone,
-  )
+  const { stripeCustomerId, paymentIntentId, clientSecret } = await createBookingIntent({
+    customerEmail: input.customerEmail,
+    customerName: input.customerName,
+    customerPhone: input.customerPhone,
+    depositCents: pricing.depositCents,
+    eventDate: input.eventDate,
+    startTime: input.startTime,
+    endTime: input.endTime,
+  })
 
-  // Insert booking record
+  const customer = await getOrCreateCustomer(stripeCustomerId, input.customerName, input.customerEmail, input.customerPhone)
+
   const booking = await createBookingRecord({
     customerId: customer.id,
     eventDate: input.eventDate,
@@ -98,16 +58,13 @@ export async function POST(req: NextRequest) {
     eventType: input.eventType,
     locationAddress: input.locationAddress,
     locationCity: input.locationCity,
-    travelSurcharge,
-    depositAmount,
-    balanceAmount,
-    balanceChargeDate,
-    stripePaymentIntentId: paymentIntent.id,
-    stripeCustomerId: stripeCustomer.id,
+    travelSurcharge: pricing.travelSurcharge,
+    depositAmount: pricing.depositAmount,
+    balanceAmount: pricing.balanceAmount,
+    balanceChargeDate: balanceChargeDate(input.eventDate),
+    stripePaymentIntentId: paymentIntentId,
+    stripeCustomerId,
   })
 
-  return NextResponse.json({
-    clientSecret: paymentIntent.client_secret,
-    bookingId: booking.id,
-  })
+  return NextResponse.json({ clientSecret, bookingId: booking.id })
 }

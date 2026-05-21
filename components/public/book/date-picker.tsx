@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { PRICING } from '@/lib/pricing'
 
 interface DatePickerProps {
   selectedDate: string | null
@@ -25,7 +26,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const minDate = new Date(today)
-  minDate.setDate(minDate.getDate() + 7)
+  minDate.setDate(minDate.getDate() + PRICING.LEAD_TIME_DAYS)
 
   const [viewYear, setViewYear] = useState(() => minDate.getFullYear())
   const [viewMonth, setViewMonth] = useState(() => minDate.getMonth())
@@ -39,7 +40,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
       const d = toDateStr(year, month, i + 1)
       return fetch(`/api/availability?date=${d}`)
         .then((r) => r.json())
-        .then((data) => (data.isDateFull ? d : null))
+        .then((data: { status: string }) => (data.status !== 'available' ? d : null))
     })
     Promise.all(fetches).then((results) => {
       setFullDates(new Set(results.filter(Boolean) as string[]))
@@ -122,7 +123,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
                   textAlign: 'center',
                   fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: selected ? 700 : 400,
                   background: selected ? 'var(--color-crimson)' : 'transparent',
-                  color: selected ? '#fff' : disabled ? 'rgba(245,240,234,0.15)' : isFull ? 'var(--color-crimson)' : 'var(--color-text)',
+                  color: selected ? '#fff' : disabled ? 'rgba(15,15,15,0.2)' : isFull ? 'var(--color-crimson)' : 'var(--color-text)',
                   transition: 'background 0.15s',
                 }}
                 title={isFull ? 'Fully booked' : undefined}

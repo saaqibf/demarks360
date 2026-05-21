@@ -1,8 +1,7 @@
 'use client'
-import { useUser, useClerk } from '@clerk/nextjs'
+import { useUser, useClerk, SignInButton } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import Link from 'next/link'
 
 export default function AdminLoginPage() {
   const { isLoaded, isSignedIn, user } = useUser()
@@ -65,18 +64,19 @@ export default function AdminLoginPage() {
 
         {/* Not signed in */}
         {isLoaded && !isSignedIn && (
-          <Link
-            href="/sign-in?redirect_url=/admin/dashboard"
-            style={{
-              display: 'block', width: '100%', background: '#C0293A',
-              borderRadius: '2px', padding: '0.9rem', textAlign: 'center',
-              textDecoration: 'none', fontSize: '0.65rem', fontWeight: 700,
-              letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff',
-              boxSizing: 'border-box',
-            }}
-          >
-            Sign in as Admin
-          </Link>
+          <SignInButton mode="modal" forceRedirectUrl="/admin-login">
+            <button
+              style={{
+                display: 'block', width: '100%', background: '#C0293A',
+                borderRadius: '2px', padding: '0.9rem', textAlign: 'center',
+                border: 'none', fontSize: '0.65rem', fontWeight: 700,
+                letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff',
+                boxSizing: 'border-box', cursor: 'pointer',
+              }}
+            >
+              Sign in as Admin
+            </button>
+          </SignInButton>
         )}
 
         {/* Signed in, redirecting */}
