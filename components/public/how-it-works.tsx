@@ -20,64 +20,73 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="sec-pad sec-light" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
+    <section id="how-it-works" className="sec-pad sec-light-2" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Process</p>
         <h2 style={{
           fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.8rem, 5vw, 5.5rem)',
+          fontSize: 'clamp(3rem, 6vw, 6rem)',
           fontWeight: 700,
-          letterSpacing: '0.04em',
-          lineHeight: 0.95,
-          textTransform: 'uppercase',
+          fontStyle: 'italic',
+          letterSpacing: '0.01em',
+          lineHeight: 0.92,
           color: 'var(--color-ink-warm)',
+          marginBottom: '3.5rem',
         }}>
-          How It Works
+          Three Steps.<br />
+          <em style={{ fontStyle: 'normal', color: 'var(--color-crimson)', fontFamily: 'var(--font-display)', fontSize: '0.85em', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            Zero Stress.
+          </em>
         </h2>
       </Reveal>
 
-      <div className="hiw-light-grid">
+      <div>
         {steps.map((step, i) => (
           <Reveal key={step.num} delay={i * 100}>
-            <div style={{ background: 'var(--color-cream)', padding: '3rem 2.5rem' }}>
-              <p style={{
+            <div className="hiw-row-editorial">
+              <div style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '4.5rem',
+                fontSize: '2.75rem',
                 fontWeight: 900,
                 lineHeight: 1,
                 color: 'var(--color-crimson)',
-                opacity: 0.12,
-                marginBottom: '1.5rem',
-                userSelect: 'none',
+                letterSpacing: '-0.02em',
+                paddingTop: '0.15rem',
               }}>
                 {step.num}
-              </p>
-              <h3 style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: '1.75rem',
-                fontWeight: 700,
-                letterSpacing: '0.03em',
-                textTransform: 'uppercase',
-                color: 'var(--color-ink-warm)',
-                marginBottom: '0.85rem',
-              }}>
-                {step.title}
-              </h3>
-              <p style={{
-                fontSize: '0.88rem',
-                color: 'var(--color-muted-warm)',
-                lineHeight: 1.8,
-                fontWeight: 300,
-              }}>
-                {step.desc}
-              </p>
+              </div>
+
+              <div>
+                <h3 style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(1.6rem, 2.5vw, 2.25rem)',
+                  fontWeight: 700,
+                  fontStyle: 'italic',
+                  lineHeight: 1.05,
+                  color: 'var(--color-ink-warm)',
+                }}>
+                  {step.title}
+                </h3>
+              </div>
+
+              <div>
+                <p style={{
+                  fontSize: '0.88rem',
+                  color: 'var(--color-muted-warm)',
+                  lineHeight: 1.85,
+                  fontWeight: 300,
+                }}>
+                  {step.desc}
+                </p>
+              </div>
             </div>
           </Reveal>
         ))}
+        <div style={{ borderTop: '1px solid rgba(28,25,23,0.08)' }} />
       </div>
 
       <Reveal delay={300}>
-        <div style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+        <div style={{ marginTop: '3rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
           <a href="/book" className="btn-primary" style={{ padding: '1rem 2.25rem', fontSize: '0.88rem' }}>
             Book Your Experience
           </a>

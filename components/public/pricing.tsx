@@ -16,8 +16,20 @@ export function Pricing() {
     <section id="pricing" className="sec-pad sec-light-2" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Pricing</p>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-ink-warm)', marginBottom: '3.5rem' }}>
-          Simple,<br />Transparent Pricing
+        <h2 style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(3rem, 6vw, 6rem)',
+          fontWeight: 700,
+          fontStyle: 'italic',
+          letterSpacing: '0.01em',
+          lineHeight: 0.92,
+          color: 'var(--color-ink-warm)',
+          marginBottom: '3.5rem',
+        }}>
+          Simple,<br />
+          <em style={{ fontStyle: 'normal', color: 'var(--color-crimson)', fontFamily: 'var(--font-display)', fontSize: '0.85em', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            Transparent Pricing
+          </em>
         </h2>
       </Reveal>
 

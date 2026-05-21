@@ -16,8 +16,20 @@ export function Faq() {
     <section id="faq" className="sec-pad sec-light" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>FAQ</p>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-ink-warm)', marginBottom: '3rem' }}>
-          Common Questions
+        <h2 style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(3rem, 6vw, 6rem)',
+          fontWeight: 700,
+          fontStyle: 'italic',
+          letterSpacing: '0.01em',
+          lineHeight: 0.92,
+          color: 'var(--color-ink-warm)',
+          marginBottom: '3rem',
+        }}>
+          Common<br />
+          <em style={{ fontStyle: 'normal', color: 'var(--color-crimson)', fontFamily: 'var(--font-display)', fontSize: '0.85em', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            Questions
+          </em>
         </h2>
       </Reveal>
 
