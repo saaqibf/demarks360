@@ -48,10 +48,12 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const empty: AvailabilityData = { bookedSlots: [], adminBlocks: [], isDateFull: false }
     setLoading(true)
     fetch(`/api/availability?date=${date}`)
-      .then(r => r.json())
+      .then(r => r.ok ? r.json() : Promise.resolve(empty))
       .then((data: AvailabilityData) => { setAvailability(data); setLoading(false) })
+      .catch(() => { setAvailability(empty); setLoading(false) })
   }, [date])
 
   function isSlotBlocked(slot: string, avail: AvailabilityData): boolean {

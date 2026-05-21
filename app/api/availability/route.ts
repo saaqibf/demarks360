@@ -8,6 +8,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid date' }, { status: 400 })
   }
 
-  const availability = await checkBookingAvailability(date)
-  return NextResponse.json(availability)
+  try {
+    const availability = await checkBookingAvailability(date)
+    return NextResponse.json(availability)
+  } catch {
+    return NextResponse.json({ status: 'available', bookedSlots: [], bookingCount: 0, adminBlocks: [] })
+  }
 }

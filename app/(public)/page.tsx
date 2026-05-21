@@ -1,3 +1,5 @@
+export const revalidate = 300 // re-generate at most every 5 minutes
+
 import { SiteNav } from '@/components/public/site-nav'
 import { Hero } from '@/components/public/hero'
 import { TrustStrip } from '@/components/public/trust-strip'

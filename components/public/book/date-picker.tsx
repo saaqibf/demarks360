@@ -39,8 +39,9 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
     const fetches = Array.from({ length: daysInMonth }, (_, i) => {
       const d = toDateStr(year, month, i + 1)
       return fetch(`/api/availability?date=${d}`)
-        .then((r) => r.json())
+        .then((r) => r.ok ? r.json() : Promise.resolve({ status: 'available' }))
         .then((data: { status: string }) => (data.status !== 'available' ? d : null))
+        .catch(() => null)
     })
     Promise.all(fetches).then((results) => {
       setFullDates(new Set(results.filter(Boolean) as string[]))
