@@ -15,6 +15,11 @@
   --font-serif: 'Cormorant', serif;
   --font-ui: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
+
+  --color-cream: #F5F1EB;
+  --color-cream-2: #EDE9E2;
+  --color-ink-warm: #1C1917;
+  --color-muted-warm: #78716C;
 }
 
 * {
@@ -236,6 +241,53 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 
 /* ─── Touch targets ─────────────────────────────────────────────── */
 button, a, [role="button"] { min-height: 44px; }
+
+/* ─── Light (cream) sections ────────────────────────────────────── */
+.sec-light { background: var(--color-cream); }
+.sec-light-2 { background: var(--color-cream-2); }
+
+/* ─── Trust strip ───────────────────────────────────────────────── */
+.trust-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.trust-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2.5rem;
+  text-align: center;
+}
+.trust-item + .trust-item { border-left: 1px solid rgba(255,255,255,0.07); }
+@media (max-width: 600px) {
+  .trust-strip { flex-wrap: wrap; gap: 0; }
+  .trust-item { padding: 0.9rem 1.5rem; width: 50%; }
+  .trust-item + .trust-item { border-left: none; }
+  .trust-item:nth-child(2) { border-left: 1px solid rgba(255,255,255,0.07); }
+  .trust-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.07); }
+  .trust-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.07); border-left: 1px solid rgba(255,255,255,0.07); }
+}
+
+/* ─── Event types grid ──────────────────────────────────────────── */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 3rem;
+}
+@media (max-width: 900px) { .events-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; } }
+@media (max-width: 480px) { .events-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; } }
+
+/* ─── How it works light grid ───────────────────────────────────── */
+.hiw-light-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(28,25,23,0.1);
+  margin-top: 3.5rem;
+}
+@media (max-width: 640px) { .hiw-light-grid { grid-template-columns: 1fr; } }
 
 /* ─── Glow effects (ui-ux-pro-max) ─────────────────────────────── */
 .crimson-glow { text-shadow: 0 0 30px rgba(192,41,58,0.45), 0 0 80px rgba(192,41,58,0.15); }

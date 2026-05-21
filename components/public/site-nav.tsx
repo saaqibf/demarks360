@@ -21,12 +21,12 @@ export function SiteNav() {
   }, [])
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '1.25rem', paddingLeft: '1rem', paddingRight: '1rem', position: 'relative', zIndex: 100 }}>
+    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '1.25rem', paddingLeft: '1rem', paddingRight: '1rem', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, pointerEvents: 'none' }}>
       <nav style={{
-        background: 'rgba(8,8,8,0.72)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(8,8,8,0.82)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(255,255,255,0.09)',
         borderRadius: '9999px',
         padding: '0.45rem 0.45rem 0.45rem 1.5rem',
         display: 'flex',
@@ -34,6 +34,7 @@ export function SiteNav() {
         width: '100%',
         maxWidth: '760px',
         position: 'relative',
+        pointerEvents: 'auto',
       }}>
         {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>

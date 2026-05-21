@@ -1,74 +1,91 @@
 import { Reveal } from './reveal'
 
-const D = 'rgba(255,255,255,0.07)'
-
 const steps = [
   {
     num: '01',
-    title: 'Browse & Pick Your Hours',
-    desc: 'Choose how long you need the booth — minimum 1.5 hours, no maximum. $150/hour, simple.',
-    bullets: ['No hidden fees', 'Instant price calculation', 'Add firecrackers', 'Secure checkout'],
+    title: 'Book Online',
+    desc: 'Pick your date, hours, and add-ons. Pay 30% to lock in your date — the remaining 70% is auto-charged 7 days before your event. No surprises.',
   },
   {
     num: '02',
-    title: 'Choose Your Date & Time',
-    desc: "Pick from available slots on our live calendar. See exactly what's taken so you can plan around it.",
-    bullets: ['7-day advance booking', 'Real-time availability', 'Two events per day max', '30-min slot increments'],
+    title: 'We Set Up',
+    desc: 'Our team arrives, sets up the 360° booth, and runs the whole experience from start to finish. You focus on the party — we handle everything else.',
   },
   {
     num: '03',
-    title: 'Secure With a Deposit',
-    desc: 'Pay 30% upfront to hold your date. Your card is saved — the remaining 70% is charged automatically 7 days before your event.',
-    bullets: ['30% deposit today', 'Card saved securely', '70% auto-charged at 7 days', 'Full receipt emailed'],
-  },
-  {
-    num: '04',
-    title: 'We Show Up & Shoot',
-    desc: 'Our team arrives, sets up, and captures every angle. After the event, your gallery link is ready to share.',
-    bullets: ['Professional setup', 'Unlimited takes', 'Same-day gallery link', 'Download & share freely'],
+    title: 'Get Your Gallery',
+    desc: 'Every take is captured. Your shareable gallery link is ready the same day — download, share, and relive every moment. No login required.',
   },
 ]
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="sec-pad" style={{ background: 'var(--color-surface)', borderBottom: `1px solid ${D}` }}>
+    <section id="how-it-works" className="sec-pad sec-light" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Process</p>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-text)' }}>
+        <h2 style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(2.8rem, 5vw, 5.5rem)',
+          fontWeight: 700,
+          letterSpacing: '0.04em',
+          lineHeight: 0.95,
+          textTransform: 'uppercase',
+          color: 'var(--color-ink-warm)',
+        }}>
           How It Works
         </h2>
       </Reveal>
 
-      <div style={{ display: 'flex', flexDirection: 'column', border: `1px solid ${D}`, marginTop: '4rem' }}>
+      <div className="hiw-light-grid">
         {steps.map((step, i) => (
-          <Reveal key={step.num} delay={i * 80}>
-            <div className="hiw-step-row hiw-step card-hover" style={{ borderBottom: i < steps.length - 1 ? `1px solid ${D}` : undefined }}>
-              <div className="hiw-num-cell" style={{ padding: '3rem 2rem', borderRight: `1px solid ${D}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '5rem', fontWeight: 900, lineHeight: 1, color: 'var(--color-crimson)', opacity: 0.15, display: 'block' }}>
-                  {step.num}
-                </span>
-              </div>
-              <div className="hiw-title-cell" style={{ padding: '2.5rem', borderRight: `1px solid ${D}` }}>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-crimson)', marginBottom: '0.5rem' }}>{step.num}</p>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--color-text)', marginBottom: '0.75rem' }}>
-                  {step.title}
-                </h3>
-                <p style={{ fontSize: '0.85rem', color: 'rgba(245,240,234,0.55)', lineHeight: 1.75, fontWeight: 300 }}>{step.desc}</p>
-              </div>
-              <div style={{ padding: '2.5rem' }}>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-                  {step.bullets.map((b) => (
-                    <li key={b} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'rgba(245,240,234,0.5)' }}>
-                      <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--color-crimson)', flexShrink: 0, display: 'inline-block' }} />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <Reveal key={step.num} delay={i * 100}>
+            <div style={{ background: 'var(--color-cream)', padding: '3rem 2.5rem' }}>
+              <p style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '4.5rem',
+                fontWeight: 900,
+                lineHeight: 1,
+                color: 'var(--color-crimson)',
+                opacity: 0.12,
+                marginBottom: '1.5rem',
+                userSelect: 'none',
+              }}>
+                {step.num}
+              </p>
+              <h3 style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: '1.75rem',
+                fontWeight: 700,
+                letterSpacing: '0.03em',
+                textTransform: 'uppercase',
+                color: 'var(--color-ink-warm)',
+                marginBottom: '0.85rem',
+              }}>
+                {step.title}
+              </h3>
+              <p style={{
+                fontSize: '0.88rem',
+                color: 'var(--color-muted-warm)',
+                lineHeight: 1.8,
+                fontWeight: 300,
+              }}>
+                {step.desc}
+              </p>
             </div>
           </Reveal>
         ))}
       </div>
+
+      <Reveal delay={300}>
+        <div style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <a href="/book" className="btn-primary" style={{ padding: '1rem 2.25rem', fontSize: '0.88rem' }}>
+            Book Your Experience
+          </a>
+          <span style={{ fontSize: '0.78rem', color: 'var(--color-muted-warm)', fontWeight: 300 }}>
+            $150/hr · 1.5 hr minimum · Calgary &amp; area
+          </span>
+        </div>
+      </Reveal>
     </section>
   )
 }

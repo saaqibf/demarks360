@@ -3,38 +3,38 @@ import { Reveal } from './reveal'
 const features = [
   '360° slow-motion video',
   'Unlimited takes',
-  'Same-day delivery link',
-  'Shareable gallery',
+  'Same-day gallery link',
+  'Shareable & downloadable',
   'Professional attendant',
   '1.5 hr minimum',
 ]
 
-const D = 'rgba(255,255,255,0.07)'
+const D = 'rgba(28,25,23,0.1)'
 
 export function Pricing() {
   return (
-    <section id="pricing" className="sec-pad" style={{ background: 'var(--color-ink)', borderBottom: `1px solid ${D}` }}>
+    <section id="pricing" className="sec-pad sec-light-2" style={{ borderBottom: '1px solid rgba(28,25,23,0.08)' }}>
       <Reveal>
         <p className="section-label" style={{ marginBottom: '0.75rem' }}>Pricing</p>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '3.5rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 0.95, textTransform: 'uppercase', color: 'var(--color-ink-warm)', marginBottom: '3.5rem' }}>
           Simple,<br />Transparent Pricing
         </h2>
       </Reveal>
 
       {/* Main pricing card */}
       <Reveal delay={100}>
-        <div className="pricing-card" style={{ border: `1px solid ${D}` }}>
+        <div className="pricing-card" style={{ border: `1px solid ${D}`, background: 'var(--color-cream)' }}>
           {/* Left — identity */}
           <div className="pricing-card-left" style={{ padding: '2.5rem', borderRight: `1px solid ${D}`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-muted)', marginBottom: '0.5rem' }}>
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-muted-warm)', marginBottom: '0.5rem' }}>
                 Standard Package
               </p>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '3.5rem', fontWeight: 800, letterSpacing: '0.02em', lineHeight: 0.85, textTransform: 'uppercase', color: 'var(--color-text)' }}>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '3.5rem', fontWeight: 800, letterSpacing: '0.02em', lineHeight: 0.85, textTransform: 'uppercase', color: 'var(--color-ink-warm)' }}>
                 360<br />BOOTH
               </p>
             </div>
-            <p style={{ fontSize: '0.72rem', color: 'var(--color-muted)', fontWeight: 300, marginTop: '0.85rem' }}>
+            <p style={{ fontSize: '0.72rem', color: 'var(--color-muted-warm)', fontWeight: 300, marginTop: '0.85rem' }}>
               1.5 hr minimum · no maximum
             </p>
           </div>
@@ -43,7 +43,7 @@ export function Pricing() {
           <div className="pricing-card-mid" style={{ padding: '2.5rem', borderRight: `1px solid ${D}`, display: 'flex', alignItems: 'center' }}>
             <ul style={{ listStyle: 'none', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem 2rem', width: '100%' }}>
               {features.map((feat) => (
-                <li key={feat} style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.82rem', color: 'rgba(245,240,234,0.65)', lineHeight: 1.3 }}>
+                <li key={feat} style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.82rem', color: 'var(--color-ink-warm)', lineHeight: 1.3 }}>
                   <span style={{ width: '5px', height: '5px', borderRadius: '50%', flexShrink: 0, background: 'var(--color-crimson)', display: 'inline-block' }} />
                   {feat}
                 </li>
@@ -54,8 +54,8 @@ export function Pricing() {
           {/* Right — price + CTA */}
           <div className="pricing-card-right" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between', borderLeft: `1px solid ${D}` }}>
             <div style={{ textAlign: 'right' }}>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '3.5rem', fontWeight: 800, letterSpacing: '0.02em', lineHeight: 1, color: 'var(--color-text)' }}>$150</p>
-              <p style={{ fontSize: '0.62rem', color: 'var(--color-muted)', fontWeight: 300, marginTop: '0.3rem', lineHeight: 1.6 }}>per hour<br />1.5 hr minimum</p>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '3.5rem', fontWeight: 800, letterSpacing: '0.02em', lineHeight: 1, color: 'var(--color-ink-warm)' }}>$150</p>
+              <p style={{ fontSize: '0.62rem', color: 'var(--color-muted-warm)', fontWeight: 300, marginTop: '0.3rem', lineHeight: 1.6 }}>per hour<br />1.5 hr minimum</p>
             </div>
             <a href="/book" className="btn-primary" style={{ marginTop: '1.5rem', whiteSpace: 'nowrap' }}>
               Book Now
@@ -67,31 +67,31 @@ export function Pricing() {
       {/* Add-ons */}
       <Reveal delay={150}>
         <div>
-          <div style={{ border: `1px solid ${D}`, borderTop: 'none', padding: '1.25rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ border: `1px solid ${D}`, borderTop: 'none', padding: '1.25rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(28,25,23,0.03)', gap: '1rem', flexWrap: 'wrap' }}>
             <div>
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-crimson)', marginBottom: '0.25rem' }}>Add-on</p>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-text)' }}>Firecrackers</p>
-              <p style={{ fontSize: '0.78rem', color: 'var(--color-muted)', fontWeight: 300 }}>Pyro-style sparks effect for maximum impact</p>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-ink-warm)' }}>Firecrackers</p>
+              <p style={{ fontSize: '0.78rem', color: 'var(--color-muted-warm)', fontWeight: 300 }}>Pyro-style sparks effect for maximum impact</p>
             </div>
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 800, letterSpacing: '0.02em', color: 'var(--color-crimson)' }}>$75</p>
-              <p style={{ fontSize: '0.62rem', color: 'var(--color-muted)', fontWeight: 300 }}>flat fee</p>
+              <p style={{ fontSize: '0.62rem', color: 'var(--color-muted-warm)', fontWeight: 300 }}>flat fee</p>
             </div>
           </div>
 
-          <div style={{ border: `1px solid ${D}`, borderTop: 'none', padding: '1.25rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.4, gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ border: `1px solid ${D}`, borderTop: 'none', padding: '1.25rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.45, gap: '1rem', flexWrap: 'wrap' }}>
             <div>
-              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-muted)', marginBottom: '0.25rem' }}>Add-on · Coming Soon</p>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-text)' }}>SmileCam</p>
-              <p style={{ fontSize: '0.78rem', color: 'var(--color-muted)', fontWeight: 300 }}>AI-powered smile detection camera</p>
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-muted-warm)', marginBottom: '0.25rem' }}>Add-on · Coming Soon</p>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-ink-warm)' }}>SmileCam</p>
+              <p style={{ fontSize: '0.78rem', color: 'var(--color-muted-warm)', fontWeight: 300 }}>AI-powered smile detection camera</p>
             </div>
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.35rem 0.85rem', border: `1px solid ${D}`, color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>Coming Soon</span>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.35rem 0.85rem', border: `1px solid ${D}`, color: 'var(--color-muted-warm)', whiteSpace: 'nowrap' }}>Coming Soon</span>
           </div>
         </div>
       </Reveal>
 
       <Reveal delay={200}>
-        <p style={{ marginTop: '1.5rem', fontSize: '0.72rem', color: 'var(--color-muted)', fontWeight: 300 }}>
+        <p style={{ marginTop: '1.5rem', fontSize: '0.72rem', color: 'var(--color-muted-warm)', fontWeight: 300 }}>
           Serving Calgary, Airdrie, Cochrane, Chestermere, Okotoks &amp; Rocky View County. $50 travel fee applies outside Calgary city limits.
         </p>
       </Reveal>

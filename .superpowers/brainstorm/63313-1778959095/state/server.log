@@ -1,0 +1,7 @@
+{"type":"server-started","port":61712,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:61712","screen_dir":"/Users/saaqibfagbenro/demarks360/.superpowers/brainstorm/63313-1778959095/content","state_dir":"/Users/saaqibfagbenro/demarks360/.superpowers/brainstorm/63313-1778959095/state"}
+{"type":"screen-added","file":"/Users/saaqibfagbenro/demarks360/.superpowers/brainstorm/63313-1778959095/content/public-site-mockup.html"}
+{"type":"screen-added","file":"/Users/saaqibfagbenro/demarks360/.superpowers/brainstorm/63313-1778959095/content/demarks360-design.html"}
+{"type":"screen-updated","file":"/Users/saaqibfagbenro/demarks360/.superpowers/brainstorm/63313-1778959095/content/demarks360-design.html"}
+{"type":"screen-added","file":"/Users/saaqibfagbenro/demarks360/.superpowers/brainstorm/63313-1778959095/content/demarks360-v2.html"}
+{"type":"screen-added","file":"/Users/saaqibfagbenro/demarks360/.superpowers/brainstorm/63313-1778959095/content/admin-dashboard.html"}
+{"type":"server-stopped","reason":"idle timeout"}

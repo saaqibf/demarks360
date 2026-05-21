@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demarks 360 — Calgary's Premier 360 Video Booth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --cream:      #EFECE7;
+  --cream-dark: #E5E1DA;
+  --ink:        #0F0F0F;
+  --ink-mid:    #3A3A3A;
+  --ink-soft:   #888880;
+  --border:     rgba(15,15,15,0.10);
+  --g1:         #EC4899;
+  --g2:         #8B5CF6;
+  --grad:       linear-gradient(90deg, #EC4899, #8B5CF6);
+  --grad-135:   linear-gradient(135deg, #EC4899, #8B5CF6);
+  --dark-bg:    #0F0F0F;
+  --dark-card:  #171717;
+  --dark-border:rgba(255,255,255,0.07);
+}
+
+/* ─── RESET ──────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── GRAIN TEXTURE ──────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ─── TYPOGRAPHY HELPERS ─────────────────────────────── */
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--grad);
+  flex-shrink: 0;
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes spin360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(1);    opacity: 0.5; }
+  100% { transform: scale(1.35); opacity: 0;   }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.75s cubic-bezier(.22,1,.36,1), transform 0.75s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── PROMO BAR ──────────────────────────────────────── */
+.promo-bar {
+  background: var(--ink);
+  color: rgba(255,255,255,0.55);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  text-transform: uppercase;
+}
+.promo-bar strong {
+  font-weight: 700;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── NAV ────────────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(239,236,231,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+}
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1;
+  text-decoration: none;
+}
+.nav-logo-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.nav-logo-name span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nav-logo-sub {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.47rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+.nav-links a {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--grad);
+  border: none;
+  padding: 0.62rem 1.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.nav-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.nav-cta:hover::after { transform: translateX(100%); }
+.nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ─── HERO ───────────────────────────────────────────── */
+.hero {
+  min-height: calc(100vh - 66px);
+  display: grid;
+  grid-template-columns: 1fr 42%;
+  grid-template-rows: auto 1fr;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* Big headline block — top left + spans across */
+.hero-headline-block {
+  grid-column: 1 / -1;
+  padding: 3.5rem 3rem 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.hero-eyebrow {
+  margin-bottom: 1rem;
+  animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) 0.1s both;
+}
+.hero-display {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5.5rem, 12vw, 11.5rem);
+  letter-spacing: 0.01em;
+  line-height: 0.85;
+  color: var(--ink);
+  animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) 0.2s both;
+}
+.hero-display .three-sixty {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+}
+
+/* The spinning ring around "360" */
+.hero-display .three-sixty::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #EC4899, #8B5CF6, transparent 60%);
+  animation: spin360 6s linear infinite;
+  opacity: 0.25;
+  filter: blur(2px);
+}
+
+.hero-sub-block {
+  grid-column: 1;
+  padding: 2.5rem 3rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--border);
+}
+.hero-desc {
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  line-height: 1.75;
+  max-width: 380px;
+  font-weight: 300;
+  animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) 0.35s both;
+}
+.hero-desc strong { font-weight: 500; color: var(--ink); }
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) 0.45s both;
+}
+.btn-primary {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--grad);
+  border: none;
+  padding: 1rem 2.25rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.btn-primary:hover::after { transform: translateX(100%); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(236,72,153,0.3); }
+
+.btn-ghost {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  padding-bottom: 2px;
+}
+.btn-ghost::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 1px;
+  background: var(--grad);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.btn-ghost:hover::after { transform: scaleX(1); }
+
+/* Stats row */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+  padding-top: 0;
+  animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) 0.55s both;
+}
+.stat {
+  padding: 1.25rem 0;
+  border-right: 1px solid var(--border);
+}
+.stat:last-child { border-right: none; }
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.25rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--ink);
+}
+.stat-val .grad-mark { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-lbl {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 0.2rem;
+}
+
+/* Hero video panel */
+.hero-video {
+  grid-column: 2;
+  grid-row: 2;
+  background: var(--dark-bg);
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1s cubic-bezier(.22,1,.36,1) 0.3s both;
+}
+.video-bg-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(236,72,153,0.25) 0%, rgba(139,92,246,0.15) 50%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.video-orbit {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-orbit-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(236,72,153,0.35);
+  animation: spin360 8s linear infinite;
+}
+.video-orbit-ring::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--g1);
+}
+.video-orbit-ring-2 {
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(139,92,246,0.25);
+  animation: spin360 12s linear infinite reverse;
+}
+.video-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(236,72,153,0.4);
+  animation: pulse-ring 2.5s ease-out infinite;
+}
+.play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  position: relative;
+  z-index: 2;
+}
+.play-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.08); }
+.play-btn svg { width: 22px; height: 22px; fill: #fff; margin-left: 3px; }
+.video-caption {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.video-tag {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+.video-live-dot {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--g1);
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+/* ─── SECTION BASE ───────────────────────────────────── */
+.section {
+  padding: 6rem 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+  color: var(--ink);
+  margin-top: 0.75rem;
+}
+
+/* ─── PACKAGES ───────────────────────────────────────── */
+.packages-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 1px solid var(--border);
+}
+.pkg {
+  padding: 2.5rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.pkg:last-child { border-right: none; }
+.pkg::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background 0.3s;
+}
+.pkg:hover { background: rgba(255,255,255,0.5); }
+.pkg:hover::before { background: var(--grad); }
+.pkg.featured {
+  background: var(--ink);
+  color: #fff;
+}
+.pkg.featured::before { background: var(--grad); }
+.pkg.featured .pkg-tier { color: rgba(255,255,255,0.35); }
+.pkg.featured .pkg-name { color: #fff; }
+.pkg.featured .pkg-overage { color: rgba(255,255,255,0.4); }
+.pkg.featured .feature-item { color: rgba(255,255,255,0.7); }
+.pkg.featured .feature-check { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.pkg.featured .feature-item.dim { color: rgba(255,255,255,0.2); }
+.pkg.featured .pkg-price { color: #fff; }
+.pkg-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  background: var(--grad);
+  color: #fff;
+}
+.pkg-tier {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+}
+.pkg-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+  line-height: 1;
+}
+.pkg-overage {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  margin-bottom: 1.75rem;
+  font-weight: 300;
+}
+.features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+  margin-bottom: 2rem;
+}
+.feature-item {
+  font-size: 0.82rem;
+  color: var(--ink-mid);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  line-height: 1.4;
+}
+.feature-item.dim { color: #CCC; }
+.feature-check { font-weight: 700; flex-shrink: 0; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.pkg-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 1.25rem;
+}
+.pkg-note {
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+}
+.pkg-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.9rem;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: opacity 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.pkg-btn-dark { background: var(--ink); color: #fff; }
+.pkg-btn-grad { background: var(--grad); color: #fff; }
+.pkg-btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+.pkg-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* Add-on strip */
+.addon-strip {
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(8px);
+}
+.addon-left { display: flex; flex-direction: column; gap: 0.2rem; }
+.addon-tag {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.addon-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.addon-desc { font-size: 0.78rem; color: var(--ink-soft); font-weight: 300; }
+.addon-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.addon-sub { font-size: 0.62rem; color: var(--ink-soft); text-align: right; font-weight: 300; }
+
+/* ─── HOW IT WORKS — REDESIGN ────────────────────────── */
+.hiw-section {
+  background: var(--cream);
+  padding: 6rem 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.hiw-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 4rem;
+  border: 1px solid var(--border);
+}
+.hiw-step {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.35s;
+  cursor: default;
+}
+.hiw-step:last-child { border-bottom: none; }
+.hiw-step:hover { background: #fff; }
+.hiw-step-num-col {
+  padding: 3rem 2.5rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hiw-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 6rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.18;
+  transition: opacity 0.35s;
+  user-select: none;
+}
+.hiw-step:hover .hiw-num { opacity: 1; }
+.hiw-step-content {
+  padding: 3rem 3rem;
+  border-right: 1px solid var(--border);
+}
+.hiw-step-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem;
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+  color: var(--ink);
+  margin-bottom: 0.85rem;
+}
+.hiw-step-desc {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  font-weight: 300;
+  max-width: 340px;
+}
+.hiw-step-detail {
+  padding: 3rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.hiw-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ink-mid);
+  font-weight: 400;
+}
+.hiw-detail-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--grad);
+  flex-shrink: 0;
+}
+.hiw-step-pill {
+  position: absolute;
+  right: 2.5rem;
+  bottom: 2rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.hiw-step:hover .hiw-step-pill {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── GALLERY ────────────────────────────────────────── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  grid-template-rows: 280px 280px;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.gallery-item {
+  background: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.gallery-item:first-child { grid-row: span 2; }
+.gallery-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(139,92,246,0.08));
+  transition: opacity 0.4s;
+  opacity: 0;
+}
+.gallery-item:hover .gallery-glow { opacity: 1; }
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-play-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.85);
+  transition: transform 0.3s;
+}
+.gallery-item:hover .gallery-play-btn { transform: scale(1); }
+.gallery-play-btn svg { width: 18px; height: 18px; fill: #fff; margin-left: 3px; }
+.gallery-bg { width: 100%; height: 100%; object-fit: cover; }
+.gallery-item-1 { background: linear-gradient(135deg, #1a0a14 0%, #2d0a2a 100%); }
+.gallery-item-2 { background: linear-gradient(135deg, #0a0a2a 0%, #12082a 100%); }
+.gallery-item-3 { background: linear-gradient(135deg, #0a1a0a 0%, #0a1210 100%); }
+.gallery-item-4 { background: linear-gradient(135deg, #1a0a0a 0%, #2a1008 100%); }
+.gallery-item-5 { background: linear-gradient(135deg, #100a2a 0%, #1a1010 100%); }
+
+/* ─── TESTIMONIALS ───────────────────────────────────── */
+.testi-section {
+  background: var(--cream-dark);
+}
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.testi-card {
+  background: #fff;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.testi-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
+.testi-card::before {
+  content: '\201C';
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  line-height: 1;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.2;
+}
+.testi-text {
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+.testi-author {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.testi-event {
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+  font-weight: 300;
+  margin-top: 0.2rem;
+}
+.testi-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 1.25rem;
+}
+.star { font-size: 0.75rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ─── FAQ ────────────────────────────────────────────── */
+.faq-list { border-top: 1px solid var(--border); }
+.faq-item {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 3rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+  transition: background 0.2s;
+}
+.faq-item:hover { background: rgba(255,255,255,0.3); margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem; }
+.faq-q {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.faq-a {
+  font-size: 0.83rem;
+  color: var(--ink-mid);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ─── CTA BAND ───────────────────────────────────────── */
+.cta-band {
+  background: var(--grad);
+  padding: 5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.cta-band::before {
+  content: 'DEMARKS 360';
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14rem;
+  letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.06);
+  white-space: nowrap;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.cta-band-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+  color: #fff;
+}
+.cta-band-sub {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+  margin-top: 0.75rem;
+  font-weight: 300;
+}
+.btn-cta-white {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #EC4899;
+  background: #fff;
+  border: none;
+  padding: 1.1rem 2.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-cta-white:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.5);
+  padding: 5rem 3rem 2.5rem;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.footer-logo-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+.footer-logo-name span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.footer-logo-sub {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 1.25rem;
+}
+.footer-desc {
+  font-size: 0.8rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.35);
+  font-weight: 300;
+  max-width: 280px;
+  margin-bottom: 1.5rem;
+}
+.footer-contact-item {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.4rem;
+  transition: color 0.2s;
+}
+.footer-contact-item:hover { color: #EC4899; }
+.footer-col-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 1.25rem;
+}
+.footer-link {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.7rem;
+  transition: color 0.2s;
+}
+.footer-link:hover { color: rgba(255,255,255,0.8); }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-copy { font-size: 0.7rem; color: rgba(255,255,255,0.2); line-height: 1.6; }
+.footer-legal { display: flex; gap: 1.75rem; }
+.footer-legal a { font-size: 0.68rem; color: rgba(255,255,255,0.2); text-decoration: none; transition: color 0.2s; }
+.footer-legal a:hover { color: #EC4899; }
+
+/* ─── SCROLLBAR ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--g1), var(--g2)); border-radius: 3px; }
+
+/* ─── SELECTION ──────────────────────────────────────── */
+::selection { background: rgba(236,72,153,0.2); color: var(--ink); }
+
+</style>
+</head>
+<body>
+
+<!-- ─── PROMO BAR ─────────────────────────────────────── -->
+<div class="promo-bar">
+  Calgary's premier 360 video booth &nbsp;·&nbsp; <strong>Free delivery &amp; setup — city-wide</strong> &nbsp;·&nbsp; Book at least 7 days in advance
+</div>
+
+<!-- ─── NAV ───────────────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-name">DEMARKS <span>360</span></div>
+    <div class="nav-logo-sub">Booth</div>
+  </a>
+  <div class="nav-links">
+    <a href="#packages">Packages</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#faq">FAQ</a>
+    <a href="tel:+14034020816">+1 (403) 402-0816</a>
+    <button class="nav-cta">Book Now</button>
+  </div>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────────── -->
+<section class="hero">
+
+  <div class="hero-headline-block">
+    <div class="label hero-eyebrow">Calgary's Premier 360° Experience</div>
+    <h1 class="hero-display">
+      DEMARKS&nbsp;<span class="three-sixty">360</span>
+    </h1>
+  </div>
+
+  <div class="hero-sub-block">
+    <div>
+      <p class="hero-desc">
+        Calgary-based 360 video booth rental for <strong>weddings, birthdays, corporate events</strong> — and every moment worth remembering. Delivery, setup &amp; a dedicated attendant included.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary">Book Your Date &nbsp;→</button>
+        <button class="btn-ghost">View Gallery &nbsp;↓</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-val">360<span class="grad-mark">°</span></div>
+        <div class="stat-lbl">Video Booth</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">30<span class="grad-mark">%</span></div>
+        <div class="stat-lbl">Deposit to Secure</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">5<span class="grad-mark">%</span></div>
+        <div class="stat-lbl">GST Included</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val"><span class="grad-mark">YYC</span></div>
+        <div class="stat-lbl">All of Calgary</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-video">
+    <div class="video-bg-glow"></div>
+    <div class="video-orbit">
+      <div class="video-pulse"></div>
+      <div class="video-orbit-ring"></div>
+      <div class="video-orbit-ring-2"></div>
+      <div class="play-btn">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
+    <div class="video-caption">
+      <div class="video-tag">360° Reel — Your Videos Here</div>
+      <div class="video-live-dot">
+        <div class="live-dot"></div>
+        Mux Streaming
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ─── PACKAGES ──────────────────────────────────────── -->
+<section class="section" id="packages">
+  <div class="section-header reveal">
+    <div>
+      <div class="label">What We Offer</div>
+      <h2 class="section-title">Choose Your<br/><span class="grad-text">Package</span></h2>
+    </div>
+    <p style="font-size:0.82rem;color:var(--ink-soft);max-width:280px;text-align:right;font-weight:300;line-height:1.7">
+      All packages include delivery, setup, teardown &amp; an on-site attendant — anywhere in Calgary, AB.
+    </p>
+  </div>
+
+  <div class="packages-grid reveal">
+
+    <div class="pkg">
+      <div class="pkg-tier">Entry Level</div>
+      <div class="pkg-name">Standard</div>
+      <div class="pkg-overage">Hourly overage available</div>
+      <ul class="features">
+        <li class="feature-item"><span class="feature-check">✓</span> X-hour rental — min 1.5 hrs</li>
+        <li class="feature-item"><span class="feature-check">✓</span> 360° video booth</li>
+        <li class="feature-item"><span class="feature-check">✓</span> On-site attendant — full duration</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Instant digital delivery</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Choice of backdrop</li>
+        <li class="feature-item dim" style="color:#bbb">— Custom overlay</li>
+        <li class="feature-item dim" style="color:#bbb">— Cold spark firecrackers</li>
+      </ul>
+      <div class="pkg-price">$XXX</div>
+      <div class="pkg-note">+ 5% GST · 30% deposit at booking</div>
+      <button class="pkg-btn pkg-btn-dark">Book Standard</button>
+    </div>
+
+    <div class="pkg featured">
+      <div class="pkg-badge">Most Popular</div>
+      <div class="pkg-tier">Signature</div>
+      <div class="pkg-name">Deluxe</div>
+      <div class="pkg-overage">Hourly overage available</div>
+      <ul class="features">
+        <li class="feature-item"><span class="feature-check">✓</span> X-hour rental — min 1.5 hrs</li>
+        <li class="feature-item"><span class="feature-check">✓</span> 360° video booth</li>
+        <li class="feature-item"><span class="feature-check">✓</span> On-site attendant — full duration</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Instant digital delivery</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Choice of backdrop</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Custom overlay</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Custom lighting</li>
+        <li class="feature-item dim">— Cold spark firecrackers</li>
+      </ul>
+      <div class="pkg-price">$X,XXX</div>
+      <div class="pkg-note" style="color:rgba(255,255,255,0.35)">+ 5% GST · 30% deposit at booking</div>
+      <button class="pkg-btn pkg-btn-grad">Book Deluxe</button>
+    </div>
+
+    <div class="pkg">
+      <div class="pkg-tier">Premium</div>
+      <div class="pkg-name">Premium</div>
+      <div class="pkg-overage">Hourly overage available</div>
+      <ul class="features">
+        <li class="feature-item"><span class="feature-check">✓</span> X-hour rental — min 1.5 hrs</li>
+        <li class="feature-item"><span class="feature-check">✓</span> 360° video booth</li>
+        <li class="feature-item"><span class="feature-check">✓</span> On-site attendant — full duration</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Instant digital delivery</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Choice of backdrop</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Custom overlay</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Custom lighting</li>
+        <li class="feature-item"><span class="feature-check">✓</span> Cold spark firecrackers</li>
+        <li class="feature-item"><span class="feature-check">✓</span> [Placeholder add-on]</li>
+      </ul>
+      <div class="pkg-price">$X,XXX</div>
+      <div class="pkg-note">+ 5% GST · 30% deposit at booking</div>
+      <button class="pkg-btn pkg-btn-dark">Book Premium</button>
+    </div>
+
+  </div>
+
+  <div class="addon-strip reveal">
+    <div class="addon-left">
+      <div class="addon-tag">Add-On — Available with any package</div>
+      <div class="addon-name">Cold Spark Firecrackers</div>
+      <div class="addon-desc">2 spectacular cold spark effects — venue permitting</div>
+    </div>
+    <div>
+      <div class="addon-price grad-text">+$XXX</div>
+      <div class="addon-sub">per event</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ──────────────────────────────────── -->
+<section class="dark-section">
+  <div class="label" style="color:rgba(255,255,255,0.3)">The Process</div>
+  <h2 class="section-title" style="color:#fff;margin-top:0.75rem">How It <span class="grad-text">Works</span></h2>
+  <div class="steps">
+    <div class="step reveal">
+      <span class="step-num">01</span>
+      <div class="step-title">Pick Your Date</div>
+      <p class="step-desc">Browse the live calendar — see exactly which time slots are already taken. Book any day, any time, at least 7 days in advance.</p>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">02</span>
+      <div class="step-title">Choose Your Package</div>
+      <p class="step-desc">Standard, Deluxe, or Premium. Add cold spark firecrackers. Your total — including 5% GST — is shown before you pay a thing.</p>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">03</span>
+      <div class="step-title">We Show Up &amp; Deliver</div>
+      <p class="step-desc">Setup and teardown are on us — city-wide, no extra charge. We run the booth all night. Your guests leave with videos they'll never forget.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── GALLERY ───────────────────────────────────────── -->
+<section class="section" id="gallery">
+  <div class="section-header reveal">
+    <div>
+      <div class="label">Past Events</div>
+      <h2 class="section-title">See It In <span class="grad-text">Motion</span></h2>
+    </div>
+    <a href="#" style="font-family:'Syne',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;border-bottom:1.5px solid var(--ink);padding-bottom:2px">View All →</a>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item gallery-item-1">
+      <div class="gallery-glow"></div>
+      <div class="gallery-overlay"><div class="gallery-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+    <div class="gallery-item gallery-item-2">
+      <div class="gallery-glow"></div>
+      <div class="gallery-overlay"><div class="gallery-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+    <div class="gallery-item gallery-item-3">
+      <div class="gallery-glow"></div>
+      <div class="gallery-overlay"><div class="gallery-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+    <div class="gallery-item gallery-item-4">
+      <div class="gallery-glow"></div>
+      <div class="gallery-overlay"><div class="gallery-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+    <div class="gallery-item gallery-item-5">
+      <div class="gallery-glow"></div>
+      <div class="gallery-overlay"><div class="gallery-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ──────────────────────────────────── -->
+<section class="section testi-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="label">Kind Words</div>
+      <h2 class="section-title">What Our <span class="grad-text">Clients Say</span></h2>
+    </div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="testi-text">"The 360 booth was the highlight of our entire wedding reception — every single guest was talking about it the next day."</p>
+      <div class="testi-author">Sarah &amp; Marcus T.</div>
+      <div class="testi-event">Wedding · Calgary, AB</div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="testi-text">"Absolutely professional from start to finish. Setup was seamless and the videos looked incredible. Would book again without hesitation."</p>
+      <div class="testi-author">Jordan K.</div>
+      <div class="testi-event">Corporate Event · Calgary, AB</div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="testi-text">"We added the firecrackers and the reaction from our guests was priceless. Worth every single penny — unforgettable night."</p>
+      <div class="testi-author">Priya M.</div>
+      <div class="testi-event">Birthday Party · Calgary, AB</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ───────────────────────────────────────────── -->
+<section class="section" id="faq">
+  <div class="section-header reveal">
+    <div>
+      <div class="label">Questions</div>
+      <h2 class="section-title">Frequently<br/><span class="grad-text">Asked</span></h2>
+    </div>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q">How far in advance do I need to book?</div>
+      <div class="faq-a">A minimum of 7 days notice is required. The sooner you book, the better — popular dates fill quickly, especially Friday and Saturday evenings.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is delivery and setup included?</div>
+      <div class="faq-a">Yes — delivery, setup, teardown &amp; a dedicated on-site attendant for the full duration are included in every package, anywhere in Calgary at no extra charge.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How does payment work?</div>
+      <div class="faq-a">A 30% deposit secures your date at booking. Your card is saved — with your explicit consent — and the remaining 70% balance is automatically charged 7 days before your event. A receipt is sent for both charges.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I see which time slots are already booked?</div>
+      <div class="faq-a">Yes. Our booking calendar shows the full day timeline — you can see exactly which time slots are taken and which are open, so two events can happen on the same day at different times.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Are there firecracker restrictions?</div>
+      <div class="faq-a">Cold spark firecrackers are a stunning add-on — however, they require venue approval. We recommend confirming with your venue before adding this option.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you serve areas outside Calgary?</div>
+      <div class="faq-a">We currently serve Calgary and the immediate surrounding area only. Events must have an Alberta postal code beginning with "T".</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA BAND ──────────────────────────────────────── -->
+<div class="cta-band">
+  <div>
+    <h2 class="cta-band-title">Ready to Make<br/>It Unforgettable?</h2>
+    <p class="cta-band-sub">Any day · Any time · All of Calgary — book at least 7 days ahead.</p>
+  </div>
+  <button class="btn-cta-white">Book Your Date →</button>
+</div>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo-name">DEMARKS <span>360</span></div>
+      <div class="footer-logo-sub">Booth · Calgary, AB</div>
+      <p class="footer-desc">Calgary's premier 360 video booth rental for weddings, birthdays, corporate events, and every moment worth remembering.</p>
+      <a href="tel:+14034020816" class="footer-contact-item">+1 (403) 402-0816</a>
+      <a href="https://instagram.com/demarks360" target="_blank" class="footer-contact-item">@demarks360</a>
+      <span class="footer-contact-item" style="cursor:default">Calgary, Alberta, Canada</span>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <a href="#packages" class="footer-link">Packages</a>
+      <a href="#gallery" class="footer-link">Gallery</a>
+      <a href="#faq" class="footer-link">FAQ</a>
+      <a href="#" class="footer-link">Book Now</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Account</div>
+      <a href="#" class="footer-link">My Bookings</a>
+      <a href="#" class="footer-link">Log In</a>
+      <a href="#" class="footer-link">Sign Up</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Legal</div>
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+      <a href="#" class="footer-link">Cancellation Policy</a>
+      <a href="#" class="footer-link">Cookie Preferences</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>
+      <div class="footer-copy">© 2026 Demarks 360. All rights reserved.</div>
+      <div class="footer-copy" style="margin-top:0.2rem">Prices include 5% GST · Alberta Business Registration</div>
+    </div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, entry.target.dataset.delay || 0);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  el.dataset.delay = (i % 3) * 80;
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

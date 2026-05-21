@@ -1,5 +1,3 @@
-import { SiteNav } from './site-nav'
-
 export function Hero() {
   return (
     /* Outer frame — dark bg with padding, creates the "framed" look */
@@ -63,9 +61,6 @@ export function Hero() {
 
         {/* Foreground content */}
         <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%' }}>
-
-          {/* Floating pill nav */}
-          <SiteNav />
 
           {/* Hero text content */}
           <div className="hero-body" style={{
