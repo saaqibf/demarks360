@@ -13,66 +13,72 @@ const faqs = [
 
 export function Faq() {
   return (
-    <section id="faq" className="sec-pad" style={{ background: 'var(--color-sand)', borderBottom: '1px solid var(--color-border-light)' }}>
-      <Reveal>
-        <p className="section-label" style={{ marginBottom: '0.85rem' }}>FAQ</p>
-        <h2 style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 400,
-          lineHeight: 1.0,
-          color: 'var(--color-charcoal)',
-          marginBottom: '0.5rem',
-          letterSpacing: '-0.02em',
-        }}>
-          Common
-        </h2>
-        <p style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 400,
-          fontStyle: 'italic',
-          lineHeight: 1.0,
-          color: 'var(--color-amber)',
-          marginBottom: '3.5rem',
-          letterSpacing: '-0.02em',
-        }}>
-          Questions
-        </p>
-      </Reveal>
+    <section id="faq" style={{ background: 'var(--color-sand)', borderBottom: '1px solid var(--color-border-light)' }}>
+      {/* Header */}
+      <div style={{ padding: '6rem 3rem 4rem', borderBottom: '1px solid var(--color-border-light)' }}>
+        <Reveal>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.6rem',
+            fontWeight: 600,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'var(--color-muted-light)',
+            marginBottom: '1.25rem',
+          }}>
+            FAQ
+          </p>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+            fontWeight: 300,
+            lineHeight: 1.0,
+            color: 'var(--color-charcoal)',
+            letterSpacing: '-0.025em',
+          }}>
+            Common questions,{' '}
+            <em style={{ color: 'var(--color-amber)' }}>answered.</em>
+          </h2>
+        </Reveal>
+      </div>
 
-      <Reveal delay={100}>
-        <Accordion type="single" collapsible className="w-full">
-          {faqs.map((faq, i) => (
-            <AccordionItem
-              key={i}
-              value={`item-${i}`}
-              style={{ borderBottom: '1px solid var(--color-border-light)' }}
-            >
-              <AccordionTrigger style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.95rem',
-                fontWeight: 600,
-                color: 'var(--color-charcoal)',
-                textAlign: 'left',
-                padding: '1.5rem 0',
-              }}>
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent style={{
-                fontSize: '0.9rem',
-                color: 'var(--color-muted)',
-                lineHeight: 1.85,
-                fontWeight: 400,
-                paddingBottom: '1.5rem',
-                fontFamily: 'var(--font-body)',
-              }}>
-                {faq.a}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </Reveal>
+      {/* Accordion */}
+      <div style={{ padding: '0 3rem 6rem', maxWidth: '860px' }}>
+        <Reveal delay={80}>
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, i) => (
+              <AccordionItem
+                key={i}
+                value={`item-${i}`}
+                style={{ borderBottom: '1px solid var(--color-border-light)' }}
+              >
+                <AccordionTrigger style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)',
+                  fontWeight: 400,
+                  color: 'var(--color-charcoal)',
+                  textAlign: 'left',
+                  padding: '1.75rem 0',
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.3,
+                }}>
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.9rem',
+                  color: 'var(--color-muted)',
+                  lineHeight: 1.8,
+                  fontWeight: 400,
+                  paddingBottom: '1.75rem',
+                }}>
+                  {faq.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </Reveal>
+      </div>
     </section>
   )
 }

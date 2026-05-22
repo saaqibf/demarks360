@@ -14,137 +14,161 @@ export function Hero() {
         autoPlay loop muted playsInline preload="auto"
         className="hero-video"
         style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: 0,
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover', zIndex: 0,
         }}
       >
         <source src="https://res.cloudinary.com/dfonotyfb/video/upload/v1775585556/dds3_1_rqhg7x.mp4" type="video/mp4" />
       </video>
 
-      {/* Warm dark overlay */}
+      {/* Overlay */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1,
-        background: 'linear-gradient(to bottom, rgba(26,23,20,0.72) 0%, rgba(26,23,20,0.3) 35%, rgba(26,23,20,0.3) 55%, rgba(26,23,20,0.9) 80%, rgba(26,23,20,0.97) 100%)',
+        background: 'linear-gradient(160deg, rgba(26,23,20,0.85) 0%, rgba(26,23,20,0.40) 45%, rgba(26,23,20,0.78) 100%)',
       }} />
 
-      {/* Warm ambient light */}
+      {/* Amber corner wash */}
       <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, height: '60%', zIndex: 2,
-        background: 'radial-gradient(ellipse at 10% 100%, rgba(168,117,48,0.12) 0%, transparent 55%)',
+        position: 'absolute', bottom: 0, left: 0, width: '50%', height: '55%', zIndex: 2,
+        background: 'radial-gradient(ellipse at 0% 100%, rgba(168,117,48,0.14) 0%, transparent 60%)',
         pointerEvents: 'none',
       }} />
 
-      {/* Content */}
-      <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <div className="hero-body" style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          paddingTop: '8rem',
-        }}>
-          {/* Label badge */}
-          <div className="hero-label" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-            background: 'rgba(237,232,223,0.08)',
-            backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(237,232,223,0.12)',
-            borderRadius: '9999px',
-            padding: '0.4rem 1rem 0.4rem 0.65rem',
-            width: 'fit-content', marginBottom: '1.5rem',
+      {/* Content — centered vertically */}
+      <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div className="hero-body" style={{ paddingBottom: '8rem', paddingTop: '10rem' }}>
+          {/* Kicker */}
+          <p className="hero-label" style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.62rem',
+            fontWeight: 600,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'rgba(237,232,223,0.50)',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
           }}>
-            <span style={{
-              width: '7px', height: '7px', borderRadius: '50%',
-              background: 'var(--color-amber)', display: 'inline-block', flexShrink: 0,
-            }} />
-            <span style={{
-              fontFamily: 'var(--font-body)', fontSize: '0.62rem', fontWeight: 600,
-              letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(237,232,223,0.7)',
-            }}>
-              Calgary &amp; Area · 360 Video Booth
-            </span>
-          </div>
+            <span style={{ display: 'inline-block', width: '28px', height: '1px', background: 'var(--color-amber)', flexShrink: 0 }} />
+            Calgary &amp; Area · 360 Video Booth
+          </p>
 
-          {/* Headline */}
+          {/* Main heading */}
           <h1 className="hero-headline" style={{
             fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(3.8rem, 10vw, 9.5rem)',
-            fontWeight: 400,
+            fontSize: 'clamp(3.8rem, 9vw, 9.5rem)',
+            fontWeight: 300,
             lineHeight: 0.95,
             color: 'var(--color-sand)',
-            maxWidth: '820px',
             letterSpacing: '-0.02em',
+            marginBottom: '0',
+            maxWidth: '820px',
           }}>
-            Every Moment,<br />
-            <em style={{ fontStyle: 'italic', color: 'var(--color-amber)' }}>Captured</em><br />
-            in 360°
+            Every Moment,
+            <br />
+            <em style={{
+              fontStyle: 'italic',
+              color: 'var(--color-amber)',
+              fontWeight: 300,
+            }}>
+              Captured.
+            </em>
           </h1>
 
-          {/* Subtext */}
+          {/* Sub */}
           <p className="hero-sub" style={{
-            fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 400,
-            color: 'rgba(237,232,223,0.55)', lineHeight: 1.8, maxWidth: '400px', marginTop: '1.5rem',
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.95rem',
+            fontWeight: 400,
+            color: 'rgba(237,232,223,0.50)',
+            lineHeight: 1.7,
+            maxWidth: '380px',
+            marginTop: '2.25rem',
           }}>
-            Calgary&apos;s premier slow-motion 360 booth.
-            Unforgettable memories delivered the same day. Birthdays, weddings, corporate events and more.
+            360° slow-motion video booth, same-day gallery delivery. Serving Calgary and surrounding areas.
           </p>
 
           {/* CTAs */}
-          <div className="hero-ctas" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}>
+          <div className="hero-ctas" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
             <a href="/book" style={{
-              fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 700,
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
               color: 'var(--color-charcoal)',
               background: 'var(--color-sand)',
-              padding: '0.9rem 2.25rem', borderRadius: '9999px',
-              textDecoration: 'none', display: 'inline-block',
+              padding: '1rem 2.75rem',
+              borderRadius: '3px',
+              textDecoration: 'none',
+              display: 'inline-block',
               transition: 'background 0.2s ease',
               whiteSpace: 'nowrap',
             }}>
               Book Your Experience
             </a>
-            <a href="#how-it-works" style={{
-              fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500,
-              color: 'rgba(237,232,223,0.6)', textDecoration: 'none',
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+            <a href="#pricing" style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'rgba(237,232,223,0.45)',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
               transition: 'color 0.2s ease',
+              whiteSpace: 'nowrap',
             }}>
-              How It Works →
+              See Pricing
+              <span style={{ display: 'inline-block', width: '18px', height: '1px', background: 'currentColor' }} />
             </a>
           </div>
+        </div>
+      </div>
 
-          {/* Stats */}
-          <div className="hero-stats" style={{
-            display: 'flex', gap: 0,
-            marginTop: '3.5rem', paddingTop: '2rem', paddingBottom: '3rem',
-            borderTop: '1px solid rgba(237,232,223,0.08)',
-          }}>
+      {/* Bottom stat bar */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10,
+        borderTop: '1px solid rgba(237,232,223,0.08)',
+        background: 'rgba(26,23,20,0.6)',
+        backdropFilter: 'blur(10px)',
+      }}>
+        <div className="hero-body" style={{ paddingTop: '1.25rem', paddingBottom: '1.25rem' }}>
+          <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
             {[
-              { val: '150+', label: 'Events Booked' },
-              { val: '5.0 ★', label: 'Average Rating' },
+              { val: '150+', label: 'Events Captured' },
+              { val: '5.0★', label: 'Client Rating' },
               { val: 'Same Day', label: 'Gallery Delivery' },
-            ].map(({ val, label }, i) => (
-              <div key={val} style={{
-                paddingRight: i < 2 ? '2.5rem' : 0,
-                marginRight: i < 2 ? '2.5rem' : 0,
-                borderRight: i < 2 ? '1px solid rgba(237,232,223,0.08)' : 'none',
-              }}>
-                <div style={{
-                  fontFamily: 'var(--font-serif)', fontSize: '2rem', fontWeight: 400,
-                  lineHeight: 1, color: 'var(--color-sand)',
+              { val: 'YYC', label: 'Calgary & Area' },
+            ].map(({ val, label }) => (
+              <div key={val}>
+                <span style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: '1.1rem',
+                  fontWeight: 400,
+                  fontStyle: 'italic',
+                  color: 'var(--color-sand)',
+                  display: 'block',
+                  lineHeight: 1,
                 }}>
                   {val}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-body)', fontSize: '0.58rem', fontWeight: 600,
-                  letterSpacing: '0.16em', textTransform: 'uppercase',
-                  color: 'rgba(237,232,223,0.35)', marginTop: '0.3rem',
+                </span>
+                <span style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.55rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(237,232,223,0.35)',
+                  display: 'block',
+                  marginTop: '0.25rem',
                 }}>
                   {label}
-                </div>
+                </span>
               </div>
             ))}
           </div>

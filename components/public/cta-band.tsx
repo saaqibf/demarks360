@@ -7,87 +7,102 @@ export function CtaBand() {
       padding: '8rem 3rem',
       position: 'relative',
       overflow: 'hidden',
+      borderTop: '1px solid rgba(237,232,223,0.06)',
     }}>
-      {/* Warm ambient glow */}
+      {/* Decorative amber wash */}
       <div aria-hidden="true" style={{
         position: 'absolute',
-        top: '50%', left: '25%',
-        transform: 'translate(-50%, -50%)',
-        width: '80vw', height: '80vh',
-        background: 'radial-gradient(ellipse at center, rgba(168,117,48,0.07) 0%, transparent 65%)',
+        bottom: 0, right: 0,
+        width: '50vw', height: '70%',
+        background: 'radial-gradient(ellipse at 100% 100%, rgba(168,117,48,0.08) 0%, transparent 60%)',
         pointerEvents: 'none',
       }} />
 
-      {/* Large faded watermark */}
-      <div aria-hidden="true" style={{
-        position: 'absolute',
-        top: '50%', right: '-2%',
-        transform: 'translateY(-50%)',
-        fontFamily: 'var(--font-serif)',
-        fontSize: 'clamp(10rem, 22vw, 20rem)',
-        fontWeight: 400,
-        fontStyle: 'italic',
-        color: 'var(--color-sand)',
-        opacity: 0.03,
-        userSelect: 'none',
-        pointerEvents: 'none',
-        lineHeight: 1,
-        letterSpacing: '-0.04em',
-      }}>
-        360°
-      </div>
-
-      <div style={{ position: 'relative', maxWidth: '820px' }}>
+      <div style={{ position: 'relative', maxWidth: '900px' }}>
         <Reveal>
-          <p className="section-label section-label-light" style={{ marginBottom: '1.5rem' }}>Ready?</p>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.6rem',
+            fontWeight: 600,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'rgba(237,232,223,0.28)',
+            marginBottom: '2.5rem',
+          }}>
+            Ready to Book
+          </p>
+
           <h2 style={{
             fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(3rem, 8vw, 7.5rem)',
-            fontWeight: 400,
+            fontSize: 'clamp(3.5rem, 8vw, 8.5rem)',
+            fontWeight: 300,
             lineHeight: 0.95,
             color: 'var(--color-sand)',
-            marginBottom: '2rem',
-            letterSpacing: '-0.02em',
+            letterSpacing: '-0.025em',
+            marginBottom: '0',
           }}>
-            Make Your Event<br />
-            <em style={{ fontStyle: 'italic', color: 'var(--color-amber)' }}>
-              Unforgettable.
-            </em>
+            Make Your Event
+          </h2>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'clamp(3.5rem, 8vw, 8.5rem)',
+            fontWeight: 300,
+            fontStyle: 'italic',
+            lineHeight: 0.95,
+            color: 'var(--color-amber)',
+            letterSpacing: '-0.025em',
+            marginBottom: '3rem',
+          }}>
+            Unforgettable.
           </h2>
 
           <p style={{
-            fontSize: '0.95rem',
-            color: 'rgba(237,232,223,0.45)',
-            fontWeight: 400,
-            lineHeight: 1.8,
-            maxWidth: '440px',
-            marginBottom: '3rem',
             fontFamily: 'var(--font-body)',
+            fontSize: '0.95rem',
+            color: 'rgba(237,232,223,0.38)',
+            lineHeight: 1.75,
+            maxWidth: '400px',
+            marginBottom: '3rem',
+            fontWeight: 400,
           }}>
-            $150/hr, 1.5-hour minimum. Gallery delivered the same day.
-            Serving Calgary, Airdrie, and surrounding areas.
+            $150/hr, 1.5-hour minimum. Gallery delivered the same day. Serving Calgary, Airdrie, and surrounding areas.
           </p>
         </Reveal>
 
-        <Reveal delay={150}>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <Reveal delay={120}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
             <a href="/book" style={{
-              fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 700,
-              color: 'var(--color-charcoal)', background: 'var(--color-sand)',
-              padding: '1rem 2.5rem', borderRadius: '9999px',
-              textDecoration: 'none', display: 'inline-block',
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--color-charcoal)',
+              background: 'var(--color-sand)',
+              padding: '1.1rem 3rem',
+              borderRadius: '3px',
+              textDecoration: 'none',
+              display: 'inline-block',
               transition: 'background 0.2s ease',
               whiteSpace: 'nowrap',
             }}>
               Book Your Experience
             </a>
             <a href="#pricing" style={{
-              fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500,
-              color: 'rgba(237,232,223,0.5)', textDecoration: 'none',
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'rgba(237,232,223,0.38)',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
               transition: 'color 0.2s ease',
             }}>
-              View Pricing →
+              View Pricing
+              <span style={{ display: 'inline-block', width: '18px', height: '1px', background: 'currentColor' }} />
             </a>
           </div>
         </Reveal>

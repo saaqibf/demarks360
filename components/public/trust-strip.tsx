@@ -7,15 +7,27 @@ export function TrustStrip() {
   ]
 
   return (
-    <div style={{ background: 'var(--color-sand-2)', borderBottom: '1px solid var(--color-border-light)', padding: '0' }}>
+    <div style={{ background: 'var(--color-charcoal-2)', borderBottom: '1px solid rgba(237,232,223,0.06)' }}>
       <div className="trust-strip">
-        {items.map(({ val, label }) => (
-          <div key={val} className="trust-item">
+        {items.map(({ val, label }, i) => (
+          <div
+            key={val}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '2.25rem 1.5rem',
+              textAlign: 'center',
+              borderRight: i < items.length - 1 ? '1px solid rgba(237,232,223,0.06)' : 'none',
+            }}
+          >
             <span style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: '1.75rem',
-              fontWeight: 400,
-              color: 'var(--color-charcoal)',
+              fontSize: '2rem',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              color: 'var(--color-sand)',
               lineHeight: 1,
               display: 'block',
               letterSpacing: '-0.02em',
@@ -24,13 +36,13 @@ export function TrustStrip() {
             </span>
             <span style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '0.6rem',
+              fontSize: '0.58rem',
               fontWeight: 600,
-              letterSpacing: '0.16em',
+              letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: 'var(--color-muted)',
+              color: 'rgba(237,232,223,0.28)',
               display: 'block',
-              marginTop: '0.3rem',
+              marginTop: '0.4rem',
             }}>
               {label}
             </span>

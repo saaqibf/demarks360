@@ -1,70 +1,51 @@
 export function MidCta() {
   return (
     <div style={{
-      background: 'var(--color-charcoal)',
-      borderTop: '1px solid rgba(237,232,223,0.06)',
-      padding: '3.5rem 3rem',
+      background: 'var(--color-sand)',
+      borderTop: '1px solid var(--color-border-light)',
+      borderBottom: '1px solid var(--color-border-light)',
+      padding: '5rem 3rem',
+      textAlign: 'center',
     }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '2rem',
-        flexWrap: 'wrap',
-        maxWidth: '1200px',
-        margin: '0 auto',
+      <p style={{
+        fontFamily: 'var(--font-body)',
+        fontSize: '0.6rem',
+        fontWeight: 600,
+        letterSpacing: '0.22em',
+        textTransform: 'uppercase',
+        color: 'var(--color-muted-light)',
+        marginBottom: '1.5rem',
       }}>
-        <div>
-          <p style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(1.6rem, 3vw, 2.5rem)',
-            fontWeight: 400,
-            lineHeight: 1.1,
-            color: 'var(--color-sand)',
-            letterSpacing: '-0.02em',
-            marginBottom: '0.35rem',
-          }}>
-            Seen enough?
-          </p>
-          <p style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(1.6rem, 3vw, 2.5rem)',
-            fontWeight: 400,
-            fontStyle: 'italic',
-            lineHeight: 1.1,
-            color: 'var(--color-amber)',
-            letterSpacing: '-0.02em',
-          }}>
-            Pick your date.
-          </p>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.78rem',
-            color: 'rgba(237,232,223,0.35)',
-            fontWeight: 400,
-            lineHeight: 1.6,
-          }}>
-            From $150/hr<br />Same-day gallery
-          </p>
-          <a href="/book" style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.9rem',
-            fontWeight: 700,
-            color: 'var(--color-charcoal)',
-            background: 'var(--color-sand)',
-            padding: '0.9rem 2.25rem',
-            borderRadius: '9999px',
-            textDecoration: 'none',
-            display: 'inline-block',
-            transition: 'background 0.2s ease',
-            whiteSpace: 'nowrap',
-          }}>
-            Book Now
-          </a>
-        </div>
+        Ready?
+      </p>
+      <h2 style={{
+        fontFamily: 'var(--font-serif)',
+        fontSize: 'clamp(3rem, 6vw, 6.5rem)',
+        fontWeight: 300,
+        fontStyle: 'italic',
+        lineHeight: 0.95,
+        color: 'var(--color-charcoal)',
+        letterSpacing: '-0.025em',
+        marginBottom: '0.5rem',
+      }}>
+        Seen enough?
+      </h2>
+      <p style={{
+        fontFamily: 'var(--font-serif)',
+        fontSize: 'clamp(3rem, 6vw, 6.5rem)',
+        fontWeight: 300,
+        lineHeight: 0.95,
+        color: 'var(--color-amber)',
+        letterSpacing: '-0.025em',
+        marginBottom: '2.5rem',
+      }}>
+        Pick your date.
+      </p>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+        <a href="/book" className="btn-primary">Book Now</a>
+        <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--color-muted-light)', fontWeight: 400 }}>
+          From $225 · Same-day gallery included
+        </span>
       </div>
     </div>
   )

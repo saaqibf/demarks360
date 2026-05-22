@@ -18,177 +18,101 @@ const reviews = [
   },
 ]
 
-function StarRow({ size = '1rem' }: { size?: string }) {
-  return (
-    <div style={{ display: 'flex', gap: '0.2rem' }} aria-label="5 out of 5 stars">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i} aria-hidden="true" style={{ color: 'var(--color-amber)', fontSize: size }}>★</span>
-      ))}
-    </div>
-  )
-}
-
 export function Testimonials() {
   const featured = reviews[0]
-  const rest = reviews.slice(1)
+  const secondary = reviews.slice(1)
 
   return (
-    <section className="sec-pad" style={{ background: 'var(--color-charcoal)', borderBottom: '1px solid rgba(237,232,223,0.06)' }}>
-      <Reveal>
-        <p className="section-label section-label-light" style={{ marginBottom: '0.85rem' }}>Reviews</p>
-        <h2 style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 400,
-          lineHeight: 1.0,
-          color: 'var(--color-sand)',
-          marginBottom: '0.5rem',
-          letterSpacing: '-0.02em',
-        }}>
-          Heard From
-        </h2>
-        <p style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 400,
-          fontStyle: 'italic',
-          lineHeight: 1.0,
-          color: 'var(--color-amber)',
-          marginBottom: '0',
-          letterSpacing: '-0.02em',
-        }}>
-          Our Clients
-        </p>
-      </Reveal>
-
-      {/* Aggregate rating row */}
-      <Reveal delay={80}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1.25rem',
-          margin: '2.75rem 0 4rem',
-          flexWrap: 'wrap',
-        }}>
-          <StarRow size="1.5rem" />
-          <span style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '2.75rem',
-            fontWeight: 400,
-            color: 'var(--color-sand)',
-            lineHeight: 1,
-            letterSpacing: '-0.02em',
-          }}>
-            5.0
-          </span>
-          <div style={{ height: '28px', width: '1px', background: 'rgba(237,232,223,0.15)', flexShrink: 0 }} />
+    <section style={{ background: 'var(--color-sand-3)', borderBottom: '1px solid var(--color-border-light)' }}>
+      {/* Large featured quote */}
+      <div style={{ padding: '6rem 3rem', borderBottom: '1px solid var(--color-border-light)' }}>
+        <Reveal>
           <p style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '0.75rem',
-            fontWeight: 500,
-            color: 'rgba(237,232,223,0.4)',
-            letterSpacing: '0.04em',
-            lineHeight: 1.55,
+            fontSize: '0.6rem',
+            fontWeight: 600,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'var(--color-muted-light)',
+            marginBottom: '3rem',
           }}>
-            Google Rating<br />50+ Calgary events
+            Reviews
           </p>
-        </div>
-      </Reveal>
 
-      {/* Asymmetric layout: featured quote left, two compact quotes right */}
-      <div className="testi-asymmetric">
+          {/* Stars */}
+          <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '2.5rem' }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span key={i} style={{ color: 'var(--color-amber)', fontSize: '1.1rem' }}>★</span>
+            ))}
+          </div>
 
-        {/* Featured quote */}
-        <Reveal>
+          {/* Large quote */}
+          <blockquote style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'clamp(1.8rem, 3.5vw, 3.5rem)',
+            fontWeight: 300,
+            fontStyle: 'italic',
+            lineHeight: 1.25,
+            color: 'var(--color-charcoal)',
+            letterSpacing: '-0.02em',
+            maxWidth: '860px',
+            margin: '0 0 2.5rem',
+          }}>
+            &ldquo;{featured.quote}&rdquo;
+          </blockquote>
+
           <div>
-            <span aria-hidden="true" style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: '5rem',
-              lineHeight: 0.55,
-              color: 'var(--color-amber)',
-              opacity: 0.18,
-              display: 'block',
-              marginBottom: '1.1rem',
-              userSelect: 'none',
-            }}>&ldquo;</span>
-            <p style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.1rem, 2vw, 1.45rem)',
-              fontWeight: 400,
-              color: 'var(--color-sand)',
-              lineHeight: 1.65,
-              letterSpacing: '-0.01em',
-              maxWidth: '52ch',
-            }}>
-              {featured.quote}
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 700, color: 'var(--color-charcoal)' }}>
+              {featured.name}
             </p>
-            <div style={{
-              marginTop: '1.75rem',
-              paddingTop: '1.25rem',
-              borderTop: '1px solid rgba(237,232,223,0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-            }}>
-              <div>
-                <p style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.9rem',
-                  fontWeight: 700,
-                  color: 'var(--color-sand)',
-                }}>{featured.name}</p>
-                <p style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.62rem',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(237,232,223,0.32)',
-                  marginTop: '0.25rem',
-                  fontWeight: 500,
-                }}>{featured.event}</p>
-              </div>
-            </div>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 400, marginTop: '0.2rem' }}>
+              {featured.event}
+            </p>
           </div>
         </Reveal>
-
-        {/* Two compact quotes stacked */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-          {rest.map((r, i) => (
-            <Reveal key={r.name} delay={(i + 1) * 100}>
-              <div>
-                <StarRow size="0.9rem" />
-                <p style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.88rem',
-                  fontWeight: 400,
-                  color: 'rgba(237,232,223,0.65)',
-                  lineHeight: 1.75,
-                  marginTop: '0.85rem',
-                  marginBottom: '1.1rem',
-                }}>
-                  &ldquo;{r.quote}&rdquo;
-                </p>
-                <p style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: 'var(--color-sand)',
-                }}>{r.name}</p>
-                <p style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.61rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(237,232,223,0.28)',
-                  marginTop: '0.2rem',
-                  fontWeight: 500,
-                }}>{r.event}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
       </div>
+
+      {/* Secondary reviews */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid var(--color-border-light)' }}>
+        {secondary.map((r, i) => (
+          <Reveal key={r.name} delay={i * 80}>
+            <div style={{
+              padding: '3rem',
+              borderRight: i === 0 ? '1px solid var(--color-border-light)' : 'none',
+            }}>
+              <div style={{ display: 'flex', gap: '0.15rem', marginBottom: '1.5rem' }}>
+                {Array.from({ length: 5 }).map((_, j) => (
+                  <span key={j} style={{ color: 'var(--color-amber)', fontSize: '0.9rem' }}>★</span>
+                ))}
+              </div>
+              <p style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
+                fontWeight: 400,
+                fontStyle: 'italic',
+                lineHeight: 1.45,
+                color: 'var(--color-charcoal)',
+                letterSpacing: '-0.01em',
+                marginBottom: '1.5rem',
+              }}>
+                &ldquo;{r.quote}&rdquo;
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-charcoal)' }}>
+                {r.name}
+              </p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--color-muted)', fontWeight: 400, marginTop: '0.2rem' }}>
+                {r.event}
+              </p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .testi-secondary { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   )
 }

@@ -19,82 +19,86 @@ export function EmailCapture() {
 
   return (
     <div style={{
-      background: 'var(--color-sand-2)',
-      borderTop: '1px solid var(--color-border-light)',
-      borderBottom: '1px solid var(--color-border-light)',
-      padding: '3.5rem 3rem',
+      background: 'var(--color-charcoal-3)',
+      borderTop: '1px solid rgba(237,232,223,0.06)',
+      borderBottom: '1px solid rgba(237,232,223,0.06)',
+      padding: '4rem 3rem',
     }}>
       <div style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '2.5rem',
+        gap: '3rem',
         flexWrap: 'wrap',
-        maxWidth: '1200px',
-        margin: '0 auto',
       }}>
-        <div style={{ maxWidth: '420px' }}>
+        <div>
           <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.6rem',
+            fontWeight: 600,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'rgba(237,232,223,0.25)',
+            marginBottom: '0.75rem',
+          }}>
+            Stay in the Loop
+          </p>
+          <h3 style={{
             fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(1.35rem, 2.5vw, 1.75rem)',
-            fontWeight: 400,
-            lineHeight: 1.2,
-            color: 'var(--color-charcoal)',
-            letterSpacing: '-0.01em',
-            marginBottom: '0.4rem',
+            fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+            fontWeight: 300,
+            fontStyle: 'italic',
+            lineHeight: 1.15,
+            color: 'var(--color-sand)',
+            letterSpacing: '-0.02em',
           }}>
             Not ready to book yet?
-          </p>
+          </h3>
           <p style={{
             fontFamily: 'var(--font-body)',
             fontSize: '0.85rem',
-            color: 'var(--color-muted)',
-            lineHeight: 1.65,
+            color: 'rgba(237,232,223,0.38)',
+            lineHeight: 1.7,
+            fontWeight: 400,
+            marginTop: '0.5rem',
           }}>
-            Be first to hear when dates open up and when we run early-booking offers.
+            Get notified when new dates open up and hear about seasonal promotions.
           </p>
         </div>
 
         {submitted ? (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.65rem',
-            padding: '0.9rem 1.75rem',
-            background: 'var(--color-sand-3)',
-            border: '1px solid var(--color-border-light)',
-            borderRadius: '9999px',
+          <p style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: '1.35rem',
+            fontWeight: 400,
+            fontStyle: 'italic',
+            color: 'var(--color-sand)',
+            letterSpacing: '-0.01em',
           }}>
-            <span style={{ color: 'var(--color-amber)', fontSize: '1rem' }}>✓</span>
-            <span style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
-              fontWeight: 600,
-              color: 'var(--color-charcoal)',
-            }}>
-              You&apos;re on the list.
-            </span>
-          </div>
+            You&apos;re on the list.
+          </p>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0', flexShrink: 0 }}>
             <input
               type="email"
-              required
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="your@email.com"
+              required
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.88rem',
+                fontSize: '0.85rem',
                 fontWeight: 400,
-                color: 'var(--color-charcoal)',
-                background: 'var(--color-sand-3)',
-                border: '1.5px solid rgba(26,23,20,0.2)',
-                borderRadius: '9999px',
-                padding: '0.85rem 1.5rem',
+                color: 'var(--color-sand)',
+                background: 'rgba(237,232,223,0.07)',
+                border: '1.5px solid rgba(237,232,223,0.15)',
+                borderRight: 'none',
+                padding: '0.9rem 1.25rem',
                 outline: 'none',
-                minWidth: '220px',
-                minHeight: '44px',
+                width: '260px',
+                borderRadius: '3px 0 0 3px',
               }}
             />
             <button
@@ -102,20 +106,22 @@ export function EmailCapture() {
               disabled={loading}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.88rem',
+                fontSize: '0.68rem',
                 fontWeight: 700,
-                color: 'var(--color-sand)',
-                background: loading ? 'var(--color-muted)' : 'var(--color-charcoal)',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--color-charcoal)',
+                background: 'var(--color-sand)',
                 border: 'none',
-                borderRadius: '9999px',
-                padding: '0.85rem 1.75rem',
-                cursor: loading ? 'wait' : 'pointer',
-                transition: 'background 0.2s ease',
+                padding: '0.9rem 1.75rem',
+                borderRadius: '0 3px 3px 0',
+                cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                minHeight: '44px',
+                transition: 'opacity 0.2s ease',
+                opacity: loading ? 0.7 : 1,
               }}
             >
-              {loading ? 'Saving…' : 'Notify Me'}
+              {loading ? '...' : 'Notify Me'}
             </button>
           </form>
         )}

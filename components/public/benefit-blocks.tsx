@@ -25,64 +25,67 @@ const benefits = [
 
 export function BenefitBlocks() {
   return (
-    <section className="sec-pad" style={{ background: 'var(--color-sand-3)', borderBottom: '1px solid var(--color-border-light)' }}>
-      <Reveal>
-        <p className="section-label" style={{ marginBottom: '0.85rem' }}>Why Demarks 360</p>
-        <h2 style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 400,
-          lineHeight: 1.0,
-          color: 'var(--color-charcoal)',
-          marginBottom: '0.5rem',
-          letterSpacing: '-0.02em',
-        }}>
-          Worth every
-        </h2>
-        <p style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 400,
-          fontStyle: 'italic',
-          lineHeight: 1.0,
-          color: 'var(--color-amber)',
-          marginBottom: '4rem',
-          letterSpacing: '-0.02em',
-        }}>
-          moment.
-        </p>
-      </Reveal>
+    <section style={{ background: 'var(--color-sand-2)', borderBottom: '1px solid var(--color-border-light)' }}>
+      {/* Header */}
+      <div style={{ padding: '6rem 3rem 5rem', borderBottom: '1px solid var(--color-border-light)' }}>
+        <Reveal>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.6rem',
+            fontWeight: 600,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'var(--color-muted-light)',
+            marginBottom: '1.25rem',
+          }}>
+            Why Demarks 360
+          </p>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+            fontWeight: 300,
+            lineHeight: 1.0,
+            color: 'var(--color-charcoal)',
+            letterSpacing: '-0.025em',
+            maxWidth: '640px',
+          }}>
+            Worth every moment,{' '}
+            <em style={{ color: 'var(--color-amber)' }}>every time.</em>
+          </h2>
+        </Reveal>
+      </div>
 
+      {/* 4-column benefit grid */}
       <div className="benefits-grid">
         {benefits.map((b, i) => (
-          <Reveal key={b.number} delay={i * 80}>
+          <Reveal key={b.number} delay={i * 70}>
             <div style={{
-              padding: '2.5rem 2rem',
-              background: 'var(--color-sand)',
-              border: '1px solid var(--color-border-light)',
-              borderRadius: '16px',
+              padding: '3rem 3rem 3.5rem',
+              borderRight: i < 3 ? '1px solid var(--color-border-light)' : 'none',
               height: '100%',
             }}>
-              <p style={{
+              <span style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '3rem',
-                fontWeight: 400,
+                fontSize: '3.5rem',
+                fontWeight: 300,
                 fontStyle: 'italic',
                 lineHeight: 1,
                 color: 'var(--color-amber)',
-                opacity: 0.5,
-                marginBottom: '1.25rem',
+                opacity: 0.55,
+                display: 'block',
+                marginBottom: '2rem',
+                letterSpacing: '-0.02em',
               }}>
                 {b.number}
-              </p>
+              </span>
               <h3 style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '1.5rem',
+                fontSize: 'clamp(1.4rem, 2vw, 1.9rem)',
                 fontWeight: 400,
                 lineHeight: 1.15,
                 color: 'var(--color-charcoal)',
                 letterSpacing: '-0.01em',
-                marginBottom: '0.85rem',
+                marginBottom: '1rem',
               }}>
                 {b.heading}
               </h3>
@@ -91,7 +94,7 @@ export function BenefitBlocks() {
                 fontSize: '0.88rem',
                 color: 'var(--color-muted)',
                 lineHeight: 1.75,
-                maxWidth: '32ch',
+                fontWeight: 400,
               }}>
                 {b.body}
               </p>
