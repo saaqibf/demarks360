@@ -4,8 +4,18 @@ import { checkBookingAvailability } from '@/lib/availability'
 import { createBookingRecord, getOrCreateCustomer } from '@/lib/db/queries/bookings'
 import { calculateBookingCost, balanceChargeDate, timeToMinutes, PRICING } from '@/lib/pricing'
 import { createBookingIntent } from '@/lib/stripe/booking-intent'
+import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const rl = checkRateLimit(`booking:${ip}`, { limit: 5, windowMs: 60_000 })
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Too many booking attempts. Please wait before trying again.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetAt - Date.now()) / 1000)), ...rateLimitHeaders(0, rl.resetAt) } },
+    )
+  }
+
   let body: unknown
   try { body = await req.json() } catch { return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 }) }
 
