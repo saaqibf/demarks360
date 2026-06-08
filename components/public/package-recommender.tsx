@@ -60,15 +60,16 @@ export function PackageRecommender() {
           Package Finder
         </p>
         <h2 style={{
-          fontFamily: 'var(--font-serif)',
+          fontFamily: 'var(--font-display)',
           fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 300,
-          lineHeight: 1.0,
+          fontWeight: 900,
+          lineHeight: 0.92,
           color: 'var(--color-charcoal)',
-          letterSpacing: '-0.025em',
+          letterSpacing: '-0.01em',
+          textTransform: 'uppercase',
         }}>
           Find your{' '}
-          <em style={{ color: 'var(--color-amber)' }}>perfect package.</em>
+          <span style={{ color: 'var(--color-amber)' }}>perfect package.</span>
         </h2>
       </div>
 
@@ -92,10 +93,9 @@ export function PackageRecommender() {
                   key={e}
                   onClick={() => selectEvent(e)}
                   style={{
-                    fontFamily: 'var(--font-serif)',
+                    fontFamily: 'var(--font-display)',
                     fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
-                    fontWeight: 400,
-                    fontStyle: 'italic',
+                    fontWeight: 800,
                     color: 'var(--color-charcoal)',
                     background: 'transparent',
                     border: '1px solid var(--color-border-light)',
@@ -105,7 +105,8 @@ export function PackageRecommender() {
                     textAlign: 'left',
                     cursor: 'pointer',
                     transition: 'background 0.2s ease',
-                    letterSpacing: '-0.01em',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
                     lineHeight: 1,
                   }}
                   onMouseEnter={e2 => (e2.currentTarget.style.background = 'rgba(26,23,20,0.04)')}
@@ -171,14 +172,14 @@ export function PackageRecommender() {
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                 >
                   <div>
-                    <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 400, fontStyle: 'italic', color: 'var(--color-charcoal)', letterSpacing: '-0.01em' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 700, color: 'var(--color-charcoal)', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
                       {d.label}
                     </p>
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 400, marginTop: '0.2rem' }}>
                       {d.note}
                     </p>
                   </div>
-                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 400, fontStyle: 'italic', color: 'var(--color-charcoal)', letterSpacing: '-0.01em', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 800, color: 'var(--color-charcoal)', letterSpacing: '0.01em', flexShrink: 0 }}>
                     {d.price}
                   </span>
                 </button>
@@ -201,7 +202,7 @@ export function PackageRecommender() {
               Your Package
             </p>
             <div style={{ maxWidth: '620px', padding: '3rem', border: '1px solid var(--color-border-light)', background: 'var(--color-sand-3)' }}>
-              <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', fontWeight: 300, fontStyle: 'italic', color: 'var(--color-charcoal)', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '0.25rem' }}>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', fontWeight: 900, color: 'var(--color-charcoal)', letterSpacing: '-0.01em', lineHeight: 1, marginBottom: '0.25rem' }}>
                 {selectedDuration.price}
               </p>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--color-muted)', fontWeight: 400, marginBottom: '1.5rem' }}>

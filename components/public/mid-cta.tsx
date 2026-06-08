@@ -19,24 +19,25 @@ export function MidCta() {
         Ready?
       </p>
       <h2 style={{
-        fontFamily: 'var(--font-serif)',
+        fontFamily: 'var(--font-display)',
         fontSize: 'clamp(3rem, 6vw, 6.5rem)',
-        fontWeight: 300,
-        fontStyle: 'italic',
-        lineHeight: 0.95,
+        fontWeight: 900,
+        lineHeight: 0.92,
         color: 'var(--color-charcoal)',
-        letterSpacing: '-0.025em',
-        marginBottom: '0.5rem',
+        letterSpacing: '-0.01em',
+        textTransform: 'uppercase',
+        marginBottom: '0.35rem',
       }}>
         Seen enough?
       </h2>
       <p style={{
-        fontFamily: 'var(--font-serif)',
+        fontFamily: 'var(--font-display)',
         fontSize: 'clamp(3rem, 6vw, 6.5rem)',
-        fontWeight: 300,
-        lineHeight: 0.95,
+        fontWeight: 900,
+        lineHeight: 0.92,
         color: 'var(--color-amber)',
-        letterSpacing: '-0.025em',
+        letterSpacing: '-0.01em',
+        textTransform: 'uppercase',
         marginBottom: '2.5rem',
       }}>
         Pick your date.

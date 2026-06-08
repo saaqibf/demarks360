@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const STATUS_STYLES: Record<string, { bg: string; color: string; border: string }> = {
   confirmed: { bg: 'rgba(52,168,83,0.1)', color: '#2d8a50', border: 'rgba(52,168,83,0.3)' },
-  pending:   { bg: 'rgba(168,117,48,0.1)', color: 'var(--color-amber)', border: 'rgba(168,117,48,0.3)' },
+  pending:   { bg: 'rgba(212,133,106,0.1)', color: 'var(--color-amber)', border: 'rgba(212,133,106,0.3)' },
   cancelled: { bg: 'rgba(192,41,58,0.08)', color: 'var(--color-crimson)', border: 'rgba(192,41,58,0.25)' },
   completed: { bg: 'rgba(26,23,20,0.05)', color: 'var(--color-muted)', border: 'rgba(26,23,20,0.15)' },
 }

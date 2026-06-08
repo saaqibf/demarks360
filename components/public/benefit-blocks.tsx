@@ -41,16 +41,17 @@ export function BenefitBlocks() {
             Why Demarks 360
           </p>
           <h2 style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-            fontWeight: 300,
-            lineHeight: 1.0,
+            fontWeight: 900,
+            lineHeight: 0.92,
             color: 'var(--color-charcoal)',
-            letterSpacing: '-0.025em',
+            letterSpacing: '-0.01em',
+            textTransform: 'uppercase',
             maxWidth: '640px',
           }}>
             Worth every moment,{' '}
-            <em style={{ color: 'var(--color-amber)' }}>every time.</em>
+            <span style={{ color: 'var(--color-amber)' }}>every time.</span>
           </h2>
         </Reveal>
       </div>
@@ -65,26 +66,26 @@ export function BenefitBlocks() {
               height: '100%',
             }}>
               <span style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: '3.5rem',
-                fontWeight: 300,
-                fontStyle: 'italic',
+                fontFamily: 'var(--font-display)',
+                fontSize: '3rem',
+                fontWeight: 900,
                 lineHeight: 1,
                 color: 'var(--color-amber)',
-                opacity: 0.55,
+                opacity: 0.5,
                 display: 'block',
                 marginBottom: '2rem',
-                letterSpacing: '-0.02em',
+                letterSpacing: '0.04em',
               }}>
                 {b.number}
               </span>
               <h3 style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(1.4rem, 2vw, 1.9rem)',
-                fontWeight: 400,
-                lineHeight: 1.15,
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(1.3rem, 1.8vw, 1.75rem)',
+                fontWeight: 700,
+                lineHeight: 1.05,
                 color: 'var(--color-charcoal)',
-                letterSpacing: '-0.01em',
+                letterSpacing: '0.01em',
+                textTransform: 'uppercase',
                 marginBottom: '1rem',
               }}>
                 {b.heading}

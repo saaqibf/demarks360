@@ -48,14 +48,13 @@ export function Testimonials() {
 
           {/* Large quote */}
           <blockquote style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(1.8rem, 3.5vw, 3.5rem)',
-            fontWeight: 300,
-            fontStyle: 'italic',
-            lineHeight: 1.25,
+            fontFamily: 'var(--font-body)',
+            fontSize: 'clamp(1.2rem, 2.5vw, 2rem)',
+            fontWeight: 400,
+            lineHeight: 1.6,
             color: 'var(--color-charcoal)',
-            letterSpacing: '-0.02em',
-            maxWidth: '860px',
+            letterSpacing: '-0.01em',
+            maxWidth: '760px',
             margin: '0 0 2.5rem',
           }}>
             &ldquo;{featured.quote}&rdquo;
@@ -86,13 +85,11 @@ export function Testimonials() {
                 ))}
               </div>
               <p style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
+                fontFamily: 'var(--font-body)',
+                fontSize: '1rem',
                 fontWeight: 400,
-                fontStyle: 'italic',
-                lineHeight: 1.45,
+                lineHeight: 1.75,
                 color: 'var(--color-charcoal)',
-                letterSpacing: '-0.01em',
                 marginBottom: '1.5rem',
               }}>
                 &ldquo;{r.quote}&rdquo;

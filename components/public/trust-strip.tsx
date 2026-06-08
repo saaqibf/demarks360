@@ -23,14 +23,14 @@ export function TrustStrip() {
             }}
           >
             <span style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: '2rem',
-              fontWeight: 300,
-              fontStyle: 'italic',
+              fontFamily: 'var(--font-display)',
+              fontSize: '1.75rem',
+              fontWeight: 800,
               color: 'var(--color-sand)',
               lineHeight: 1,
               display: 'block',
-              letterSpacing: '-0.02em',
+              letterSpacing: '0.02em',
+              textTransform: 'uppercase',
             }}>
               {val}
             </span>

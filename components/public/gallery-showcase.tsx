@@ -32,15 +32,16 @@ export async function GalleryShowcase() {
                 Gallery
               </p>
               <h2 style={{
-                fontFamily: 'var(--font-serif)',
+                fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-                fontWeight: 300,
-                lineHeight: 1.0,
+                fontWeight: 900,
+                lineHeight: 0.92,
                 color: 'var(--color-sand)',
-                letterSpacing: '-0.025em',
+                letterSpacing: '-0.01em',
+                textTransform: 'uppercase',
               }}>
                 From Our{' '}
-                <em style={{ color: 'var(--color-amber)' }}>Events</em>
+                <span style={{ color: 'var(--color-amber)' }}>Events</span>
               </h2>
             </div>
             <p style={{
@@ -71,13 +72,13 @@ export async function GalleryShowcase() {
                 <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
               ) : (
                 <span aria-hidden="true" style={{
-                  fontFamily: 'var(--font-serif)',
+                  fontFamily: 'var(--font-display)',
                   fontSize: '4rem',
-                  fontWeight: 300,
-                  fontStyle: 'italic',
+                  fontWeight: 900,
                   opacity: 0.06,
                   color: 'var(--color-sand)',
-                  letterSpacing: '-0.02em',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
                 }}>
                   360°
                 </span>

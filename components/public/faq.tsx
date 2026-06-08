@@ -29,15 +29,16 @@ export function Faq() {
             FAQ
           </p>
           <h2 style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-            fontWeight: 300,
-            lineHeight: 1.0,
+            fontWeight: 900,
+            lineHeight: 0.92,
             color: 'var(--color-charcoal)',
-            letterSpacing: '-0.025em',
+            letterSpacing: '-0.01em',
+            textTransform: 'uppercase',
           }}>
             Common questions,{' '}
-            <em style={{ color: 'var(--color-amber)' }}>answered.</em>
+            <span style={{ color: 'var(--color-amber)' }}>answered.</span>
           </h2>
         </Reveal>
       </div>
@@ -53,14 +54,14 @@ export function Faq() {
                 style={{ borderBottom: '1px solid var(--color-border-light)' }}
               >
                 <AccordionTrigger style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)',
-                  fontWeight: 400,
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '1rem',
+                  fontWeight: 600,
                   color: 'var(--color-charcoal)',
                   textAlign: 'left',
-                  padding: '1.75rem 0',
-                  letterSpacing: '-0.01em',
-                  lineHeight: 1.3,
+                  padding: '1.5rem 0',
+                  letterSpacing: '0',
+                  lineHeight: 1.5,
                 }}>
                   {faq.q}
                 </AccordionTrigger>

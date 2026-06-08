@@ -46,13 +46,13 @@ export function EmailCapture() {
             Stay in the Loop
           </p>
           <h3 style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)',
-            fontWeight: 300,
-            fontStyle: 'italic',
-            lineHeight: 1.15,
+            fontWeight: 800,
+            lineHeight: 1.05,
             color: 'var(--color-sand)',
-            letterSpacing: '-0.02em',
+            letterSpacing: '0.01em',
+            textTransform: 'uppercase',
           }}>
             Not ready to book yet?
           </h3>
@@ -70,12 +70,12 @@ export function EmailCapture() {
 
         {submitted ? (
           <p style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: '1.35rem',
-            fontWeight: 400,
-            fontStyle: 'italic',
+            fontWeight: 700,
             color: 'var(--color-sand)',
-            letterSpacing: '-0.01em',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
           }}>
             You&apos;re on the list.
           </p>

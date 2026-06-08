@@ -10,14 +10,15 @@ export function SiteFooter() {
       <div className="footer-inner">
         <div>
           <p style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-wordmark)',
             fontSize: '1.5rem',
             fontWeight: 400,
-            fontStyle: 'italic',
             color: 'var(--color-sand)',
-            letterSpacing: '-0.01em',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            lineHeight: 1,
           }}>
-            Demarks <em style={{ fontStyle: 'italic', color: 'var(--color-amber)' }}>360</em>
+            DEMARKS<span style={{ color: 'var(--color-amber)' }}>360</span>
           </p>
           <p style={{
             fontFamily: 'var(--font-body)',

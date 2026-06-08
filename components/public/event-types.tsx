@@ -29,19 +29,20 @@ export function EventTypes() {
             What We Do
           </p>
           <h2 style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)',
-            fontWeight: 300,
-            lineHeight: 1.0,
+            fontWeight: 900,
+            lineHeight: 0.92,
             color: 'var(--color-sand)',
-            letterSpacing: '-0.025em',
+            letterSpacing: '-0.01em',
+            textTransform: 'uppercase',
             maxWidth: '600px',
           }}>
             The 360 Experience,
             <br />
-            <em style={{ color: 'var(--color-amber)', fontWeight: 300 }}>
+            <span style={{ color: 'var(--color-amber)' }}>
               for Every Occasion.
-            </em>
+            </span>
           </h2>
         </Reveal>
       </div>
@@ -78,13 +79,13 @@ export function EventTypes() {
               {ev.num}
             </span>
             <span style={{
-              fontFamily: 'var(--font-serif)',
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
-              fontWeight: 300,
-              fontStyle: 'italic',
+              fontWeight: 800,
               lineHeight: 1,
               color: 'var(--color-sand)',
-              letterSpacing: '-0.02em',
+              letterSpacing: '0.01em',
+              textTransform: 'uppercase',
               flex: 1,
             }}>
               {ev.type}

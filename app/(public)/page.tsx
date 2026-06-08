@@ -2,6 +2,7 @@ export const revalidate = 300 // re-generate at most every 5 minutes
 
 import { SiteNav } from '@/components/public/site-nav'
 import { Hero } from '@/components/public/hero'
+import { IntroAnimation } from '@/components/public/intro-animation'
 import { TrustStrip } from '@/components/public/trust-strip'
 import { EventTypes } from '@/components/public/event-types'
 import { HowItWorks } from '@/components/public/how-it-works'
@@ -20,6 +21,7 @@ import { CookieConsent } from '@/components/public/cookie-consent'
 export default function HomePage() {
   return (
     <>
+      <IntroAnimation />
       <SiteNav />
       <main>
         <Hero />

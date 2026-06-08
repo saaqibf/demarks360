@@ -39,16 +39,17 @@ export function HowItWorks() {
                 How It Works
               </p>
               <h2 style={{
-                fontFamily: 'var(--font-serif)',
+                fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-                fontWeight: 300,
-                lineHeight: 1.0,
+                fontWeight: 900,
+                lineHeight: 0.92,
                 color: 'var(--color-charcoal)',
-                letterSpacing: '-0.025em',
+                letterSpacing: '-0.01em',
+                textTransform: 'uppercase',
                 marginBottom: 0,
               }}>
                 Three steps.{' '}
-                <em style={{ color: 'var(--color-amber)' }}>Zero stress.</em>
+                <span style={{ color: 'var(--color-amber)' }}>Zero stress.</span>
               </h2>
             </div>
             <a href="/book" className="btn-primary" style={{ flexShrink: 0 }}>
@@ -77,13 +78,12 @@ export function HowItWorks() {
                 position: 'absolute',
                 top: '-0.5rem',
                 left: '2rem',
-                fontFamily: 'var(--font-serif)',
+                fontFamily: 'var(--font-display)',
                 fontSize: '14rem',
-                fontWeight: 300,
-                fontStyle: 'italic',
+                fontWeight: 900,
                 lineHeight: 1,
                 color: 'var(--color-charcoal)',
-                opacity: 0.04,
+                opacity: 0.05,
                 userSelect: 'none',
                 pointerEvents: 'none',
                 letterSpacing: '-0.04em',
@@ -101,12 +101,13 @@ export function HowItWorks() {
                   marginBottom: '1.5rem',
                 }} />
                 <h3 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1.7rem, 2.5vw, 2.25rem)',
-                  fontWeight: 400,
-                  lineHeight: 1.1,
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(1.5rem, 2.2vw, 2rem)',
+                  fontWeight: 700,
+                  lineHeight: 1.05,
                   color: 'var(--color-charcoal)',
-                  letterSpacing: '-0.01em',
+                  letterSpacing: '0.01em',
+                  textTransform: 'uppercase',
                   marginBottom: '1rem',
                 }}>
                   {step.title}

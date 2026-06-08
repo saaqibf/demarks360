@@ -31,7 +31,7 @@ export function Hero() {
       {/* Amber corner wash */}
       <div style={{
         position: 'absolute', bottom: 0, left: 0, width: '50%', height: '55%', zIndex: 2,
-        background: 'radial-gradient(ellipse at 0% 100%, rgba(168,117,48,0.14) 0%, transparent 60%)',
+        background: 'radial-gradient(ellipse at 0% 100%, rgba(212,133,106,0.14) 0%, transparent 60%)',
         pointerEvents: 'none',
       }} />
 
@@ -57,24 +57,21 @@ export function Hero() {
 
           {/* Main heading */}
           <h1 className="hero-headline" style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(3.8rem, 9vw, 9.5rem)',
-            fontWeight: 300,
-            lineHeight: 0.95,
+            fontWeight: 900,
+            lineHeight: 0.92,
             color: 'var(--color-sand)',
-            letterSpacing: '-0.02em',
+            letterSpacing: '-0.01em',
+            textTransform: 'uppercase',
             marginBottom: '0',
-            maxWidth: '820px',
+            maxWidth: '900px',
           }}>
             Every Moment,
             <br />
-            <em style={{
-              fontStyle: 'italic',
-              color: 'var(--color-amber)',
-              fontWeight: 300,
-            }}>
+            <span style={{ color: 'var(--color-amber)' }}>
               Captured.
-            </em>
+            </span>
           </h1>
 
           {/* Sub */}
@@ -147,10 +144,11 @@ export function Hero() {
             ].map(({ val, label }) => (
               <div key={val}>
                 <span style={{
-                  fontFamily: 'var(--font-serif)',
+                  fontFamily: 'var(--font-display)',
                   fontSize: '1.1rem',
-                  fontWeight: 400,
-                  fontStyle: 'italic',
+                  fontWeight: 800,
+                  letterSpacing: '0.02em',
+                  textTransform: 'uppercase',
                   color: 'var(--color-sand)',
                   display: 'block',
                   lineHeight: 1,

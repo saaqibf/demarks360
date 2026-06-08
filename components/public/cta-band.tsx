@@ -14,7 +14,7 @@ export function CtaBand() {
         position: 'absolute',
         bottom: 0, right: 0,
         width: '50vw', height: '70%',
-        background: 'radial-gradient(ellipse at 100% 100%, rgba(168,117,48,0.08) 0%, transparent 60%)',
+        background: 'radial-gradient(ellipse at 100% 100%, rgba(212,133,106,0.08) 0%, transparent 60%)',
         pointerEvents: 'none',
       }} />
 
@@ -33,24 +33,25 @@ export function CtaBand() {
           </p>
 
           <h2 style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(3.5rem, 8vw, 8.5rem)',
-            fontWeight: 300,
-            lineHeight: 0.95,
+            fontWeight: 900,
+            lineHeight: 0.92,
             color: 'var(--color-sand)',
-            letterSpacing: '-0.025em',
+            letterSpacing: '-0.01em',
+            textTransform: 'uppercase',
             marginBottom: '0',
           }}>
             Make Your Event
           </h2>
           <h2 style={{
-            fontFamily: 'var(--font-serif)',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(3.5rem, 8vw, 8.5rem)',
-            fontWeight: 300,
-            fontStyle: 'italic',
-            lineHeight: 0.95,
+            fontWeight: 900,
+            lineHeight: 0.92,
             color: 'var(--color-amber)',
-            letterSpacing: '-0.025em',
+            letterSpacing: '-0.01em',
+            textTransform: 'uppercase',
             marginBottom: '3rem',
           }}>
             Unforgettable.

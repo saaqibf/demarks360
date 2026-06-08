@@ -35,15 +35,16 @@ export function Pricing() {
           </p>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
             <h2 style={{
-              fontFamily: 'var(--font-serif)',
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-              fontWeight: 300,
-              lineHeight: 1.0,
+              fontWeight: 900,
+              lineHeight: 0.92,
               color: 'var(--color-sand)',
-              letterSpacing: '-0.025em',
+              letterSpacing: '-0.01em',
+              textTransform: 'uppercase',
             }}>
               Simple,{' '}
-              <em style={{ color: 'var(--color-amber)' }}>transparent.</em>
+              <span style={{ color: 'var(--color-amber)' }}>transparent.</span>
             </h2>
             <p style={{
               fontFamily: 'var(--font-body)',
@@ -128,13 +129,12 @@ export function Pricing() {
                 {t.duration}
               </p>
               <p style={{
-                fontFamily: 'var(--font-serif)',
+                fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(2rem, 3.5vw, 3rem)',
-                fontWeight: 300,
-                fontStyle: 'italic',
+                fontWeight: 800,
                 lineHeight: 1,
                 color: 'var(--color-sand)',
-                letterSpacing: '-0.02em',
+                letterSpacing: '0.01em',
                 marginBottom: '0.5rem',
               }}>
                 {t.price}
