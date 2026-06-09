@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { SiteNav } from '@/components/public/site-nav'
 import { DatePicker } from '@/components/public/book/date-picker'
@@ -40,7 +40,7 @@ const initialState: BookingState = {
 
 const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Checkout']
 
-export default function BookPage() {
+function BookPageInner() {
   const params = useSearchParams()
   const prefilledDate = params.get('date') ?? null
   const [state, setState] = useState<BookingState>({
@@ -134,5 +134,17 @@ export default function BookPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function BookPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
+        <SiteNav />
+      </div>
+    }>
+      <BookPageInner />
+    </Suspense>
   )
 }
