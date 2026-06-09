@@ -1,10 +1,42 @@
 import { google } from 'googleapis'
 import type { Readable } from 'stream'
 
-function getAuth() {
+export class DriveConfigurationError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'DriveConfigurationError'
+  }
+}
+
+type ServiceAccountCredentials = {
+  client_email?: string
+}
+
+function getServiceAccountCredentials(): ServiceAccountCredentials {
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-  if (!raw) throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON not configured')
-  const credentials = JSON.parse(raw)
+  if (!raw) {
+    throw new DriveConfigurationError(
+      'Google Drive import requires GOOGLE_SERVICE_ACCOUNT_JSON for a service account with Drive readonly access.'
+    )
+  }
+
+  try {
+    return JSON.parse(raw) as ServiceAccountCredentials
+  } catch {
+    throw new DriveConfigurationError('GOOGLE_SERVICE_ACCOUNT_JSON must be valid service account JSON.')
+  }
+}
+
+export function getDriveServiceAccountEmail(): string | null {
+  try {
+    return getServiceAccountCredentials().client_email ?? null
+  } catch {
+    return null
+  }
+}
+
+function getAuth() {
+  const credentials = getServiceAccountCredentials()
   return new google.auth.GoogleAuth({
     credentials,
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],

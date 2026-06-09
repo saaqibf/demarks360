@@ -23,28 +23,45 @@ export function BookingActions({ bookingId, currentStatus, currentNotes }: Props
   const [saving, setSaving] = useState(false)
   const [notes, setNotes] = useState(currentNotes)
   const [notesSaved, setNotesSaved] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function setStatus(status: Status) {
     setSaving(true)
-    await fetch(`/api/admin/bookings/${bookingId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
-    })
-    setSaving(false)
-    router.refresh()
+    setError(null)
+    try {
+      const res = await fetch(`/api/admin/bookings/${bookingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.error ?? 'Failed to update status')
+      router.refresh()
+    } catch (e) {
+      setError((e as Error).message)
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function saveNotes() {
     setSaving(true)
-    await fetch(`/api/admin/bookings/${bookingId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ notes }),
-    })
-    setSaving(false)
-    setNotesSaved(true)
-    setTimeout(() => setNotesSaved(false), 2000)
+    setError(null)
+    try {
+      const res = await fetch(`/api/admin/bookings/${bookingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notes }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.error ?? 'Failed to save notes')
+      setNotesSaved(true)
+      setTimeout(() => setNotesSaved(false), 2000)
+    } catch (e) {
+      setError((e as Error).message)
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -82,6 +99,11 @@ export function BookingActions({ bookingId, currentStatus, currentNotes }: Props
 
       {/* Notes */}
       <div>
+        {error && (
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-crimson)', marginBottom: '0.75rem' }}>
+            {error}
+          </p>
+        )}
         <label style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', display: 'block', marginBottom: '0.5rem' }}>
           Internal Notes
         </label>

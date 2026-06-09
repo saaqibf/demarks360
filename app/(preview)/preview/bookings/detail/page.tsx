@@ -7,7 +7,7 @@ const STATUS_STYLES: Record<string, { bg: string; color: string; border: string 
   completed: { bg: 'rgba(26,23,20,0.05)', color: 'var(--color-muted)', border: 'rgba(26,23,20,0.15)' },
 }
 
-const MOCK = {
+const PREVIEW_BOOKING = {
   id: 'bk_001aabbcc',
   status: 'confirmed',
   eventDate: '2026-06-14',
@@ -66,7 +66,7 @@ const sectionLabel: React.CSSProperties = {
 }
 
 export default function PreviewBookingDetail() {
-  const b = MOCK
+  const b = PREVIEW_BOOKING
   const s = STATUS_STYLES[b.status]
   const balanceDate = fmtDate(b.balanceChargeDate, { month: 'long', day: 'numeric', year: 'numeric' })
 

@@ -42,6 +42,10 @@ export default withSentryConfig(nextConfig, {
   sourcemaps: {
     disable: false,
   },
-  disableLogger: true,
-  automaticVercelMonitors: true,
+  webpack: {
+    automaticVercelMonitors: true,
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
 })

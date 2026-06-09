@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface DriveFile {
@@ -26,11 +26,26 @@ const VAL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.72
 export function DriveImport({ bookingId }: Props) {
   const router = useRouter()
   const [folderUrl, setFolderUrl] = useState('')
+  const [serviceAccountEmail, setServiceAccountEmail] = useState<string | null>(null)
+  const [configNote, setConfigNote] = useState('')
   const [files, setFiles] = useState<DriveFile[]>([])
   const [listing, setListing] = useState(false)
   const [listError, setListError] = useState('')
   const [importing, setImporting] = useState<Record<string, 'idle' | 'loading' | 'done' | 'error'>>({})
   const [importErrors, setImportErrors] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    let mounted = true
+    fetch('/api/admin/drive-import')
+      .then(async res => {
+        const data = await res.json().catch(() => ({}))
+        if (!mounted || !res.ok) return
+        setServiceAccountEmail(data.serviceAccountEmail ?? null)
+        setConfigNote(data.note ?? '')
+      })
+      .catch(() => {})
+    return () => { mounted = false }
+  }, [])
 
   async function handleList() {
     if (!folderUrl.trim()) return
@@ -197,7 +212,10 @@ export function DriveImport({ bookingId }: Props) {
       )}
 
       <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.25)', marginTop: '1rem', lineHeight: 1.6 }}>
-        Share the Drive folder with <strong style={{ color: 'rgba(245,240,234,0.45)' }}>demarks360-drive@demarks360.iam.gserviceaccount.com</strong> (Viewer access) before listing files.
+        {serviceAccountEmail
+          ? <>Share the Drive folder with <strong style={{ color: 'rgba(245,240,234,0.45)' }}>{serviceAccountEmail}</strong> (Viewer access) before listing files.</>
+          : 'Google Drive import requires GOOGLE_SERVICE_ACCOUNT_JSON with a service account client_email. Share folders with that service account; OAuth is intentionally not implemented here because it requires user secrets.'}
+        {configNote && <span style={{ display: 'block', marginTop: '0.4rem' }}>{configNote}</span>}
       </p>
     </div>
   )

@@ -2,10 +2,28 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Readable } from 'stream'
 import { isAdmin } from '@/lib/auth/roles'
 import { getMux } from '@/lib/mux'
-import { listDriveFolderVideos, streamDriveFile, parseFolderId } from '@/lib/google-drive'
-import { pollMuxAsset, createGalleryItemFromUpload, MuxAssetTimeoutError, MuxNoPlaybackIdError } from '@/lib/mux-poll-upload'
+import {
+  DriveConfigurationError,
+  getDriveServiceAccountEmail,
+  listDriveFolderVideos,
+  parseFolderId,
+  streamDriveFile,
+} from '@/lib/google-drive'
+import { createGalleryItemFromUpload, MuxAssetTimeoutError, MuxNoPlaybackIdError } from '@/lib/mux-poll-upload'
 
 export const maxDuration = 300
+
+export async function GET() {
+  if (!(await isAdmin())) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+
+  const serviceAccountEmail = getDriveServiceAccountEmail()
+  return NextResponse.json({
+    configured: Boolean(serviceAccountEmail),
+    serviceAccountEmail,
+    requiredEnv: 'GOOGLE_SERVICE_ACCOUNT_JSON',
+    note: 'Use a Google Cloud service account with Drive readonly access. Share Drive folders with its client_email; OAuth is intentionally not implemented here because it requires user secrets and consent setup.',
+  })
+}
 
 export async function POST(req: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
@@ -16,8 +34,15 @@ export async function POST(req: NextRequest) {
   // ── List videos in a Drive folder ────────────────────────────────────────
   if (body.action === 'list_files') {
     if (!body.folderId) return NextResponse.json({ error: 'folderId required' }, { status: 400 })
-    const files = await listDriveFolderVideos(parseFolderId(body.folderId))
-    return NextResponse.json({ files })
+    try {
+      const files = await listDriveFolderVideos(parseFolderId(body.folderId))
+      return NextResponse.json({ files })
+    } catch (e) {
+      if (e instanceof DriveConfigurationError) {
+        return NextResponse.json({ error: e.message }, { status: 503 })
+      }
+      throw e
+    }
   }
 
   // ── Import a single file: Drive → Mux → gallery_item ────────────────────
@@ -33,12 +58,21 @@ export async function POST(req: NextRequest) {
       new_asset_settings: { playback_policies: ['public'] },
     })
 
-    const driveStream = await streamDriveFile(fileId)
+    let driveStream: Awaited<ReturnType<typeof streamDriveFile>>
+    try {
+      driveStream = await streamDriveFile(fileId)
+    } catch (e) {
+      if (e instanceof DriveConfigurationError) {
+        return NextResponse.json({ error: e.message }, { status: 503 })
+      }
+      throw e
+    }
     const putRes = await fetch(upload.url!, {
       method: 'PUT',
       body: Readable.toWeb(driveStream) as ReadableStream,
-      headers: { 'Content-Type': 'video/mp4' },
-      // @ts-ignore — Node fetch requires duplex for streaming bodies
+      headers: { 'Content-Type': 'application/octet-stream' },
+      // Node fetch requires duplex for streaming request bodies.
+      // @ts-expect-error duplex is supported by Node but not yet in the DOM RequestInit type.
       duplex: 'half',
     })
     if (!putRes.ok) {

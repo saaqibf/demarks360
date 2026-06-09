@@ -7,7 +7,7 @@ const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-const MOCK_BLOCKS: Record<string, { reason: string; type: 'booked' | 'admin' }> = {
+const PREVIEW_BLOCKS: Record<string, { reason: string; type: 'booked' | 'admin' }> = {
   '2026-06-14': { reason: 'Aisha Mohammed — Birthday Party', type: 'booked' },
   '2026-06-21': { reason: 'Jordan & Kezia Tran — Wedding Reception', type: 'booked' },
   '2026-06-27': { reason: 'Personal day off', type: 'admin' },
@@ -48,7 +48,7 @@ function toKey(year: number, month: number, day: number): string {
 export default function PreviewAvailability() {
   const [year, setYear] = useState(2026)
   const [month, setMonth] = useState(5)
-  const [blocks, setBlocks] = useState(MOCK_BLOCKS)
+  const [blocks, setBlocks] = useState(PREVIEW_BLOCKS)
   const [selected, setSelected] = useState<string | null>(null)
   const [formDate, setFormDate] = useState('')
   const [formReason, setFormReason] = useState('')

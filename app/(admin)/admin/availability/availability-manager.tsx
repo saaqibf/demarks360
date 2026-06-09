@@ -37,25 +37,38 @@ export function AvailabilityManager({ initialBlocks }: Props) {
     if (!form.date) { setError('Date is required'); return }
     setError(null)
     setSaving(true)
-    const res = await fetch('/api/admin/availability', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        date: form.date,
-        startTime: form.startTime || undefined,
-        endTime: form.endTime || undefined,
-        reason: form.reason || undefined,
-      }),
-    })
-    const block = await res.json()
-    setBlocks(prev => [...prev, block].sort((a, b) => a.blockedDate.localeCompare(b.blockedDate)))
-    setForm({ date: '', startTime: '', endTime: '', reason: '' })
-    setSaving(false)
+    try {
+      const res = await fetch('/api/admin/availability', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: form.date,
+          startTime: form.startTime || undefined,
+          endTime: form.endTime || undefined,
+          reason: form.reason || undefined,
+        }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.error ?? 'Failed to block date')
+      setBlocks(prev => [...prev, data].sort((a, b) => a.blockedDate.localeCompare(b.blockedDate)))
+      setForm({ date: '', startTime: '', endTime: '', reason: '' })
+    } catch (e) {
+      setError((e as Error).message)
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function removeBlock(id: string) {
-    await fetch(`/api/admin/availability/${id}`, { method: 'DELETE' })
+    setError(null)
+    const previous = blocks
     setBlocks(prev => prev.filter(b => b.id !== id))
+    const res = await fetch(`/api/admin/availability/${id}`, { method: 'DELETE' })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      setBlocks(previous)
+      setError(data.error ?? 'Failed to remove block')
+    }
   }
 
   const inputStyle: React.CSSProperties = {
