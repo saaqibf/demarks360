@@ -58,14 +58,16 @@ export function EventTypes() {
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '2rem 3rem',
-              borderTop: '1px solid rgba(237,232,223,0.07)',
+              borderTop: '2px solid var(--color-amber)',
               textDecoration: 'none',
               transition: 'background 0.22s ease',
               cursor: 'pointer',
               gap: '2rem',
+              background: 'rgba(237,232,223,0.02)',
+              marginBottom: i < events.length - 1 ? '0.5rem' : 0,
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(237,232,223,0.03)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(237,232,223,0.05)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(237,232,223,0.02)')}
           >
             <span style={{
               fontFamily: 'var(--font-body)',
@@ -104,7 +106,8 @@ export function EventTypes() {
             <span style={{
               fontFamily: 'var(--font-body)',
               fontSize: '1rem',
-              color: 'rgba(237,232,223,0.25)',
+              color: 'var(--color-amber)',
+              opacity: 0.6,
               flexShrink: 0,
             }}>
               →

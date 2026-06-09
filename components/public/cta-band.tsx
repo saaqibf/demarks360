@@ -9,12 +9,21 @@ export function CtaBand() {
       overflow: 'hidden',
       borderTop: '1px solid rgba(237,232,223,0.06)',
     }}>
-      {/* Decorative amber wash */}
+      {/* Amber radial glow */}
       <div aria-hidden="true" style={{
         position: 'absolute',
         bottom: 0, right: 0,
         width: '50vw', height: '70%',
-        background: 'radial-gradient(ellipse at 100% 100%, rgba(212,133,106,0.08) 0%, transparent 60%)',
+        background: 'radial-gradient(ellipse at 100% 100%, rgba(212,133,106,0.12) 0%, transparent 60%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Subtle CSS grid overlay */}
+      <div aria-hidden="true" style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'linear-gradient(rgba(237,232,223,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(237,232,223,0.025) 1px, transparent 1px)',
+        backgroundSize: '80px 80px',
         pointerEvents: 'none',
       }} />
 
@@ -33,24 +42,24 @@ export function CtaBand() {
           </p>
 
           <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(3.5rem, 8vw, 8.5rem)',
-            fontWeight: 900,
-            lineHeight: 0.92,
+            fontFamily: 'var(--font-wordmark)',
+            fontSize: 'clamp(4rem, 10vw, 10rem)',
+            fontWeight: 400,
+            lineHeight: 0.88,
             color: 'var(--color-sand)',
-            letterSpacing: '-0.01em',
+            letterSpacing: '0.06em',
             textTransform: 'uppercase',
             marginBottom: '0',
           }}>
             Make Your Event
           </h2>
           <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(3.5rem, 8vw, 8.5rem)',
-            fontWeight: 900,
-            lineHeight: 0.92,
+            fontFamily: 'var(--font-wordmark)',
+            fontSize: 'clamp(4rem, 10vw, 10rem)',
+            fontWeight: 400,
+            lineHeight: 0.88,
             color: 'var(--color-amber)',
-            letterSpacing: '-0.01em',
+            letterSpacing: '0.06em',
             textTransform: 'uppercase',
             marginBottom: '3rem',
           }}>

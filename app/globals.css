@@ -327,6 +327,13 @@ button, a, [role="button"] { min-height: 44px; }
 
 .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
+/* ─── Gallery cell hover ─────────────────────────────────────────── */
+.gallery-cell {
+  transition: transform 0.35s cubic-bezier(.16,1,.3,1);
+}
+.gallery-cell:hover { transform: scale(1.025); }
+@media (prefers-reduced-motion: reduce) { .gallery-cell { transition: none; } }
+
 /* ─── Hero responsive ────────────────────────────────────────────── */
 .hero-body { padding: 0 3rem; }
 @media (max-width: 640px) {

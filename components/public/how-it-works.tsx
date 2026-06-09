@@ -20,12 +20,24 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" style={{ background: 'var(--color-sand)', borderBottom: '1px solid var(--color-border-light)' }}>
+    <section id="how-it-works" style={{
+      background: 'var(--color-charcoal)',
+      borderBottom: '1px solid rgba(237,232,223,0.06)',
+    }}>
 
       {/* Header strip */}
-      <div style={{ padding: '6rem 3rem 4rem', borderBottom: '1px solid var(--color-border-light)' }}>
+      <div style={{
+        padding: '6rem 3rem 4rem',
+        borderBottom: '1px solid rgba(237,232,223,0.07)',
+      }}>
         <Reveal>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: '2rem',
+            flexWrap: 'wrap',
+          }}>
             <div>
               <p style={{
                 fontFamily: 'var(--font-body)',
@@ -33,7 +45,7 @@ export function HowItWorks() {
                 fontWeight: 600,
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color: 'var(--color-muted-light)',
+                color: 'rgba(237,232,223,0.28)',
                 marginBottom: '1.25rem',
               }}>
                 How It Works
@@ -43,7 +55,7 @@ export function HowItWorks() {
                 fontSize: 'clamp(2.5rem, 5vw, 5rem)',
                 fontWeight: 900,
                 lineHeight: 0.92,
-                color: 'var(--color-charcoal)',
+                color: 'var(--color-sand)',
                 letterSpacing: '-0.01em',
                 textTransform: 'uppercase',
                 marginBottom: 0,
@@ -52,7 +64,19 @@ export function HowItWorks() {
                 <span style={{ color: 'var(--color-amber)' }}>Zero stress.</span>
               </h2>
             </div>
-            <a href="/book" className="btn-primary" style={{ flexShrink: 0 }}>
+            <a href="/book" style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#fff',
+              background: 'var(--color-amber)',
+              padding: '0.9rem 2.25rem',
+              borderRadius: '3px',
+              textDecoration: 'none',
+              flexShrink: 0,
+            }}>
               Book Your Experience
             </a>
           </div>
@@ -66,24 +90,24 @@ export function HowItWorks() {
             <div style={{
               position: 'relative',
               padding: '3.5rem 3rem 3.5rem',
-              borderRight: i < 2 ? '1px solid var(--color-border-light)' : 'none',
+              borderRight: i < 2 ? '1px solid rgba(237,232,223,0.07)' : 'none',
               overflow: 'hidden',
               minHeight: '340px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-end',
             }}>
-              {/* Large background number */}
+              {/* Oversized ghost step number */}
               <div aria-hidden="true" style={{
                 position: 'absolute',
-                top: '-0.5rem',
-                left: '2rem',
-                fontFamily: 'var(--font-display)',
-                fontSize: '14rem',
-                fontWeight: 900,
+                top: '-1rem',
+                left: '1.5rem',
+                fontFamily: 'var(--font-wordmark)',
+                fontSize: '16rem',
+                fontWeight: 400,
                 lineHeight: 1,
-                color: 'var(--color-charcoal)',
-                opacity: 0.05,
+                color: 'var(--color-sand)',
+                opacity: 0.03,
                 userSelect: 'none',
                 pointerEvents: 'none',
                 letterSpacing: '-0.04em',
@@ -105,8 +129,8 @@ export function HowItWorks() {
                   fontSize: 'clamp(1.5rem, 2.2vw, 2rem)',
                   fontWeight: 700,
                   lineHeight: 1.05,
-                  color: 'var(--color-charcoal)',
-                  letterSpacing: '0.01em',
+                  color: 'var(--color-sand)',
+                  letterSpacing: '0.04em',
                   textTransform: 'uppercase',
                   marginBottom: '1rem',
                 }}>
@@ -115,8 +139,8 @@ export function HowItWorks() {
                 <p style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.9rem',
-                  color: 'var(--color-muted)',
-                  lineHeight: 1.75,
+                  color: 'rgba(237,232,223,0.45)',
+                  lineHeight: 1.8,
                   fontWeight: 400,
                   maxWidth: '32ch',
                 }}>
@@ -128,8 +152,16 @@ export function HowItWorks() {
         ))}
       </div>
 
-      <div style={{ padding: '1.75rem 3rem', borderTop: '1px solid var(--color-border-light)' }}>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--color-muted-light)', fontWeight: 400 }}>
+      <div style={{
+        padding: '1.75rem 3rem',
+        borderTop: '1px solid rgba(237,232,223,0.07)',
+      }}>
+        <p style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: '0.78rem',
+          color: 'rgba(237,232,223,0.25)',
+          fontWeight: 400,
+        }}>
           $150/hr · 1.5 hr minimum · Calgary &amp; surrounding area
         </p>
       </div>

@@ -1,41 +1,10 @@
 'use client'
 import Link from 'next/link'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 
 export function SiteNav() {
   const [open, setOpen] = useState(false)
-  const [isDark, setIsDark] = useState(true) // hero at top is always dark
   const [active, setActive] = useState('')
-
-  // Sample the background color of whatever section sits just below the nav.
-  // getComputedStyle().backgroundColor always returns a solid rgba — gradients
-  // appear as rgba(0,0,0,0) so we skip them and find the first opaque element.
-  const detectTheme = useCallback(() => {
-    try {
-      const els = document.elementsFromPoint(window.innerWidth / 2, 80)
-      for (const el of els) {
-        const s = window.getComputedStyle(el)
-        if (s.position === 'fixed') continue
-        const bg = s.backgroundColor
-        if (!bg || bg === 'rgba(0, 0, 0, 0)') continue
-        const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
-        if (m) {
-          const lum = (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255
-          setIsDark(lum < 0.55)
-          return
-        }
-      }
-    } catch { /* ssr safety */ }
-  }, [])
-
-  useEffect(() => {
-    const t = setTimeout(detectTheme, 120)
-    window.addEventListener('scroll', detectTheme, { passive: true })
-    return () => {
-      clearTimeout(t)
-      window.removeEventListener('scroll', detectTheme)
-    }
-  }, [detectTheme])
 
   useEffect(() => {
     const ids = ['how-it-works', 'pricing', 'gallery', 'faq']
@@ -49,16 +18,11 @@ export function SiteNav() {
 
   const links = ['How It Works', 'Pricing', 'Gallery', 'FAQ']
 
-  const logoColor   = isDark ? '#EDE8DF' : 'var(--color-charcoal)'
-  const linkColor   = isDark ? 'rgba(237,232,223,0.55)' : 'rgba(26,23,20,0.45)'
-  const activeColor = isDark ? '#EDE8DF' : 'var(--color-charcoal)'
-  const barColor    = isDark ? '#EDE8DF' : 'var(--color-charcoal)'
-
   return (
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0,
       zIndex: 1000,
-      pointerEvents: 'none', // transparent to clicks; restored on interactive children
+      pointerEvents: 'none',
     }}>
       <nav style={{
         maxWidth: '1280px',
@@ -70,6 +34,10 @@ export function SiteNav() {
         padding: '0 3rem',
         gap: '2rem',
         pointerEvents: 'auto',
+        background: 'rgba(12,8,8,0.75)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(237,232,223,0.06)',
       }}>
 
         {/* Wordmark */}
@@ -80,9 +48,8 @@ export function SiteNav() {
             fontWeight: 400,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: logoColor,
+            color: '#EDE8DF',
             lineHeight: 1,
-            transition: 'color 0.4s ease',
           }}>
             DEMARKS<span style={{ color: 'var(--color-amber)' }}>360</span>
           </span>
@@ -103,9 +70,9 @@ export function SiteNav() {
                   fontWeight: isActive ? 700 : 500,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
-                  color: isActive ? activeColor : linkColor,
+                  color: isActive ? '#EDE8DF' : 'rgba(237,232,223,0.45)',
                   textDecoration: 'none',
-                  transition: 'color 0.3s ease',
+                  transition: 'color 0.2s ease',
                   whiteSpace: 'nowrap',
                   position: 'relative',
                   paddingBottom: '3px',
@@ -129,17 +96,16 @@ export function SiteNav() {
             fontWeight: 500,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: linkColor,
+            color: 'rgba(237,232,223,0.25)',
             textDecoration: 'none',
-            transition: 'color 0.3s ease',
-            opacity: 0.6,
+            transition: 'color 0.2s ease',
             whiteSpace: 'nowrap',
           }}>
             Admin
           </Link>
         </div>
 
-        {/* Book Now + hamburger */}
+        {/* Book CTA + hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
           <Link
             href="/book"
@@ -148,17 +114,17 @@ export function SiteNav() {
               fontFamily: 'var(--font-body)',
               fontSize: '0.68rem',
               fontWeight: 700,
-              letterSpacing: '0.12em',
+              letterSpacing: '0.14em',
               textTransform: 'uppercase',
               textDecoration: 'none',
               display: 'inline-block',
               padding: '0.65rem 1.75rem',
               borderRadius: '3px',
               whiteSpace: 'nowrap',
-              transition: 'background 0.4s ease, color 0.4s ease, border-color 0.4s ease',
-              background: isDark ? 'transparent' : 'var(--color-charcoal)',
-              color: isDark ? '#EDE8DF' : 'var(--color-sand)',
-              border: `1.5px solid ${isDark ? 'rgba(237,232,223,0.38)' : 'transparent'}`,
+              transition: 'background 0.2s ease, color 0.2s ease',
+              background: 'var(--color-amber)',
+              color: '#fff',
+              border: 'none',
             }}
           >
             Book Now
@@ -177,18 +143,18 @@ export function SiteNav() {
               flexDirection: 'column', gap: '5px',
             }}
           >
-            <span style={{ display: 'block', width: '22px', height: '1.5px', background: barColor, transition: 'background 0.4s ease' }} />
-            <span style={{ display: 'block', width: '16px', height: '1.5px', background: barColor, transition: 'background 0.4s ease' }} />
+            <span style={{ display: 'block', width: '22px', height: '1.5px', background: '#EDE8DF' }} />
+            <span style={{ display: 'block', width: '16px', height: '1.5px', background: '#EDE8DF' }} />
           </button>
         </div>
       </nav>
 
-      {/* Mobile drawer — always cream, independent of section theme */}
+      {/* Mobile drawer */}
       {open && (
         <div style={{
-          background: 'rgba(247,244,239,0.99)',
-          borderBottom: '1px solid rgba(26,23,20,0.1)',
-          backdropFilter: 'blur(16px)',
+          background: 'rgba(12,8,8,0.97)',
+          borderBottom: '1px solid rgba(237,232,223,0.08)',
+          backdropFilter: 'blur(20px)',
           pointerEvents: 'auto',
         }}>
           <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0.5rem 1.5rem 1rem' }}>
@@ -204,10 +170,10 @@ export function SiteNav() {
                   fontWeight: 600,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-charcoal)',
+                  color: 'rgba(237,232,223,0.7)',
                   textDecoration: 'none',
                   padding: '0.85rem 0',
-                  borderBottom: '1px solid rgba(26,23,20,0.07)',
+                  borderBottom: '1px solid rgba(237,232,223,0.07)',
                 }}
               >
                 {label}
@@ -223,17 +189,29 @@ export function SiteNav() {
                 fontWeight: 600,
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                color: 'var(--color-charcoal)',
+                color: 'rgba(237,232,223,0.25)',
                 textDecoration: 'none',
                 padding: '0.85rem 0',
-                borderBottom: '1px solid rgba(26,23,20,0.07)',
-                opacity: 0.45,
+                borderBottom: '1px solid rgba(237,232,223,0.07)',
               }}
             >
               Admin
             </Link>
             <div style={{ paddingTop: '1rem' }}>
-              <Link href="/book" className="btn-primary" style={{ display: 'block', textAlign: 'center' }}>
+              <Link href="/book" style={{
+                display: 'block',
+                textAlign: 'center',
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#fff',
+                background: 'var(--color-amber)',
+                padding: '0.85rem',
+                borderRadius: '3px',
+                textDecoration: 'none',
+              }}>
                 Book Now
               </Link>
             </div>

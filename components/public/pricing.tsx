@@ -99,8 +99,9 @@ export function Pricing() {
             <div style={{
               padding: '2.5rem 2.5rem 3rem',
               borderRight: i < 3 ? '1px solid rgba(237,232,223,0.07)' : 'none',
-              background: t.highlight ? 'rgba(237,232,223,0.04)' : 'transparent',
+              background: t.highlight ? 'rgba(212,133,106,0.06)' : 'transparent',
               position: 'relative',
+              borderTop: t.highlight ? '2px solid var(--color-amber)' : '2px solid transparent',
             }}>
               {t.highlight && (
                 <span style={{
@@ -129,12 +130,12 @@ export function Pricing() {
                 {t.duration}
               </p>
               <p style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2rem, 3.5vw, 3rem)',
-                fontWeight: 800,
+                fontFamily: 'var(--font-wordmark)',
+                fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                fontWeight: 400,
                 lineHeight: 1,
-                color: 'var(--color-sand)',
-                letterSpacing: '0.01em',
+                color: t.highlight ? 'var(--color-amber)' : 'var(--color-sand)',
+                letterSpacing: '0.04em',
                 marginBottom: '0.5rem',
               }}>
                 {t.price}

@@ -4,7 +4,7 @@ export function SiteFooter() {
   return (
     <footer style={{
       background: 'var(--color-charcoal-2)',
-      borderTop: '1px solid rgba(237,232,223,0.06)',
+      borderTop: '1px solid var(--color-amber)',
       padding: '4rem 3rem 2.5rem',
     }}>
       <div className="footer-inner">

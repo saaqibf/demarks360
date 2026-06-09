@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { SiteNav } from '@/components/public/site-nav'
 import { DatePicker } from '@/components/public/book/date-picker'
 import { TimePicker } from '@/components/public/book/time-picker'
@@ -40,7 +41,13 @@ const initialState: BookingState = {
 const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Checkout']
 
 export default function BookPage() {
-  const [state, setState] = useState<BookingState>(initialState)
+  const params = useSearchParams()
+  const prefilledDate = params.get('date') ?? null
+  const [state, setState] = useState<BookingState>({
+    ...initialState,
+    date: prefilledDate,
+    step: prefilledDate ? 2 : 1,
+  })
 
   function update(patch: Partial<BookingState>) {
     setState((s) => ({ ...s, ...patch }))

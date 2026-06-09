@@ -6,15 +6,29 @@ export function EmailCapture() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email) return
     setLoading(true)
-    setTimeout(() => {
+    setError('')
+    try {
+      const res = await fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setSubmitted(true)
+      } else {
+        setError('Something went wrong. Try again.')
+      }
+    } catch {
+      setError('Something went wrong. Try again.')
+    } finally {
       setLoading(false)
-      setSubmitted(true)
-    }, 600)
+    }
   }
 
   return (
@@ -77,53 +91,66 @@ export function EmailCapture() {
             letterSpacing: '0.04em',
             textTransform: 'uppercase',
           }}>
-            You&apos;re on the list.
+            You&apos;re on the list. ✓
           </p>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0', flexShrink: 0 }}>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              required
-              style={{
+          <div>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0', flexShrink: 0 }}>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                required
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.85rem',
+                  fontWeight: 400,
+                  color: 'var(--color-sand)',
+                  background: 'rgba(237,232,223,0.07)',
+                  border: '1.5px solid rgba(237,232,223,0.15)',
+                  borderRight: 'none',
+                  padding: '0.9rem 1.25rem',
+                  outline: 'none',
+                  width: '260px',
+                  borderRadius: '3px 0 0 3px',
+                }}
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-charcoal)',
+                  background: 'var(--color-sand)',
+                  border: 'none',
+                  padding: '0.9rem 1.75rem',
+                  borderRadius: '0 3px 3px 0',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'opacity 0.2s ease',
+                  opacity: loading ? 0.6 : 1,
+                }}
+              >
+                {loading ? '...' : 'Notify Me'}
+              </button>
+            </form>
+            {error && (
+              <p style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.85rem',
+                fontSize: '0.75rem',
+                color: 'rgba(212,133,106,0.8)',
+                marginTop: '0.5rem',
                 fontWeight: 400,
-                color: 'var(--color-sand)',
-                background: 'rgba(237,232,223,0.07)',
-                border: '1.5px solid rgba(237,232,223,0.15)',
-                borderRight: 'none',
-                padding: '0.9rem 1.25rem',
-                outline: 'none',
-                width: '260px',
-                borderRadius: '3px 0 0 3px',
-              }}
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.68rem',
-                fontWeight: 700,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--color-charcoal)',
-                background: 'var(--color-sand)',
-                border: 'none',
-                padding: '0.9rem 1.75rem',
-                borderRadius: '0 3px 3px 0',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                transition: 'opacity 0.2s ease',
-                opacity: loading ? 0.7 : 1,
-              }}
-            >
-              {loading ? '...' : 'Notify Me'}
-            </button>
-          </form>
+              }}>
+                {error}
+              </p>
+            )}
+          </div>
         )}
       </div>
     </div>

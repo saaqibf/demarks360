@@ -2,7 +2,7 @@ import { getPublicShowcaseItems } from '@/lib/db/queries/gallery'
 import { Reveal } from './reveal'
 import { ShowcasePlayer } from './showcase-player'
 
-const GRID_SIZE = 6
+const GRID_SIZE = 4
 
 export async function GalleryShowcase() {
   let showcaseItems: Awaited<ReturnType<typeof getPublicShowcaseItems>> = []
@@ -14,11 +14,22 @@ export async function GalleryShowcase() {
   const slots = Array.from({ length: GRID_SIZE }, (_, i) => showcaseItems[i] ?? null)
 
   return (
-    <section id="gallery" style={{ background: 'var(--color-charcoal)', borderBottom: '1px solid rgba(237,232,223,0.06)' }}>
+    <section id="gallery" style={{
+      background: 'var(--color-charcoal)',
+      borderBottom: '1px solid rgba(237,232,223,0.06)',
+    }}>
       {/* Header */}
-      <div style={{ padding: '6rem 3rem 0' }}>
+      <div style={{ padding: '6rem 3rem 3rem' }}>
         <Reveal>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap', paddingBottom: '3rem', borderBottom: '1px solid rgba(237,232,223,0.08)' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: '2rem',
+            flexWrap: 'wrap',
+            paddingBottom: '3rem',
+            borderBottom: '1px solid rgba(237,232,223,0.08)',
+          }}>
             <div>
               <p style={{
                 fontFamily: 'var(--font-body)',
@@ -32,12 +43,12 @@ export async function GalleryShowcase() {
                 Gallery
               </p>
               <h2 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-                fontWeight: 900,
-                lineHeight: 0.92,
+                fontFamily: 'var(--font-wordmark)',
+                fontSize: 'clamp(4rem, 8vw, 6.5rem)',
+                fontWeight: 400,
+                lineHeight: 0.9,
                 color: 'var(--color-sand)',
-                letterSpacing: '-0.01em',
+                letterSpacing: '0.06em',
                 textTransform: 'uppercase',
               }}>
                 From Our{' '}
@@ -57,35 +68,75 @@ export async function GalleryShowcase() {
         </Reveal>
       </div>
 
-      {/* Grid */}
-      <div className="gallery-grid" style={{ padding: '0 3rem 3rem' }}>
-        {slots.map((item, i) => (
-          <Reveal key={item?.id ?? i} delay={i * 55}>
-            <div style={{
-              aspectRatio: i === 0 ? '16/9' : '9/16',
-              background: i % 3 === 0 ? 'var(--color-charcoal-2)' : i % 3 === 1 ? 'var(--color-charcoal-3)' : '#221E1A',
-              position: 'relative', overflow: 'hidden',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              gridColumn: i === 0 ? 'span 2' : undefined,
-            }}>
-              {item ? (
-                <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
-              ) : (
-                <span aria-hidden="true" style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '4rem',
-                  fontWeight: 900,
-                  opacity: 0.06,
-                  color: 'var(--color-sand)',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                }}>
-                  360°
-                </span>
-              )}
-            </div>
-          </Reveal>
-        ))}
+      {/* 2+2 offset grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '0',
+        padding: '0 3rem 3rem',
+      }}>
+        {/* Left column — two tall items */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+          {[slots[0], slots[1]].map((item, i) => (
+            <Reveal key={item?.id ?? i} delay={i * 55}>
+              <div className="gallery-cell" style={{
+                aspectRatio: '4/3',
+                background: i === 0 ? 'var(--color-charcoal-2)' : 'var(--color-charcoal-3)',
+                position: 'relative', overflow: 'hidden',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                borderBottom: '1px solid rgba(237,232,223,0.04)',
+                borderRight: '1px solid rgba(237,232,223,0.04)',
+              }}>
+                {item ? (
+                  <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
+                ) : (
+                  <span aria-hidden="true" style={{
+                    fontFamily: 'var(--font-wordmark)',
+                    fontSize: '4rem',
+                    fontWeight: 400,
+                    opacity: 0.06,
+                    color: 'var(--color-sand)',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}>
+                    360°
+                  </span>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Right column — two portrait items offset down */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0', marginTop: '4rem' }}>
+          {[slots[2], slots[3]].map((item, i) => (
+            <Reveal key={item?.id ?? (i + 2)} delay={(i + 2) * 55}>
+              <div className="gallery-cell" style={{
+                aspectRatio: '4/3',
+                background: i === 0 ? '#221E1A' : 'var(--color-charcoal-2)',
+                position: 'relative', overflow: 'hidden',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                borderBottom: '1px solid rgba(237,232,223,0.04)',
+              }}>
+                {item ? (
+                  <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
+                ) : (
+                  <span aria-hidden="true" style={{
+                    fontFamily: 'var(--font-wordmark)',
+                    fontSize: '4rem',
+                    fontWeight: 400,
+                    opacity: 0.06,
+                    color: 'var(--color-sand)',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}>
+                    360°
+                  </span>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
 
       <div style={{ padding: '0 3rem 4rem' }}>
@@ -94,15 +145,15 @@ export async function GalleryShowcase() {
             fontFamily: 'var(--font-body)',
             fontSize: '0.68rem',
             fontWeight: 700,
-            letterSpacing: '0.12em',
+            letterSpacing: '0.14em',
             textTransform: 'uppercase',
-            color: 'var(--color-charcoal)',
-            background: 'var(--color-sand)',
+            color: '#fff',
+            background: 'var(--color-amber)',
             padding: '0.9rem 2.5rem',
             borderRadius: '3px',
             textDecoration: 'none',
             display: 'inline-block',
-            transition: 'background 0.2s ease',
+            transition: 'opacity 0.2s ease',
           }}>
             Book Your Experience
           </a>

@@ -25,9 +25,15 @@ const benefits = [
 
 export function BenefitBlocks() {
   return (
-    <section style={{ background: 'var(--color-sand-2)', borderBottom: '1px solid var(--color-border-light)' }}>
+    <section style={{
+      background: 'var(--color-sand)',
+      borderBottom: '1px solid var(--color-border-light)',
+    }}>
       {/* Header */}
-      <div style={{ padding: '6rem 3rem 5rem', borderBottom: '1px solid var(--color-border-light)' }}>
+      <div style={{
+        padding: '6rem 3rem 5rem',
+        borderBottom: '1px solid var(--color-border-light)',
+      }}>
         <Reveal>
           <p style={{
             fontFamily: 'var(--font-body)',
@@ -56,53 +62,73 @@ export function BenefitBlocks() {
         </Reveal>
       </div>
 
-      {/* 4-column benefit grid */}
-      <div className="benefits-grid">
-        {benefits.map((b, i) => (
-          <Reveal key={b.number} delay={i * 70}>
+      {/* Alternating magazine rows */}
+      {benefits.map((b, i) => (
+        <Reveal key={b.number} delay={i * 60}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: i % 2 === 0 ? '1fr 1fr' : '1fr 1fr',
+            borderBottom: '1px solid var(--color-border-light)',
+            minHeight: '220px',
+          }}>
+            {/* Number block — left on even, right on odd */}
             <div style={{
-              padding: '3rem 3rem 3.5rem',
-              borderRight: i < 3 ? '1px solid var(--color-border-light)' : 'none',
-              height: '100%',
+              order: i % 2 === 0 ? 0 : 1,
+              background: i % 2 === 0 ? 'var(--color-charcoal)' : 'var(--color-sand)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '3rem',
+              borderRight: i % 2 === 0 ? '1px solid var(--color-border-light)' : 'none',
+              borderLeft: i % 2 === 1 ? '1px solid var(--color-border-light)' : 'none',
             }}>
               <span style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '3rem',
-                fontWeight: 900,
+                fontFamily: 'var(--font-wordmark)',
+                fontSize: 'clamp(4rem, 8vw, 8rem)',
+                fontWeight: 400,
                 lineHeight: 1,
-                color: 'var(--color-amber)',
-                opacity: 0.5,
-                display: 'block',
-                marginBottom: '2rem',
+                color: i % 2 === 0 ? 'var(--color-amber)' : 'var(--color-charcoal)',
+                opacity: i % 2 === 0 ? 0.6 : 0.08,
                 letterSpacing: '0.04em',
               }}>
                 {b.number}
               </span>
+            </div>
+
+            {/* Text block */}
+            <div style={{
+              order: i % 2 === 0 ? 1 : 0,
+              padding: '3.5rem 3rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
               <h3 style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(1.3rem, 1.8vw, 1.75rem)',
-                fontWeight: 700,
-                lineHeight: 1.05,
+                fontSize: 'clamp(1.8rem, 2.8vw, 2.8rem)',
+                fontWeight: 900,
+                lineHeight: 0.95,
                 color: 'var(--color-charcoal)',
-                letterSpacing: '0.01em',
+                letterSpacing: '0.02em',
                 textTransform: 'uppercase',
-                marginBottom: '1rem',
+                marginBottom: '1.25rem',
               }}>
                 {b.heading}
               </h3>
               <p style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.88rem',
+                fontSize: '0.95rem',
                 color: 'var(--color-muted)',
                 lineHeight: 1.75,
                 fontWeight: 400,
+                maxWidth: '38ch',
               }}>
                 {b.body}
               </p>
             </div>
-          </Reveal>
-        ))}
-      </div>
+          </div>
+        </Reveal>
+      ))}
     </section>
   )
 }
