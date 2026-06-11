@@ -399,3 +399,4 @@ button, a, [role="button"] { min-height: 44px; }
   will-change: transform;
 }
 .marquee-track:hover { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }

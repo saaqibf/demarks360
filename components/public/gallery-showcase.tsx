@@ -9,156 +9,118 @@ export async function GalleryShowcase() {
   try {
     showcaseItems = await getPublicShowcaseItems()
   } catch {
-    // DB unavailable — render empty slots
+    // DB unavailable, render empty slots
   }
   const slots = Array.from({ length: GRID_SIZE }, (_, i) => showcaseItems[i] ?? null)
 
   return (
-    <section id="gallery" style={{
+    <section id="gallery" className="sec-pad" style={{
       background: 'var(--color-charcoal)',
-      borderBottom: '1px solid rgba(237,232,223,0.06)',
+      borderBottom: '1px solid var(--color-border-dark)',
+      overflow: 'hidden',
     }}>
-      {/* Header */}
-      <div style={{ padding: '6rem 3rem 3rem' }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
         <Reveal>
           <div style={{
             display: 'flex',
-            alignItems: 'flex-end',
+            alignItems: 'end',
             justifyContent: 'space-between',
             gap: '2rem',
             flexWrap: 'wrap',
-            paddingBottom: '3rem',
-            borderBottom: '1px solid rgba(237,232,223,0.08)',
+            marginBottom: '3rem',
           }}>
             <div>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.6rem',
-                fontWeight: 600,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'rgba(237,232,223,0.28)',
-                marginBottom: '1.25rem',
-              }}>
+              <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1.25rem' }}>
                 Gallery
               </p>
-              <h2 style={{
-                fontFamily: 'var(--font-wordmark)',
-                fontSize: 'clamp(4rem, 8vw, 6.5rem)',
-                fontWeight: 400,
-                lineHeight: 0.9,
-                color: 'var(--color-sand)',
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-              }}>
-                From Our{' '}
-                <span style={{ color: 'var(--color-amber)' }}>Events</span>
+              <h2 className="t-heading" style={{ color: 'var(--color-sand)', maxWidth: '13ch' }}>
+                From <em>last weekend&apos;s</em> events.
               </h2>
             </div>
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.82rem',
-              color: 'rgba(237,232,223,0.35)',
-              lineHeight: 1.7,
-              maxWidth: '280px',
+            <p className="t-body-dark" style={{
+              color: 'var(--color-muted-light)',
+              maxWidth: '34ch',
             }}>
               Every take, captured and delivered. Your gallery link is ready before the night ends.
             </p>
           </div>
         </Reveal>
-      </div>
 
-      {/* 2+2 offset grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '0',
-        padding: '0 3rem 3rem',
-      }}>
-        {/* Left column — two tall items */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-          {[slots[0], slots[1]].map((item, i) => (
+        <div className="gallery-cinema-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, minmax(220px, 1fr))',
+          gap: '1rem',
+        }}>
+          {slots.map((item, i) => (
             <Reveal key={item?.id ?? i} delay={i * 55}>
-              <div className="gallery-cell" style={{
-                aspectRatio: '4/3',
-                background: i === 0 ? 'var(--color-charcoal-2)' : 'var(--color-charcoal-3)',
-                position: 'relative', overflow: 'hidden',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                borderBottom: '1px solid rgba(237,232,223,0.04)',
-                borderRight: '1px solid rgba(237,232,223,0.04)',
+              <figure style={{
+                margin: 0,
+                transform: i % 2 === 1 ? 'translateY(2rem)' : undefined,
               }}>
-                {item ? (
-                  <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
-                ) : (
-                  <span aria-hidden="true" style={{
-                    fontFamily: 'var(--font-wordmark)',
-                    fontSize: '4rem',
-                    fontWeight: 400,
-                    opacity: 0.06,
-                    color: 'var(--color-sand)',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                  }}>
-                    360°
-                  </span>
-                )}
-              </div>
+                <div className="gallery-cell" style={{
+                  aspectRatio: '3 / 4',
+                  background: i % 2 === 0 ? 'var(--color-charcoal-2)' : 'var(--color-charcoal-3)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--color-border-dark)',
+                  borderRadius: '6px',
+                }}>
+                  {item ? (
+                    <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
+                  ) : (
+                    <span aria-hidden="true" style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '4rem',
+                      fontStyle: 'italic',
+                      fontWeight: 400,
+                      opacity: 0.12,
+                      color: 'var(--color-amber-light)',
+                    }}>
+                      360°
+                    </span>
+                  )}
+                </div>
+                <figcaption className="t-label" style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: '1rem',
+                  color: 'var(--color-muted-light)',
+                  marginTop: '0.85rem',
+                  letterSpacing: '0.18em',
+                }}>
+                  <span>{item?.title ?? 'Demarks reel'}</span>
+                  <span>{String(i + 1).padStart(2, '0')}</span>
+                </figcaption>
+              </figure>
             </Reveal>
           ))}
         </div>
 
-        {/* Right column — two portrait items offset down */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0', marginTop: '4rem' }}>
-          {[slots[2], slots[3]].map((item, i) => (
-            <Reveal key={item?.id ?? (i + 2)} delay={(i + 2) * 55}>
-              <div className="gallery-cell" style={{
-                aspectRatio: '4/3',
-                background: i === 0 ? '#221E1A' : 'var(--color-charcoal-2)',
-                position: 'relative', overflow: 'hidden',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                borderBottom: '1px solid rgba(237,232,223,0.04)',
-              }}>
-                {item ? (
-                  <ShowcasePlayer playbackId={item.muxPlaybackId} title={item.title} />
-                ) : (
-                  <span aria-hidden="true" style={{
-                    fontFamily: 'var(--font-wordmark)',
-                    fontSize: '4rem',
-                    fontWeight: 400,
-                    opacity: 0.06,
-                    color: 'var(--color-sand)',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                  }}>
-                    360°
-                  </span>
-                )}
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ padding: '0 3rem 4rem' }}>
         <Reveal>
-          <a href="/book" style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.68rem',
-            fontWeight: 700,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: '#fff',
-            background: 'var(--color-amber)',
-            padding: '0.9rem 2.5rem',
-            borderRadius: '3px',
-            textDecoration: 'none',
-            display: 'inline-block',
-            transition: 'opacity 0.2s ease',
-          }}>
-            Book Your Experience
+          <a href="/book" className="btn-primary" style={{ marginTop: '4rem' }}>
+            Book your experience
           </a>
         </Reveal>
       </div>
+
+      <style>{`
+        @media (max-width: 1080px) {
+          .gallery-cinema-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+        @media (max-width: 560px) {
+          .gallery-cinema-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .gallery-cinema-grid figure {
+            transform: none !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

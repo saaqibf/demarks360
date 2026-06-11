@@ -45,196 +45,216 @@ export function PackageRecommender() {
   }
 
   return (
-    <section style={{ background: 'var(--color-sand)', borderBottom: '1px solid var(--color-border-light)' }}>
-      {/* Header */}
-      <div style={{ padding: '6rem 3rem 5rem', borderBottom: '1px solid var(--color-border-light)' }}>
-        <p style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.6rem',
-          fontWeight: 600,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          color: 'var(--color-muted-light)',
-          marginBottom: '1.25rem',
-        }}>
-          Package Finder
-        </p>
-        <h2 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-          fontWeight: 900,
-          lineHeight: 0.92,
-          color: 'var(--color-charcoal)',
-          letterSpacing: '-0.01em',
-          textTransform: 'uppercase',
-        }}>
-          Find your{' '}
-          <span style={{ color: 'var(--color-amber)' }}>perfect package.</span>
-        </h2>
-      </div>
+    <section className="sec-pad" style={{
+      background: 'var(--color-sand)',
+      borderBottom: '1px solid var(--color-border-light)',
+    }}>
+      <div className="package-finder" style={{
+        maxWidth: '1240px',
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: '0.9fr 1.1fr',
+        gap: 'clamp(2rem, 6vw, 5rem)',
+        alignItems: 'start',
+      }}>
+        <div>
+          <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1.25rem' }}>
+            Package finder
+          </p>
+          <h2 className="t-heading" style={{
+            color: 'var(--color-charcoal)',
+            maxWidth: '13ch',
+          }}>
+            Find the package that <em>fits your night.</em>
+          </h2>
+        </div>
 
-      {/* Step content */}
-      <div style={{ padding: '4rem 3rem 5rem' }}>
-        {step === 1 && (
-          <div>
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
-              fontWeight: 500,
-              color: 'var(--color-muted)',
-              marginBottom: '2.5rem',
-              letterSpacing: '0.01em',
-            }}>
-              Step 1 of 2 — What kind of event are you planning?
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0', maxWidth: '640px' }}>
-              {eventTypes.map((e, i) => (
-                <button
-                  key={e}
-                  onClick={() => selectEvent(e)}
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
-                    fontWeight: 800,
-                    color: 'var(--color-charcoal)',
-                    background: 'transparent',
-                    border: '1px solid var(--color-border-light)',
-                    borderTop: i < 2 ? '1px solid var(--color-border-light)' : 'none',
-                    borderLeft: i % 2 === 0 ? '1px solid var(--color-border-light)' : 'none',
-                    padding: '2rem 2.5rem',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s ease',
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    lineHeight: 1,
-                  }}
-                  onMouseEnter={e2 => (e2.currentTarget.style.background = 'rgba(26,23,20,0.04)')}
-                  onMouseLeave={e2 => (e2.currentTarget.style.background = 'transparent')}
-                >
-                  {e}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div>
-            <button
-              onClick={reset}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.65rem',
-                fontWeight: 600,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--color-muted-light)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                marginBottom: '2rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                padding: 0,
-              }}
-            >
-              ← Back
-            </button>
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
-              fontWeight: 500,
-              color: 'var(--color-muted)',
-              marginBottom: '2.5rem',
-            }}>
-              Step 2 of 2 — How long is your event?
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0', maxWidth: '640px', border: '1px solid var(--color-border-light)' }}>
-              {durations.map((d, i) => (
-                <button
-                  key={d.value}
-                  onClick={() => selectDuration(d.value)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '1.5rem 2rem',
-                    background: 'transparent',
-                    border: 'none',
-                    borderBottom: i < durations.length - 1 ? '1px solid var(--color-border-light)' : 'none',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'background 0.18s ease',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,23,20,0.04)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                >
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 700, color: 'var(--color-charcoal)', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
-                      {d.label}
-                    </p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 400, marginTop: '0.2rem' }}>
-                      {d.note}
-                    </p>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 800, color: 'var(--color-charcoal)', letterSpacing: '0.01em', flexShrink: 0 }}>
-                    {d.price}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 'result' && eventType && selectedDuration && (
-          <div>
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.6rem',
-              fontWeight: 600,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: 'var(--color-amber)',
-              marginBottom: '1.5rem',
-            }}>
-              Your Package
-            </p>
-            <div style={{ maxWidth: '620px', padding: '3rem', border: '1px solid var(--color-border-light)', background: 'var(--color-sand-3)' }}>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', fontWeight: 900, color: 'var(--color-charcoal)', letterSpacing: '-0.01em', lineHeight: 1, marginBottom: '0.25rem' }}>
-                {selectedDuration.price}
+        <div>
+          {step === 1 && (
+            <div>
+              <p className="t-label" style={{
+                color: 'var(--color-muted)',
+                marginBottom: '1.5rem',
+              }}>
+                Step 1 of 2 · What kind of event are you planning?
               </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--color-muted)', fontWeight: 400, marginBottom: '1.5rem' }}>
-                {eventType} · {selectedDuration.label}
-              </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', color: 'var(--color-muted)', lineHeight: 1.75, fontWeight: 400, marginBottom: '2rem', maxWidth: '40ch' }}>
-                {noteMap[eventType]}
-              </p>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                <a href="/book" className="btn-primary">Book This Package</a>
-                <button
-                  onClick={reset}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.68rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-muted)',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: 0,
-                  }}
-                >
-                  Start over
-                </button>
+              <div className="package-grid" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                borderTop: '1px solid var(--color-border-light)',
+                borderLeft: '1px solid var(--color-border-light)',
+              }}>
+                {eventTypes.map(e => (
+                  <button
+                    key={e}
+                    onClick={() => selectEvent(e)}
+                    className="package-choice"
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: 'clamp(1.5rem, 2.5vw, 2.1rem)',
+                      fontWeight: 400,
+                      color: 'var(--color-charcoal)',
+                      background: 'transparent',
+                      border: 'none',
+                      borderRight: '1px solid var(--color-border-light)',
+                      borderBottom: '1px solid var(--color-border-light)',
+                      padding: '2rem',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s ease, color 0.2s ease',
+                      lineHeight: 1,
+                    }}
+                  >
+                    {e}
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {step === 2 && (
+            <div>
+              <button
+                onClick={reset}
+                className="t-label"
+                style={{
+                  color: 'var(--color-muted)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  marginBottom: '1.5rem',
+                  padding: 0,
+                }}
+              >
+                Back
+              </button>
+              <p className="t-label" style={{
+                color: 'var(--color-muted)',
+                marginBottom: '1.5rem',
+              }}>
+                Step 2 of 2 · How long is your event?
+              </p>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                borderTop: '1px solid var(--color-border-light)',
+              }}>
+                {durations.map((d, i) => (
+                  <button
+                    key={d.value}
+                    onClick={() => selectDuration(d.value)}
+                    className="package-choice"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '1.5rem',
+                      padding: '1.5rem 0',
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: '1px solid var(--color-border-light)',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.18s ease',
+                    }}
+                  >
+                    <div>
+                      <p className="t-subheading" style={{
+                        color: 'var(--color-charcoal)',
+                        fontSize: 'clamp(1.35rem, 2vw, 1.8rem)',
+                      }}>
+                        {d.label}
+                      </p>
+                      <p className="t-body" style={{
+                        color: 'var(--color-muted)',
+                        marginTop: '0.25rem',
+                      }}>
+                        {d.note}
+                      </p>
+                    </div>
+                    <span style={{
+                      fontFamily: 'var(--font-display)',
+                      fontStyle: 'italic',
+                      fontSize: '1.6rem',
+                      fontWeight: 400,
+                      color: 'var(--color-amber)',
+                      flexShrink: 0,
+                    }}>
+                      {d.price}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 'result' && eventType && selectedDuration && (
+            <div>
+              <p className="t-label" style={{
+                color: 'var(--color-amber)',
+                marginBottom: '1.5rem',
+              }}>
+                Your package
+              </p>
+              <div style={{
+                padding: '2.5rem',
+                border: '1px solid var(--color-border-light)',
+                background: 'var(--color-sand-3)',
+                borderRadius: '8px',
+              }}>
+                <p style={{
+                  fontFamily: 'var(--font-display)',
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(2.8rem, 5vw, 4rem)',
+                  fontWeight: 400,
+                  color: 'var(--color-amber)',
+                  lineHeight: 1,
+                  marginBottom: '0.25rem',
+                }}>
+                  {selectedDuration.price}
+                </p>
+                <p className="t-label" style={{
+                  color: 'var(--color-muted)',
+                  marginBottom: '1.5rem',
+                }}>
+                  {eventType} · {selectedDuration.label}
+                </p>
+                <p className="t-body" style={{
+                  color: 'var(--color-muted)',
+                  marginBottom: '2rem',
+                }}>
+                  {noteMap[eventType]}
+                </p>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <a href="/book" className="btn-primary">Book this package</a>
+                  <button
+                    onClick={reset}
+                    className="btn-secondary"
+                  >
+                    Start over
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      <style>{`
+        .package-choice:hover {
+          background: var(--color-sand-2) !important;
+        }
+        @media (max-width: 840px) {
+          .package-finder {
+            grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 560px) {
+          .package-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

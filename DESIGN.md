@@ -1,203 +1,187 @@
 ---
 name: Demarks 360
-description: Calgary's premier 360 video booth — joyful, trustworthy, cinematic.
+description: Calgary's premier 360 video booth — cinematic, golden, trustworthy.
 colors:
-  warm-sand: "#EDE8DF"
-  warm-sand-dim: "#E4DDD4"
-  warm-sand-bright: "#F7F4EF"
-  celebration-charcoal: "#1A1714"
-  celebration-charcoal-mid: "#242019"
-  celebration-charcoal-soft: "#2E2A25"
-  muted-walnut: "#7A7168"
-  muted-walnut-light: "#A8A099"
-  event-amber: "#A87530"
-  event-amber-light: "#C49045"
+  sand: "#F5EFE2"
+  sand-2: "#EFE6D2"
+  sand-3: "#FAF6EC"
+  charcoal: "#141009"
+  charcoal-2: "#1A140B"
+  charcoal-3: "#221A0F"
+  text: "#1C1610"
+  text-light: "#F3EAD9"
+  muted: "#7A6C52"
+  muted-light: "#B9AD97"
+  amber: "#C9913F"
+  amber-light: "#E8B25C"
 typography:
   display:
-    fontFamily: "'DM Serif Display', Georgia, serif"
-    fontSize: "clamp(2.5rem, 5vw, 5rem)"
+    fontFamily: "'Bodoni Moda', Georgia, serif"
+    fontSize: "clamp(3.5rem, 7vw, 5.5rem)"
     fontWeight: 400
     lineHeight: 1.0
-    letterSpacing: "-0.02em"
-  headline:
-    fontFamily: "'DM Serif Display', Georgia, serif"
-    fontSize: "clamp(1.6rem, 2.5vw, 2.25rem)"
+    letterSpacing: "-0.015em"
+  heading:
+    fontFamily: "'Bodoni Moda', Georgia, serif"
+    fontSize: "clamp(2rem, 3.5vw, 2.667rem)"
     fontWeight: 400
-    lineHeight: 1.15
-    letterSpacing: "-0.01em"
+    lineHeight: 1.1
+  subheading:
+    fontFamily: "'Bodoni Moda', Georgia, serif"
+    fontSize: "clamp(1.5rem, 2.5vw, 2rem)"
+    fontWeight: 500
+    lineHeight: 1.2
   body:
-    fontFamily: "'Nunito', system-ui, sans-serif"
-    fontSize: "0.9rem"
-    fontWeight: 400
-    lineHeight: 1.75
+    fontFamily: "'Figtree', system-ui, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 300
+    lineHeight: 1.7
   label:
-    fontFamily: "'Nunito', system-ui, sans-serif"
+    fontFamily: "'Figtree', system-ui, sans-serif"
     fontSize: "0.62rem"
-    fontWeight: 700
-    letterSpacing: "0.18em"
+    fontWeight: 500
+    letterSpacing: "0.22em"
 rounded:
-  pill: "9999px"
-  card: "16px"
-  card-sm: "12px"
+  pill: "999px"
+  card: "14px"
+  card-sm: "10px"
 spacing:
-  section: "6rem 3rem"
-  section-mobile: "4rem 1.5rem"
+  section: "7rem 3rem"
+  section-mobile: "4.5rem 1.5rem"
   card-inner: "2.25rem"
-  card-inner-sm: "1.25rem 2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.celebration-charcoal}"
-    textColor: "{colors.warm-sand}"
+    backgroundColor: "{colors.amber-light}"
+    textColor: "{colors.charcoal}"
     rounded: "{rounded.pill}"
-    padding: "0.85rem 2.25rem"
-    typography: "{typography.body}"
+    padding: "0.95rem 2.5rem"
+    letterSpacing: "0.26em"
+    textTransform: uppercase
   button-primary-hover:
-    backgroundColor: "{colors.celebration-charcoal-mid}"
+    transform: "scale(1.04)"
+    boxShadow: "0 12px 44px rgba(232,178,92,0.35)"
   button-secondary:
     backgroundColor: "transparent"
-    textColor: "{colors.celebration-charcoal}"
+    textColor: "{colors.text}"
+    border: "1px solid rgba(28,22,16,0.3)"
     rounded: "{rounded.pill}"
-    padding: "0.85rem 2.25rem"
-  nav-link:
-    textColor: "{colors.muted-walnut}"
-    typography: "{typography.body}"
-  nav-link-active:
-    textColor: "{colors.celebration-charcoal}"
+    padding: "0.95rem 2.5rem"
 ---
 
 # Design System: Demarks 360
 
 ## 1. Overview
 
-**Creative North Star: "The Warm Celebration"**
+**Creative North Star: "Golden Hour Cinema"**
 
-Every design decision in this system originates from a single image: stepping into a beautifully lit room full of people who love each other. The Demarks 360 brand is the 360 booth at that party: warm, present, reliable, and genuinely delighted to be there. Joy is the first impression; trust is the aftertaste.
+The booth spins, the lights catch, and for eight seconds every guest is the lead in their own film. The Demarks 360 site is built around that feeling: warm stage light on dark charcoal, serif title cards, letterboxed video, the hush before the premiere. Joy is the first impression; trust is the aftertaste.
 
-This is a Calgary family business, owned by a Muslim mother, and the design must reflect that grounded, community-first spirit. It is accessible to every family, every culture, every type of celebration. The warmth is not decorative. It is the product. The palette lives in the temperatures of candlelight and warm wood, not in the cold blues or aggressive neons that dominate the events industry.
+This is a Calgary family business, owned by a Muslim mother, and the design reflects that grounded, community-first spirit. It is accessible to every family, every culture, every type of celebration. The cinema framing is never cold or exclusive: the light is candle-warm, the copy is plain and welcoming, and booking stays effortless.
 
-This system explicitly rejects: nightclub energy (neon on black, aggressive display type, Vegas brightness); corporate rental-catalog dryness (price lists, no emotion, stock photography of empty conference rooms); AI-generated SaaS aesthetics (purple gradients, floating card grids, "Join 10,000+ users" banners); and cold editorial luxury (fashion-magazine distance, unapproachable serif-only layouts that make booking feel intimidating). If a design choice would read as any of those, restart.
+This system explicitly rejects: nightclub energy (neon on black, aggressive display type); corporate rental-catalog dryness (spreadsheet pricing, emotionless stock photography); AI-generated SaaS aesthetics (purple gradients, floating card grids, hero metric templates); and cold editorial luxury that makes a mother planning a birthday feel like she's in the wrong place. If a design choice reads as any of those, restart.
 
 **Key Characteristics:**
-- Warm sand and charcoal surfaces, never pure white or pure black
-- Amber gold used as the one celebratory accent, not decoration
-- DM Serif Display italic for emotional emphasis; Nunito for everything readable
-- Pill-shaped buttons (inviting, not corporate)
-- Rounded cards (16px) that feel soft rather than sharp
-- Sections alternate warm sand and warm charcoal for rhythm, never monotone
+- Stage charcoal darks and warm cream lights, never pure black or pure white
+- Golden amber as the single celebratory accent, applied through italic serif phrases and pill CTAs
+- Bodoni Moda serif headings in sentence case, weight 400–500, with one italic amber `<em>` phrase per heading
+- Figtree (300–600) for all body and UI text
+- Pill buttons: amber fill primary with glow hover, outlined secondary
+- Letterbox bars and title-card centering in the hero; dark/light section alternation for scroll rhythm
 
-## 2. Colors: The Celebration Palette
+## 2. Colors: The Golden Hour Palette
 
-A restrained warm palette with one committed accent. The sand tones carry the light sections; the charcoals carry the dark sections; the amber marks every moment of emphasis and joy.
+A committed warm palette. Charcoals carry the cinematic dark sections, creams carry the light sections, and amber marks every moment of emphasis.
 
-### Primary
-- **Event Amber** (`#A87530`): The celebratory accent. Used for section label lines, italic heading emphasis, star ratings, feature dots, the "360" in the logo, and the amber decorative line. It appears on roughly 10% of any screen. Its rarity is the point. Do not use it for backgrounds or large fills.
-- **Event Amber Light** (`#C49045`): Hover state for amber elements. Slightly warmer.
+### Accent
+- **Amber** (`#C9913F`, `--color-amber`): The core brand accent. Label rules, dividers, active states, the "360" in the wordmark.
+- **Amber Light** (`#E8B25C`, `--color-amber-light`): The brighter stage-light amber. Italic `<em>` phrases inside headings, primary button fill, stat values, hover states.
 
 ### Neutral (Light)
-- **Warm Sand** (`#EDE8DF`): The primary background for light sections. Also used as the text color on dark charcoal sections (inverted). Never use pure white; always tinted toward amber.
-- **Warm Sand Dim** (`#E4DDD4`): Alternate light section background (slightly warmer). Used for alternating sections and the trust strip.
-- **Warm Sand Bright** (`#F7F4EF`): The lightest surface, used for card faces within light sections (pricing card interior, testimonial cards, FAQ background).
+- **Sand** (`#F5EFE2`, `--color-sand`): Primary light section background. Never pure white.
+- **Sand 2** (`#EFE6D2`, `--color-sand-2`): Alternate light section, trust strip.
+- **Sand 3** (`#FAF6EC`, `--color-sand-3`): Lightest surface, card faces within light sections.
 
 ### Neutral (Dark)
-- **Celebration Charcoal** (`#1A1714`): The primary dark surface and text color on light backgrounds. Used for dark sections (hero, gallery, CTA band, footer). Never use pure black.
-- **Celebration Charcoal Mid** (`#242019`): Slightly lighter. Used for footer and secondary dark surfaces.
-- **Celebration Charcoal Soft** (`#2E2A25`): The lightest charcoal. Used for gallery tile alternates and interactive dark surfaces.
-- **Muted Walnut** (`#7A7168`): All body copy on light backgrounds; secondary text. Also used for nav links in default state.
-- **Muted Walnut Light** (`#A8A099`): Tertiary text, timestamps, legal copy.
+- **Charcoal** (`#141009`, `--color-charcoal`): Primary dark stage. Hero, gallery, CTA band, footer. Never pure black.
+- **Charcoal 2** (`#1A140B`) / **Charcoal 3** (`#221A0F`): Layered dark surfaces and cards on dark sections.
+- **Text** (`#1C1610`) on light; **Text Light** (`#F3EAD9`) on dark.
+- **Muted** (`#7A6C52`) body copy on light; **Muted Light** (`#B9AD97`) secondary text on dark.
+- Borders: `rgba(243,234,217,0.10)` on dark, `rgba(28,22,16,0.12)` on light (`--color-border-dark` / `--color-border-light`).
 
 ### Named Rules
-**The Warm Tint Rule.** There are no pure whites or pure blacks anywhere in this system. Every surface is tinted toward amber. `#EDE8DF` is the lightest; `#1A1714` is the darkest. If a color passes the "is this pure white?" or "is this pure black?" test, it is wrong.
+**The Warm Tint Rule.** No pure whites or pure blacks anywhere. Every surface is tinted toward amber. `#FAF6EC` is the lightest; `#141009` is the darkest.
 
-**The One Amber Rule.** Event Amber appears on no more than 10% of any screen. It marks joy, emphasis, and the brand. It never fills a section background, a card, or a large button. When amber appears, it has earned its place.
+**The Token Rule.** Never hardcode hex values or font names in components. Use the `--color-*` and `--font-*` variables or the semantic classes (`.t-display`, `.t-heading`, `.t-subheading`, `.t-body`, `.t-label`, `.btn-primary`, `.btn-secondary`).
+
+**The Earned Amber Rule.** Amber never fills a section background or a large surface. It appears as the italic phrase, the pill CTA, the thin rule, the stat value. Its rarity is the glow.
 
 ## 3. Typography
 
-**Display Font:** DM Serif Display (with Georgia, serif fallback)
-**Body Font:** Nunito (with system-ui, sans-serif fallback)
+**Display Font:** Bodoni Moda (Georgia fallback), weights 400–500, italic 400/500
+**Body Font:** Figtree (system-ui fallback), weights 300–700
 
-**Character:** DM Serif Display carries the brand's warmth and ceremony: its italic cuts lean into celebration without feeling stuffy. Nunito grounds everything in accessibility and friendliness: it is the font of the attendant who explains how the booth works with a smile. They work together because one is for the headline, the other is for the conversation.
+**Character:** Bodoni Moda's high-contrast strokes are the film-poster serif: ceremony without stuffiness. Figtree keeps everything readable and friendly, the voice of the attendant explaining how the booth works. Headings are always sentence case; the days of uppercase 700-weight headings are over.
 
 ### Hierarchy
-- **Display** (400, `clamp(2.5rem, 5vw, 5rem)`, line-height 1.0): Section headings only. Always set in two lines: the first line straight, the second in italic with amber color. Example: "Three steps." / *"Zero stress."* (in amber italic).
-- **Headline** (400, `clamp(1.6rem, 2.5vw, 2.25rem)`, line-height 1.15): Step titles, card headings, pricing tier names. Set in DM Serif Display. Italic allowed for emotional moments.
-- **Body** (400, 0.9rem, line-height 1.75): All paragraph copy. Nunito. Max 65ch line length on desktop. Color is Muted Walnut on light sections; 55% opacity Sand on dark sections.
-- **Label** (700, 0.62rem, letter-spacing 0.18em, UPPERCASE): Section kickers above display headings. Amber on light sections; 55% opacity Sand on dark sections. Always preceded by a 20px amber rule via `::before`.
-- **UI / Button** (700, 0.88rem): Nunito bold for all button text, nav links, and small interactive text.
+- **Display** (`.t-display`, 400, `--text-3xl`): Hero title card only.
+- **Heading** (`.t-heading`, 400, `--text-xl`): Section headings. Sentence case with exactly one italic amber `<em>` phrase.
+- **Subheading** (`.t-subheading`, 500, `--text-lg`): Card and step titles.
+- **Body** (`.t-body`, Figtree 300, 1rem, line-height 1.7): Paragraph copy, max 65ch. Muted on light, Muted Light on dark.
+- **Label** (`.t-label`, Figtree 500, 0.62rem, letter-spacing 0.22em, UPPERCASE): Section kickers and eyebrows. The ONLY uppercase element in the system. Amber on light sections, muted light on dark.
 
 ### Named Rules
-**The Two-Line Heading Rule.** Every display heading is a two-liner: one straight line (charcoal or sand) and one italic amber line. The straight line states the fact; the italic amber line makes it feel. Never use three display lines, never set the whole heading in one color.
+**The One Em Rule.** Every section heading contains exactly one `<em>` phrase, which renders italic in amber light (styled globally on `em` inside `.t-display/.t-heading/.t-subheading`). Example: "Your event, shot like a *film premiere.*" Never two, never zero, never a whole heading in amber.
 
-**The Italic Accent Rule.** Italic in DM Serif Display is reserved for the amber-colored second line of display headings, for the "360" in the logo, and for the `<em>` emphasis in hero copy. Nowhere else.
+**The Sentence Case Rule.** Headings are sentence case, weight 400–500. Uppercase lives only in `.t-label` eyebrows and button text. Any `textTransform: 'uppercase'` or weight 700+ on an h1/h2/h3 is wrong.
 
 ## 4. Elevation
 
-This system is **flat by default, lifted by state**. There are no ambient box shadows on resting surfaces. Depth is expressed through tonal layering: Warm Sand Bright cards sit on Warm Sand Dim section backgrounds, which creates a 2-level surface hierarchy without shadows.
-
-Shadows appear only as a response to hover state on interactive cards. The hover shadow is diffuse and warm:
+Flat by default, lit by state. Depth comes from tonal layering (Sand 3 cards on Sand 2 sections; Charcoal 3 cards on Charcoal) and thin borders, not ambient shadows.
 
 ### Shadow Vocabulary
-- **Card hover lift** (`0 8px 32px rgba(26,23,20,0.12)`): Applied on `.card-hover:hover`. Warm-tinted dark shadow, never cold blue. Paired with `translateY(-2px)` for physical feedback.
-- **Button hover** (`none`; instead uses `translateY(-1px)`): Buttons do not gain a shadow on hover. The slight lift is enough.
+- **Primary button hover** (`0 12px 44px rgba(232,178,92,0.35)` + `scale(1.04)`): The amber glow. The one shadow that exists by design; it reads as stage light, not elevation.
+- **Card hover lift** (`0 8px 32px rgba(20,16,9,0.12)` + `translateY(-2px)`): Interactive cards only, warm-tinted.
 
-### Named Rules
-**The Flat-By-Default Rule.** Surfaces are flat at rest. No card has a shadow in its resting state. Shadows appear only as hover state feedback. If a designer adds a resting-state shadow, it should be removed.
+**The Flat-By-Default Rule.** No card has a resting-state shadow. Shadows are responses to hover.
 
 ## 5. Components
 
 ### Buttons
-Buttons are the booking invitation. They must feel warm and easy to press, never aggressive.
-
-- **Shape:** Fully pill-shaped (border-radius: 9999px)
-- **Primary:** Celebration Charcoal fill, Warm Sand text, 0.85rem Nunito 700. Padding: 0.85rem 2.25rem. On hover: transitions to Charcoal Mid + translateY(-1px). On dark sections, primary becomes Warm Sand fill with Celebration Charcoal text.
-- **Ghost / Text link:** No background, no border. Muted Walnut on light sections. Fades to full charcoal on hover. Used for secondary navigation CTAs ("How It Works →").
-- **Secondary (outlined):** Transparent background, 1.5px Celebration Charcoal border at 25% opacity, same pill radius. Hover: slight sand fill.
+- **Shape:** Fully pill (border-radius 999px), min-height 44px.
+- **Primary** (`.btn-primary`): Amber Light fill, Charcoal text, Figtree 600 at 0.72rem with 0.26em letter-spacing, uppercase. Hover: scale 1.04 + amber glow shadow. One per section maximum.
+- **Secondary** (`.btn-secondary`): Transparent, 1px border at 30% text color, same metrics. Hover: fills charcoal with light text.
+- On dark sections, secondary borders use the light border token.
 
 ### Cards / Containers
-- **Corner Style:** Gently rounded (16px on primary cards; 12px on smaller containers like add-on rows)
-- **Background:** Warm Sand Bright on light sections; Celebration Charcoal variations on dark sections
-- **Shadow Strategy:** None at rest. Warm lift shadow on hover for interactive cards only.
-- **Border:** Light sections use `1px solid rgba(26,23,20,0.10)`. Dark sections use `1px solid rgba(237,232,223,0.06)`.
-- **Internal Padding:** 2.25rem for full cards; 1.25rem 2rem for compact rows.
+- **Corners:** 14px primary, 10px compact.
+- **Dark sections:** Charcoal 2/3 surfaces, `--color-border-dark` thin borders, italic serif amber prices/values.
+- **Light sections:** Sand 3 faces, `--color-border-light` borders.
+- No side-stripe accents, no glassmorphism, no nested cards.
+
+### Hero (Signature Component)
+Letterboxed full-viewport video: real Cloudinary event footage under a radial golden-hour overlay, top and bottom letterbox bars (`clamp(18px, 4vh, 42px)`, `#0c0a06`), centered serif title card with kicker (0.5em tracking, amber light), one italic amber phrase in the headline, amber pill CTA, and a blurred stat bar above the bottom bar with italic serif values.
 
 ### Navigation
-- **Style:** Fixed header, sand-tinted frosted glass (`rgba(247,244,239,0.82)` with `backdrop-filter: blur(20px)`). Gains a border-bottom on scroll.
-- **Layout:** 3-column grid (`1fr auto 1fr`): logo left, links centered, CTA right.
-- **Default link:** Muted Walnut, Nunito 500, 0.82rem
-- **Active link:** Celebration Charcoal, Nunito 700
-- **Logo:** DM Serif Display, "Demarks" in Charcoal + italic "360" in Amber
-- **Book Now:** Primary button pill, Charcoal fill, scaled down to 0.82rem 1.5rem padding
-- **Mobile:** Collapses to logo + hamburger; dropdown appears below header in matching frosted sand
+- Fixed header; wordmark in Bodoni Moda ("Demarks" + italic amber "360"). Nav links Figtree, token colors, active in amber. CTA is `.btn-primary` scaled down. Mobile collapses to burger.
 
-### Section Label (Signature Component)
-The section label is the only element with a decorative before-rule. Used at the top of every section to signal a new topic.
-
-- **Style:** 0.62rem Nunito 700, 0.18em letter-spacing, all-caps, Event Amber on light sections / 55% Sand on dark sections
-- **Before-rule:** 20px × 1.5px line in matching color, vertically centered to the text
-- **Position:** Always directly above the display heading, 0.85rem margin-bottom
-
-### Promo Bar
-- **Style:** Celebration Charcoal background, 0.68rem Nunito 500, 0.12em letter-spacing, all-caps. The bold highlight uses Warm Sand at 100% opacity. One line only.
+### Section Label
+`.t-label` eyebrow above every section heading, preceded by a short amber rule. The only decorative before-rule in the system.
 
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** tint every surface toward amber. Use `#EDE8DF` (Warm Sand) as the lightest, `#1A1714` (Celebration Charcoal) as the darkest. No pure white, no pure black, ever.
-- **Do** use the two-line heading structure for every display heading: straight first line in charcoal/sand, italic amber second line.
-- **Do** keep Event Amber to 10% of any screen surface. More than that and the celebration becomes noise.
-- **Do** use fully pill-shaped buttons (border-radius: 9999px). The pill is inviting, not corporate.
-- **Do** alternate sections: warm sand section, charcoal section, warm sand section. The rhythm creates a scroll experience with visible momentum.
-- **Do** make booking effortless: price, CTA, and service area must be visible within the first two screens without scrolling on mobile.
-- **Do** reflect the local and welcoming nature: Calgary-specific copy, inclusive language, warm voice throughout.
-- **Do** use rounded cards (16px) for all card containers. Sharp corners conflict with the warm, welcoming personality.
+- **Do** use tokens and semantic classes for every color and font. Hardcoded hex is a bug.
+- **Do** give every section heading one italic amber `<em>` phrase, sentence case, serif 400–500.
+- **Do** alternate dark stage sections and warm cream sections for scroll rhythm.
+- **Do** keep booking effortless: price, CTA, and service area visible within two screens on mobile.
+- **Do** keep Calgary-specific, inclusive, warm copy. Real footage over stock.
+- **Do** keep 44px touch targets, reduced-motion handling, and accessibility attributes intact through any restyle.
 
 ### Don't:
-- **Don't** use nightclub or party-supply aesthetics: no neon, no aggressive all-caps display type set in heavy condensed fonts, no high-contrast red/black combos. The site serves birthday parties, not bars.
-- **Don't** use corporate event rental catalog aesthetics: no dry product grids, no pricing tables that look like spreadsheets, no emotionless stock imagery of empty rooms.
-- **Don't** produce AI-built SaaS landing-page aesthetics: no purple or blue gradients, no glass cards stacked on dark backgrounds, no "Join 10,000+ users" banners, no hero metric grids (big number + small label + gradient accent).
-- **Don't** use cold editorial luxury: no all-Cormorant italic layouts, no broadsheet-grid black-and-white treatments, no design that makes a mother organizing a birthday party feel like she's in the wrong place.
-- **Don't** use em dashes. Use commas, colons, semicolons, or periods instead.
-- **Don't** use border-left as a colored accent stripe on cards or list items. Not a side stripe; use full border, tonal background, or a leading number.
-- **Don't** use gradient text (background-clip: text with a gradient). The amber color is already enough; it does not need to shimmer.
-- **Don't** add a resting-state shadow to any card. Shadows are hover-only.
-- **Don't** set all-caps body copy. Reserve uppercase for the 0.62rem section labels only.
-- **Don't** reach for DM Serif Display italic in contexts outside the Two-Line Heading Rule and the logo "360". Italic is celebratory; diluting it by overuse makes it lose meaning.
+- **Don't** use nightclub aesthetics: no neon, no heavy condensed all-caps display type, no red/black combos.
+- **Don't** use corporate catalog aesthetics: no spreadsheet pricing tables, no emotionless stock imagery.
+- **Don't** produce SaaS landing-page slop: no purple/blue gradients, no glass card stacks, no "Join 10,000+ users" banners, no hero-metric templates.
+- **Don't** use em dashes anywhere in copy. Commas, colons, periods.
+- **Don't** use border-left/right color stripes, gradient text, or resting-state card shadows.
+- **Don't** set uppercase or 700+ weight on headings. Uppercase belongs to `.t-label` and buttons only.
+- **Don't** change business logic, prices, package contents, or data fetching during visual work. Restyle containers and typography only.

@@ -17,61 +17,58 @@ export function TrustStrip() {
   return (
     <div style={{
       background: 'var(--color-charcoal-2)',
-      borderTop: '1px solid var(--color-amber)',
-      borderBottom: '1px solid rgba(237,232,223,0.06)',
+      borderTop: '1px solid var(--color-border-dark)',
+      borderBottom: '1px solid var(--color-border-dark)',
       overflow: 'hidden',
       position: 'relative',
     }}>
-      {/* Fade edges */}
       <div aria-hidden="true" style={{
-        position: 'absolute', left: 0, top: 0, bottom: 0,
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
         width: '80px',
         background: 'linear-gradient(to right, var(--color-charcoal-2), transparent)',
-        zIndex: 2, pointerEvents: 'none',
+        zIndex: 2,
+        pointerEvents: 'none',
       }} />
       <div aria-hidden="true" style={{
-        position: 'absolute', right: 0, top: 0, bottom: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0,
         width: '80px',
         background: 'linear-gradient(to left, var(--color-charcoal-2), transparent)',
-        zIndex: 2, pointerEvents: 'none',
+        zIndex: 2,
+        pointerEvents: 'none',
       }} />
 
-      <div style={{
-        display: 'flex',
-        animation: 'marquee 28s linear infinite',
-        width: 'max-content',
-      }}>
+      <div className="marquee-track" style={{ width: 'max-content' }}>
         {items.map(({ val, label }, i) => (
           <div
             key={i}
             style={{
               display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '1.5rem 3rem',
+              alignItems: 'baseline',
+              gap: '0.85rem',
+              padding: '1.35rem 3rem',
               flexShrink: 0,
-              borderRight: '1px solid rgba(237,232,223,0.06)',
+              borderRight: '1px solid var(--color-border-dark)',
             }}
           >
             <span style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '1.1rem',
-              fontWeight: 700,
-              color: 'var(--color-sand)',
+              fontSize: '1.25rem',
+              fontStyle: 'italic',
+              fontWeight: 400,
+              color: 'var(--color-amber-light)',
               lineHeight: 1,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
               whiteSpace: 'nowrap',
             }}>
               {val}
             </span>
-            <span style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.58rem',
-              fontWeight: 600,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'rgba(237,232,223,0.25)',
+            <span className="t-label" style={{
+              color: 'var(--color-muted-light)',
               whiteSpace: 'nowrap',
             }}>
               {label}
@@ -79,16 +76,6 @@ export function TrustStrip() {
           </div>
         ))}
       </div>
-
-      <style>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          div[style*="marquee"] { animation: none; }
-        }
-      `}</style>
     </div>
   )
 }

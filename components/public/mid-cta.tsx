@@ -1,97 +1,51 @@
 export function MidCta() {
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      borderTop: '1px solid rgba(237,232,223,0.06)',
-      borderBottom: '1px solid rgba(237,232,223,0.06)',
+    <section style={{
+      background: 'var(--color-charcoal-2)',
+      borderTop: '1px solid var(--color-border-dark)',
+      borderBottom: '1px solid var(--color-border-dark)',
     }}>
-      {/* Left — dark */}
-      <div style={{
-        background: 'var(--color-charcoal)',
+      <div className="mid-cta-inner" style={{
+        maxWidth: '1240px',
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: '1.1fr 0.9fr',
+        gap: '3rem',
         padding: '5rem 3rem',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        borderRight: '1px solid rgba(237,232,223,0.06)',
+        alignItems: 'center',
       }}>
-        <p style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.6rem',
-          fontWeight: 600,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          color: 'rgba(237,232,223,0.28)',
-          marginBottom: '1.5rem',
-        }}>
-          Ready?
-        </p>
-        <h2 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.5rem, 4.5vw, 5rem)',
-          fontWeight: 900,
-          lineHeight: 0.92,
-          color: 'var(--color-sand)',
-          letterSpacing: '-0.01em',
-          textTransform: 'uppercase',
-          marginBottom: '0.35rem',
-        }}>
-          Seen enough?
-        </h2>
-        <p style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.5rem, 4.5vw, 5rem)',
-          fontWeight: 900,
-          lineHeight: 0.92,
-          color: 'var(--color-amber)',
-          letterSpacing: '-0.01em',
-          textTransform: 'uppercase',
-          marginBottom: 0,
-        }}>
-          Pick your date.
-        </p>
-      </div>
+        <div>
+          <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1.25rem' }}>
+            Ready?
+          </p>
+          <h2 className="t-heading" style={{ color: 'var(--color-sand)', maxWidth: '11ch' }}>
+            Seen enough? <em>Pick your date.</em>
+          </h2>
+        </div>
 
-      {/* Right — amber wash */}
-      <div style={{
-        background: 'rgba(212,133,106,0.08)',
-        padding: '5rem 3rem',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        gap: '1.5rem',
-      }}>
-        <a href="/book" style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.72rem',
-          fontWeight: 700,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: '#fff',
-          background: 'var(--color-amber)',
-          padding: '1rem 2.5rem',
-          borderRadius: '3px',
-          textDecoration: 'none',
-          display: 'inline-block',
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '1.25rem',
         }}>
-          Book Now
-        </a>
-        <span style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.78rem',
-          color: 'rgba(237,232,223,0.3)',
-          fontWeight: 400,
-        }}>
-          From $225 · Same-day gallery included
-        </span>
+          <a href="/book" className="btn-primary">
+            Book now
+          </a>
+          <span className="t-body-dark" style={{ color: 'var(--color-muted-light)' }}>
+            From $225 · Same-day gallery included
+          </span>
+        </div>
       </div>
 
       <style>{`
-        @media (max-width: 640px) {
-          div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+        @media (max-width: 760px) {
+          .mid-cta-inner {
+            grid-template-columns: 1fr !important;
+            padding: 4rem 1.5rem !important;
+          }
         }
       `}</style>
-    </div>
+    </section>
   )
 }

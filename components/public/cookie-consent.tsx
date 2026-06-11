@@ -21,10 +21,10 @@ export function CookieConsent() {
       aria-label="Cookie consent"
       style={{
         position: 'fixed', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)',
-        zIndex: 1000, background: '#0F0F0F', color: 'rgba(255,255,255,0.65)',
+        zIndex: 1000, background: 'var(--color-charcoal-2)', color: 'var(--color-muted-light)',
         fontFamily: 'var(--font-ui)', fontSize: '0.7rem', letterSpacing: '0.06em',
         padding: '0.85rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem',
-        borderRadius: '2px', whiteSpace: 'nowrap', border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: '999px', whiteSpace: 'nowrap', border: '1px solid var(--color-border-dark)',
       }}
     >
       <span>We use cookies to make this site work.</span>
@@ -32,9 +32,10 @@ export function CookieConsent() {
         onClick={accept}
         aria-label="Accept cookies"
         style={{
-          background: 'var(--color-crimson)',
-          color: '#fff', border: 'none', padding: '0.4rem 1rem',
-          fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700,
+          background: 'var(--color-amber-light)',
+          color: 'var(--color-charcoal)', border: 'none', padding: '0.45rem 1.1rem',
+          borderRadius: '999px',
+          fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 600,
           letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
         }}
       >

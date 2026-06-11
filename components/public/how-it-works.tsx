@@ -3,168 +3,125 @@ import { Reveal } from './reveal'
 const steps = [
   {
     num: '1',
-    title: 'Book Online',
+    title: 'Book online',
     desc: 'Pick your date, hours, and add-ons. Pay a 30% deposit to lock in your date. The remaining 70% is auto-charged 7 days before your event. No surprises.',
   },
   {
     num: '2',
-    title: 'We Show Up',
+    title: 'We show up',
     desc: 'Our team arrives early, sets up the 360° booth, and runs the whole experience for you. You focus on the party. We handle everything else.',
   },
   {
     num: '3',
-    title: 'Keep the Memories',
+    title: 'Keep the memories',
     desc: 'Every take is captured and saved. Your shareable gallery link is ready the same day so you can download, share, and relive every moment. No login needed.',
   },
 ]
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" style={{
+    <section id="how-it-works" className="sec-pad" style={{
       background: 'var(--color-charcoal)',
-      borderBottom: '1px solid rgba(237,232,223,0.06)',
+      borderBottom: '1px solid var(--color-border-dark)',
     }}>
-
-      {/* Header strip */}
-      <div style={{
-        padding: '6rem 3rem 4rem',
-        borderBottom: '1px solid rgba(237,232,223,0.07)',
-      }}>
-        <Reveal>
-          <div style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-            gap: '2rem',
-            flexWrap: 'wrap',
-          }}>
-            <div>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.6rem',
-                fontWeight: 600,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'rgba(237,232,223,0.28)',
-                marginBottom: '1.25rem',
-              }}>
-                How It Works
-              </p>
-              <h2 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-                fontWeight: 900,
-                lineHeight: 0.92,
-                color: 'var(--color-sand)',
-                letterSpacing: '-0.01em',
-                textTransform: 'uppercase',
-                marginBottom: 0,
-              }}>
-                Three steps.{' '}
-                <span style={{ color: 'var(--color-amber)' }}>Zero stress.</span>
-              </h2>
-            </div>
-            <a href="/book" style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.68rem',
-              fontWeight: 700,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: '#fff',
-              background: 'var(--color-amber)',
-              padding: '0.9rem 2.25rem',
-              borderRadius: '3px',
-              textDecoration: 'none',
-              flexShrink: 0,
+      <Reveal>
+        <div style={{
+          maxWidth: '1240px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 0.9fr) minmax(280px, 1.1fr)',
+          gap: 'clamp(2rem, 6vw, 5rem)',
+          alignItems: 'start',
+        }}>
+          <div>
+            <p className="t-label" style={{
+              color: 'var(--color-amber)',
+              marginBottom: '1.25rem',
             }}>
-              Book Your Experience
+              How it works
+            </p>
+            <h2 className="t-heading" style={{
+              color: 'var(--color-sand)',
+              maxWidth: '12ch',
+            }}>
+              Your event, shot like a <em>film premiere.</em>
+            </h2>
+            <p className="t-body-dark" style={{
+              color: 'var(--color-muted-light)',
+              marginTop: '1.5rem',
+            }}>
+              Three simple steps, one polished guest experience from first spin to final download.
+            </p>
+            <a href="/book" className="btn-primary" style={{ marginTop: '2.25rem' }}>
+              Book your experience
             </a>
           </div>
-        </Reveal>
-      </div>
 
-      {/* Steps */}
-      <div className="hiw-steps">
-        {steps.map((step, i) => (
-          <Reveal key={step.num} delay={i * 80}>
-            <div style={{
-              position: 'relative',
-              padding: '3.5rem 3rem 3.5rem',
-              borderRight: i < 2 ? '1px solid rgba(237,232,223,0.07)' : 'none',
-              overflow: 'hidden',
-              minHeight: '340px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-            }}>
-              {/* Oversized ghost step number */}
-              <div aria-hidden="true" style={{
-                position: 'absolute',
-                top: '-1rem',
-                left: '1.5rem',
-                fontFamily: 'var(--font-wordmark)',
-                fontSize: '16rem',
-                fontWeight: 400,
-                lineHeight: 1,
-                color: 'var(--color-sand)',
-                opacity: 0.03,
-                userSelect: 'none',
-                pointerEvents: 'none',
-                letterSpacing: '-0.04em',
-              }}>
-                {step.num}
-              </div>
-
-              {/* Content */}
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <span style={{
-                  display: 'inline-block',
-                  width: '24px',
-                  height: '1px',
-                  background: 'var(--color-amber)',
-                  marginBottom: '1.5rem',
-                }} />
-                <h3 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(1.5rem, 2.2vw, 2rem)',
-                  fontWeight: 700,
-                  lineHeight: 1.05,
-                  color: 'var(--color-sand)',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                  marginBottom: '1rem',
+          <div style={{
+            display: 'grid',
+            gap: '1rem',
+          }}>
+            {steps.map((step, i) => (
+              <Reveal key={step.num} delay={i * 80}>
+                <article style={{
+                  position: 'relative',
+                  display: 'grid',
+                  gridTemplateColumns: 'auto minmax(0, 1fr)',
+                  gap: '1.25rem',
+                  padding: '1.5rem 0 1.75rem',
+                  borderBottom: i < steps.length - 1 ? '1px solid var(--color-border-dark)' : 'none',
                 }}>
-                  {step.title}
-                </h3>
-                <p style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.9rem',
-                  color: 'rgba(237,232,223,0.45)',
-                  lineHeight: 1.8,
-                  fontWeight: 400,
-                  maxWidth: '32ch',
-                }}>
-                  {step.desc}
-                </p>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
+                  <span aria-hidden="true" style={{
+                    fontFamily: 'var(--font-display)',
+                    fontStyle: 'italic',
+                    fontSize: '2rem',
+                    lineHeight: 1,
+                    color: 'var(--color-amber-light)',
+                  }}>
+                    {step.num}
+                  </span>
+                  <div>
+                    <h3 className="t-subheading" style={{
+                      color: 'var(--color-sand)',
+                      fontSize: 'clamp(1.55rem, 2.4vw, 2.25rem)',
+                    }}>
+                      {step.title}
+                    </h3>
+                    <p className="t-body-dark" style={{
+                      color: 'var(--color-muted-light)',
+                      marginTop: '0.8rem',
+                    }}>
+                      {step.desc}
+                    </p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </Reveal>
 
       <div style={{
-        padding: '1.75rem 3rem',
-        borderTop: '1px solid rgba(237,232,223,0.07)',
+        maxWidth: '1240px',
+        margin: '3rem auto 0',
+        paddingTop: '1.25rem',
+        borderTop: '1px solid var(--color-border-dark)',
       }}>
-        <p style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.78rem',
-          color: 'rgba(237,232,223,0.25)',
-          fontWeight: 400,
+        <p className="t-label" style={{
+          color: 'var(--color-muted-light)',
+          letterSpacing: '0.24em',
         }}>
           $150/hr · 1.5 hr minimum · Calgary &amp; surrounding area
         </p>
       </div>
+
+      <style>{`
+        @media (max-width: 860px) {
+          #how-it-works > div:first-child > div {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

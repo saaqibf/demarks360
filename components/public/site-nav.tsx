@@ -20,7 +20,10 @@ export function SiteNav() {
 
   return (
     <header style={{
-      position: 'fixed', top: 0, left: 0, right: 0,
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
       zIndex: 1000,
       pointerEvents: 'none',
     }}>
@@ -34,28 +37,24 @@ export function SiteNav() {
         padding: '0 3rem',
         gap: '2rem',
         pointerEvents: 'auto',
-        background: 'rgba(12,8,8,0.75)',
+        background: 'color-mix(in srgb, var(--color-charcoal) 82%, transparent)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(237,232,223,0.06)',
+        borderBottom: '1px solid var(--color-border-dark)',
       }}>
-
-        {/* Wordmark */}
         <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
           <span style={{
             fontFamily: 'var(--font-wordmark)',
-            fontSize: '1.55rem',
+            fontSize: '1.45rem',
             fontWeight: 400,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: '#EDE8DF',
+            letterSpacing: '0.04em',
+            color: 'var(--color-sand)',
             lineHeight: 1,
           }}>
-            DEMARKS<span style={{ color: 'var(--color-amber)' }}>360</span>
+            Demarks<em style={{ color: 'var(--color-amber-light)', fontStyle: 'italic' }}>360</em>
           </span>
         </Link>
 
-        {/* Desktop links */}
         <div className="nav-links-desktop" style={{ display: 'flex', alignItems: 'center', gap: '2.25rem' }}>
           {links.map(label => {
             const id = label.toLowerCase().replace(/\s+/g, '-')
@@ -64,15 +63,15 @@ export function SiteNav() {
               <a
                 key={label}
                 href={`#${id}`}
+                className="nav-link"
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.68rem',
-                  fontWeight: isActive ? 700 : 500,
+                  fontWeight: isActive ? 600 : 500,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
-                  color: isActive ? '#EDE8DF' : 'rgba(237,232,223,0.45)',
+                  color: isActive ? 'var(--color-sand)' : 'var(--color-muted-light)',
                   textDecoration: 'none',
-                  transition: 'color 0.2s ease',
                   whiteSpace: 'nowrap',
                   position: 'relative',
                   paddingBottom: '3px',
@@ -81,53 +80,38 @@ export function SiteNav() {
                 {label}
                 {isActive && (
                   <span style={{
-                    position: 'absolute', bottom: 0, left: 0, right: 0,
-                    height: '1.5px', background: 'var(--color-amber)',
-                    borderRadius: '1px',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '1px',
+                    background: 'var(--color-amber-light)',
                   }} />
                 )}
               </a>
             )
           })}
 
-          <Link href="/admin-login" style={{
+          <Link href="/admin-login" className="nav-link" style={{
             fontFamily: 'var(--font-body)',
             fontSize: '0.68rem',
             fontWeight: 500,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: 'rgba(237,232,223,0.25)',
+            color: 'var(--color-muted-light)',
             textDecoration: 'none',
-            transition: 'color 0.2s ease',
             whiteSpace: 'nowrap',
+            opacity: 0.55,
           }}>
             Admin
           </Link>
         </div>
 
-        {/* Book CTA + hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
-          <Link
-            href="/book"
-            className="nav-book-btn"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.68rem',
-              fontWeight: 700,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              display: 'inline-block',
-              padding: '0.65rem 1.75rem',
-              borderRadius: '3px',
-              whiteSpace: 'nowrap',
-              transition: 'background 0.2s ease, color 0.2s ease',
-              background: 'var(--color-amber)',
-              color: '#fff',
-              border: 'none',
-            }}
-          >
-            Book Now
+          <Link href="/book" className="btn-primary nav-book-btn" style={{
+            padding: '0.75rem 1.75rem',
+          }}>
+            Book now
           </Link>
 
           <button
@@ -136,24 +120,28 @@ export function SiteNav() {
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             style={{
-              background: 'none', border: 'none',
-              cursor: 'pointer', padding: '0.5rem',
-              display: 'none', minHeight: '44px',
-              alignItems: 'center', justifyContent: 'center',
-              flexDirection: 'column', gap: '5px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              display: 'none',
+              minHeight: '44px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              gap: '5px',
             }}
           >
-            <span style={{ display: 'block', width: '22px', height: '1.5px', background: '#EDE8DF' }} />
-            <span style={{ display: 'block', width: '16px', height: '1.5px', background: '#EDE8DF' }} />
+            <span style={{ display: 'block', width: '22px', height: '1.5px', background: 'var(--color-sand)' }} />
+            <span style={{ display: 'block', width: '16px', height: '1.5px', background: 'var(--color-sand)' }} />
           </button>
         </div>
       </nav>
 
-      {/* Mobile drawer */}
       {open && (
         <div style={{
-          background: 'rgba(12,8,8,0.97)',
-          borderBottom: '1px solid rgba(237,232,223,0.08)',
+          background: 'color-mix(in srgb, var(--color-charcoal) 96%, transparent)',
+          borderBottom: '1px solid var(--color-border-dark)',
           backdropFilter: 'blur(20px)',
           pointerEvents: 'auto',
         }}>
@@ -170,10 +158,10 @@ export function SiteNav() {
                   fontWeight: 600,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
-                  color: 'rgba(237,232,223,0.7)',
+                  color: 'var(--color-sand)',
                   textDecoration: 'none',
                   padding: '0.85rem 0',
-                  borderBottom: '1px solid rgba(237,232,223,0.07)',
+                  borderBottom: '1px solid var(--color-border-dark)',
                 }}
               >
                 {label}
@@ -189,30 +177,20 @@ export function SiteNav() {
                 fontWeight: 600,
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                color: 'rgba(237,232,223,0.25)',
+                color: 'var(--color-muted-light)',
                 textDecoration: 'none',
                 padding: '0.85rem 0',
-                borderBottom: '1px solid rgba(237,232,223,0.07)',
+                borderBottom: '1px solid var(--color-border-dark)',
               }}
             >
               Admin
             </Link>
             <div style={{ paddingTop: '1rem' }}>
-              <Link href="/book" style={{
+              <Link href="/book" className="btn-primary" onClick={() => setOpen(false)} style={{
                 display: 'block',
                 textAlign: 'center',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#fff',
-                background: 'var(--color-amber)',
-                padding: '0.85rem',
-                borderRadius: '3px',
-                textDecoration: 'none',
               }}>
-                Book Now
+                Book now
               </Link>
             </div>
           </div>
@@ -220,7 +198,13 @@ export function SiteNav() {
       )}
 
       <style>{`
+        .nav-link:hover {
+          color: var(--color-sand) !important;
+        }
         @media (max-width: 768px) {
+          nav {
+            padding: 0 1.5rem !important;
+          }
           .nav-links-desktop { display: none !important; }
           .nav-hamburger { display: flex !important; }
           .nav-book-btn { display: none !important; }

@@ -25,110 +25,80 @@ const benefits = [
 
 export function BenefitBlocks() {
   return (
-    <section style={{
+    <section className="sec-pad" style={{
       background: 'var(--color-sand)',
       borderBottom: '1px solid var(--color-border-light)',
     }}>
-      {/* Header */}
-      <div style={{
-        padding: '6rem 3rem 5rem',
-        borderBottom: '1px solid var(--color-border-light)',
-      }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
         <Reveal>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.6rem',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--color-muted-light)',
-            marginBottom: '1.25rem',
-          }}>
+          <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1.25rem' }}>
             Why Demarks 360
           </p>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-            fontWeight: 900,
-            lineHeight: 0.92,
+          <h2 className="t-heading" style={{
             color: 'var(--color-charcoal)',
-            letterSpacing: '-0.01em',
-            textTransform: 'uppercase',
-            maxWidth: '640px',
+            maxWidth: '13ch',
           }}>
-            Worth every moment,{' '}
-            <span style={{ color: 'var(--color-amber)' }}>every time.</span>
+            Details that make <em>the night easier.</em>
           </h2>
         </Reveal>
+
+        <div className="benefit-cinema-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+          marginTop: '3rem',
+          borderTop: '1px solid var(--color-border-light)',
+          borderLeft: '1px solid var(--color-border-light)',
+        }}>
+          {benefits.map((b, i) => (
+            <Reveal key={b.number} delay={i * 60}>
+              <article style={{
+                minHeight: '100%',
+                padding: '2rem',
+                borderRight: '1px solid var(--color-border-light)',
+                borderBottom: '1px solid var(--color-border-light)',
+                background: i % 2 === 0 ? 'var(--color-sand)' : 'var(--color-sand-3)',
+              }}>
+                <span style={{
+                  display: 'block',
+                  fontFamily: 'var(--font-display)',
+                  fontStyle: 'italic',
+                  fontSize: '2rem',
+                  lineHeight: 1,
+                  color: 'var(--color-amber)',
+                  marginBottom: '2.5rem',
+                }}>
+                  {b.number}
+                </span>
+                <h3 className="t-subheading" style={{
+                  color: 'var(--color-charcoal)',
+                  fontSize: 'clamp(1.5rem, 2.4vw, 2.2rem)',
+                }}>
+                  {b.heading}
+                </h3>
+                <p className="t-body" style={{
+                  color: 'var(--color-muted)',
+                  marginTop: '1rem',
+                }}>
+                  {b.body}
+                </p>
+              </article>
+            </Reveal>
+          ))}
+        </div>
       </div>
 
-      {/* Alternating magazine rows */}
-      {benefits.map((b, i) => (
-        <Reveal key={b.number} delay={i * 60}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: i % 2 === 0 ? '1fr 1fr' : '1fr 1fr',
-            borderBottom: '1px solid var(--color-border-light)',
-            minHeight: '220px',
-          }}>
-            {/* Number block — left on even, right on odd */}
-            <div style={{
-              order: i % 2 === 0 ? 0 : 1,
-              background: i % 2 === 0 ? 'var(--color-charcoal)' : 'var(--color-sand)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '3rem',
-              borderRight: i % 2 === 0 ? '1px solid var(--color-border-light)' : 'none',
-              borderLeft: i % 2 === 1 ? '1px solid var(--color-border-light)' : 'none',
-            }}>
-              <span style={{
-                fontFamily: 'var(--font-wordmark)',
-                fontSize: 'clamp(4rem, 8vw, 8rem)',
-                fontWeight: 400,
-                lineHeight: 1,
-                color: i % 2 === 0 ? 'var(--color-amber)' : 'var(--color-charcoal)',
-                opacity: i % 2 === 0 ? 0.6 : 0.08,
-                letterSpacing: '0.04em',
-              }}>
-                {b.number}
-              </span>
-            </div>
-
-            {/* Text block */}
-            <div style={{
-              order: i % 2 === 0 ? 1 : 0,
-              padding: '3.5rem 3rem',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-              <h3 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(1.8rem, 2.8vw, 2.8rem)',
-                fontWeight: 900,
-                lineHeight: 0.95,
-                color: 'var(--color-charcoal)',
-                letterSpacing: '0.02em',
-                textTransform: 'uppercase',
-                marginBottom: '1.25rem',
-              }}>
-                {b.heading}
-              </h3>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.95rem',
-                color: 'var(--color-muted)',
-                lineHeight: 1.75,
-                fontWeight: 400,
-                maxWidth: '38ch',
-              }}>
-                {b.body}
-              </p>
-            </div>
-          </div>
-        </Reveal>
-      ))}
+      <style>{`
+        @media (max-width: 960px) {
+          .benefit-cinema-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+        @media (max-width: 560px) {
+          .benefit-cinema-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

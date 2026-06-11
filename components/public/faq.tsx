@@ -13,38 +13,24 @@ const faqs = [
 
 export function Faq() {
   return (
-    <section id="faq" style={{ background: 'var(--color-sand)', borderBottom: '1px solid var(--color-border-light)' }}>
-      {/* Header */}
-      <div style={{ padding: '6rem 3rem 4rem', borderBottom: '1px solid var(--color-border-light)' }}>
+    <section id="faq" className="sec-pad" style={{
+      background: 'var(--color-sand)',
+      borderBottom: '1px solid var(--color-border-light)',
+    }}>
+      <div style={{ maxWidth: '860px', margin: '0 auto' }}>
         <Reveal>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.6rem',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--color-muted-light)',
-            marginBottom: '1.25rem',
-          }}>
+          <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1.25rem' }}>
             FAQ
           </p>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-            fontWeight: 900,
-            lineHeight: 0.92,
+          <h2 className="t-heading" style={{
             color: 'var(--color-charcoal)',
-            letterSpacing: '-0.01em',
-            textTransform: 'uppercase',
+            maxWidth: '11ch',
+            marginBottom: '2.5rem',
           }}>
-            Common questions,{' '}
-            <span style={{ color: 'var(--color-amber)' }}>answered.</span>
+            Before you <em>book.</em>
           </h2>
         </Reveal>
-      </div>
 
-      {/* Accordion */}
-      <div style={{ padding: '0 3rem 6rem', maxWidth: '860px' }}>
         <Reveal delay={80}>
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, i) => (
@@ -53,21 +39,23 @@ export function Faq() {
                 value={`item-${i}`}
                 style={{ borderBottom: '1px solid var(--color-border-light)' }}
               >
-                <AccordionTrigger style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '1rem',
-                  fontWeight: 600,
+                <AccordionTrigger className="faq-trigger" style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(1.25rem, 2vw, 1.6rem)',
+                  fontWeight: 400,
                   color: 'var(--color-charcoal)',
                   textAlign: 'left',
                   padding: '1.5rem 0',
                   letterSpacing: '0',
-                  lineHeight: 1.5,
+                  lineHeight: 1.25,
+                  textDecoration: 'none',
                 }}>
-                  {faq.q}
+                  <span>{faq.q}</span>
+                  <span className="faq-plus" aria-hidden="true">+</span>
                 </AccordionTrigger>
                 <AccordionContent style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: '0.9rem',
+                  fontSize: '1rem',
                   color: 'var(--color-muted)',
                   lineHeight: 1.8,
                   fontWeight: 400,
@@ -80,6 +68,28 @@ export function Faq() {
           </Accordion>
         </Reveal>
       </div>
+
+      <style>{`
+        .faq-trigger:hover {
+          color: var(--color-amber) !important;
+          text-decoration: none !important;
+        }
+        .faq-trigger > svg {
+          display: none;
+        }
+        .faq-plus {
+          color: var(--color-amber);
+          font-family: var(--font-body);
+          font-size: 1.8rem;
+          font-weight: 300;
+          line-height: 1;
+          transition: transform 0.25s ease;
+          flex-shrink: 0;
+        }
+        .faq-trigger[data-state='open'] .faq-plus {
+          transform: rotate(45deg);
+        }
+      `}</style>
     </section>
   )
 }

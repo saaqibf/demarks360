@@ -7,112 +7,52 @@ export function CtaBand() {
       padding: '8rem 3rem',
       position: 'relative',
       overflow: 'hidden',
-      borderTop: '1px solid rgba(237,232,223,0.06)',
+      borderTop: '1px solid var(--color-border-dark)',
     }}>
-      {/* Amber radial glow */}
-      <div aria-hidden="true" style={{
-        position: 'absolute',
-        bottom: 0, right: 0,
-        width: '50vw', height: '70%',
-        background: 'radial-gradient(ellipse at 100% 100%, rgba(212,133,106,0.12) 0%, transparent 60%)',
-        pointerEvents: 'none',
-      }} />
-
-      {/* Subtle CSS grid overlay */}
       <div aria-hidden="true" style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: 'linear-gradient(rgba(237,232,223,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(237,232,223,0.025) 1px, transparent 1px)',
-        backgroundSize: '80px 80px',
+        backgroundImage: 'linear-gradient(var(--color-border-dark) 1px, transparent 1px), linear-gradient(90deg, var(--color-border-dark) 1px, transparent 1px)',
+        backgroundSize: '84px 84px',
+        opacity: 0.42,
         pointerEvents: 'none',
       }} />
 
-      <div style={{ position: 'relative', maxWidth: '900px' }}>
+      <div style={{ position: 'relative', maxWidth: '1240px', margin: '0 auto' }}>
         <Reveal>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.6rem',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'rgba(237,232,223,0.28)',
-            marginBottom: '2.5rem',
+          <p className="t-label" style={{
+            color: 'var(--color-amber)',
+            marginBottom: '1.5rem',
           }}>
-            Ready to Book
+            Ready to book
           </p>
 
-          <h2 style={{
-            fontFamily: 'var(--font-wordmark)',
-            fontSize: 'clamp(4rem, 10vw, 10rem)',
-            fontWeight: 400,
-            lineHeight: 0.88,
+          <h2 className="t-display" style={{
             color: 'var(--color-sand)',
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            marginBottom: '0',
+            maxWidth: '12ch',
           }}>
-            Make Your Event
-          </h2>
-          <h2 style={{
-            fontFamily: 'var(--font-wordmark)',
-            fontSize: 'clamp(4rem, 10vw, 10rem)',
-            fontWeight: 400,
-            lineHeight: 0.88,
-            color: 'var(--color-amber)',
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            marginBottom: '3rem',
-          }}>
-            Unforgettable.
+            Some moments deserve <em>every angle.</em>
           </h2>
 
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.95rem',
-            color: 'rgba(237,232,223,0.38)',
-            lineHeight: 1.75,
-            maxWidth: '400px',
-            marginBottom: '3rem',
-            fontWeight: 400,
+          <p className="t-body-dark" style={{
+            color: 'var(--color-muted-light)',
+            marginTop: '2rem',
+            marginBottom: '2.5rem',
           }}>
             $150/hr, 1.5-hour minimum. Gallery delivered the same day. Serving Calgary, Airdrie, and surrounding areas.
           </p>
         </Reveal>
 
         <Reveal delay={120}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-            <a href="/book" style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--color-charcoal)',
-              background: 'var(--color-sand)',
-              padding: '1.1rem 3rem',
-              borderRadius: '3px',
-              textDecoration: 'none',
-              display: 'inline-block',
-              transition: 'background 0.2s ease',
-              whiteSpace: 'nowrap',
-            }}>
-              Book Your Experience
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <a href="/book" className="btn-primary">
+              Book your experience
             </a>
-            <a href="#pricing" style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: 'rgba(237,232,223,0.38)',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              transition: 'color 0.2s ease',
+            <a href="#pricing" className="btn-secondary" style={{
+              color: 'var(--color-sand)',
+              borderColor: 'var(--color-border-dark)',
             }}>
-              View Pricing
-              <span style={{ display: 'inline-block', width: '18px', height: '1px', background: 'currentColor' }} />
+              View pricing
             </a>
           </div>
         </Reveal>

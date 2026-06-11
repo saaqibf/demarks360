@@ -32,120 +32,85 @@ export function EmailCapture() {
   }
 
   return (
-    <div style={{
+    <section style={{
       background: 'var(--color-charcoal-3)',
-      borderTop: '1px solid rgba(237,232,223,0.06)',
-      borderBottom: '1px solid rgba(237,232,223,0.06)',
-      padding: '4rem 3rem',
+      borderTop: '1px solid var(--color-border-dark)',
+      borderBottom: '1px solid var(--color-border-dark)',
     }}>
-      <div style={{
-        maxWidth: '1280px',
+      <div className="email-capture-inner" style={{
+        maxWidth: '1240px',
         margin: '0 auto',
-        display: 'flex',
+        padding: '4rem 3rem',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto',
         alignItems: 'center',
-        justifyContent: 'space-between',
         gap: '3rem',
-        flexWrap: 'wrap',
       }}>
         <div>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.6rem',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'rgba(237,232,223,0.25)',
-            marginBottom: '0.75rem',
-          }}>
-            Stay in the Loop
+          <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '0.9rem' }}>
+            Stay in the loop
           </p>
-          <h3 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)',
-            fontWeight: 800,
-            lineHeight: 1.05,
-            color: 'var(--color-sand)',
-            letterSpacing: '0.01em',
-            textTransform: 'uppercase',
-          }}>
-            Not ready to book yet?
+          <h3 className="t-subheading" style={{ color: 'var(--color-sand)' }}>
+            Not ready? <em>Stay in the loop.</em>
           </h3>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.85rem',
-            color: 'rgba(237,232,223,0.38)',
-            lineHeight: 1.7,
-            fontWeight: 400,
-            marginTop: '0.5rem',
+          <p className="t-body-dark" style={{
+            color: 'var(--color-muted-light)',
+            marginTop: '0.75rem',
           }}>
             Get notified when new dates open up and hear about seasonal promotions.
           </p>
         </div>
 
         {submitted ? (
-          <p style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '1.35rem',
-            fontWeight: 700,
+          <p className="t-subheading" aria-live="polite" style={{
             color: 'var(--color-sand)',
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
+            fontSize: 'clamp(1.35rem, 2vw, 1.8rem)',
           }}>
-            You&apos;re on the list. ✓
+            You&apos;re on the list.
           </p>
         ) : (
           <div>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0', flexShrink: 0 }}>
+            <form onSubmit={handleSubmit} className="email-capture-form" style={{
+              display: 'flex',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+            }}>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 required
+                aria-label="Email address"
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: '0.85rem',
+                  fontSize: '1rem',
                   fontWeight: 400,
                   color: 'var(--color-sand)',
-                  background: 'rgba(237,232,223,0.07)',
-                  border: '1.5px solid rgba(237,232,223,0.15)',
-                  borderRight: 'none',
-                  padding: '0.9rem 1.25rem',
-                  outline: 'none',
-                  width: '260px',
-                  borderRadius: '3px 0 0 3px',
+                  background: 'color-mix(in srgb, var(--color-charcoal) 74%, transparent)',
+                  border: '1px solid var(--color-border-dark)',
+                  padding: '0.95rem 1.25rem',
+                  width: 'min(100%, 280px)',
+                  borderRadius: '999px',
+                  minHeight: '44px',
                 }}
               />
               <button
                 type="submit"
                 disabled={loading}
+                className="btn-primary"
                 style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-charcoal)',
-                  background: 'var(--color-sand)',
-                  border: 'none',
-                  padding: '0.9rem 1.75rem',
-                  borderRadius: '0 3px 3px 0',
+                  opacity: loading ? 0.65 : 1,
                   cursor: loading ? 'not-allowed' : 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'opacity 0.2s ease',
-                  opacity: loading ? 0.6 : 1,
                 }}
               >
-                {loading ? '...' : 'Notify Me'}
+                {loading ? '...' : 'Notify me'}
               </button>
             </form>
             {error && (
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.75rem',
-                color: 'rgba(212,133,106,0.8)',
-                marginTop: '0.5rem',
-                fontWeight: 400,
+              <p className="t-body-dark" aria-live="polite" style={{
+                color: 'var(--color-amber-light)',
+                marginTop: '0.75rem',
               }}>
                 {error}
               </p>
@@ -153,6 +118,19 @@ export function EmailCapture() {
           </div>
         )}
       </div>
-    </div>
+
+      <style>{`
+        @media (max-width: 820px) {
+          .email-capture-inner {
+            grid-template-columns: 1fr !important;
+            padding: 3.5rem 1.5rem !important;
+          }
+          .email-capture-form input,
+          .email-capture-form button {
+            width: 100%;
+          }
+        }
+      `}</style>
+    </section>
   )
 }

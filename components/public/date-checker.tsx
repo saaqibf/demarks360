@@ -27,169 +27,128 @@ export function DateChecker() {
 
   const statusConfig = {
     idle: null,
-    loading: { color: 'rgba(237,232,223,0.4)', text: 'Checking...' },
-    available: { color: '#6EC97A', text: '✓ Your date is available — lock it in below.' },
-    limited: { color: 'var(--color-amber)', text: '⚡ Limited availability on this date — book soon.' },
-    booked: { color: '#E07070', text: '✗ This date is fully booked. Pick another date.' },
-    error: { color: 'rgba(237,232,223,0.3)', text: 'Could not check availability. Try again.' },
+    loading: { color: 'var(--color-muted-light)', text: 'Checking...' },
+    available: { color: 'var(--color-amber-light)', text: 'Your date is available, lock it in below.' },
+    limited: { color: 'var(--color-amber-light)', text: 'Limited availability on this date, book soon.' },
+    booked: { color: 'var(--color-muted-light)', text: 'This date is fully booked. Pick another date.' },
+    error: { color: 'var(--color-muted-light)', text: 'Could not check availability. Try again.' },
   }
 
   const info = statusConfig[status]
 
   return (
-    <div style={{
+    <section style={{
       background: 'var(--color-charcoal-2)',
-      borderTop: '1px solid rgba(237,232,223,0.06)',
-      borderBottom: '1px solid rgba(237,232,223,0.06)',
-      padding: '4rem 3rem',
+      borderTop: '1px solid var(--color-border-dark)',
+      borderBottom: '1px solid var(--color-border-dark)',
     }}>
-      <div style={{ maxWidth: '680px', margin: '0 auto', textAlign: 'center' }}>
-        <p style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.6rem',
-          fontWeight: 600,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          color: 'rgba(237,232,223,0.28)',
-          marginBottom: '1rem',
-        }}>
-          Check Your Date
-        </p>
-        <h2 style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(1.8rem, 3.5vw, 3rem)',
-          fontWeight: 900,
-          lineHeight: 0.95,
-          color: 'var(--color-sand)',
-          textTransform: 'uppercase',
-          letterSpacing: '-0.01em',
-          marginBottom: '0.5rem',
-        }}>
-          Is your date available?
-        </h2>
-        <p style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.85rem',
-          color: 'rgba(237,232,223,0.35)',
-          lineHeight: 1.7,
-          marginBottom: '2rem',
-          fontWeight: 400,
-        }}>
-          Dates book up fast — especially weekends. Check yours before it&apos;s gone.
-        </p>
-
-        <div style={{
-          display: 'flex',
-          gap: '0',
-          maxWidth: '480px',
-          margin: '0 auto',
-          boxShadow: '0 2px 24px rgba(0,0,0,0.3)',
-        }}>
-          <input
-            type="date"
-            value={date}
-            onChange={e => { setDate(e.target.value); setStatus('idle') }}
-            min={today}
-            max={maxDate}
-            style={{
-              flex: 1,
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.9rem',
-              fontWeight: 400,
-              color: date ? 'var(--color-sand)' : 'rgba(237,232,223,0.35)',
-              background: 'rgba(237,232,223,0.06)',
-              border: '1.5px solid rgba(237,232,223,0.12)',
-              borderRight: 'none',
-              padding: '0.9rem 1.25rem',
-              outline: 'none',
-              borderRadius: '3px 0 0 3px',
-              colorScheme: 'dark',
-            }}
-          />
-          <button
-            onClick={check}
-            disabled={!date || status === 'loading'}
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.68rem',
-              fontWeight: 700,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: '#fff',
-              background: !date ? 'rgba(212,133,106,0.4)' : 'var(--color-amber)',
-              border: 'none',
-              padding: '0.9rem 1.75rem',
-              borderRadius: '0 3px 3px 0',
-              cursor: !date ? 'not-allowed' : 'pointer',
-              whiteSpace: 'nowrap',
-              transition: 'background 0.2s ease',
-              flexShrink: 0,
-            }}
-          >
-            {status === 'loading' ? '...' : 'Check'}
-          </button>
+      <div className="date-check-inner" style={{
+        maxWidth: '1240px',
+        margin: '0 auto',
+        padding: '4.5rem 3rem',
+        display: 'grid',
+        gridTemplateColumns: '1.1fr 0.9fr',
+        gap: '3rem',
+        alignItems: 'center',
+      }}>
+        <div>
+          <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1rem' }}>
+            Check your date
+          </p>
+          <h2 className="t-heading" style={{ color: 'var(--color-sand)' }}>
+            Is your date <em>still open?</em>
+          </h2>
+          <p className="t-body-dark" style={{
+            color: 'var(--color-muted-light)',
+            marginTop: '1rem',
+          }}>
+            Dates book up fast, especially weekends. Check yours before it&apos;s gone.
+          </p>
         </div>
 
-        {info && (
+        <div>
           <div style={{
-            marginTop: '1.25rem',
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '1rem',
+            gap: '0.75rem',
+            flexWrap: 'wrap',
           }}>
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
-              fontWeight: 600,
-              color: info.color,
-              letterSpacing: '0.01em',
-            }}>
-              {info.text}
-            </p>
-            {status === 'available' && date && (
-              <Link
-                href={`/book?date=${date}`}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: '#fff',
-                  background: 'var(--color-amber)',
-                  padding: '0.85rem 2.25rem',
-                  borderRadius: '3px',
-                  textDecoration: 'none',
-                  display: 'inline-block',
-                }}
-              >
-                Book This Date →
-              </Link>
-            )}
-            {status === 'limited' && date && (
-              <Link
-                href={`/book?date=${date}`}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-charcoal)',
-                  background: 'var(--color-sand)',
-                  padding: '0.85rem 2.25rem',
-                  borderRadius: '3px',
-                  textDecoration: 'none',
-                  display: 'inline-block',
-                }}
-              >
-                Check Remaining Slots →
-              </Link>
-            )}
+            <input
+              type="date"
+              value={date}
+              onChange={e => { setDate(e.target.value); setStatus('idle') }}
+              min={today}
+              max={maxDate}
+              aria-label="Event date"
+              style={{
+                flex: '1 1 200px',
+                fontFamily: 'var(--font-body)',
+                fontSize: '1rem',
+                fontWeight: 400,
+                color: 'var(--color-sand)',
+                background: 'color-mix(in srgb, var(--color-charcoal) 76%, transparent)',
+                border: '1px solid var(--color-border-dark)',
+                padding: '0.95rem 1.25rem',
+                borderRadius: '999px',
+                colorScheme: 'dark',
+                minHeight: '44px',
+              }}
+            />
+            <button
+              onClick={check}
+              disabled={!date || status === 'loading'}
+              className="btn-primary"
+              style={{
+                opacity: !date ? 0.45 : 1,
+                cursor: !date ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {status === 'loading' ? '...' : 'Check'}
+            </button>
           </div>
-        )}
+
+          {info && (
+            <div style={{
+              marginTop: '1.25rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: '1rem',
+            }}>
+              <p className="t-body-dark" aria-live="polite" style={{
+                color: info.color,
+                fontWeight: 500,
+              }}>
+                {info.text}
+              </p>
+              {status === 'available' && date && (
+                <Link href={`/book?date=${date}`} className="btn-secondary" style={{
+                  color: 'var(--color-sand)',
+                  borderColor: 'var(--color-border-dark)',
+                }}>
+                  Book this date
+                </Link>
+              )}
+              {status === 'limited' && date && (
+                <Link href={`/book?date=${date}`} className="btn-secondary" style={{
+                  color: 'var(--color-sand)',
+                  borderColor: 'var(--color-border-dark)',
+                }}>
+                  Check remaining slots
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+
+      <style>{`
+        @media (max-width: 820px) {
+          .date-check-inner {
+            grid-template-columns: 1fr !important;
+            padding: 3.5rem 1.5rem !important;
+          }
+        }
+      `}</style>
+    </section>
   )
 }

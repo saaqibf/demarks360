@@ -23,143 +23,124 @@ export function Testimonials() {
   const secondary = reviews.slice(1)
 
   return (
-    <section style={{
+    <section className="sec-pad" style={{
       background: 'var(--color-charcoal-2)',
-      borderBottom: '1px solid rgba(237,232,223,0.06)',
+      borderBottom: '1px solid var(--color-border-dark)',
     }}>
-      {/* Large featured quote */}
-      <div style={{
-        padding: '6rem 3rem',
-        borderBottom: '1px solid rgba(237,232,223,0.07)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* Oversized amber quote mark */}
-        <div aria-hidden="true" style={{
-          position: 'absolute',
-          top: '2rem',
-          left: '2rem',
-          fontFamily: 'var(--font-wordmark)',
-          fontSize: '14rem',
-          fontWeight: 400,
-          lineHeight: 1,
-          color: 'var(--color-amber)',
-          opacity: 0.12,
-          userSelect: 'none',
-          pointerEvents: 'none',
-          letterSpacing: '-0.04em',
-        }}>
-          &ldquo;
-        </div>
-
+      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
         <Reveal>
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.6rem',
-              fontWeight: 600,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: 'rgba(237,232,223,0.28)',
-              marginBottom: '3rem',
-            }}>
-              Reviews
-            </p>
-
-            {/* Stars */}
-            <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '2.5rem' }}>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <span key={i} style={{ color: 'var(--color-amber)', fontSize: '1.1rem' }}>★</span>
-              ))}
-            </div>
-
-            {/* Large quote */}
-            <blockquote style={{
-              fontFamily: 'var(--font-body)',
-              fontStyle: 'italic',
-              fontSize: 'clamp(1.2rem, 2.5vw, 2rem)',
-              fontWeight: 400,
-              lineHeight: 1.65,
-              color: 'rgba(237,232,223,0.85)',
-              letterSpacing: '-0.01em',
-              maxWidth: '760px',
-              margin: '0 0 2.5rem',
-            }}>
-              &ldquo;{featured.quote}&rdquo;
-            </blockquote>
-
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '0.9fr 1.1fr',
+            gap: 'clamp(2rem, 6vw, 5rem)',
+            alignItems: 'start',
+          }} className="reviews-cinema">
             <div>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.88rem',
-                fontWeight: 700,
-                color: 'var(--color-sand)',
-              }}>
-                {featured.name}
+              <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1.25rem' }}>
+                Reviews
               </p>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.75rem',
-                color: 'rgba(237,232,223,0.35)',
-                fontWeight: 400,
-                marginTop: '0.2rem',
-              }}>
-                {featured.event}
-              </p>
+              <h2 className="t-heading" style={{ color: 'var(--color-sand)', maxWidth: '13ch' }}>
+                The part of the night <em>everyone remembers.</em>
+              </h2>
             </div>
-          </div>
-        </Reveal>
-      </div>
 
-      {/* Secondary reviews */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        borderBottom: '1px solid rgba(237,232,223,0.07)',
-      }}>
-        {secondary.map((r, i) => (
-          <Reveal key={r.name} delay={i * 80}>
-            <div style={{
-              padding: '3rem',
-              borderRight: i === 0 ? '1px solid rgba(237,232,223,0.07)' : 'none',
+            <article style={{
+              padding: '2.5rem',
+              background: 'var(--color-charcoal-3)',
+              border: '1px solid var(--color-border-dark)',
+              borderRadius: '8px',
+              position: 'relative',
+              overflow: 'hidden',
             }}>
-              <div style={{ display: 'flex', gap: '0.15rem', marginBottom: '1.5rem' }}>
-                {Array.from({ length: 5 }).map((_, j) => (
-                  <span key={j} style={{ color: 'var(--color-amber)', fontSize: '0.9rem' }}>★</span>
+              <div aria-hidden="true" style={{
+                position: 'absolute',
+                top: '-1rem',
+                right: '1rem',
+                fontFamily: 'var(--font-display)',
+                fontSize: '9rem',
+                fontStyle: 'italic',
+                lineHeight: 1,
+                color: 'var(--color-amber)',
+                opacity: 0.16,
+              }}>
+                &ldquo;
+              </div>
+              <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '1.5rem' }} aria-label="5 star rating">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span key={i} style={{ color: 'var(--color-amber-light)', fontSize: '1rem' }}>★</span>
                 ))}
               </div>
-              <p style={{
-                fontFamily: 'var(--font-body)',
+              <blockquote style={{
+                fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
-                fontSize: '1rem',
+                fontSize: 'clamp(1.45rem, 2.5vw, 2.2rem)',
                 fontWeight: 400,
-                lineHeight: 1.75,
-                color: 'rgba(237,232,223,0.7)',
-                marginBottom: '1.5rem',
-              }}>
-                &ldquo;{r.quote}&rdquo;
-              </p>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.82rem',
-                fontWeight: 600,
+                lineHeight: 1.35,
                 color: 'var(--color-sand)',
+                margin: '0 0 2rem',
+                position: 'relative',
               }}>
-                {r.name}
+                &ldquo;{featured.quote}&rdquo;
+              </blockquote>
+              <p className="t-label" style={{ color: 'var(--color-sand)', marginBottom: '0.45rem' }}>
+                {featured.name}
               </p>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.72rem',
-                color: 'rgba(237,232,223,0.28)',
-                fontWeight: 400,
-                marginTop: '0.2rem',
+              <p className="t-body-dark" style={{ color: 'var(--color-muted-light)' }}>
+                {featured.event}
+              </p>
+            </article>
+          </div>
+        </Reveal>
+
+        <div className="reviews-side-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: '1rem',
+          marginTop: '1rem',
+          marginLeft: 'calc(45% + 0.5rem)',
+        }}>
+          {secondary.map((r, i) => (
+            <Reveal key={r.name} delay={i * 80}>
+              <article style={{
+                height: '100%',
+                padding: '1.75rem',
+                background: 'var(--color-charcoal)',
+                border: '1px solid var(--color-border-dark)',
+                borderRadius: '8px',
               }}>
-                {r.event}
-              </p>
-            </div>
-          </Reveal>
-        ))}
+                <div style={{ display: 'flex', gap: '0.15rem', marginBottom: '1rem' }} aria-label="5 star rating">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <span key={j} style={{ color: 'var(--color-amber-light)', fontSize: '0.9rem' }}>★</span>
+                  ))}
+                </div>
+                <p className="t-body-dark" style={{
+                  color: 'var(--color-sand)',
+                  fontStyle: 'italic',
+                  marginBottom: '1.5rem',
+                }}>
+                  &ldquo;{r.quote}&rdquo;
+                </p>
+                <p className="t-label" style={{ color: 'var(--color-sand)', marginBottom: '0.35rem' }}>
+                  {r.name}
+                </p>
+                <p className="t-body-dark" style={{ color: 'var(--color-muted-light)' }}>
+                  {r.event}
+                </p>
+              </article>
+            </Reveal>
+          ))}
+        </div>
       </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .reviews-cinema,
+          .reviews-side-grid {
+            grid-template-columns: 1fr !important;
+            margin-left: 0 !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

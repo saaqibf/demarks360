@@ -1,18 +1,14 @@
 export function PromoBar() {
   return (
-    <div style={{
+    <div className="t-label" style={{
       background: 'var(--color-charcoal)',
-      color: 'rgba(237,232,223,0.7)',
-      fontFamily: 'var(--font-body)',
-      fontSize: '0.68rem',
-      fontWeight: 500,
-      letterSpacing: '0.12em',
+      color: 'var(--color-muted-light)',
       textAlign: 'center',
-      padding: '0.55rem 1rem',
-      textTransform: 'uppercase',
+      padding: '0.65rem 1rem',
+      borderBottom: '1px solid var(--color-border-dark)',
     }}>
       Calgary&apos;s premier 360 video booth.{' '}
-      <strong style={{ fontWeight: 700, color: 'var(--color-sand)', letterSpacing: '0.08em' }}>
+      <strong style={{ fontWeight: 600, color: 'var(--color-amber-light)' }}>
         Same-day gallery delivery.
       </strong>
     </div>

@@ -18,181 +18,168 @@ const tiers = [
 
 export function Pricing() {
   return (
-    <section id="pricing" style={{ background: 'var(--color-charcoal)', borderBottom: '1px solid rgba(237,232,223,0.06)' }}>
-      {/* Header */}
-      <div style={{ padding: '6rem 3rem 5rem', borderBottom: '1px solid rgba(237,232,223,0.07)' }}>
-        <Reveal>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.6rem',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'rgba(237,232,223,0.28)',
-            marginBottom: '1.25rem',
-          }}>
-            Pricing
-          </p>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-              fontWeight: 900,
-              lineHeight: 0.92,
-              color: 'var(--color-sand)',
-              letterSpacing: '-0.01em',
-              textTransform: 'uppercase',
-            }}>
-              Simple,{' '}
-              <span style={{ color: 'var(--color-amber)' }}>transparent.</span>
-            </h2>
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.85rem',
-              color: 'rgba(237,232,223,0.38)',
-              lineHeight: 1.7,
-              maxWidth: '280px',
-            }}>
-              $150/hr. Choose your duration below. All packages include everything listed.
+    <section id="pricing" className="sec-pad" style={{
+      background: 'var(--color-charcoal)',
+      borderBottom: '1px solid var(--color-border-dark)',
+    }}>
+      <Reveal>
+        <div style={{
+          maxWidth: '1240px',
+          margin: '0 auto 3rem',
+          display: 'flex',
+          alignItems: 'end',
+          justifyContent: 'space-between',
+          gap: '2rem',
+          flexWrap: 'wrap',
+        }}>
+          <div>
+            <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1.25rem' }}>
+              Pricing
             </p>
+            <h2 className="t-heading" style={{
+              color: 'var(--color-sand)',
+              maxWidth: '12ch',
+            }}>
+              Clear pricing. <em>Zero surprises.</em>
+            </h2>
           </div>
-        </Reveal>
-      </div>
-
-      {/* What's included — feature list */}
-      <div style={{ padding: '3rem 3rem 0', borderBottom: '1px solid rgba(237,232,223,0.07)' }}>
-        <Reveal>
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.58rem',
-            fontWeight: 600,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: 'rgba(237,232,223,0.28)',
-            marginBottom: '1.5rem',
+          <p className="t-body-dark" style={{
+            color: 'var(--color-muted-light)',
+            maxWidth: '34ch',
           }}>
-            Every Package Includes
+            $150/hr. Choose your duration below. All packages include everything listed.
           </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem 2rem', paddingBottom: '3rem' }}>
-            {features.map(f => (
-              <span key={f} style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.82rem',
-                color: 'rgba(237,232,223,0.55)',
-                fontWeight: 400,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-              }}>
-                <span style={{ display: 'inline-block', width: '4px', height: '4px', borderRadius: '50%', background: 'var(--color-amber)', flexShrink: 0 }} />
-                {f}
-              </span>
-            ))}
-          </div>
-        </Reveal>
-      </div>
+        </div>
+      </Reveal>
 
-      {/* Tier grid */}
-      <div className="pricing-table">
+      <Reveal>
+        <div style={{
+          maxWidth: '1240px',
+          margin: '0 auto 1.25rem',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0.75rem 1.5rem',
+          padding: '1.25rem 0',
+          borderTop: '1px solid var(--color-border-dark)',
+          borderBottom: '1px solid var(--color-border-dark)',
+        }}>
+          <p className="t-label" style={{
+            color: 'var(--color-muted-light)',
+            marginRight: '0.5rem',
+          }}>
+            Every package includes
+          </p>
+          {features.map(f => (
+            <span key={f} className="t-label" style={{
+              color: 'var(--color-sand)',
+              letterSpacing: '0.16em',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}>
+              <span aria-hidden="true" style={{
+                width: '4px',
+                height: '4px',
+                borderRadius: '999px',
+                background: 'var(--color-amber)',
+                display: 'inline-block',
+              }} />
+              {f}
+            </span>
+          ))}
+        </div>
+      </Reveal>
+
+      <div className="pricing-table" style={{
+        maxWidth: '1240px',
+        margin: '0 auto',
+        gap: '1rem',
+      }}>
         {tiers.map((t, i) => (
           <Reveal key={t.duration} delay={i * 60}>
-            <div style={{
-              padding: '2.5rem 2.5rem 3rem',
-              borderRight: i < 3 ? '1px solid rgba(237,232,223,0.07)' : 'none',
-              background: t.highlight ? 'rgba(212,133,106,0.06)' : 'transparent',
+            <article style={{
+              minHeight: '100%',
+              padding: '2.25rem',
+              border: t.highlight ? '1px solid var(--color-amber-light)' : '1px solid var(--color-border-dark)',
+              borderRadius: '8px',
+              background: t.highlight ? 'color-mix(in srgb, var(--color-charcoal-3) 86%, var(--color-amber) 14%)' : 'var(--color-charcoal-2)',
               position: 'relative',
-              borderTop: t.highlight ? '2px solid var(--color-amber)' : '2px solid transparent',
+              display: 'flex',
+              flexDirection: 'column',
             }}>
               {t.highlight && (
-                <span style={{
+                <span className="t-label" style={{
                   position: 'absolute',
-                  top: '1.5rem',
-                  right: '1.5rem',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.55rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.16em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-amber)',
+                  top: '-0.85rem',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  color: 'var(--color-charcoal)',
+                  background: 'var(--color-amber-light)',
+                  borderRadius: '999px',
+                  padding: '0.45rem 1rem',
+                  whiteSpace: 'nowrap',
                 }}>
-                  Popular
+                  Most booked
                 </span>
               )}
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.62rem',
-                fontWeight: 600,
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: 'rgba(237,232,223,0.35)',
+              <p className="t-label" style={{
+                color: 'var(--color-muted-light)',
                 marginBottom: '1.25rem',
               }}>
                 {t.duration}
               </p>
               <p style={{
-                fontFamily: 'var(--font-wordmark)',
-                fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(2.6rem, 5vw, 4rem)',
                 fontWeight: 400,
                 lineHeight: 1,
-                color: t.highlight ? 'var(--color-amber)' : 'var(--color-sand)',
-                letterSpacing: '0.04em',
-                marginBottom: '0.5rem',
+                color: 'var(--color-amber-light)',
+                marginBottom: '0.6rem',
               }}>
                 {t.price}
               </p>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.72rem',
-                color: 'rgba(237,232,223,0.28)',
-                fontWeight: 400,
+              <p className="t-body-dark" style={{
+                color: 'var(--color-muted-light)',
                 marginBottom: '2rem',
               }}>
                 {t.deposit} deposit today
               </p>
-              <a href="/book" style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.65rem',
-                fontWeight: 700,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: t.highlight ? 'var(--color-charcoal)' : 'var(--color-sand)',
-                background: t.highlight ? 'var(--color-sand)' : 'transparent',
-                border: t.highlight ? 'none' : '1.5px solid rgba(237,232,223,0.25)',
-                padding: '0.75rem 1.75rem',
-                borderRadius: '3px',
-                textDecoration: 'none',
-                display: 'inline-block',
-                transition: 'background 0.2s ease',
+              <a href="/book" className={t.highlight ? 'btn-primary' : 'btn-secondary'} style={{
+                marginTop: 'auto',
+                textAlign: 'center',
+                color: t.highlight ? undefined : 'var(--color-sand)',
+                borderColor: t.highlight ? undefined : 'var(--color-border-dark)',
               }}>
-                Book This
+                Book this
               </a>
-            </div>
+            </article>
           </Reveal>
         ))}
       </div>
 
-      {/* Add-on row */}
       <Reveal>
         <div style={{
-          padding: '2rem 3rem',
-          borderTop: '1px solid rgba(237,232,223,0.07)',
+          maxWidth: '1240px',
+          margin: '2rem auto 0',
+          paddingTop: '1.5rem',
+          borderTop: '1px solid var(--color-border-dark)',
           display: 'flex',
           alignItems: 'center',
-          gap: '1.5rem',
+          gap: '1rem',
           flexWrap: 'wrap',
         }}>
-          <span style={{
-            display: 'inline-block',
-            width: '4px',
-            height: '4px',
-            borderRadius: '50%',
+          <span aria-hidden="true" style={{
+            width: '5px',
+            height: '5px',
+            borderRadius: '999px',
             background: 'var(--color-amber)',
             flexShrink: 0,
           }} />
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', color: 'rgba(237,232,223,0.45)', fontWeight: 400 }}>
-            Add firecrackers (handheld sparkler cannons) for <strong style={{ color: 'rgba(237,232,223,0.65)', fontWeight: 600 }}>$75</strong> flat.
+          <span className="t-body-dark" style={{ color: 'var(--color-muted-light)' }}>
+            Add firecrackers (handheld sparkler cannons) for <strong style={{ color: 'var(--color-sand)', fontWeight: 600 }}>$75</strong> flat.
           </span>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'rgba(237,232,223,0.25)', fontWeight: 400 }}>
+          <span className="t-body-dark" style={{ color: 'var(--color-muted-light)' }}>
             Travel fee ($50) applies outside Calgary city limits.
           </span>
         </div>
