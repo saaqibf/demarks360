@@ -22,106 +22,89 @@ export function Hero() {
         <source src="https://res.cloudinary.com/dfonotyfb/video/upload/v1775585556/dds3_1_rqhg7x.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlay */}
+      {/* Overlay — darker at edges, golden-hour center */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1,
-        background: 'linear-gradient(160deg, rgba(26,23,20,0.85) 0%, rgba(26,23,20,0.40) 45%, rgba(26,23,20,0.78) 100%)',
+        background: 'radial-gradient(ellipse at 50% 45%, rgba(20,16,9,0.30) 0%, rgba(20,16,9,0.78) 90%), linear-gradient(rgba(20,16,9,0.55), rgba(20,16,9,0.35) 40%, rgba(20,16,9,0.7))',
       }} />
 
-      {/* Amber corner wash */}
+      {/* Amber light wash */}
       <div style={{
-        position: 'absolute', bottom: 0, left: 0, width: '50%', height: '55%', zIndex: 2,
-        background: 'radial-gradient(ellipse at 0% 100%, rgba(212,133,106,0.14) 0%, transparent 60%)',
+        position: 'absolute', bottom: 0, left: '15%', width: '70%', height: '60%', zIndex: 2,
+        background: 'radial-gradient(ellipse at 50% 100%, rgba(201,145,63,0.18) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
-      {/* Content — centered vertically */}
-      <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div className="hero-body" style={{ paddingBottom: '8rem', paddingTop: '10rem' }}>
+      {/* Letterbox bars */}
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: '#0c0a06', zIndex: 5 }} />
+      <div aria-hidden style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: '#0c0a06', zIndex: 5 }} />
+
+      {/* Content — centered like a title card */}
+      <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+        <div className="hero-body" style={{ paddingBottom: '9rem', paddingTop: '8rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {/* Kicker */}
           <p className="hero-label" style={{
             fontFamily: 'var(--font-body)',
             fontSize: '0.62rem',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
+            fontWeight: 500,
+            letterSpacing: '0.5em',
             textTransform: 'uppercase',
-            color: 'rgba(237,232,223,0.50)',
-            marginBottom: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
+            color: 'var(--color-amber-light)',
+            marginBottom: '1.8rem',
           }}>
-            <span style={{ display: 'inline-block', width: '28px', height: '1px', background: 'var(--color-amber)', flexShrink: 0 }} />
-            Calgary &amp; Area · 360 Video Booth
+            Calgary&apos;s 360° slow-motion video booth
           </p>
 
           {/* Main heading */}
           <h1 className="hero-headline" style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(3.8rem, 9vw, 9.5rem)',
-            fontWeight: 900,
-            lineHeight: 0.92,
-            color: 'var(--color-sand)',
-            letterSpacing: '-0.01em',
-            textTransform: 'uppercase',
+            fontSize: 'clamp(3rem, 9vw, 8rem)',
+            fontWeight: 400,
+            lineHeight: 0.98,
+            color: 'var(--color-text-light)',
+            letterSpacing: '-0.015em',
             marginBottom: '0',
-            maxWidth: '900px',
+            maxWidth: '1000px',
           }}>
-            Every Moment,
+            Every angle
             <br />
-            <span style={{ color: 'var(--color-amber)' }}>
-              Captured.
-            </span>
+            of <em style={{ fontStyle: 'italic', color: 'var(--color-amber-light)' }}>the moment.</em>
           </h1>
 
           {/* Sub */}
           <p className="hero-sub" style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '0.95rem',
-            fontWeight: 400,
-            color: 'rgba(237,232,223,0.50)',
+            fontSize: '1rem',
+            fontWeight: 300,
+            color: 'var(--color-muted-light)',
             lineHeight: 1.7,
-            maxWidth: '380px',
-            marginTop: '2.25rem',
+            maxWidth: '36ch',
+            marginTop: '2.2rem',
           }}>
-            360° slow-motion video booth, same-day gallery delivery. Serving Calgary and surrounding areas.
+            Cinematic slow-motion video of your guests, captured in one spin and delivered the same day.
           </p>
 
           {/* CTAs */}
-          <div className="hero-ctas" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
-            <a href="/book" style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--color-charcoal)',
-              background: 'var(--color-sand)',
-              padding: '1rem 2.75rem',
-              borderRadius: '3px',
-              textDecoration: 'none',
-              display: 'inline-block',
-              transition: 'background 0.2s ease',
-              whiteSpace: 'nowrap',
-            }}>
-              Book Your Experience
+          <div className="hero-ctas" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.1rem', marginTop: '2.6rem', flexWrap: 'wrap' }}>
+            <a href="/book" className="btn-primary" style={{ whiteSpace: 'nowrap' }}>
+              Check your date
             </a>
             <a href="#pricing" style={{
               fontFamily: 'var(--font-body)',
               fontSize: '0.72rem',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
+              fontWeight: 400,
+              letterSpacing: '0.26em',
               textTransform: 'uppercase',
-              color: 'rgba(237,232,223,0.45)',
+              color: 'var(--color-text-light)',
+              border: '1px solid rgba(243,234,217,0.35)',
+              padding: '0.95rem 2.5rem',
+              borderRadius: '999px',
               textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              transition: 'color 0.2s ease',
+              display: 'inline-block',
+              transition: 'background 0.3s ease, color 0.3s ease',
               whiteSpace: 'nowrap',
             }}>
-              See Pricing
-              <span style={{ display: 'inline-block', width: '18px', height: '1px', background: 'currentColor' }} />
+              See pricing
             </a>
           </div>
         </div>
@@ -129,27 +112,27 @@ export function Hero() {
 
       {/* Bottom stat bar */}
       <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10,
-        borderTop: '1px solid rgba(237,232,223,0.08)',
-        background: 'rgba(26,23,20,0.6)',
+        position: 'absolute', bottom: 'clamp(18px, 4vh, 42px)', left: 0, right: 0, zIndex: 10,
+        borderTop: '1px solid rgba(243,234,217,0.08)',
+        background: 'rgba(20,16,9,0.55)',
         backdropFilter: 'blur(10px)',
       }}>
         <div className="hero-body" style={{ paddingTop: '1.25rem', paddingBottom: '1.25rem' }}>
-          <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             {[
-              { val: '150+', label: 'Events Captured' },
-              { val: '5.0★', label: 'Client Rating' },
-              { val: 'Same Day', label: 'Gallery Delivery' },
-              { val: 'YYC', label: 'Calgary & Area' },
+              { val: '150+', label: 'Events captured' },
+              { val: '5.0★', label: 'Client rating' },
+              { val: 'Same day', label: 'Gallery delivery' },
+              { val: 'YYC', label: 'Calgary & area' },
             ].map(({ val, label }) => (
-              <div key={val}>
+              <div key={val} style={{ textAlign: 'center' }}>
                 <span style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: '1.1rem',
-                  fontWeight: 800,
+                  fontStyle: 'italic',
+                  fontSize: '1.15rem',
+                  fontWeight: 500,
                   letterSpacing: '0.02em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-sand)',
+                  color: 'var(--color-amber-light)',
                   display: 'block',
                   lineHeight: 1,
                 }}>
@@ -158,12 +141,12 @@ export function Hero() {
                 <span style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.55rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.16em',
+                  fontWeight: 500,
+                  letterSpacing: '0.22em',
                   textTransform: 'uppercase',
-                  color: 'rgba(237,232,223,0.35)',
+                  color: 'var(--color-muted-light)',
                   display: 'block',
-                  marginTop: '0.25rem',
+                  marginTop: '0.3rem',
                 }}>
                   {label}
                 </span>

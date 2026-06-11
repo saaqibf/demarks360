@@ -1,30 +1,30 @@
-/* Bebas Neue (wordmark only) + Barlow Condensed (display/headings) + Barlow (body/UI) */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap');
+/* Bodoni Moda (wordmark/display/headings) + Figtree (body/UI) — Golden Hour Cinema */
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Figtree:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* ── Obsidian + Rose Gold palette ── */
-  --color-sand:         #FAF4F2;
-  --color-sand-2:       #F2E8E4;
-  --color-sand-3:       #F8F0EE;
-  --color-charcoal:     #0C0808;
-  --color-charcoal-2:   #160D0D;
-  --color-charcoal-3:   #1E1010;
-  --color-text:         #0C0808;
-  --color-text-light:   #FAF4F2;
-  --color-muted:        #8A6A60;
-  --color-muted-light:  #B09088;
-  --color-amber:        #D4856A;
-  --color-amber-light:  #E0A892;
-  --color-border-dark:  rgba(255,255,255,0.08);
-  --color-border-light: rgba(12,8,8,0.1);
+  /* ── Golden Hour Cinema palette ── */
+  --color-sand:         #F5EFE2;
+  --color-sand-2:       #EFE6D2;
+  --color-sand-3:       #FAF6EC;
+  --color-charcoal:     #141009;
+  --color-charcoal-2:   #1A140B;
+  --color-charcoal-3:   #221A0F;
+  --color-text:         #1C1610;
+  --color-text-light:   #F3EAD9;
+  --color-muted:        #7A6C52;
+  --color-muted-light:  #B9AD97;
+  --color-amber:        #C9913F;
+  --color-amber-light:  #E8B25C;
+  --color-border-dark:  rgba(243,234,217,0.10);
+  --color-border-light: rgba(28,22,16,0.12);
 
   /* ── Font stack ── */
-  --font-wordmark: 'Bebas Neue', 'Barlow Condensed', system-ui, sans-serif;
-  --font-display: 'Barlow Condensed', system-ui, sans-serif;
-  --font-serif:   'Barlow Condensed', system-ui, sans-serif;
-  --font-body:    'Barlow', system-ui, sans-serif;
-  --font-ui:      'Barlow', system-ui, sans-serif;
+  --font-wordmark: 'Bodoni Moda', Georgia, serif;
+  --font-display: 'Bodoni Moda', Georgia, serif;
+  --font-serif:   'Bodoni Moda', Georgia, serif;
+  --font-body:    'Figtree', system-ui, sans-serif;
+  --font-ui:      'Figtree', system-ui, sans-serif;
 
   /* ── Type scale — perfect fourth (1.333×), fluid headings ── */
   /* xs   → 0.75rem  (12px) labels, legal                    */
@@ -44,9 +44,9 @@
   --text-3xl:     clamp(3.5rem, 7vw, 5.5rem);
 
   /* ── Aliases for booking/gallery/admin surfaces ── */
-  --color-ink:      #0C0808;
-  --color-surface:  #160D0D;
-  --color-surface-2:#1E1010;
+  --color-ink:      #141009;
+  --color-surface:  #1A140B;
+  --color-surface-2:#221A0F;
   --color-crimson:  #C0293A;
 }
 
@@ -71,30 +71,34 @@ body {
 .t-display {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: 900;
-  line-height: 0.92;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  text-transform: none;
+}
+.t-display em, .t-heading em, .t-subheading em {
+  font-style: italic;
+  color: var(--color-amber-light);
 }
 
 /* Heading — section headings */
 .t-heading {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: 800;
-  line-height: 0.95;
+  font-weight: 400;
+  line-height: 1.02;
   letter-spacing: -0.01em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* Sub-heading — card titles, step titles */
 .t-subheading {
   font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: 700;
-  line-height: 1.05;
+  font-weight: 500;
+  line-height: 1.08;
   letter-spacing: 0;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 /* Body — all paragraph copy, max 65ch */
@@ -161,41 +165,41 @@ body {
 /* ─── Buttons ────────────────────────────────────────────────────── */
 .btn-primary {
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--color-text-light);
-  background: var(--color-charcoal);
-  padding: 0.9rem 2.5rem;
-  border-radius: 3px;
+  color: var(--color-charcoal);
+  background: var(--color-amber-light);
+  padding: 0.95rem 2.5rem;
+  border-radius: 999px;
   text-decoration: none;
   display: inline-block;
-  transition: background 0.2s cubic-bezier(.16,1,.3,1), transform 0.2s cubic-bezier(.16,1,.3,1);
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease;
   border: none;
   cursor: pointer;
   min-height: 44px;
 }
-.btn-primary:hover { background: var(--color-charcoal-2); transform: translateY(-1px); }
+.btn-primary:hover { transform: scale(1.04); box-shadow: 0 12px 44px rgba(232,178,92,0.35); }
 
 .btn-secondary {
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--color-text);
   background: transparent;
-  padding: 0.9rem 2.5rem;
-  border-radius: 3px;
+  padding: 0.95rem 2.5rem;
+  border-radius: 999px;
   text-decoration: none;
   display: inline-block;
-  transition: background 0.2s ease;
-  border: 1.5px solid rgba(12,8,8,0.25);
+  transition: background 0.3s ease, color 0.3s ease;
+  border: 1px solid rgba(28,22,16,0.3);
   cursor: pointer;
   min-height: 44px;
 }
-.btn-secondary:hover { background: rgba(12,8,8,0.05); }
+.btn-secondary:hover { background: var(--color-charcoal); color: var(--color-text-light); }
 
 .btn-ghost {
   font-family: var(--font-body);
@@ -378,7 +382,7 @@ button, a, [role="button"] { min-height: 44px; }
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.018;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
