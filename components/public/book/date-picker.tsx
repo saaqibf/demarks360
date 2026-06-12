@@ -33,19 +33,13 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
   const [fullDates, setFullDates] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    const year = viewYear
-    const month = viewMonth
-    const daysInMonth = getDaysInMonth(year, month)
-    const fetches = Array.from({ length: daysInMonth }, (_, i) => {
-      const d = toDateStr(year, month, i + 1)
-      return fetch(`/api/availability?date=${d}`)
-        .then((r) => r.ok ? r.json() : Promise.resolve({ status: 'available' }))
-        .then((data: { status: string }) => (data.status !== 'available' ? d : null))
-        .catch(() => null)
-    })
-    Promise.all(fetches).then((results) => {
-      setFullDates(new Set(results.filter(Boolean) as string[]))
-    })
+    const month = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}`
+    fetch(`/api/availability?month=${month}`)
+      .then((r) => (r.ok ? r.json() : Promise.resolve({ unavailableDates: [] })))
+      .then((data: { unavailableDates?: string[] }) => {
+        setFullDates(new Set(data.unavailableDates ?? []))
+      })
+      .catch(() => {})
   }, [viewYear, viewMonth])
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth)

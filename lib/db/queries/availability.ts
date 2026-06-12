@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { bookings, availabilityBlocks } from '@/lib/db/schema'
-import { eq, asc } from 'drizzle-orm'
+import { eq, asc, and, gte, lte } from 'drizzle-orm'
 
 export interface BookedSlot {
   startTime: string
@@ -43,6 +43,20 @@ export async function getAvailabilityForDate(date: string): Promise<Availability
     adminBlocks,
     bookingCount: activeBookings.length,
   }
+}
+
+export async function getAvailabilityForDateRange(firstDate: string, lastDate: string) {
+  const [rangeBookings, rangeBlocks] = await Promise.all([
+    db
+      .select({ eventDate: bookings.eventDate, status: bookings.status })
+      .from(bookings)
+      .where(and(gte(bookings.eventDate, firstDate), lte(bookings.eventDate, lastDate))),
+    db
+      .select({ blockedDate: availabilityBlocks.blockedDate })
+      .from(availabilityBlocks)
+      .where(and(gte(availabilityBlocks.blockedDate, firstDate), lte(availabilityBlocks.blockedDate, lastDate))),
+  ])
+  return { rangeBookings, rangeBlocks }
 }
 
 export async function getAllBlocks() {
