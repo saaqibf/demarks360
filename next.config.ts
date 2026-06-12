@@ -16,7 +16,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://*.stripe.com https://img.clerk.com https://*.cloudfront.net https://image.mux.com",
-      "media-src 'self' https://stream.mux.com https://*.mux.com blob:",
+      "media-src 'self' https://stream.mux.com https://*.mux.com https://res.cloudinary.com blob:",
       "connect-src 'self' https://*.stripe.com https://*.clerk.com https://*.clerk.accounts.dev https://*.sentry.io wss://*.pusher.com https://*.mux.com https://api.mux.com",
       "frame-src https://*.stripe.com https://*.clerk.com https://*.clerk.accounts.dev",
       "worker-src blob:",
