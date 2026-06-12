@@ -32,11 +32,11 @@ export default async function GalleryPage({ params }: Props) {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
       {/* Header */}
-      <div style={{ background: '#0a0a0a', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem 3rem' }}>
+      <div style={{ background: 'var(--color-ink)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem 3rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#fff', margin: 0 }}>
-              DEMARKS <span style={{ color: 'var(--color-crimson)' }}>360</span>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 500, color: 'var(--color-text-light)', margin: 0 }}>
+              DEMARKS <span style={{ color: 'var(--color-amber)' }}>360</span>
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -54,8 +54,8 @@ export default async function GalleryPage({ params }: Props) {
         {/* Event info strip */}
         <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '3rem', paddingBottom: '2rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <div>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-crimson)', margin: '0 0 0.35rem' }}>Event</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-text)', margin: 0 }}>{b.eventType}</p>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-amber)', margin: '0 0 0.35rem' }}>Event</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)', margin: 0 }}>{b.eventType}</p>
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', margin: '0 0 0.35rem' }}>Date</p>
@@ -67,7 +67,7 @@ export default async function GalleryPage({ params }: Props) {
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', margin: '0 0 0.35rem' }}>Videos</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-text)', margin: 0 }}>{items.length}</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)', margin: 0 }}>{items.length}</p>
           </div>
         </div>
 
@@ -77,8 +77,8 @@ export default async function GalleryPage({ params }: Props) {
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', margin: '0 0 0.5rem' }}>
                 {items.length} video{items.length !== 1 ? 's' : ''} · tap to play · right-click to download
               </p>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 900, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-text)', margin: 0 }}>
-                Your Moments
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 400, color: 'var(--color-text-light)', margin: 0 }}>
+                Your moments
               </h2>
             </div>
 
@@ -91,17 +91,17 @@ export default async function GalleryPage({ params }: Props) {
         ) : (
           <div style={{ textAlign: 'center', padding: '6rem 2rem' }}>
             {/* Animated icon */}
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid rgba(192,41,58,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', fontSize: '1.5rem' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid rgba(201,145,63,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', fontSize: '1.5rem' }}>
               🎬
             </div>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-crimson)', marginBottom: '0.75rem' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '0.75rem' }}>
               Coming Soon
             </p>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-text)', marginBottom: '1rem' }}>
-              Your Videos<br />Are Being Prepared
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>
+              Your videos<br />are being prepared
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'rgba(245,240,234,0.45)', fontWeight: 300, lineHeight: 1.75, maxWidth: '400px', margin: '0 auto' }}>
-              We&apos;re processing your 360 recordings. You&apos;ll receive an email when everything is ready — usually the same day as your event.
+              We&apos;re processing your 360 recordings. You&apos;ll receive an email when everything is ready, usually the same day as your event.
             </p>
           </div>
         )}

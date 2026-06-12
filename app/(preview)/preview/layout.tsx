@@ -12,19 +12,19 @@ function PreviewSidebar() {
     <aside style={{
       width: '220px',
       flexShrink: 0,
-      background: 'var(--color-sand-2)',
-      borderRight: '1px solid var(--color-border-light)',
+      background: 'var(--color-ink)',
+      borderRight: '1px solid rgba(255,255,255,0.06)',
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
       position: 'sticky',
       top: 0,
     }}>
-      <div style={{ padding: '1.5rem 1.25rem', borderBottom: '1px solid var(--color-border-light)' }}>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-charcoal)' }}>
-          DEMARKS <span style={{ color: 'var(--color-crimson)' }}>360</span>
+      <div style={{ padding: '1.5rem 1.25rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 500, color: 'var(--color-text-light)' }}>
+          DEMARKS <span style={{ color: 'var(--color-amber)' }}>360</span>
         </p>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-muted)', marginTop: '0.2rem' }}>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.25)', marginTop: '0.2rem' }}>
           Admin Panel
         </p>
       </div>
@@ -46,29 +46,29 @@ function PreviewSidebar() {
               fontSize: '0.72rem',
               fontWeight: 600,
               letterSpacing: '0.04em',
-              color: 'var(--color-muted)',
+              color: 'rgba(245,240,234,0.45)',
               transition: 'all 0.15s',
             }}
           >
-            <Icon size={14} style={{ flexShrink: 0, color: 'var(--color-muted-light)' }} />
+            <Icon size={14} style={{ flexShrink: 0, color: 'rgba(245,240,234,0.3)' }} />
             {label}
           </Link>
         ))}
       </nav>
 
-      <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--color-border-light)' }}>
+      <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <span style={{
           display: 'inline-block',
           padding: '0.25rem 0.65rem',
-          background: 'rgba(192,41,58,0.08)',
-          border: '1px solid rgba(192,41,58,0.25)',
-          borderRadius: '4px',
+          background: 'rgba(201,145,63,0.12)',
+          border: '1px solid rgba(201,145,63,0.35)',
+          borderRadius: '999px',
           fontFamily: 'var(--font-ui)',
           fontSize: '0.5rem',
           fontWeight: 700,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: 'var(--color-crimson)',
+          color: 'var(--color-amber-light)',
         }}>
           Preview Mode
         </span>
@@ -79,7 +79,7 @@ function PreviewSidebar() {
 
 export default function PreviewLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-sand)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-ink)' }}>
       <PreviewSidebar />
       <main style={{ flex: 1, overflow: 'auto', minHeight: '100vh' }}>
         {children}

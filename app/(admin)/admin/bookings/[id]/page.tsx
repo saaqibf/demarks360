@@ -8,7 +8,7 @@ import { DeviceUpload } from './device-upload'
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
   pending:   { bg: 'rgba(251,191,36,0.12)',   color: '#FBB724' },
   confirmed: { bg: 'rgba(52,211,153,0.10)',   color: '#34D399' },
-  cancelled: { bg: 'rgba(192,41,58,0.12)',    color: '#C0293A' },
+  cancelled: { bg: 'rgba(201,145,63,0.12)',    color: 'var(--color-amber)' },
   completed: { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
 }
 
@@ -56,8 +56,8 @@ export default async function BookingDetailPage({ params }: Props) {
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.4rem' }}>
             Booking · {b.id.slice(0, 12).toUpperCase()}
           </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 900, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-text)', lineHeight: 1, marginBottom: '0.5rem' }}>
-            {c?.name ?? 'Unknown Customer'}
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1, marginBottom: '0.5rem' }}>
+            {c?.name ?? 'Unknown customer'}
           </h1>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.5)' }}>{fmtDate(b.eventDate)}</p>
         </div>
@@ -79,7 +79,7 @@ export default async function BookingDetailPage({ params }: Props) {
           ].map(({ label, value }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text)', textAlign: 'right', maxWidth: '55%' }}>{value}</span>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)', textAlign: 'right', maxWidth: '55%' }}>{value}</span>
             </div>
           ))}
         </div>
@@ -88,17 +88,17 @@ export default async function BookingDetailPage({ params }: Props) {
         <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '1rem' }}>Customer & Payment</p>
           {[
-            { label: 'Name', value: c?.name ?? '—' },
-            { label: 'Email', value: c?.email ?? '—' },
-            { label: 'Phone', value: c?.phone ?? '—' },
+            { label: 'Name', value: c?.name ?? 'Not set' },
+            { label: 'Email', value: c?.email ?? 'Not set' },
+            { label: 'Phone', value: c?.phone ?? 'Not set' },
             { label: 'Deposit Paid', value: `$${Number(b.depositAmount ?? 0).toFixed(2)}` },
             { label: 'Balance Due', value: `$${Number(b.balanceAmount ?? 0).toFixed(2)}` },
-            { label: 'Balance Date', value: balanceDate ?? '—' },
-            { label: 'Gallery Token', value: b.galleryToken ?? '—' },
+            { label: 'Balance Date', value: balanceDate ?? 'Not set' },
+            { label: 'Gallery Token', value: b.galleryToken ?? 'Not set' },
           ].map(({ label, value }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text)', textAlign: 'right', maxWidth: '55%' }}>{value}</span>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)', textAlign: 'right', maxWidth: '55%' }}>{value}</span>
             </div>
           ))}
         </div>
@@ -134,7 +134,7 @@ export default async function BookingDetailPage({ params }: Props) {
           <Link
             href={`/gallery/${b.galleryToken}`}
             target="_blank"
-            style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-crimson)', textDecoration: 'none' }}
+            style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-amber-light)', textDecoration: 'none' }}
           >
             Preview Gallery →
           </Link>

@@ -18,7 +18,7 @@ const EVENT_TYPES = [
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.85rem 1rem',
   border: '1px solid rgba(255,255,255,0.08)', background: 'var(--color-surface)',
-  fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-text)',
+  fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-text-light)',
   outline: 'none', boxSizing: 'border-box',
 }
 
@@ -51,12 +51,12 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-crimson)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-crimson)' }} />
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-amber)' }} />
         Step 4
       </p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)', marginBottom: '2.5rem' }}>
-        Your Details
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 400, lineHeight: 0.95, color: 'var(--color-text-light)', marginBottom: '2.5rem' }}>
+        Your details
       </h2>
 
       <div style={{ maxWidth: '560px', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -68,7 +68,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             onChange={e => onChange({ customerName: e.target.value })}
             placeholder="Jane Smith"
           />
-          {errors.customerName && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerName}</p>}
+          {errors.customerName && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerName}</p>}
         </div>
 
         <div>
@@ -80,7 +80,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             onChange={e => onChange({ customerEmail: e.target.value })}
             placeholder="jane@example.com"
           />
-          {errors.customerEmail && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerEmail}</p>}
+          {errors.customerEmail && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerEmail}</p>}
         </div>
 
         <div>
@@ -92,7 +92,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             onChange={e => onChange({ customerPhone: e.target.value })}
             placeholder="(403) 555-0123"
           />
-          {errors.customerPhone && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerPhone}</p>}
+          {errors.customerPhone && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerPhone}</p>}
         </div>
 
         <div>
@@ -103,7 +103,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             onChange={e => onChange({ locationAddress: e.target.value })}
             placeholder="123 Main Street NW"
           />
-          {errors.locationAddress && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.locationAddress}</p>}
+          {errors.locationAddress && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.locationAddress}</p>}
         </div>
 
         <div>
@@ -146,7 +146,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
               autoFocus
             />
           )}
-          {errors.eventType && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventType}</p>}
+          {errors.eventType && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventType}</p>}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginTop: '0.5rem' }}>
@@ -155,24 +155,24 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             id="tos"
             checked={state.agreedToTerms}
             onChange={e => onChange({ agreedToTerms: e.target.checked })}
-            style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: '#C0293A', flexShrink: 0, cursor: 'pointer' }}
+            style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: 'var(--color-amber-light)', flexShrink: 0, cursor: 'pointer' }}
           />
           <label htmlFor="tos" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.55)', lineHeight: 1.6, cursor: 'pointer' }}>
             I have read and agree to the{' '}
-            <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-crimson)', textDecoration: 'underline' }}>Terms of Service</a>
+            <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Terms of Service</a>
             {' '}and{' '}
-            <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-crimson)', textDecoration: 'underline' }}>Privacy Policy</a>.
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Privacy Policy</a>.
             I understand my 30% deposit is non-refundable.
           </label>
         </div>
-        {errors.agreedToTerms && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginTop: '-0.75rem' }}>{errors.agreedToTerms}</p>}
+        {errors.agreedToTerms && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '-0.75rem' }}>{errors.agreedToTerms}</p>}
       </div>
 
       <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <button
           onClick={handleSubmit}
           style={{
-            background: 'var(--color-crimson)', color: '#fff', border: 'none',
+            background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px',
             padding: '0.85rem 2rem', fontFamily: 'var(--font-ui)', fontSize: '0.7rem',
             fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
           }}

@@ -14,7 +14,7 @@ export function GalleryPlayer({ playbackId, index, title }: Props) {
         playbackId={playbackId}
         streamType="on-demand"
         style={{ width: '100%', height: '100%' }}
-        accentColor="#C0293A"
+        accentColor="var(--color-amber-light)"
         thumbnailTime={1}
       />
       <div style={{

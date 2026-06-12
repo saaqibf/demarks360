@@ -1,10 +1,10 @@
 import Link from 'next/link'
 
 const STATUS_STYLES: Record<string, { bg: string; color: string; border: string }> = {
-  pending:   { bg: 'rgba(212,133,106,0.1)',  color: 'var(--color-amber)',  border: 'rgba(212,133,106,0.3)' },
+  pending:   { bg: 'rgba(201,145,63,0.12)',  color: 'var(--color-amber)',  border: 'rgba(201,145,63,0.35)' },
   confirmed: { bg: 'rgba(52,168,83,0.1)',   color: '#2d8a50',             border: 'rgba(52,168,83,0.3)' },
-  cancelled: { bg: 'rgba(192,41,58,0.08)',  color: 'var(--color-crimson)', border: 'rgba(192,41,58,0.25)' },
-  completed: { bg: 'rgba(26,23,20,0.05)',   color: 'var(--color-muted)',  border: 'rgba(26,23,20,0.15)' },
+  cancelled: { bg: 'rgba(201,145,63,0.12)',  color: 'var(--color-amber)', border: 'rgba(201,145,63,0.35)' },
+  completed: { bg: 'rgba(255,255,255,0.05)',   color: 'rgba(245,240,234,0.4)',  border: 'rgba(255,255,255,0.1)' },
 }
 
 const MOCK_BOOKINGS = [
@@ -40,10 +40,10 @@ export default function PreviewDashboard() {
   return (
     <div style={{ padding: '2.5rem' }}>
       <div style={{ marginBottom: '2.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-crimson)', marginBottom: '0.5rem' }}>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '0.5rem' }}>
           Admin
         </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 400, letterSpacing: '-0.01em', color: 'var(--color-charcoal)', lineHeight: 1 }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
           Overview
         </h1>
       </div>
@@ -51,11 +51,11 @@ export default function PreviewDashboard() {
       {/* Stats */}
       <div className="admin-stats-grid">
         {stats.map(({ label, value }) => (
-          <div key={label} style={{ background: 'var(--color-sand-2)', padding: '1.5rem', border: '1px solid var(--color-border-light)' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-muted)', marginBottom: '0.5rem' }}>
+          <div key={label} style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>
               {label}
             </p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-charcoal)', lineHeight: 1 }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
               {value}
             </p>
           </div>
@@ -63,9 +63,9 @@ export default function PreviewDashboard() {
       </div>
 
       {/* Bookings table */}
-      <div style={{ border: '1px solid var(--color-border-light)', background: 'var(--color-sand-2)' }}>
-        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--color-border-light)' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-muted)' }}>
+      <div style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'var(--color-surface)' }}>
+        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)' }}>
             All Bookings
           </p>
         </div>
@@ -73,9 +73,9 @@ export default function PreviewDashboard() {
         <div className="admin-table-wrap">
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--color-border-light)' }}>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                 {['Date', 'Customer', 'Event Type', 'Time', 'Status', 'Deposit', ''].map(h => (
-                  <th key={h} style={{ padding: '0.65rem 1rem', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-muted-light)' }}>
+                  <th key={h} style={{ padding: '0.65rem 1rem', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)' }}>
                     {h}
                   </th>
                 ))}
@@ -85,17 +85,17 @@ export default function PreviewDashboard() {
               {MOCK_BOOKINGS.map(b => {
                 const s = STATUS_STYLES[b.status]
                 return (
-                  <tr key={b.id} style={{ borderBottom: '1px solid var(--color-border-light)' }}>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-charcoal)', whiteSpace: 'nowrap' }}>
+                  <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)', whiteSpace: 'nowrap' }}>
                       {fmtDate(b.eventDate)}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-charcoal)', fontWeight: 600 }}>
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)', fontWeight: 600 }}>
                       {b.customerName}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted)' }}>
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.55)' }}>
                       {b.eventType}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'rgba(245,240,234,0.45)', whiteSpace: 'nowrap' }}>
                       {fmt(b.startTime)} → {fmt(b.endTime)}
                     </td>
                     <td style={{ padding: '0.9rem 1rem' }}>
@@ -103,13 +103,13 @@ export default function PreviewDashboard() {
                         {b.status}
                       </span>
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-charcoal)' }}>
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
                       ${b.deposit.toFixed(2)}
                     </td>
                     <td style={{ padding: '0.9rem 1rem' }}>
                       <Link
                         href="/preview/bookings/detail"
-                        style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-crimson)', textDecoration: 'none' }}
+                        style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-amber-light)', textDecoration: 'none' }}
                       >
                         View →
                       </Link>

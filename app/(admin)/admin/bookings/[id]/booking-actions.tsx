@@ -78,9 +78,9 @@ export function BookingActions({ bookingId, currentStatus, currentNotes }: Props
               style={{
                 padding: '0.55rem 1.1rem',
                 border: '1px solid',
-                borderColor: active ? 'var(--color-crimson)' : 'rgba(255,255,255,0.1)',
-                background: active ? 'var(--color-crimson)' : 'transparent',
-                color: active ? '#fff' : 'rgba(245,240,234,0.55)',
+                borderColor: active ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.1)',
+                background: active ? 'var(--color-amber-light)' : 'transparent',
+                color: active ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.55)',
                 fontFamily: 'var(--font-ui)',
                 fontSize: '0.62rem',
                 fontWeight: 700,
@@ -100,7 +100,7 @@ export function BookingActions({ bookingId, currentStatus, currentNotes }: Props
       {/* Notes */}
       <div>
         {error && (
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-crimson)', marginBottom: '0.75rem' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-amber-light)', marginBottom: '0.75rem' }}>
             {error}
           </p>
         )}
@@ -113,8 +113,8 @@ export function BookingActions({ bookingId, currentStatus, currentNotes }: Props
           rows={3}
           style={{
             width: '100%', boxSizing: 'border-box',
-            background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)',
-            color: 'var(--color-text)', fontFamily: 'var(--font-body)', fontSize: '0.85rem',
+            background: 'var(--color-ink)', border: '1px solid rgba(255,255,255,0.08)',
+            color: 'var(--color-text-light)', fontFamily: 'var(--font-body)', fontSize: '0.85rem',
             padding: '0.75rem', resize: 'vertical', outline: 'none',
           }}
           placeholder="Add internal notes about this booking…"
@@ -125,9 +125,10 @@ export function BookingActions({ bookingId, currentStatus, currentNotes }: Props
           style={{
             marginTop: '0.5rem',
             padding: '0.5rem 1.25rem',
-            background: notesSaved ? 'rgba(52,211,153,0.15)' : 'var(--color-crimson)',
-            color: notesSaved ? '#34D399' : '#fff',
+            background: notesSaved ? 'rgba(52,211,153,0.15)' : 'var(--color-amber-light)',
+            color: notesSaved ? '#34D399' : 'var(--color-charcoal)',
             border: 'none',
+            borderRadius: '999px',
             fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700,
             letterSpacing: '0.1em', textTransform: 'uppercase', cursor: saving ? 'not-allowed' : 'pointer',
           }}

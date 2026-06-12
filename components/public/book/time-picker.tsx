@@ -99,12 +99,12 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-crimson)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-crimson)' }} />
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-amber)' }} />
         Step 2
       </p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)', marginBottom: '0.75rem' }}>
-        {phase === 'start' ? 'Pick a Start Time' : 'Pick an End Time'}
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 400, lineHeight: 0.95, color: 'var(--color-text-light)', marginBottom: '0.75rem' }}>
+        {phase === 'start' ? 'Pick a start time' : 'Pick an end time'}
       </h2>
       <p style={{ fontSize: '0.82rem', color: 'rgba(245,240,234,0.4)', fontWeight: 300, marginBottom: '2.5rem' }}>
         {phase === 'start'
@@ -131,9 +131,9 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
               }}
               style={{
                 padding: '0.75rem 0.5rem', border: '1px solid',
-                borderColor: isSelected ? 'var(--color-crimson)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
-                background: isSelected ? 'var(--color-crimson)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
-                color: isSelected ? '#fff' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text)',
+                borderColor: isSelected ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
+                background: isSelected ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
+                color: isSelected ? 'var(--color-charcoal)' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text-light)',
                 cursor: isDisabled ? 'not-allowed' : 'pointer',
                 fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: 600,
                 transition: 'all 0.15s',
@@ -147,7 +147,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
       {phase === 'end' && selectedStart && selectedEnd && (
         <div style={{ marginTop: '2rem', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', maxWidth: '560px' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text)' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)' }}>
             <strong>{formatTime(selectedStart)}</strong> → <strong>{formatTime(selectedEnd)}</strong>
             {' · '}
             {Math.round((timeToMinutes(selectedEnd) - timeToMinutes(selectedStart)) / 60 * 10) / 10} hrs
@@ -157,9 +157,9 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
           <button
             onClick={() => onSelect(selectedStart, selectedEnd)}
             style={{
-              marginTop: '1rem', background: 'var(--color-crimson)',
-              color: '#fff', border: 'none', padding: '0.85rem 2rem',
-              fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700,
+              marginTop: '1rem', background: 'var(--color-amber-light)',
+              color: 'var(--color-charcoal)', border: 'none', padding: '0.85rem 2rem',
+              borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700,
               letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
             }}
           >

@@ -70,9 +70,9 @@ function BookPageInner() {
                   <span style={{
                     width: '22px', height: '22px', borderRadius: '50%', display: 'inline-flex',
                     alignItems: 'center', justifyContent: 'center',
-                    background: done ? 'var(--color-crimson)' : active ? '#fff' : 'transparent',
+                    background: done ? 'var(--color-amber-light)' : active ? 'var(--color-text-light)' : 'transparent',
                     border: active || done ? 'none' : '1.5px solid rgba(255,255,255,0.18)',
-                    color: active ? '#080808' : done ? '#fff' : 'rgba(245,240,234,0.3)',
+                    color: active || done ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)',
                     fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
                   }}>
                     {done ? '✓' : stepNum}
@@ -80,7 +80,7 @@ function BookPageInner() {
                   <span style={{
                     fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600,
                     letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: active ? 'var(--color-text)' : 'rgba(245,240,234,0.3)',
+                    color: active ? 'var(--color-text-light)' : 'rgba(245,240,234,0.3)',
                   }}>
                     {label}
                   </span>

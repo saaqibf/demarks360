@@ -4,7 +4,7 @@ import { getAllBookings } from '@/lib/db/queries/bookings'
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
   pending:   { bg: 'rgba(251,191,36,0.12)',   color: '#FBB724' },
   confirmed: { bg: 'rgba(52,211,153,0.10)',   color: '#34D399' },
-  cancelled: { bg: 'rgba(192,41,58,0.12)',    color: '#C0293A' },
+  cancelled: { bg: 'rgba(201,145,63,0.12)',    color: 'var(--color-amber)' },
   completed: { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
 }
 
@@ -49,10 +49,10 @@ export default async function DashboardPage() {
   return (
     <div style={{ padding: '2.5rem' }}>
       <div style={{ marginBottom: '2.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-crimson)', marginBottom: '0.5rem' }}>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '0.5rem' }}>
           Admin
         </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 900, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-text)', lineHeight: 1 }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
           Overview
         </h1>
       </div>
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>
               {label}
             </p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1 }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
               {value}
             </p>
           </div>
@@ -100,11 +100,11 @@ export default async function DashboardPage() {
                 const s = STATUS_STYLES[b.status] ?? STATUS_STYLES.pending
                 return (
                   <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text)', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)', whiteSpace: 'nowrap' }}>
                       {fmtDate(b.eventDate)}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text)' }}>
-                      {c?.name ?? '—'}
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
+                      {c?.name ?? 'Not set'}
                     </td>
                     <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.55)' }}>
                       {b.eventType}
@@ -117,13 +117,13 @@ export default async function DashboardPage() {
                         {b.status}
                       </span>
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text)' }}>
+                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
                       ${Number(b.depositAmount ?? 0).toFixed(2)}
                     </td>
                     <td style={{ padding: '0.9rem 1rem' }}>
                       <Link
                         href={`/admin/bookings/${b.id}`}
-                        style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-crimson)', textDecoration: 'none' }}
+                        style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-amber-light)', textDecoration: 'none' }}
                       >
                         View →
                       </Link>

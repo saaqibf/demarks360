@@ -8,7 +8,7 @@ interface AddonsStepProps {
 }
 
 const ADDONS = [
-  { id: 'firecrackers', name: 'Firecrackers', price: 75, desc: 'Pyro-style sparks effect — maximum visual impact', active: true },
+  { id: 'firecrackers', name: 'Firecrackers', price: 75, desc: 'Pyro-style sparks effect, maximum visual impact', active: true },
   { id: 'smilecam', name: 'SmileCam', price: 0, desc: 'AI-powered smile detection camera', active: false, comingSoon: true },
 ]
 
@@ -26,11 +26,11 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-crimson)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-crimson)' }} />
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-amber)' }} />
         Step 3
       </p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)', marginBottom: '2.5rem' }}>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 400, lineHeight: 0.95, color: 'var(--color-text-light)', marginBottom: '2.5rem' }}>
         Add-ons
       </h2>
 
@@ -56,13 +56,13 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
                   <span style={{
                     width: '18px', height: '18px', borderRadius: '2px', flexShrink: 0,
                     border: `1.5px solid ${isSelected ? 'transparent' : 'rgba(255,255,255,0.2)'}`,
-                    background: isSelected ? 'var(--color-crimson)' : 'transparent',
+                    background: isSelected ? 'var(--color-amber-light)' : 'transparent',
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#fff', fontSize: '0.7rem',
+                    color: 'var(--color-charcoal)', fontSize: '0.7rem',
                   }}>
                     {isSelected ? '✓' : ''}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-text)' }}>
+                  <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-text-light)' }}>
                     {addon.name}
                   </span>
                   {'comingSoon' in addon && addon.comingSoon && (
@@ -76,7 +76,7 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
                 </p>
               </div>
               {addon.active && (
-                <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', color: isSelected ? 'var(--color-crimson)' : 'var(--color-text)', marginLeft: '2rem', flexShrink: 0 }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 400, color: isSelected ? 'var(--color-amber-light)' : 'var(--color-text-light)', marginLeft: '2rem', flexShrink: 0 }}>
                   +${addon.price}
                 </span>
               )}
@@ -89,7 +89,7 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
         <button
           onClick={() => onNext(Array.from(selected))}
           style={{
-            background: 'var(--color-crimson)', color: '#fff', border: 'none',
+            background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px',
             padding: '0.85rem 2rem', fontFamily: 'var(--font-ui)', fontSize: '0.7rem',
             fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
           }}

@@ -25,7 +25,7 @@ function googleCalendarUrl(booking: {
   const endStr = `${dateStr}T${booking.endTime.replace(':', '')}00`
   const params = new URLSearchParams({
     action: 'TEMPLATE',
-    text: `Demarks 360 — ${booking.eventType}`,
+    text: `Demarks 360, ${booking.eventType}`,
     dates: `${startStr}/${endStr}`,
     location: `${booking.locationAddress}, ${booking.locationCity}, Alberta`,
     details: 'Your Demarks 360 360-degree video booth is confirmed for this event.',
@@ -41,8 +41,8 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-ink)' }}>
         <div style={{ textAlign: 'center' }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', color: 'var(--color-text)', marginBottom: '1rem' }}>Booking Not Found</h1>
-          <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-crimson)', textDecoration: 'underline' }}>Return to Home</Link>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>Booking not found</h1>
+          <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Return to Home</Link>
         </div>
       </div>
     )
@@ -59,14 +59,14 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
     <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '4rem 3rem' }}>
         <div style={{ marginBottom: '3rem' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-crimson)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <span style={{ color: '#fff', fontSize: '1.25rem' }}>✓</span>
+          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-amber-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            <span style={{ color: 'var(--color-charcoal)', fontSize: '1.25rem' }}>✓</span>
           </div>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', marginBottom: '0.5rem' }}>
             Booking Confirmed
           </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)' }}>
-            You&apos;re Booked!
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 400, lineHeight: 0.95, color: 'var(--color-text-light)' }}>
+            You&apos;re booked
           </h1>
           <p style={{ fontSize: '0.88rem', color: 'rgba(245,240,234,0.5)', lineHeight: 1.75, fontWeight: 300, marginTop: '1rem' }}>
             A confirmation email has been sent. Check your inbox for the receipt and event details.
@@ -76,7 +76,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
         <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', marginBottom: '1.5rem' }}>
           <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>Event Details</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: 'var(--color-text)' }}>{eventDate}</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)' }}>{eventDate}</p>
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', color: 'rgba(245,240,234,0.6)', marginTop: '0.25rem' }}>
               {formatTime(booking.startTime)} → {formatTime(booking.endTime)}
               {' · '}{booking.eventType}
@@ -89,12 +89,12 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
           {[
             { label: 'Deposit Paid', value: `$${Number(booking.depositAmount).toFixed(2)}` },
             { label: 'Balance Due', value: `$${Number(booking.balanceAmount).toFixed(2)}` },
-            { label: 'Balance Charge Date', value: balanceDate ?? '—' },
+            { label: 'Balance Charge Date', value: balanceDate ?? 'Not set' },
             { label: 'Booking Reference', value: booking.id.slice(0, 12).toUpperCase() },
           ].map(({ label, value }) => (
             <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text)', fontWeight: 600 }}>{value}</span>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', fontWeight: 600 }}>{value}</span>
             </div>
           ))}
 
@@ -113,7 +113,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             style={{
               fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700,
               letterSpacing: '0.1em', textTransform: 'uppercase',
-              color: '#fff', background: 'var(--color-crimson)',
+              color: 'var(--color-charcoal)', background: 'var(--color-amber-light)', borderRadius: '999px',
               padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block',
             }}
           >
@@ -124,7 +124,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             style={{
               fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600,
               letterSpacing: '0.1em', textTransform: 'uppercase',
-              color: 'var(--color-text)', border: '1px solid rgba(255,255,255,0.15)',
+              color: 'var(--color-text-light)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '999px',
               padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block',
             }}
           >

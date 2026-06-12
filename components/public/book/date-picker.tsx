@@ -61,12 +61,12 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-crimson)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-crimson)' }} />
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+        <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-amber)' }} />
         Step 1
       </p>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.02em', lineHeight: 0.9, color: 'var(--color-text)', marginBottom: '2.5rem' }}>
-        Pick a Date
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 400, lineHeight: 0.95, color: 'var(--color-text-light)', marginBottom: '2.5rem' }}>
+        Pick a date
       </h2>
 
       <div style={{ maxWidth: '480px', border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)' }}>
@@ -78,7 +78,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
           >
             ←
           </button>
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', letterSpacing: '0.04em', color: 'var(--color-text)' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)' }}>
             {MONTH_NAMES[viewMonth]} {viewYear}
           </span>
           <button
@@ -116,9 +116,9 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
                   border: 'none', cursor: disabled ? 'not-allowed' : 'pointer',
                   padding: '0.6rem 0', margin: '2px', borderRadius: '2px',
                   textAlign: 'center',
-                  fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: selected ? 700 : 400,
-                  background: selected ? 'var(--color-crimson)' : 'transparent',
-                  color: selected ? '#fff' : disabled ? 'rgba(15,15,15,0.2)' : isFull ? 'var(--color-crimson)' : 'var(--color-text)',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: selected ? 600 : 400,
+                  background: selected ? 'var(--color-amber-light)' : 'transparent',
+                  color: selected ? 'var(--color-charcoal)' : disabled ? 'rgba(243,234,217,0.18)' : isFull ? 'var(--color-amber)' : 'var(--color-text-light)',
                   transition: 'background 0.15s',
                 }}
                 title={isFull ? 'Fully booked' : undefined}
@@ -132,7 +132,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
         {/* Legend */}
         <div style={{ padding: '0.75rem 1.5rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.35)' }}>
-            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-crimson)' }} />
+            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-amber)' }} />
             Fully booked
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.35)' }}>

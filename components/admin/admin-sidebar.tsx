@@ -17,7 +17,7 @@ export function AdminSidebar() {
     <aside style={{
       width: '220px',
       flexShrink: 0,
-      background: '#0a0a0a',
+      background: 'var(--color-ink)',
       borderRight: '1px solid rgba(255,255,255,0.06)',
       display: 'flex',
       flexDirection: 'column',
@@ -27,8 +27,8 @@ export function AdminSidebar() {
     }}>
       {/* Logo */}
       <div style={{ padding: '1.5rem 1.25rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#fff' }}>
-          DEMARKS <span style={{ color: 'var(--color-crimson)' }}>360</span>
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 500, color: 'var(--color-text-light)' }}>
+          DEMARKS <span style={{ color: 'var(--color-amber)' }}>360</span>
         </p>
         <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.25)', marginTop: '0.2rem' }}>
           Admin Panel
@@ -55,12 +55,12 @@ export function AdminSidebar() {
                 fontSize: '0.72rem',
                 fontWeight: active ? 700 : 500,
                 letterSpacing: '0.04em',
-                color: active ? '#fff' : 'rgba(245,240,234,0.45)',
+                color: active ? 'var(--color-text-light)' : 'rgba(245,240,234,0.45)',
                 background: active ? 'rgba(255,255,255,0.07)' : 'transparent',
                 transition: 'all 0.15s',
               }}
             >
-              <Icon size={14} style={{ flexShrink: 0, color: active ? 'var(--color-crimson)' : 'rgba(245,240,234,0.3)' }} />
+              <Icon size={14} style={{ flexShrink: 0, color: active ? 'var(--color-amber)' : 'rgba(245,240,234,0.3)' }} />
               {label}
             </Link>
           )

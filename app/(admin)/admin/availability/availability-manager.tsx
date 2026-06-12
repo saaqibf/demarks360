@@ -72,8 +72,8 @@ export function AvailabilityManager({ initialBlocks }: Props) {
   }
 
   const inputStyle: React.CSSProperties = {
-    background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)',
-    color: 'var(--color-text)', fontFamily: 'var(--font-body)', fontSize: '0.85rem',
+    background: 'var(--color-ink)', border: '1px solid rgba(255,255,255,0.08)',
+    color: 'var(--color-text-light)', fontFamily: 'var(--font-body)', fontSize: '0.85rem',
     padding: '0.65rem 0.75rem', outline: 'none', width: '100%', boxSizing: 'border-box',
   }
   const labelStyle: React.CSSProperties = {
@@ -131,13 +131,13 @@ export function AvailabilityManager({ initialBlocks }: Props) {
           />
         </div>
 
-        {error && <p style={{ color: 'var(--color-crimson)', fontSize: '0.72rem', marginBottom: '0.75rem' }}>{error}</p>}
+        {error && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginBottom: '0.75rem' }}>{error}</p>}
 
         <button
           onClick={addBlock}
           disabled={saving}
           style={{
-            background: 'var(--color-crimson)', color: '#fff', border: 'none',
+            background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px',
             padding: '0.65rem 1.5rem', fontFamily: 'var(--font-ui)', fontSize: '0.65rem',
             fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
             cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1,
@@ -163,7 +163,7 @@ export function AvailabilityManager({ initialBlocks }: Props) {
           blocks.map(block => (
             <div key={block.id} style={{ padding: '0.9rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
               <div>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-text)' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-text-light)' }}>
                   {fmtDate(block.blockedDate)}
                   {block.startTime && (
                     <span style={{ fontWeight: 400, color: 'rgba(245,240,234,0.5)', marginLeft: '0.5rem' }}>
@@ -179,7 +179,7 @@ export function AvailabilityManager({ initialBlocks }: Props) {
               </div>
               <button
                 onClick={() => removeBlock(block.id)}
-                style={{ background: 'none', border: '1px solid rgba(192,41,58,0.25)', color: 'var(--color-crimson)', padding: '0.3rem 0.75rem', fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}
+                style={{ background: 'none', border: '1px solid rgba(201,145,63,0.35)', color: 'var(--color-amber-light)', padding: '0.3rem 0.75rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}
               >
                 Remove
               </button>

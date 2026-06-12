@@ -22,8 +22,8 @@ export default function GlobalError({
           display: 'grid',
           placeItems: 'center',
           padding: '2rem',
-          background: 'var(--color-ink, #0a0a0a)',
-          color: 'var(--color-text, #f5f0ea)',
+          background: 'var(--color-ink)',
+          color: 'var(--color-text-light)',
           fontFamily: 'var(--font-ui, system-ui, sans-serif)',
         }}>
           <div style={{ maxWidth: '28rem', textAlign: 'center' }}>
@@ -32,7 +32,7 @@ export default function GlobalError({
               fontWeight: 700,
               letterSpacing: '0.16em',
               textTransform: 'uppercase',
-              color: 'var(--color-crimson, #c0293a)',
+              color: 'var(--color-amber)',
               marginBottom: '0.75rem',
             }}>
               Something went wrong
@@ -48,9 +48,10 @@ export default function GlobalError({
             <button
               onClick={reset}
               style={{
-                background: 'var(--color-crimson, #c0293a)',
-                color: '#fff',
+                background: 'var(--color-amber-light)',
+                color: 'var(--color-charcoal)',
                 border: 'none',
+                borderRadius: '999px',
                 padding: '0.7rem 1.4rem',
                 fontSize: '0.65rem',
                 fontWeight: 700,

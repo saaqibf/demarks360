@@ -14,14 +14,14 @@ interface Props {
 }
 
 function fmtSize(bytes: number): string {
-  if (bytes === 0) return '—'
+  if (bytes === 0) return 'Not set'
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
 const D = 'rgba(255,255,255,0.06)'
 const LABEL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }
-const VAL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text)' }
+const VAL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)' }
 
 export function DriveImport({ bookingId }: Props) {
   const router = useRouter()
@@ -63,7 +63,7 @@ export function DriveImport({ bookingId }: Props) {
       setFiles(data.files)
       if (data.files.length === 0) setListError('No video files found in that folder.')
     } catch {
-      setListError('Network error — check folder URL and try again.')
+      setListError('Network error. Check folder URL and try again.')
     } finally {
       setListing(false)
     }
@@ -119,7 +119,7 @@ export function DriveImport({ bookingId }: Props) {
           style={{
             flex: 1, background: 'rgba(255,255,255,0.04)', border: `1px solid ${D}`,
             borderRadius: '2px', padding: '0.6rem 0.8rem',
-            fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text)',
+            fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)',
             outline: 'none',
           }}
         />
@@ -131,7 +131,7 @@ export function DriveImport({ bookingId }: Props) {
             borderRadius: '2px', padding: '0 1rem',
             fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
             letterSpacing: '0.1em', textTransform: 'uppercase',
-            color: listing ? 'rgba(245,240,234,0.3)' : 'var(--color-text)',
+            color: listing ? 'rgba(245,240,234,0.3)' : 'var(--color-text-light)',
             cursor: listing ? 'not-allowed' : 'pointer',
           }}
         >
@@ -140,7 +140,7 @@ export function DriveImport({ bookingId }: Props) {
       </div>
 
       {listError && (
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--color-crimson)', marginBottom: '1rem' }}>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--color-amber-light)', marginBottom: '1rem' }}>
           {listError}
         </p>
       )}
@@ -162,7 +162,7 @@ export function DriveImport({ bookingId }: Props) {
                     <p style={{ ...VAL, marginBottom: '0.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</p>
                     <p style={{ ...LABEL, fontSize: '0.6rem' }}>{fmtSize(file.size)}</p>
                     {importErrors[file.id] && (
-                      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--color-crimson)', marginTop: '0.2rem' }}>{importErrors[file.id]}</p>
+                      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--color-amber-light)', marginTop: '0.2rem' }}>{importErrors[file.id]}</p>
                     )}
                   </div>
                   <button
@@ -175,7 +175,7 @@ export function DriveImport({ bookingId }: Props) {
                       borderRadius: '2px', padding: '0.3rem 0.75rem',
                       fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700,
                       letterSpacing: '0.1em', textTransform: 'uppercase',
-                      color: state === 'done' ? '#34D399' : state === 'loading' ? 'rgba(245,240,234,0.35)' : 'var(--color-text)',
+                      color: state === 'done' ? '#34D399' : state === 'loading' ? 'rgba(245,240,234,0.35)' : 'var(--color-text-light)',
                       cursor: state === 'loading' || state === 'done' ? 'not-allowed' : 'pointer',
                       whiteSpace: 'nowrap',
                     }}
@@ -192,10 +192,10 @@ export function DriveImport({ bookingId }: Props) {
               onClick={handleImportAll}
               disabled={anyLoading}
               style={{
-                background: 'var(--color-crimson)', border: 'none', borderRadius: '2px',
+                background: 'var(--color-amber-light)', border: 'none', borderRadius: '999px',
                 padding: '0.6rem 1.25rem', cursor: anyLoading ? 'not-allowed' : 'pointer',
                 fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
-                letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff',
+                letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-charcoal)',
                 opacity: anyLoading ? 0.6 : 1,
               }}
             >
@@ -205,7 +205,7 @@ export function DriveImport({ bookingId }: Props) {
 
           {allDone && (
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: '#34D399' }}>
-              All videos imported — gallery is ready to publish.
+              All videos imported. Gallery is ready to publish.
             </p>
           )}
         </>

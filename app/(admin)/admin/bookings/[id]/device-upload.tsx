@@ -52,7 +52,7 @@ export function DeviceUpload({ bookingId }: Props) {
       return
     }
 
-    // 2. PUT the file directly from browser → Mux (with progress tracking via XHR)
+    // 2. PUT the file directly from browser to Mux (with progress tracking via XHR)
     await new Promise<void>((resolve, reject) => {
       const xhr = new XMLHttpRequest()
       xhr.upload.onprogress = e => {
@@ -152,11 +152,11 @@ export function DeviceUpload({ bookingId }: Props) {
                 background: f.status === 'done' ? 'rgba(52,211,153,0.05)' : f.status === 'error' ? 'rgba(192,41,58,0.04)' : 'transparent',
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: f.status === 'uploading' ? '0.4rem' : 0 }}>
-                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--color-text)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '70%' }}>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--color-text-light)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '70%' }}>
                     {f.file.name}
                   </p>
                   <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0,
-                    color: f.status === 'done' ? '#34D399' : f.status === 'error' ? 'var(--color-crimson)' : f.status === 'processing' ? '#FBB724' : 'rgba(245,240,234,0.35)'
+                    color: f.status === 'done' ? '#34D399' : f.status === 'error' ? 'var(--color-amber-light)' : f.status === 'processing' ? '#FBB724' : 'rgba(245,240,234,0.35)'
                   }}>
                     {f.status === 'done' ? '✓ Done' : f.status === 'error' ? 'Error' : f.status === 'processing' ? 'Processing…' : f.status === 'uploading' ? `${f.progress}%` : 'Ready'}
                   </span>
@@ -164,12 +164,12 @@ export function DeviceUpload({ bookingId }: Props) {
 
                 {f.status === 'uploading' && (
                   <div style={{ height: '2px', background: 'rgba(255,255,255,0.06)', borderRadius: '1px', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${f.progress}%`, background: 'var(--color-crimson)', transition: 'width 0.2s' }} />
+                    <div style={{ height: '100%', width: `${f.progress}%`, background: 'var(--color-amber-light)', transition: 'width 0.2s' }} />
                   </div>
                 )}
 
                 {f.error && (
-                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--color-crimson)', margin: '0.25rem 0 0' }}>{f.error}</p>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--color-amber-light)', margin: '0.25rem 0 0' }}>{f.error}</p>
                 )}
               </div>
             ))}
@@ -180,10 +180,10 @@ export function DeviceUpload({ bookingId }: Props) {
               onClick={handleUploadAll}
               disabled={anyActive}
               style={{
-                background: 'var(--color-crimson)', border: 'none', borderRadius: '2px',
+                background: 'var(--color-amber-light)', border: 'none', borderRadius: '999px',
                 padding: '0.6rem 1.25rem', cursor: anyActive ? 'not-allowed' : 'pointer',
                 fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
-                letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff',
+                letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-charcoal)',
                 opacity: anyActive ? 0.6 : 1,
               }}
             >
@@ -193,7 +193,7 @@ export function DeviceUpload({ bookingId }: Props) {
 
           {allDone && (
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: '#34D399' }}>
-              All videos uploaded — gallery is ready to publish.
+              All videos uploaded. Gallery is ready to publish.
             </p>
           )}
         </>
