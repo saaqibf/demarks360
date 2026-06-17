@@ -35,7 +35,7 @@
   color: #b9ad97;
 }
 
-/* letterbox bars */
+/* letterbox bars — hidden until GSAP activates them */
 .dm-bar-top,
 .dm-bar-bottom {
   position: fixed;
@@ -45,6 +45,7 @@
   background: #0c0a06;
   z-index: 50;
   pointer-events: none;
+  transform: scaleY(0);
 }
 .dm-bar-top    { top: 0;    transform-origin: top; }
 .dm-bar-bottom { bottom: 0; transform-origin: bottom; }

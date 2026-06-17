@@ -142,25 +142,21 @@ export function DemarksLandingFx() {
           onUpdate: () => { degEl.textContent = Math.round(count.v) + '°' },
         })
         .to('#dm-loader', { yPercent: -100, duration: 0.9, ease: 'power4.inOut' })
-        .from('.dm-bar-top', { scaleY: 4 }, '<')
-        .from('.dm-bar-bottom', { scaleY: 4 }, '<')
+        // Bars fade in as the loader exits — never starts at scaleY:4 so nothing is ever clipped
+        .to('.dm-bar-top, .dm-bar-bottom', { scaleY: 1, duration: 0.5, ease: 'power2.out' }, '<0.2')
         .from('#dm-hero h1 .dm-line span', {
           yPercent: 110, duration: 1.1, stagger: 0.12, ease: 'power4.out',
-        }, '-=.4')
+        }, '-=.5')
         .from('.dm-hero-kicker, .dm-hero-sub, .dm-hero-ctas, .dm-hero-proof, .dm-scroll-hint', {
           opacity: 0, y: 18, duration: 0.8, stagger: 0.09,
         }, '-=.7')
         .from('#dm-nav', { opacity: 0, y: -16, duration: 0.7 }, '-=.6')
     }
 
-    // Letterbox collapse
-    gsap.to('.dm-bar-top', {
-      scaleY: 0.16,
-      scrollTrigger: { trigger: '#dm-experience', start: 'top bottom', end: 'top 30%', scrub: true },
-    })
-    gsap.to('.dm-bar-bottom', {
-      scaleY: 0.16,
-      scrollTrigger: { trigger: '#dm-experience', start: 'top bottom', end: 'top 30%', scrub: true },
+    // Bars fully disappear as user scrolls into experience section
+    gsap.to('.dm-bar-top, .dm-bar-bottom', {
+      scaleY: 0,
+      scrollTrigger: { trigger: '#dm-experience', start: 'top bottom', end: 'top 40%', scrub: true },
     })
 
     // Section head reveals
