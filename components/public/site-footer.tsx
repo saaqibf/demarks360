@@ -10,8 +10,8 @@ const bookLinks = [
 const eventLinks = [
   { label: 'How it works', href: '#how-it-works' },
   { label: 'Gallery', href: '#gallery' },
-  { label: 'Birthdays', href: '/book' },
-  { label: 'Weddings', href: '/book' },
+  { label: 'Birthdays', href: '/book?eventType=Birthday' },
+  { label: 'Weddings', href: '/book?eventType=Wedding' },
 ]
 
 export function SiteFooter() {

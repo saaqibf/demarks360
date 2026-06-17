@@ -17,14 +17,14 @@ const EVENT_TYPES = [
 
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.85rem 1rem',
-  border: '1px solid rgba(255,255,255,0.08)', background: 'var(--color-surface)',
+  border: '1px solid var(--color-border-dark)', background: 'var(--color-surface)',
   fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-text-light)',
   outline: 'none', boxSizing: 'border-box',
 }
 
 const labelStyle: React.CSSProperties = {
   fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
-  letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)',
+  letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-muted-light)',
   display: 'block', marginBottom: '0.4rem',
 }
 
@@ -157,7 +157,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             onChange={e => onChange({ agreedToTerms: e.target.checked })}
             style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: 'var(--color-amber-light)', flexShrink: 0, cursor: 'pointer' }}
           />
-          <label htmlFor="tos" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.55)', lineHeight: 1.6, cursor: 'pointer' }}>
+          <label htmlFor="tos" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted-light)', lineHeight: 1.6, cursor: 'pointer' }}>
             I have read and agree to the{' '}
             <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Terms of Service</a>
             {' '}and{' '}
@@ -179,7 +179,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
         >
           Continue to Payment →
         </button>
-        <button onClick={onBack} style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
+        <button onClick={onBack} style={{ background: 'none', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
           ← Back
         </button>
       </div>

@@ -2,6 +2,8 @@
 import { SignIn, useAuth } from '@clerk/nextjs'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { SiteFooter } from '@/components/public/site-footer'
+import { SiteNav } from '@/components/public/site-nav'
 
 export default function SignInPage() {
   const { isSignedIn, isLoaded } = useAuth()
@@ -16,8 +18,27 @@ export default function SignInPage() {
   }, [isLoaded, isSignedIn, router])
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--color-sand)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-      <SignIn appearance={{ variables: { colorPrimary: '#C0293A', fontFamily: 'Nunito, sans-serif' } }} />
-    </div>
+    <>
+      <SiteNav />
+      <main style={{
+        minHeight: '100vh',
+        background: 'var(--color-ink)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '7rem 1.5rem 4rem',
+      }}>
+        <SignIn appearance={{ variables: {
+          colorPrimary: 'var(--color-amber-light)',
+          colorBackground: 'var(--color-surface)',
+          colorText: 'var(--color-text-light)',
+          colorInputBackground: 'var(--color-ink)',
+          colorInputText: 'var(--color-text-light)',
+          colorNeutral: 'var(--color-muted-light)',
+          fontFamily: 'var(--font-body)',
+        } }} />
+      </main>
+      <SiteFooter />
+    </>
   )
 }

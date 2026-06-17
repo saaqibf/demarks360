@@ -40,12 +40,35 @@ const initialState: BookingState = {
 
 const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Checkout']
 
+const EVENT_TYPE_ALIASES: Record<string, string> = {
+  birthday: 'Birthday Party',
+  'birthday party': 'Birthday Party',
+  wedding: 'Wedding',
+  graduation: 'Graduation',
+  corporate: 'Corporate Event',
+  'corporate event': 'Corporate Event',
+  engagement: 'Engagement Party',
+  'engagement party': 'Engagement Party',
+  'baby shower': 'Baby Shower & Gender Reveal',
+  'gender reveal': 'Baby Shower & Gender Reveal',
+  holiday: 'Holiday Party',
+  'holiday party': 'Holiday Party',
+}
+
+function normalizeEventType(value: string | null): string {
+  if (!value) return ''
+  const normalized = value.trim().replace(/[-_]+/g, ' ').toLowerCase()
+  return EVENT_TYPE_ALIASES[normalized] ?? value.trim()
+}
+
 function BookPageInner() {
   const params = useSearchParams()
   const prefilledDate = params.get('date') ?? null
+  const prefilledEventType = normalizeEventType(params.get('eventType'))
   const [state, setState] = useState<BookingState>({
     ...initialState,
     date: prefilledDate,
+    eventType: prefilledEventType,
     step: prefilledDate ? 2 : 1,
   })
 
@@ -58,7 +81,7 @@ function BookPageInner() {
       <SiteNav />
 
       {/* Step indicator */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'var(--color-ink)', position: 'sticky', top: 0, zIndex: 100 }}>
+      <div style={{ borderBottom: '1px solid var(--color-border-dark)', background: 'var(--color-ink)', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 3rem', display: 'flex', alignItems: 'center', gap: '0' }}>
           {STEP_LABELS.map((label, i) => {
             const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5
@@ -71,8 +94,8 @@ function BookPageInner() {
                     width: '22px', height: '22px', borderRadius: '50%', display: 'inline-flex',
                     alignItems: 'center', justifyContent: 'center',
                     background: done ? 'var(--color-amber-light)' : active ? 'var(--color-text-light)' : 'transparent',
-                    border: active || done ? 'none' : '1.5px solid rgba(255,255,255,0.18)',
-                    color: active || done ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)',
+                    border: active || done ? 'none' : '1.5px solid var(--color-border-dark)',
+                    color: active || done ? 'var(--color-charcoal)' : 'var(--color-muted-light)',
                     fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
                   }}>
                     {done ? '✓' : stepNum}
@@ -80,13 +103,13 @@ function BookPageInner() {
                   <span style={{
                     fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600,
                     letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: active ? 'var(--color-text-light)' : 'rgba(245,240,234,0.3)',
+                    color: active ? 'var(--color-text-light)' : 'var(--color-muted-light)',
                   }}>
                     {label}
                   </span>
                 </div>
                 {i < STEP_LABELS.length - 1 && (
-                  <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)', margin: '0 0.75rem' }} />
+                  <div style={{ flex: 1, height: '1px', background: 'var(--color-border-dark)', margin: '0 0.75rem' }} />
                 )}
               </div>
             )

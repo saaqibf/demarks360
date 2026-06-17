@@ -34,7 +34,7 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
         Add-ons
       </h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'rgba(255,255,255,0.07)', maxWidth: '560px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--color-border-dark)', maxWidth: '560px' }}>
         {ADDONS.map((addon) => {
           const isSelected = selected.has(addon.id)
           const disabled = !addon.active
@@ -51,11 +51,32 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
                 transition: 'background 0.2s',
               }}
             >
-              <div>
+              <div style={{ flex: 1 }}>
+                {addon.id === 'firecrackers' && (
+                  <div style={{
+                    aspectRatio: '16 / 9',
+                    width: '100%',
+                    marginBottom: '1rem',
+                    border: '1px solid var(--color-amber)',
+                    borderRadius: '8px',
+                    background: 'var(--color-ink)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                  }}>
+                    <span className="t-label" style={{
+                      color: 'var(--color-amber-light)',
+                      letterSpacing: '0.14em',
+                    }}>
+                      Preview coming soon
+                    </span>
+                  </div>
+                )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.3rem' }}>
                   <span style={{
                     width: '18px', height: '18px', borderRadius: '2px', flexShrink: 0,
-                    border: `1.5px solid ${isSelected ? 'transparent' : 'rgba(255,255,255,0.2)'}`,
+                    border: `1.5px solid ${isSelected ? 'transparent' : 'var(--color-border-dark)'}`,
                     background: isSelected ? 'var(--color-amber-light)' : 'transparent',
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                     color: 'var(--color-charcoal)', fontSize: '0.7rem',
@@ -66,12 +87,12 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
                     {addon.name}
                   </span>
                   {'comingSoon' in addon && addon.comingSoon && (
-                    <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.2rem 0.5rem', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(245,240,234,0.35)' }}>
+                    <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.2rem 0.5rem', border: '1px solid var(--color-border-dark)', color: 'var(--color-muted-light)' }}>
                       Coming Soon
                     </span>
                   )}
                 </div>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.45)', fontWeight: 300, paddingLeft: '1.6rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-muted-light)', fontWeight: 300, paddingLeft: '1.6rem' }}>
                   {addon.desc}
                 </p>
               </div>
@@ -96,7 +117,7 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
         >
           Continue →
         </button>
-        <button onClick={onBack} style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
+        <button onClick={onBack} style={{ background: 'none', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
           ← Back
         </button>
       </div>

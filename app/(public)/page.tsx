@@ -299,6 +299,9 @@ export default function HomePage() {
               <figcaption><span>TELUS team night</span><span>YYC</span></figcaption>
             </figure>
           </div>
+          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+            <a className="dm-ghost-btn" href="/gallery">Open the full gallery</a>
+          </div>
         </section>
 
         <hr className="dm-amber-rule" />
@@ -428,10 +431,10 @@ export default function HomePage() {
             </div>
             <div className="dm-fcol">
               <h5>Events</h5>
-              <a href="/book">Weddings</a>
-              <a href="/book">Birthdays</a>
-              <a href="/book">Corporate</a>
-              <a href="/book">Graduations</a>
+              <a href="/book?eventType=Wedding">Weddings</a>
+              <a href="/book?eventType=Birthday">Birthdays</a>
+              <a href="/book?eventType=Corporate">Corporate</a>
+              <a href="/book?eventType=Graduation">Graduations</a>
             </div>
             <div className="dm-fcol">
               <h5>Contact</h5>
