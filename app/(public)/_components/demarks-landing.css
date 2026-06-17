@@ -233,10 +233,10 @@
 .dm-hero h1 .dm-line {
   display: block;
   overflow: hidden;
-  padding-top: 0.12em;
-  padding-bottom: 0.08em;
-  margin-top: -0.12em;
-  margin-bottom: -0.08em;
+  padding-top: 0.25em;
+  padding-bottom: 0.18em;
+  margin-top: -0.25em;
+  margin-bottom: -0.18em;
 }
 .dm-hero h1 .dm-line span { display: inline-block; }
 .dm-hero h1 em { font-style: italic; color: #e8b25c; }
