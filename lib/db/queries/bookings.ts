@@ -10,6 +10,7 @@ export interface CreateBookingParams {
   durationMinutes: number
   addOns: string[]
   eventType: string
+  eventName?: string
   locationAddress: string
   locationCity: string
   travelSurcharge: number
@@ -40,6 +41,7 @@ export async function createBookingRecord(params: CreateBookingParams) {
       balanceChargeDate: params.balanceChargeDate,
       stripePaymentIntentId: params.stripePaymentIntentId,
       stripeCustomerId: params.stripeCustomerId,
+      notes: params.eventName ?? null,
     })
     .returning()
   return booking

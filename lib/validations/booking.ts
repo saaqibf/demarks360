@@ -21,6 +21,7 @@ export const createBookingSchema = z.object({
     'Holiday Party',
     'Other',
   ]),
+  eventName: z.string().max(100).trim().optional(),
   agreedToTerms: z.literal(true),
 })
 

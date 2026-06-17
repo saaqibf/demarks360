@@ -20,6 +20,7 @@ export type BookingState = {
   locationAddress: string
   locationCity: string
   eventType: string
+  eventName: string
   agreedToTerms: boolean
 }
 
@@ -35,6 +36,7 @@ const initialState: BookingState = {
   locationAddress: '',
   locationCity: 'Calgary',
   eventType: '',
+  eventName: '',
   agreedToTerms: false,
 }
 

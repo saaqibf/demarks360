@@ -115,6 +115,7 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
         locationAddress: state.locationAddress,
         locationCity: state.locationCity,
         eventType: state.eventType,
+        eventName: state.eventName || undefined,
         agreedToTerms: state.agreedToTerms,
       }),
     })
@@ -175,6 +176,11 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
             <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)' }}>
               {state.date ? new Date(state.date + 'T00:00:00').toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''}
             </p>
+            {state.eventName && (
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontStyle: 'italic', color: 'var(--color-amber-light)', marginTop: '0.35rem' }}>
+                {state.eventName}
+              </p>
+            )}
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.6)', marginTop: '0.25rem' }}>
               {state.startTime && formatTime(state.startTime)} → {state.endTime && formatTime(state.endTime)}
               {' · '}{(durationMinutes / 60).toFixed(1).replace('.0', '')} hours

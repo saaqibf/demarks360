@@ -149,6 +149,19 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
           {errors.eventType && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventType}</p>}
         </div>
 
+        <div>
+          <label style={labelStyle}>Event Name <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional)</span></label>
+          <input
+            style={inputStyle}
+            value={state.eventName}
+            onChange={e => onChange({ eventName: e.target.value })}
+            placeholder="e.g. Bolu @ 80, Sarah's Graduation, NCMCC Sisters' Forum"
+          />
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.35)', marginTop: '0.35rem' }}>
+            Give your event a personal name so it shows on your confirmation and gallery.
+          </p>
+        </div>
+
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginTop: '0.5rem' }}>
           <input
             type="checkbox"

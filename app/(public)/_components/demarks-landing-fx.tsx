@@ -112,7 +112,7 @@ export function DemarksLandingFx() {
         head.position.set(
           Math.cos(a) * 2.6,
           Math.sin(a) * 2.6 * Math.cos(Math.PI / 2.25),
-          Math.sin(a) * 2.6 * Math.sin(Math.PI / 2.25) * 0.4
+          Math.sin(a) * 2.6 * Math.sin(Math.PI / 2.25)
         )
         ringGroup.rotation.y = t * 0.35 + mx * 0.5
         ringGroup.rotation.x = my * 0.25
