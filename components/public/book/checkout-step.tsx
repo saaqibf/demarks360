@@ -71,7 +71,7 @@ function PaymentForm({ bookingId, onBack }: { bookingId: string; onBack: () => v
       <button
         type="button"
         onClick={onBack}
-        style={{ marginTop: '0.75rem', display: 'block', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.4)', textDecoration: 'underline' }}
+        style={{ marginTop: '1rem', background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}
       >
         ← Back
       </button>
@@ -139,9 +139,16 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
 
   if (initError) {
     return (
-      <div>
-        <p style={{ color: 'var(--color-amber-light)', fontSize: '0.85rem', marginBottom: '1rem' }}>{initError}</p>
-        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.4)', textDecoration: 'underline' }}>
+      <div style={{ maxWidth: '480px' }}>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+          <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-amber)' }} />
+          Step 5
+        </p>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 400, lineHeight: 1, color: 'var(--color-text-light)', marginBottom: '1.25rem' }}>
+          Something went wrong
+        </h2>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.88rem', color: 'rgba(245,240,234,0.55)', lineHeight: 1.7, marginBottom: '2rem' }}>{initError}</p>
+        <button onClick={onBack} style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
           ← Back
         </button>
       </div>

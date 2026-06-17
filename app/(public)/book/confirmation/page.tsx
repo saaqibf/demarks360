@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { getBookingById } from '@/lib/db/queries/bookings'
+import { SiteNav } from '@/components/public/site-nav'
+import { SiteFooter } from '@/components/public/site-footer'
 
 interface PageProps {
   searchParams: Promise<{ id?: string }>
@@ -39,11 +41,15 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
 
   if (!booking) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-ink)' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>Booking not found</h1>
-          <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Return to Home</Link>
+      <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
+        <SiteNav />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 80px)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>Booking not found</h1>
+            <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-charcoal)', background: 'var(--color-amber-light)', borderRadius: '999px', padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block' }}>Back to Home</Link>
+          </div>
         </div>
+        <SiteFooter />
       </div>
     )
   }
@@ -57,7 +63,8 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
-      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '4rem 3rem' }}>
+      <SiteNav />
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '6rem 3rem 4rem' }}>
         <div style={{ marginBottom: '3rem' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-amber-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <span style={{ color: 'var(--color-charcoal)', fontSize: '1.25rem' }}>✓</span>
@@ -132,6 +139,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </div>
   )
 }
