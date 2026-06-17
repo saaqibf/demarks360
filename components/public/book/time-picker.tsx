@@ -114,7 +114,11 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', maxWidth: '560px' }}>
         {slotsWithStatus.map(({ slot, blocked }) => {
-          const isSelected = phase === 'start' ? slot === selectedStart : slot === selectedEnd
+          const isSelectedEnd = phase === 'end' && slot === selectedEnd
+          const isSelectedStart = slot === selectedStart
+          // In 'start' phase: highlight the chosen slot; in 'end' phase: highlight both start (dimmer) and end (full amber)
+          const isActivePrimary = phase === 'start' ? isSelectedStart : isSelectedEnd
+          const isActiveStart = phase === 'end' && isSelectedStart && !isSelectedEnd
           const isDisabled = phase === 'end' ? !isEndSlotValid(slot) || blocked : blocked
           return (
             <button
@@ -131,11 +135,11 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
               }}
               style={{
                 padding: '0.75rem 0.5rem', border: '1px solid',
-                borderColor: isSelected ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
-                background: isSelected ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
-                color: isSelected ? 'var(--color-charcoal)' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text-light)',
+                borderColor: isActivePrimary ? 'var(--color-amber-light)' : isActiveStart ? 'var(--color-amber)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
+                background: isActivePrimary ? 'var(--color-amber-light)' : isActiveStart ? 'rgba(201,145,63,0.18)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
+                color: isActivePrimary ? 'var(--color-charcoal)' : isActiveStart ? 'var(--color-amber-light)' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text-light)',
                 cursor: isDisabled ? 'not-allowed' : 'pointer',
-                fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: 600,
+                fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: isActivePrimary || isActiveStart ? 700 : 600,
                 transition: 'all 0.15s',
               }}
             >
@@ -170,7 +174,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
       <button
         onClick={() => { if (phase === 'end') { setPhase('start'); setSelectedEnd(null) } else { onBack() } }}
-        style={{ marginTop: '1.5rem', display: 'block', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.4)', textDecoration: 'underline' }}
+        style={{ marginTop: '1.5rem', display: 'inline-block', background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.75rem 1.6rem', transition: 'border-color 0.2s' }}
       >
         ← Back
       </button>

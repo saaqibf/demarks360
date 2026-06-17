@@ -74,7 +74,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <button
             onClick={prevMonth}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'rgba(245,240,234,0.55)', padding: '0.25rem 0.5rem' }}
+            style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'var(--color-amber)', padding: '0.3rem 0.7rem', lineHeight: 1, transition: 'border-color 0.2s' }}
           >
             ←
           </button>
@@ -83,7 +83,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
           </span>
           <button
             onClick={nextMonth}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'rgba(245,240,234,0.55)', padding: '0.25rem 0.5rem' }}
+            style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'var(--color-amber)', padding: '0.3rem 0.7rem', lineHeight: 1, transition: 'border-color 0.2s' }}
           >
             →
           </button>

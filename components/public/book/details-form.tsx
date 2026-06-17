@@ -179,7 +179,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
         >
           Continue to Payment →
         </button>
-        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.4)', textDecoration: 'underline' }}>
+        <button onClick={onBack} style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
           ← Back
         </button>
       </div>
