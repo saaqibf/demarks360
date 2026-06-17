@@ -1,15 +1,15 @@
 import Link from 'next/link'
 
 const bookLinks = [
-  { label: 'Check your date', href: '#pricing' },
+  { label: 'Check your date', href: '/book' },
   { label: 'Book now', href: '/book' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Pricing', href: '/#pricing' },
+  { label: 'FAQ', href: '/#faq' },
 ]
 
 const eventLinks = [
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'Gallery', href: '#gallery' },
+  { label: 'How it works', href: '/#how-it-works' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'Birthdays', href: '/book?eventType=Birthday' },
   { label: 'Weddings', href: '/book?eventType=Wedding' },
 ]

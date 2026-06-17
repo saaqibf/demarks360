@@ -83,7 +83,7 @@ function BookPageInner() {
       <SiteNav />
 
       {/* Step indicator */}
-      <div style={{ borderBottom: '1px solid var(--color-border-dark)', background: 'var(--color-ink)', position: 'sticky', top: 0, zIndex: 100 }}>
+      <div style={{ borderBottom: '1px solid var(--color-border-dark)', background: 'var(--color-ink)', position: 'sticky', top: '72px', zIndex: 100 }}>
         <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 3rem', display: 'flex', alignItems: 'center', gap: '0' }}>
           {STEP_LABELS.map((label, i) => {
             const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5
