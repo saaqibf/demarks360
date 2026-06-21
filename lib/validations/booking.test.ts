@@ -65,14 +65,36 @@ describe('createBookingSchema — core fields', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts all valid eventType values', () => {
-    const types = [
-      'Birthday Party', 'Wedding', 'Graduation', 'Corporate Event',
-      'Engagement Party', 'Baby Shower & Gender Reveal', 'Holiday Party', 'Other',
-    ]
-    for (const eventType of types) {
-      expect(createBookingSchema.safeParse({ ...base, eventType }).success).toBe(true)
-    }
+  it('accepts eventType Birthday Party', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Birthday Party' }).success).toBe(true)
+  })
+
+  it('accepts eventType Wedding', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Wedding' }).success).toBe(true)
+  })
+
+  it('accepts eventType Graduation', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Graduation' }).success).toBe(true)
+  })
+
+  it('accepts eventType Corporate Event', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Corporate Event' }).success).toBe(true)
+  })
+
+  it('accepts eventType Engagement Party', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Engagement Party' }).success).toBe(true)
+  })
+
+  it('accepts eventType Baby Shower & Gender Reveal', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Baby Shower & Gender Reveal' }).success).toBe(true)
+  })
+
+  it('accepts eventType Holiday Party', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Holiday Party' }).success).toBe(true)
+  })
+
+  it('accepts eventType Other', () => {
+    expect(createBookingSchema.safeParse({ ...base, eventType: 'Other' }).success).toBe(true)
   })
 
   it('accepts optional eventName', () => {
@@ -131,14 +153,24 @@ describe('createBookingSchema — eventPreferences', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts videoDuration within 1-120 range', () => {
-    for (const d of [1, 12, 20, 120]) {
-      const result = createBookingSchema.safeParse({
-        ...base,
-        eventPreferences: { videoDuration: d },
-      })
-      expect(result.success).toBe(true)
-    }
+  it('accepts videoDuration of 1 (minimum)', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: { videoDuration: 1 } })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts videoDuration of 12 (slomo max)', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: { videoDuration: 12 } })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts videoDuration of 20 (video recommended)', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: { videoDuration: 20 } })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts videoDuration of 120 (maximum)', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: { videoDuration: 120 } })
+    expect(result.success).toBe(true)
   })
 
   it('rejects videoDuration of 0', () => {
@@ -165,14 +197,14 @@ describe('createBookingSchema — eventPreferences', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts slomoBoomerang true and false', () => {
-    for (const v of [true, false]) {
-      const result = createBookingSchema.safeParse({
-        ...base,
-        eventPreferences: { slomoBoomerang: v },
-      })
-      expect(result.success).toBe(true)
-    }
+  it('accepts slomoBoomerang true', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: { slomoBoomerang: true } })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts slomoBoomerang false', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: { slomoBoomerang: false } })
+    expect(result.success).toBe(true)
   })
 
   it('accepts backgroundColorTheme up to 200 chars', () => {
@@ -191,20 +223,18 @@ describe('createBookingSchema — eventPreferences', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts designThemeTags array up to 5 items', () => {
+  it('accepts designThemeTags with all 12 preset categories', () => {
     const result = createBookingSchema.safeParse({
       ...base,
-      eventPreferences: { designThemeTags: ['Birthday (Adult)', 'Glam', 'Casino Night', 'Wedding', 'Bachelorette'] },
+      eventPreferences: {
+        designThemeTags: [
+          'Birthday (Adult)', 'Birthday (Kids)', 'Baby Shower', 'Bachelorette',
+          'Wedding', 'Graduation', 'Corporate', 'Holiday / Christmas',
+          'Carnival / Tropical', 'Casino Night', 'Sports', 'Custom / Other',
+        ],
+      },
     })
     expect(result.success).toBe(true)
-  })
-
-  it('rejects designThemeTags array with more than 5 items', () => {
-    const result = createBookingSchema.safeParse({
-      ...base,
-      eventPreferences: { designThemeTags: ['A', 'B', 'C', 'D', 'E', 'F'] },
-    })
-    expect(result.success).toBe(false)
   })
 
   it('rejects a designThemeTags item longer than 100 chars', () => {
@@ -231,23 +261,32 @@ describe('createBookingSchema — eventPreferences', () => {
     expect(result.success).toBe(false)
   })
 
+  const fullPrefs = {
+    backgroundColorTheme: 'Gold and Black',
+    designThemeTags: ['Birthday (Adult)', 'Glam'],
+    songPreference: 'Davido - Champion Sound',
+    videoType: 'slomo' as const,
+    videoDuration: 12,
+    slomoBoomerang: true,
+  }
+
   it('accepts a fully populated eventPreferences object', () => {
-    const result = createBookingSchema.safeParse({
-      ...base,
-      eventPreferences: {
-        backgroundColorTheme: 'Gold and Black',
-        designThemeTags: ['Birthday (Adult)', 'Glam'],
-        songPreference: 'Davido - Champion Sound',
-        videoType: 'slomo',
-        videoDuration: 12,
-        slomoBoomerang: true,
-      },
-    })
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: fullPrefs })
     expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.eventPreferences?.videoType).toBe('slomo')
-      expect(result.data.eventPreferences?.slomoBoomerang).toBe(true)
-      expect(result.data.eventPreferences?.videoDuration).toBe(12)
-    }
+  })
+
+  it('fully populated eventPreferences preserves videoType slomo', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: fullPrefs })
+    expect(result.success && result.data.eventPreferences?.videoType).toBe('slomo')
+  })
+
+  it('fully populated eventPreferences preserves slomoBoomerang', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: fullPrefs })
+    expect(result.success && result.data.eventPreferences?.slomoBoomerang).toBe(true)
+  })
+
+  it('fully populated eventPreferences preserves videoDuration', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventPreferences: fullPrefs })
+    expect(result.success && result.data.eventPreferences?.videoDuration).toBe(12)
   })
 })

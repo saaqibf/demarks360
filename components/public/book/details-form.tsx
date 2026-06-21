@@ -219,7 +219,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   <button
                     key={s}
                     type="button"
-                    onClick={() => onChange({ videoDuration: selected ? null : s })}
+                    onClick={() => onChange({ videoDuration: selected ? null : s, ...(selected && { slomoBoomerang: false }) })}
                     style={{
                       padding: '0.6rem 1.1rem', borderRadius: '6px',
                       border: `1.5px solid ${selected ? 'var(--color-amber-light)' : 'var(--color-border-dark)'}`,
@@ -254,6 +254,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   type="button"
                   role="switch"
                   aria-checked={state.slomoBoomerang}
+                  aria-label="Add Boomerang Loop"
                   onClick={() => onChange({ slomoBoomerang: !state.slomoBoomerang })}
                   style={{
                     width: '44px', height: '24px', borderRadius: '999px', border: 'none',

@@ -118,7 +118,7 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
         eventName: state.eventName || undefined,
         agreedToTerms: state.agreedToTerms,
         eventPreferences: {
-          videoType: state.videoType,
+          ...(state.videoType === 'slomo' && { videoType: 'slomo' as const }),
           ...(state.videoDuration !== null && { videoDuration: state.videoDuration }),
           ...(state.slomoBoomerang && { slomoBoomerang: true }),
           ...(state.backgroundColorTheme && { backgroundColorTheme: state.backgroundColorTheme }),
