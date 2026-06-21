@@ -62,7 +62,7 @@ export function SiteNav() {
             return (
               <a
                 key={label}
-                href={`#${id}`}
+                href={`/#${id}`}
                 className="nav-link"
                 style={{
                   fontFamily: 'var(--font-body)',
@@ -149,7 +149,7 @@ export function SiteNav() {
             {links.map(label => (
               <a
                 key={label}
-                href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
+                href={`/#${label.toLowerCase().replace(/\s+/g, '-')}`}
                 onClick={() => setOpen(false)}
                 style={{
                   display: 'block',
