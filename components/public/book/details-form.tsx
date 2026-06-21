@@ -162,6 +162,202 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
           </p>
         </div>
 
+        {/* ── Your 360 Experience ─────────────────────────────── */}
+        <div style={{ borderTop: '1px solid var(--color-border-dark)', paddingTop: '2rem', marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.6rem' }}>
+              <span style={{ display: 'inline-block', width: '20px', height: '1.5px', background: 'var(--color-amber)' }} />
+              Your 360 Experience
+            </p>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 0.95 }}>
+              Design your <em style={{ color: 'var(--color-amber-light)', fontStyle: 'italic' }}>moment</em>
+            </h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.38)', maxWidth: '46ch', lineHeight: 1.65 }}>
+              All optional. The more you share, the better we can tailor the booth to your night.
+            </p>
+          </div>
+
+          {/* Video Format */}
+          <div>
+            <label style={labelStyle}>Video Format</label>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              {(['video', 'slomo'] as const).map(type => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => onChange({ videoType: type, videoDuration: null, slomoBoomerang: false })}
+                  style={{
+                    padding: '0.75rem 1.5rem', borderRadius: '999px',
+                    border: `1.5px solid ${state.videoType === type ? 'var(--color-amber-light)' : 'var(--color-border-dark)'}`,
+                    background: state.videoType === type ? 'rgba(201,145,63,0.12)' : 'transparent',
+                    color: state.videoType === type ? 'var(--color-amber-light)' : 'var(--color-muted-light)',
+                    fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700,
+                    letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.15s',
+                  }}
+                >
+                  {type === 'video' ? 'Video' : 'Slow Motion'}
+                </button>
+              ))}
+            </div>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.45rem' }}>
+              {state.videoType === 'video'
+                ? 'Standard video. Recommended 15-20 seconds for the best crowd moment.'
+                : 'Cinematic slow motion. Up to 12 seconds. Looks incredible on every screen.'}
+            </p>
+          </div>
+
+          {/* Clip Duration */}
+          <div>
+            <label style={labelStyle}>
+              Clip Duration <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional)</span>
+            </label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {(state.videoType === 'slomo' ? [4, 6, 8, 10, 12] : [5, 10, 15, 20]).map(s => {
+                const isRec = state.videoType === 'video' && s === 20
+                const selected = state.videoDuration === s
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => onChange({ videoDuration: selected ? null : s })}
+                    style={{
+                      padding: '0.6rem 1.1rem', borderRadius: '6px',
+                      border: `1.5px solid ${selected ? 'var(--color-amber-light)' : 'var(--color-border-dark)'}`,
+                      background: selected ? 'rgba(201,145,63,0.1)' : 'transparent',
+                      color: selected ? 'var(--color-amber-light)' : 'var(--color-muted-light)',
+                      fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 600,
+                      cursor: 'pointer', transition: 'all 0.15s',
+                    }}
+                  >
+                    {s}s{isRec ? ' ★' : ''}
+                  </button>
+                )
+              })}
+            </div>
+            {state.videoType === 'video' && (
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.4rem' }}>
+                20s ★ is our recommended length.
+              </p>
+            )}
+            {state.videoType === 'slomo' && state.videoDuration === 12 && (
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'var(--color-amber)', marginTop: '0.4rem' }}>
+                At 12s, your output may run slightly longer depending on frame rate.
+              </p>
+            )}
+          </div>
+
+          {/* Boomerang (slomo only) */}
+          {state.videoType === 'slomo' && (
+            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--color-border-dark)', padding: '1.25rem', borderRadius: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={state.slomoBoomerang}
+                  onClick={() => onChange({ slomoBoomerang: !state.slomoBoomerang })}
+                  style={{
+                    width: '44px', height: '24px', borderRadius: '999px', border: 'none',
+                    cursor: 'pointer', flexShrink: 0, position: 'relative', transition: 'background 0.2s',
+                    background: state.slomoBoomerang ? 'var(--color-amber)' : 'rgba(255,255,255,0.12)',
+                  }}
+                >
+                  <span style={{
+                    position: 'absolute', top: '3px',
+                    left: state.slomoBoomerang ? '23px' : '3px',
+                    width: '18px', height: '18px', borderRadius: '50%',
+                    background: 'white', transition: 'left 0.2s',
+                  }} />
+                </button>
+                <div>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', fontWeight: 600, color: 'var(--color-text-light)', marginBottom: '0.25rem' }}>
+                    Add Boomerang Loop
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.4)', lineHeight: 1.55 }}>
+                    Plays your slomo forward, then reverses. Doubles your final clip length.
+                    {state.videoDuration ? ` Your ${state.videoDuration}s clip becomes ~${state.videoDuration * 2}s total.` : ''}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Color Theme */}
+          <div>
+            <label style={labelStyle}>
+              Color Theme <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional)</span>
+            </label>
+            <input
+              style={inputStyle}
+              value={state.backgroundColorTheme}
+              onChange={e => onChange({ backgroundColorTheme: e.target.value })}
+              placeholder="e.g. Gold and Black, Hot Pink, Navy and Silver, Rose Gold"
+              maxLength={200}
+            />
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.35rem' }}>
+              The palette we design your 360 overlay around.
+            </p>
+          </div>
+
+          {/* Design Theme Tags */}
+          <div>
+            <label style={labelStyle}>
+              Vibe / Theme <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional, pick any that fit)</span>
+            </label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {[
+                'Birthday (Adult)', 'Birthday (Kids)', 'Baby Shower', 'Bachelorette',
+                'Wedding', 'Graduation', 'Corporate', 'Holiday / Christmas',
+                'Carnival / Tropical', 'Casino Night', 'Sports', 'Custom / Other',
+              ].map(tag => {
+                const selected = state.designThemeTags.includes(tag)
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => {
+                      const next = selected
+                        ? state.designThemeTags.filter(t => t !== tag)
+                        : [...state.designThemeTags, tag]
+                      onChange({ designThemeTags: next })
+                    }}
+                    style={{
+                      padding: '0.45rem 0.85rem', borderRadius: '4px',
+                      border: `1px solid ${selected ? 'var(--color-amber-light)' : 'var(--color-border-dark)'}`,
+                      background: selected ? 'rgba(201,145,63,0.12)' : 'transparent',
+                      color: selected ? 'var(--color-amber-light)' : 'rgba(245,240,234,0.45)',
+                      fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 600,
+                      letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s',
+                    }}
+                  >
+                    {tag}
+                  </button>
+                )
+              })}
+            </div>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.45rem' }}>
+              Helps us pick the right design section from our overlay library.
+            </p>
+          </div>
+
+          {/* Song Preference */}
+          <div>
+            <label style={labelStyle}>
+              Song for the Booth <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional)</span>
+            </label>
+            <input
+              style={inputStyle}
+              value={state.songPreference}
+              onChange={e => onChange({ songPreference: e.target.value })}
+              placeholder="Artist – Song title, or describe the vibe (e.g. afrobeats energy)"
+              maxLength={200}
+            />
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.35rem' }}>
+              We queue this up while the booth runs at your event.
+            </p>
+          </div>
+        </div>
+        {/* ── end Your 360 Experience ──────────────────────────── */}
+
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginTop: '0.5rem' }}>
           <input
             type="checkbox"

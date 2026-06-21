@@ -117,6 +117,14 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
         eventType: state.eventType,
         eventName: state.eventName || undefined,
         agreedToTerms: state.agreedToTerms,
+        eventPreferences: {
+          videoType: state.videoType,
+          ...(state.videoDuration !== null && { videoDuration: state.videoDuration }),
+          ...(state.slomoBoomerang && { slomoBoomerang: true }),
+          ...(state.backgroundColorTheme && { backgroundColorTheme: state.backgroundColorTheme }),
+          ...(state.designThemeTags.length > 0 && { designThemeTags: state.designThemeTags }),
+          ...(state.songPreference && { songPreference: state.songPreference }),
+        },
       }),
     })
       .then(r => r.json())

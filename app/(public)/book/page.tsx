@@ -22,6 +22,13 @@ export type BookingState = {
   eventType: string
   eventName: string
   agreedToTerms: boolean
+  // 360 design preferences
+  videoType: 'video' | 'slomo'
+  videoDuration: number | null
+  slomoBoomerang: boolean
+  backgroundColorTheme: string
+  designThemeTags: string[]
+  songPreference: string
 }
 
 const initialState: BookingState = {
@@ -38,6 +45,12 @@ const initialState: BookingState = {
   eventType: '',
   eventName: '',
   agreedToTerms: false,
+  videoType: 'video',
+  videoDuration: null,
+  slomoBoomerang: false,
+  backgroundColorTheme: '',
+  designThemeTags: [],
+  songPreference: '',
 }
 
 const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Checkout']

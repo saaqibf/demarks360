@@ -74,6 +74,7 @@ export default async function BookingDetailPage({ params }: Props) {
             { label: 'Date', value: fmtDate(b.eventDate) },
             { label: 'Time', value: `${fmt(b.startTime)} → ${fmt(b.endTime)}` },
             { label: 'Type', value: b.eventType },
+            ...(b.eventName ? [{ label: 'Event Name', value: b.eventName }] : []),
             { label: 'Address', value: `${b.locationAddress}, ${b.locationCity}` },
             { label: 'Add-ons', value: (b.addOns as string[]).join(', ') || 'None' },
           ].map(({ label, value }) => (
@@ -111,6 +112,38 @@ export default async function BookingDetailPage({ params }: Props) {
         </p>
         <BookingActions bookingId={b.id} currentStatus={b.status} currentNotes={b.notes ?? ''} />
       </div>
+
+      {/* 360 Design Preferences */}
+      {b.eventPreferences && (() => {
+        type Prefs = {
+          backgroundColorTheme?: string
+          designThemeTags?: string[]
+          songPreference?: string
+          videoType?: string
+          videoDuration?: number
+          slomoBoomerang?: boolean
+        }
+        const p = b.eventPreferences as Prefs
+        const rows = [
+          p.videoType && { label: 'Video Format', value: p.videoType === 'slomo' ? 'Slow Motion' : 'Video' },
+          p.videoDuration && { label: 'Clip Duration', value: `${p.videoDuration}s${p.slomoBoomerang ? ' + boomerang loop' : ''}` },
+          p.backgroundColorTheme && { label: 'Color Theme', value: p.backgroundColorTheme },
+          p.designThemeTags?.length && { label: 'Vibe / Theme', value: p.designThemeTags.join(', ') },
+          p.songPreference && { label: 'Song', value: p.songPreference },
+        ].filter(Boolean) as { label: string; value: string }[]
+        if (!rows.length) return null
+        return (
+          <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '1rem' }}>360 Design Preferences</p>
+            {rows.map(({ label, value }) => (
+              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
+                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-amber-light)', textAlign: 'right', maxWidth: '60%' }}>{value}</span>
+              </div>
+            ))}
+          </div>
+        )
+      })()}
 
       {/* Video upload */}
       <div className="admin-2col" style={{ marginTop: '1px' }}>
