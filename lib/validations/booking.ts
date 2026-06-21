@@ -22,6 +22,14 @@ export const createBookingSchema = z.object({
     'Other',
   ]),
   eventName: z.string().max(100).trim().optional(),
+  eventPreferences: z.object({
+    backgroundColorTheme: z.string().max(200).optional(),
+    designThemeTags: z.array(z.string().max(100)).max(5).optional(),
+    songPreference: z.string().max(200).optional(),
+    videoType: z.enum(['video', 'slomo']).optional(),
+    videoDuration: z.number().int().min(1).max(120).optional(),
+    slomoBoomerang: z.boolean().optional(),
+  }).optional(),
   agreedToTerms: z.literal(true),
 })
 

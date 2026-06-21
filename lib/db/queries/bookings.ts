@@ -11,6 +11,14 @@ export interface CreateBookingParams {
   addOns: string[]
   eventType: string
   eventName?: string
+  eventPreferences?: {
+    backgroundColorTheme?: string
+    designThemeTags?: string[]
+    songPreference?: string
+    videoType?: 'video' | 'slomo'
+    videoDuration?: number
+    slomoBoomerang?: boolean
+  }
   locationAddress: string
   locationCity: string
   travelSurcharge: number
@@ -41,7 +49,8 @@ export async function createBookingRecord(params: CreateBookingParams) {
       balanceChargeDate: params.balanceChargeDate,
       stripePaymentIntentId: params.stripePaymentIntentId,
       stripeCustomerId: params.stripeCustomerId,
-      notes: params.eventName ?? null,
+      eventName: params.eventName ?? null,
+      eventPreferences: params.eventPreferences ?? null,
     })
     .returning()
   return booking

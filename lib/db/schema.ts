@@ -43,6 +43,15 @@ export const bookings = pgTable('bookings', {
   galleryToken: text('gallery_token').$defaultFn(() => createId()),
   galleryPublishedAt: timestamp('gallery_published_at'),
   notes: text('notes'),
+  eventName: text('event_name'),
+  eventPreferences: jsonb('event_preferences').$type<{
+    backgroundColorTheme?: string
+    designThemeTags?: string[]
+    songPreference?: string
+    videoType?: 'video' | 'slomo'
+    videoDuration?: number
+    slomoBoomerang?: boolean
+  }>(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
