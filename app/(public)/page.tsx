@@ -53,7 +53,7 @@ const faqSchema = {
       name: 'How do guests get their videos?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Instantly by QR code at the booth, and the full gallery link is sent the same day. Every video is ready to post.',
+        text: 'Right at the booth. We send your video straight to your phone by text or WhatsApp. Tap to save and it goes directly into your photos. No QR codes to scan, no downloading from a gallery link.',
       },
     },
     {
@@ -194,8 +194,8 @@ export default function HomePage() {
                 <span className="dm-step-no">03</span>
                 <h3>Leave with the video</h3>
                 <p>
-                  Same-day gallery delivery. Your guests walk out with a share-ready video before the night ends,{' '}
-                  <strong>and your event lives on every feed.</strong>
+                  Your video lands in your texts or WhatsApp the moment it is ready. One tap saves it{' '}
+                  <strong>directly to your camera roll.</strong>
                 </p>
               </div>
             </div>
@@ -370,8 +370,8 @@ export default function HomePage() {
                 <span className="dm-faq-icon">+</span>
               </summary>
               <div className="dm-faq-ans">
-                Instantly by QR code at the booth, and the full gallery link lands the same day. Every video is ready to
-                post: trimmed, music added, slow motion dialed in.
+                Right at the booth. We send your video straight to your phone by text or WhatsApp. Tap to save and it
+                goes directly into your photos. No QR codes to scan, no downloading from a gallery link.
               </div>
             </details>
             <details className="dm-faq">
