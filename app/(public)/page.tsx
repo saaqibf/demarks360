@@ -77,7 +77,7 @@ const faqSchema = {
       name: 'What do you need to hold a date?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'A deposit through our secure checkout holds your date. The rest is due the week of the event. Cancel two weeks out and the deposit moves to a new date.',
+        text: 'A deposit through our secure checkout holds your date. The rest is due the week of the event. Cancel 7 or more days out and the deposit moves to a new date.',
       },
     },
   ],
@@ -400,8 +400,8 @@ export default function HomePage() {
                 <span className="dm-faq-icon">+</span>
               </summary>
               <div className="dm-faq-ans">
-                A deposit through our secure checkout holds your date. The rest is due the week of the event. Cancel two
-                weeks out and the deposit moves to a new date, no questions.
+                A deposit through our secure checkout holds your date. The rest is due the week of the event. Cancel 7 or
+                more days out and the deposit moves to a new date, no questions.
               </div>
             </details>
           </div>
@@ -441,7 +441,8 @@ export default function HomePage() {
               <a href="mailto:hello@demarks360.com">hello@demarks360.com</a>
               <a href="https://instagram.com/demarks360" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://tiktok.com/@demarks360" target="_blank" rel="noopener noreferrer">TikTok</a>
-              <a href="/privacy">Privacy &amp; terms</a>
+              <a href="/privacy">Privacy policy</a>
+              <a href="/terms">Terms of service</a>
             </div>
           </div>
           <div className="dm-foot-base">

@@ -46,6 +46,9 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 80px)' }}>
           <div style={{ textAlign: 'center' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>Booking not found</h1>
+            <p style={{ fontSize: '0.88rem', color: 'rgba(245,240,234,0.5)', lineHeight: 1.75, fontWeight: 300, marginBottom: '2rem' }}>
+              Your confirmation link may have expired. Check your email for your booking receipt and details.
+            </p>
             <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-charcoal)', background: 'var(--color-amber-light)', borderRadius: '999px', padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block' }}>Back to Home</Link>
           </div>
         </div>
