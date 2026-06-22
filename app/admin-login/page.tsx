@@ -1,20 +1,21 @@
 'use client'
 import { useUser, useClerk, SignInButton } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, Suspense } from 'react'
 
-export default function AdminLoginPage() {
+function AdminLoginInner() {
   const { isLoaded, isSignedIn, user } = useUser()
   const { signOut } = useClerk()
   const router = useRouter()
+  const params = useSearchParams()
+  const unauthorized = params.get('error') === 'unauthorized'
 
-  const isAdmin = (user?.publicMetadata as { role?: string } | undefined)?.role === 'admin'
-
+  // Once signed in, try the dashboard — admin layout gates by email/role
   useEffect(() => {
-    if (isLoaded && isSignedIn && isAdmin) {
+    if (isLoaded && isSignedIn && !unauthorized) {
       router.replace('/admin/dashboard')
     }
-  }, [isLoaded, isSignedIn, isAdmin, router])
+  }, [isLoaded, isSignedIn, unauthorized, router])
 
   return (
     <div style={{
@@ -41,14 +42,10 @@ export default function AdminLoginPage() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem',
       }}>
         <div style={{ textAlign: 'center' }}>
-          <p className="t-label" style={{
-            color: 'var(--color-amber)', marginBottom: '0.5rem',
-          }}>
+          <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '0.5rem' }}>
             Admin Access
           </p>
-          <h1 className="t-subheading" style={{
-            color: 'var(--color-text-light)', lineHeight: 1, margin: 0,
-          }}>
+          <h1 className="t-subheading" style={{ color: 'var(--color-text-light)', lineHeight: 1, margin: 0 }}>
             Dashboard
           </h1>
         </div>
@@ -64,47 +61,45 @@ export default function AdminLoginPage() {
         )}
 
         {isLoaded && !isSignedIn && (
-          <SignInButton mode="modal" forceRedirectUrl="/admin-login">
-            <button
-              className="btn-primary"
-              style={{
-                width: '100%',
-                textAlign: 'center',
-              }}
-            >
+          <SignInButton mode="modal" forceRedirectUrl="/admin/dashboard">
+            <button className="btn-primary" style={{ width: '100%', textAlign: 'center' }}>
               Sign in as Admin
             </button>
           </SignInButton>
         )}
 
-        {isLoaded && isSignedIn && isAdmin && (
-          <p style={{ fontSize: '0.75rem', color: 'var(--color-muted-light)', margin: 0 }}>
-            Redirecting to dashboard…
-          </p>
-        )}
-
-        {isLoaded && isSignedIn && !isAdmin && (
+        {isLoaded && isSignedIn && unauthorized && (
           <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
             <p style={{ fontSize: '0.8rem', color: 'var(--color-muted-light)', lineHeight: 1.6, margin: 0 }}>
               <strong style={{ color: 'var(--color-text-light)' }}>
-                {user.primaryEmailAddress?.emailAddress}
+                {user?.primaryEmailAddress?.emailAddress}
               </strong>
               {' '}does not have admin access.
             </p>
             <button
               onClick={() => signOut()}
               className="btn-secondary"
-              style={{
-                width: '100%',
-                color: 'var(--color-text-light)',
-                borderColor: 'var(--color-amber)',
-              }}
+              style={{ width: '100%', color: 'var(--color-text-light)', borderColor: 'var(--color-amber)' }}
             >
               Sign out & try again
             </button>
           </div>
         )}
+
+        {isLoaded && isSignedIn && !unauthorized && (
+          <p style={{ fontSize: '0.75rem', color: 'var(--color-muted-light)', margin: 0 }}>
+            Redirecting to dashboard…
+          </p>
+        )}
       </div>
     </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense>
+      <AdminLoginInner />
+    </Suspense>
   )
 }

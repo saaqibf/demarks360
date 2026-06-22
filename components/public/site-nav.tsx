@@ -1,10 +1,13 @@
 'use client'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 export function SiteNav() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('')
+  const pathname = usePathname()
+  const onBookPage = pathname === '/book'
 
   useEffect(() => {
     const ids = ['dm-experience', 'dm-packages', 'dm-gallery', 'dm-faq']
@@ -112,11 +115,13 @@ export function SiteNav() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
-          <Link href="/book" className="btn-primary nav-book-btn" style={{
-            padding: '0.75rem 1.75rem',
-          }}>
-            Book now
-          </Link>
+          {!onBookPage && (
+            <Link href="/book" className="btn-primary nav-book-btn" style={{
+              padding: '0.75rem 1.75rem',
+            }}>
+              Book now
+            </Link>
+          )}
 
           <button
             onClick={() => setOpen(o => !o)}
@@ -189,14 +194,16 @@ export function SiteNav() {
             >
               Admin
             </Link>
-            <div style={{ paddingTop: '1rem' }}>
-              <Link href="/book" className="btn-primary" onClick={() => setOpen(false)} style={{
-                display: 'block',
-                textAlign: 'center',
-              }}>
-                Book now
-              </Link>
-            </div>
+            {!onBookPage && (
+              <div style={{ paddingTop: '1rem' }}>
+                <Link href="/book" className="btn-primary" onClick={() => setOpen(false)} style={{
+                  display: 'block',
+                  textAlign: 'center',
+                }}>
+                  Book now
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -438,6 +438,8 @@ export default function HomePage() {
             </div>
             <div className="dm-fcol">
               <h5>Contact</h5>
+              <a href="tel:+15879179272">587-917-9272</a>
+              <a href="tel:+14034020816">403-402-0816</a>
               <a href="mailto:hello@demarks360.com">hello@demarks360.com</a>
               <a href="https://instagram.com/demarks360" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://tiktok.com/@demarks360" target="_blank" rel="noopener noreferrer">TikTok</a>

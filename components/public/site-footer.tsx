@@ -61,6 +61,8 @@ export function SiteFooter() {
           }}>
             Contact
           </p>
+          <FooterAnchor href="tel:+15879179272">587-917-9272</FooterAnchor>
+          <FooterAnchor href="tel:+14034020816">403-402-0816</FooterAnchor>
           <FooterAnchor href="mailto:hello@demarks360.com">
             hello@demarks360.com
           </FooterAnchor>
