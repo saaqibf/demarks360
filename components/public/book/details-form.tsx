@@ -61,54 +61,63 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
 
       <div style={{ maxWidth: '560px', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         <div>
-          <label style={labelStyle}>Full Name</label>
+          <label htmlFor="df-name" style={labelStyle}>Full Name</label>
           <input
+            id="df-name"
             style={inputStyle}
             value={state.customerName}
             onChange={e => onChange({ customerName: e.target.value })}
             placeholder="Jane Smith"
+            autoComplete="name"
           />
-          {errors.customerName && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerName}</p>}
+          {errors.customerName && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerName}</p>}
         </div>
 
         <div>
-          <label style={labelStyle}>Email Address</label>
+          <label htmlFor="df-email" style={labelStyle}>Email Address</label>
           <input
+            id="df-email"
             type="email"
             style={inputStyle}
             value={state.customerEmail}
             onChange={e => onChange({ customerEmail: e.target.value })}
             placeholder="jane@example.com"
+            autoComplete="email"
           />
-          {errors.customerEmail && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerEmail}</p>}
+          {errors.customerEmail && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerEmail}</p>}
         </div>
 
         <div>
-          <label style={labelStyle}>Phone Number</label>
+          <label htmlFor="df-phone" style={labelStyle}>Phone Number</label>
           <input
+            id="df-phone"
             type="tel"
             style={inputStyle}
             value={state.customerPhone}
             onChange={e => onChange({ customerPhone: e.target.value })}
             placeholder="(403) 555-0123"
+            autoComplete="tel"
           />
-          {errors.customerPhone && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerPhone}</p>}
+          {errors.customerPhone && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.customerPhone}</p>}
         </div>
 
         <div>
-          <label style={labelStyle}>Event Address</label>
+          <label htmlFor="df-address" style={labelStyle}>Event Address</label>
           <input
+            id="df-address"
             style={inputStyle}
             value={state.locationAddress}
             onChange={e => onChange({ locationAddress: e.target.value })}
             placeholder="123 Main Street NW"
+            autoComplete="street-address"
           />
-          {errors.locationAddress && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.locationAddress}</p>}
+          {errors.locationAddress && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.locationAddress}</p>}
         </div>
 
         <div>
-          <label style={labelStyle}>City</label>
+          <label htmlFor="df-city" style={labelStyle}>City</label>
           <select
+            id="df-city"
             style={{ ...inputStyle, cursor: 'pointer' }}
             value={state.locationCity}
             onChange={e => onChange({ locationCity: e.target.value })}
@@ -120,8 +129,9 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
         </div>
 
         <div>
-          <label style={labelStyle}>Event Type</label>
+          <label htmlFor="df-event-type" style={labelStyle}>Event Type</label>
           <select
+            id="df-event-type"
             style={{ ...inputStyle, cursor: 'pointer' }}
             value={dropdownValue}
             onChange={e => {
@@ -146,7 +156,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
               autoFocus
             />
           )}
-          {errors.eventType && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventType}</p>}
+          {errors.eventType && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventType}</p>}
         </div>
 
         <div>
@@ -375,7 +385,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             I understand my 30% deposit is non-refundable.
           </label>
         </div>
-        {errors.agreedToTerms && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '-0.75rem' }}>{errors.agreedToTerms}</p>}
+        {errors.agreedToTerms && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '-0.75rem' }}>{errors.agreedToTerms}</p>}
       </div>
 
       <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>

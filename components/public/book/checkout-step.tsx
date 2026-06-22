@@ -167,7 +167,23 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
   const { lineItems, depositAmount: deposit, balanceAmount: balance, subtotal, durationHours } = pricing
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '3rem', alignItems: 'start' }}>
+    <div className="checkout-grid" style={{ alignItems: 'start' }}>
+      <style>{`
+        .checkout-grid {
+          display: grid;
+          grid-template-columns: 1fr 380px;
+          gap: 3rem;
+        }
+        @media (max-width: 768px) {
+          .checkout-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .checkout-sticky {
+            position: static !important;
+          }
+        }
+      `}</style>
       {/* Order summary */}
       <div>
         <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
@@ -231,7 +247,7 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
       </div>
 
       {/* Payment form */}
-      <div style={{ position: 'sticky', top: '80px' }}>
+      <div className="checkout-sticky" style={{ position: 'sticky', top: '80px' }}>
         <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', padding: '2rem' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '1.25rem' }}>
             Payment Details

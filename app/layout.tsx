@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
+import { CookieConsent } from '@/components/public/cookie-consent'
 import './globals.css'
 
 const BASE_URL = 'https://demarks360.com'
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body>
           <div className="grain" aria-hidden="true" />
           {children}
+          <CookieConsent />
         </body>
       </html>
     </ClerkProvider>

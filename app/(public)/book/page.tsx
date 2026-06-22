@@ -96,8 +96,15 @@ function BookPageInner() {
       <SiteNav />
 
       {/* Step indicator */}
+      <style>{`
+        @media (max-width: 640px) {
+          .step-bar { padding: 0 1rem !important; }
+          .step-label { display: none !important; }
+          .step-content { padding: 2rem 1.25rem !important; }
+        }
+      `}</style>
       <div style={{ borderBottom: '1px solid var(--color-border-dark)', background: 'var(--color-ink)', position: 'sticky', top: '72px', zIndex: 100 }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 3rem', display: 'flex', alignItems: 'center', gap: '0' }}>
+        <div className="step-bar" style={{ maxWidth: '960px', margin: '0 auto', padding: '0 3rem', display: 'flex', alignItems: 'center', gap: '0' }}>
           {STEP_LABELS.map((label, i) => {
             const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5
             const active = stepNum === state.step
@@ -115,7 +122,7 @@ function BookPageInner() {
                   }}>
                     {done ? '✓' : stepNum}
                   </span>
-                  <span style={{
+                  <span className="step-label" style={{
                     fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600,
                     letterSpacing: '0.1em', textTransform: 'uppercase',
                     color: active ? 'var(--color-text-light)' : 'var(--color-muted-light)',
@@ -133,7 +140,7 @@ function BookPageInner() {
       </div>
 
       {/* Step content */}
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '3rem' }}>
+      <div className="step-content" style={{ maxWidth: '960px', margin: '0 auto', padding: '3rem' }}>
         {state.step === 1 && (
           <DatePicker
             selectedDate={state.date}

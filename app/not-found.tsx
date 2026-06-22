@@ -46,18 +46,7 @@ export default function NotFound() {
       }}>
         This page doesn&apos;t exist or has been moved. Let&apos;s get you back.
       </p>
-      <Link href="/" style={{
-        fontFamily: 'var(--font-body)',
-        fontSize: '0.72rem',
-        fontWeight: 700,
-        letterSpacing: '0.14em',
-        textTransform: 'uppercase',
-        color: '#fff',
-        background: 'var(--color-amber)',
-        padding: '0.9rem 2.5rem',
-        borderRadius: '3px',
-        textDecoration: 'none',
-      }}>
+      <Link href="/" className="btn-primary">
         Back to Home
       </Link>
     </div>

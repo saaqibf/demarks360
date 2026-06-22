@@ -364,6 +364,7 @@ button, a, [role="button"] { min-height: 44px; }
 }
 
 /* ─── Scroll offset for fixed header ────────────────────────────── */
+#dm-experience, #dm-packages, #dm-gallery, #dm-faq,
 #how-it-works, #pricing, #gallery, #faq {
   scroll-margin-top: 72px;
 }

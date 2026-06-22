@@ -99,19 +99,6 @@ export function SiteNav() {
             )
           })}
 
-          <Link href="/admin-login" className="nav-link" style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.68rem',
-            fontWeight: 500,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--color-muted-light)',
-            textDecoration: 'none',
-            whiteSpace: 'nowrap',
-            opacity: 0.55,
-          }}>
-            Admin
-          </Link>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
@@ -176,24 +163,6 @@ export function SiteNav() {
                 {label}
               </a>
             ))}
-            <Link
-              href="/admin-login"
-              onClick={() => setOpen(false)}
-              style={{
-                display: 'block',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--color-muted-light)',
-                textDecoration: 'none',
-                padding: '0.85rem 0',
-                borderBottom: '1px solid var(--color-border-dark)',
-              }}
-            >
-              Admin
-            </Link>
             {!onBookPage && (
               <div style={{ paddingTop: '1rem' }}>
                 <Link href="/book" className="btn-primary" onClick={() => setOpen(false)} style={{
