@@ -10,6 +10,21 @@ interface DetailsFormProps {
   onBack: () => void
 }
 
+const DESIGN_THEMES = [
+  { tag: 'Birthday (Adult)', icon: '🥂', gradient: 'linear-gradient(135deg, #2a1a2e 0%, #8B1A4A 50%, #C9913F 100%)' },
+  { tag: 'Birthday (Kids)', icon: '🎈', gradient: 'linear-gradient(135deg, #1a1050 0%, #D63E6B 50%, #F5C842 100%)' },
+  { tag: 'Baby Shower', icon: '✨', gradient: 'linear-gradient(135deg, #1a2535 0%, #7CB3D8 50%, #F0C8D0 100%)' },
+  { tag: 'Bachelorette', icon: '💋', gradient: 'linear-gradient(135deg, #1a0a1a 0%, #C2185B 50%, #F8BBD9 100%)' },
+  { tag: 'Wedding', icon: '🕊️', gradient: 'linear-gradient(135deg, #1a1512 0%, #8B6F5E 50%, #F5EFE2 100%)' },
+  { tag: 'Graduation', icon: '🎓', gradient: 'linear-gradient(135deg, #0a0e1a 0%, #1a3A6B 50%, #C9913F 100%)' },
+  { tag: 'Corporate', icon: '◆', gradient: 'linear-gradient(135deg, #0a0f14 0%, #1E3A4C 50%, #4A9B8E 100%)' },
+  { tag: 'Holiday / Christmas', icon: '❄️', gradient: 'linear-gradient(135deg, #0a1a0a 0%, #8B0000 50%, #C9913F 100%)' },
+  { tag: 'Carnival / Tropical', icon: '🌺', gradient: 'linear-gradient(135deg, #0a1a1a 0%, #00796B 50%, #F57C00 100%)' },
+  { tag: 'Casino Night', icon: '♠️', gradient: 'linear-gradient(135deg, #0a120a 0%, #1B5E20 50%, #C9913F 100%)' },
+  { tag: 'Sports', icon: '🏆', gradient: 'linear-gradient(135deg, #0a0a1a 0%, #1A237E 50%, #B71C1C 100%)' },
+  { tag: 'Custom / Other', icon: '✦', gradient: 'linear-gradient(135deg, #141009 0%, #3D2B1F 50%, #C9913F 100%)' },
+] as const
+
 const EVENT_TYPES = [
   'Birthday Party', 'Wedding', 'Graduation', 'Corporate Event',
   'Engagement Party', 'Baby Shower & Gender Reveal', 'Holiday Party', 'Other',
@@ -309,43 +324,71 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             </p>
           </div>
 
-          {/* Design Theme Tags */}
+          {/* Design Theme Cards */}
           <div>
             <label style={labelStyle}>
               Vibe / Theme <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional, pick any that fit)</span>
             </label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {[
-                'Birthday (Adult)', 'Birthday (Kids)', 'Baby Shower', 'Bachelorette',
-                'Wedding', 'Graduation', 'Corporate', 'Holiday / Christmas',
-                'Carnival / Tropical', 'Casino Night', 'Sports', 'Custom / Other',
-              ].map(tag => {
-                const selected = state.designThemeTags.includes(tag)
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.75rem' }}>
+              {DESIGN_THEMES.map(theme => {
+                const selected = state.designThemeTags.includes(theme.tag)
                 return (
                   <button
-                    key={tag}
+                    key={theme.tag}
                     type="button"
                     onClick={() => {
                       const next = selected
-                        ? state.designThemeTags.filter(t => t !== tag)
-                        : [...state.designThemeTags, tag]
+                        ? state.designThemeTags.filter(t => t !== theme.tag)
+                        : [...state.designThemeTags, theme.tag]
                       onChange({ designThemeTags: next })
                     }}
                     style={{
-                      padding: '0.45rem 0.85rem', borderRadius: '4px',
-                      border: `1px solid ${selected ? 'var(--color-amber-light)' : 'var(--color-border-dark)'}`,
-                      background: selected ? 'rgba(201,145,63,0.12)' : 'transparent',
-                      color: selected ? 'var(--color-amber-light)' : 'rgba(245,240,234,0.45)',
-                      fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 600,
-                      letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.15s',
+                      padding: 0, borderRadius: '8px', cursor: 'pointer', textAlign: 'left',
+                      border: `1.5px solid ${selected ? 'var(--color-amber-light)' : 'rgba(245,240,234,0.1)'}`,
+                      background: 'transparent', overflow: 'hidden',
+                      boxShadow: selected ? '0 0 0 1px var(--color-amber-light)' : 'none',
+                      transition: 'border-color 0.15s, box-shadow 0.15s',
                     }}
                   >
-                    {tag}
+                    {/* Visual preview */}
+                    <div style={{
+                      height: '80px', position: 'relative',
+                      background: theme.gradient,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <span style={{ fontSize: '1.8rem', lineHeight: 1 }}>{theme.icon}</span>
+                      {selected && (
+                        <div style={{
+                          position: 'absolute', top: '6px', right: '6px',
+                          width: '18px', height: '18px', borderRadius: '50%',
+                          background: 'var(--color-amber-light)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                            <path d="M1 4L3.5 6.5L9 1" stroke="#141009" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    {/* Label */}
+                    <div style={{
+                      padding: '0.45rem 0.6rem',
+                      background: 'rgba(20,16,9,0.7)',
+                    }}>
+                      <span style={{
+                        fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700,
+                        letterSpacing: '0.06em', textTransform: 'uppercase',
+                        color: selected ? 'var(--color-amber-light)' : 'rgba(245,240,234,0.65)',
+                        display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                      }}>
+                        {theme.tag}
+                      </span>
+                    </div>
                   </button>
                 )
               })}
             </div>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.45rem' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.6rem' }}>
               Helps us pick the right design section from our overlay library.
             </p>
           </div>
