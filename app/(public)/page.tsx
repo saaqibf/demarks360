@@ -5,7 +5,7 @@ import { DemarksLandingFx } from './_components/demarks-landing-fx'
 import './_components/demarks-landing.css'
 
 export const metadata: Metadata = {
-  title: 'Demarks 360 — Calgary 360° Video Booth Rental',
+  title: 'Demarks 360: Calgary 360° Video Booth Rental',
   description:
     '360° slow-motion video booth rental in Calgary. Same-day gallery delivery, unlimited takes, cinematic results. From $225. Book online.',
   alternates: { canonical: 'https://demarks360.com' },

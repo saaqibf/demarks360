@@ -359,7 +359,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
               style={inputStyle}
               value={state.songPreference}
               onChange={e => onChange({ songPreference: e.target.value })}
-              placeholder="Artist – Song title, or describe the vibe (e.g. afrobeats energy)"
+              placeholder="Artist / Song title, or describe the vibe (e.g. afrobeats energy)"
               maxLength={200}
             />
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.35rem' }}>

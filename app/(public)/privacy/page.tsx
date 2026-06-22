@@ -15,7 +15,7 @@ export default function PrivacyPage() {
 
         {[
           { title: '1. Who We Are', body: 'Demarks 360 is a 360 video booth rental service operating in Calgary, Alberta, Canada. We are committed to protecting your personal information in accordance with the Personal Information Protection and Electronic Documents Act (PIPEDA).' },
-          { title: '2. What We Collect', body: 'We collect: name, email address, phone number, event address (city and postal code), event type, and payment information. Payment card details are processed and stored by Stripe — we never store your card number directly.' },
+          { title: '2. What We Collect', body: 'We collect: name, email address, phone number, event address (city and postal code), event type, and payment information. Payment card details are processed and stored by Stripe. We never store your card number directly.' },
           { title: '3. How We Use It', body: 'Your information is used to: process your booking, charge your deposit and balance payment, send booking confirmations and event reminders via email and SMS, deliver your gallery link after the event, and respond to your inquiries.' },
           { title: '4. SMS Communications', body: 'By providing your phone number, you consent to receive SMS messages from Demarks 360 related to your booking (confirmations, reminders, gallery notifications). Standard message and data rates may apply. You can opt out at any time by replying STOP.' },
           { title: '5. Data Retention', body: 'Your booking data is retained for 3 years for accounting and tax purposes. Your saved payment method is automatically deleted from Stripe 7 days after your event. You may request deletion of your personal data at any time.' },
