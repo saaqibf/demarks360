@@ -3,12 +3,12 @@ import Link from 'next/link'
 const bookLinks = [
   { label: 'Check your date', href: '/book' },
   { label: 'Book now', href: '/book' },
-  { label: 'Pricing', href: '/#pricing' },
-  { label: 'FAQ', href: '/#faq' },
+  { label: 'Packages', href: '/#dm-packages' },
+  { label: 'FAQ', href: '/#dm-faq' },
 ]
 
 const eventLinks = [
-  { label: 'How it works', href: '/#how-it-works' },
+  { label: 'How it works', href: '/#dm-experience' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Birthdays', href: '/book?eventType=Birthday' },
   { label: 'Weddings', href: '/book?eventType=Wedding' },
@@ -61,6 +61,9 @@ export function SiteFooter() {
           }}>
             Contact
           </p>
+          <FooterAnchor href="mailto:hello@demarks360.com">
+            hello@demarks360.com
+          </FooterAnchor>
           <FooterAnchor href="https://instagram.com/demarks360" external>
             @demarks360
           </FooterAnchor>

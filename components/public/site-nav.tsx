@@ -7,7 +7,7 @@ export function SiteNav() {
   const [active, setActive] = useState('')
 
   useEffect(() => {
-    const ids = ['how-it-works', 'pricing', 'gallery', 'faq']
+    const ids = ['dm-experience', 'dm-packages', 'dm-gallery', 'dm-faq']
     const obs = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id) }),
       { rootMargin: '-20% 0px -60% 0px' }
@@ -16,7 +16,12 @@ export function SiteNav() {
     return () => obs.disconnect()
   }, [])
 
-  const links = ['How It Works', 'Pricing', 'Gallery', 'FAQ']
+  const links = [
+    { label: 'Experience', id: 'dm-experience' },
+    { label: 'Packages', id: 'dm-packages' },
+    { label: 'Gallery', id: 'dm-gallery' },
+    { label: 'FAQ', id: 'dm-faq' },
+  ]
 
   return (
     <header style={{
@@ -56,12 +61,11 @@ export function SiteNav() {
         </Link>
 
         <div className="nav-links-desktop" style={{ display: 'flex', alignItems: 'center', gap: '2.25rem' }}>
-          {links.map(label => {
-            const id = label.toLowerCase().replace(/\s+/g, '-')
+          {links.map(({ label, id }) => {
             const isActive = active === id
             return (
               <a
-                key={label}
+                key={id}
                 href={`/#${id}`}
                 className="nav-link"
                 style={{
@@ -146,10 +150,10 @@ export function SiteNav() {
           pointerEvents: 'auto',
         }}>
           <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0.5rem 1.5rem 1rem' }}>
-            {links.map(label => (
+            {links.map(({ label, id }) => (
               <a
-                key={label}
-                href={`/#${label.toLowerCase().replace(/\s+/g, '-')}`}
+                key={id}
+                href={`/#${id}`}
                 onClick={() => setOpen(false)}
                 style={{
                   display: 'block',
