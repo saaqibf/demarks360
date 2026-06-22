@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, useUser } from '@clerk/nextjs'
 import { LayoutDashboard, CalendarDays, BookOpen } from 'lucide-react'
 
 const NAV = [
@@ -12,6 +12,8 @@ const NAV = [
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const { user } = useUser()
+  const displayName = user ? [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Admin' : ''
 
   return (
     <aside style={{
@@ -70,7 +72,7 @@ export function AdminSidebar() {
       {/* User */}
       <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         <UserButton />
-        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.35)' }}>Signed in</span>
+        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.55)', fontWeight: 500 }}>{displayName}</span>
       </div>
     </aside>
   )

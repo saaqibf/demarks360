@@ -1,6 +1,15 @@
 import Link from 'next/link'
 import { getAllBookings } from '@/lib/db/queries/bookings'
 
+const VALID_STATUSES = ['pending', 'confirmed', 'cancelled', 'completed'] as const
+const STATUS_TABS = [
+  { label: 'All', value: '' },
+  { label: 'Pending', value: 'pending' },
+  { label: 'Confirmed', value: 'confirmed' },
+  { label: 'Cancelled', value: 'cancelled' },
+  { label: 'Completed', value: 'completed' },
+]
+
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
   pending:   { bg: 'rgba(251,191,36,0.12)',   color: '#FBB724' },
   confirmed: { bg: 'rgba(52,211,153,0.10)',   color: '#34D399' },
@@ -21,26 +30,29 @@ function fmtDate(d: string): string {
   })
 }
 
-export default async function DashboardPage() {
-  const rows = await getAllBookings()
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const { status } = await searchParams
+  const activeStatus = status && (VALID_STATUSES as readonly string[]).includes(status) ? status : ''
+  const allRows = await getAllBookings()
+  const rows = activeStatus ? allRows.filter(r => r.booking.status === activeStatus) : allRows
 
   const today = new Date().toISOString().split('T')[0]
   const in30 = new Date(Date.now() + 30 * 864e5).toISOString().split('T')[0]
 
-  const totalRevenue = rows
+  const totalRevenue = allRows
     .filter(r => r.booking.status === 'confirmed' || r.booking.status === 'completed')
     .reduce((sum, r) => sum + Number(r.booking.depositAmount ?? 0), 0)
 
-  const upcoming = rows.filter(r =>
+  const upcoming = allRows.filter(r =>
     r.booking.eventDate >= today &&
     r.booking.eventDate <= in30 &&
     (r.booking.status === 'confirmed' || r.booking.status === 'pending')
   ).length
 
-  const pending = rows.filter(r => r.booking.status === 'pending').length
+  const pending = allRows.filter(r => r.booking.status === 'pending').length
 
   const stats = [
-    { label: 'Total Bookings', value: rows.length },
+    { label: 'Total Bookings', value: allRows.length },
     { label: 'Confirmed Revenue', value: `$${totalRevenue.toFixed(0)}` },
     { label: 'Next 30 Days', value: upcoming },
     { label: 'Pending Payment', value: pending },
@@ -73,10 +85,36 @@ export default async function DashboardPage() {
 
       {/* Bookings table */}
       <div style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'var(--color-surface)' }}>
-        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)' }}>
-            All Bookings
+        <div style={{ padding: '0.75rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', margin: 0 }}>
+            Bookings
           </p>
+          <div style={{ display: 'flex', gap: '0.35rem' }}>
+            {STATUS_TABS.map(tab => {
+              const isActive = activeStatus === tab.value
+              return (
+                <Link
+                  key={tab.value}
+                  href={tab.value ? `/admin/dashboard?status=${tab.value}` : '/admin/dashboard'}
+                  style={{
+                    padding: '0.3rem 0.8rem',
+                    borderRadius: '999px',
+                    fontFamily: 'var(--font-ui)',
+                    fontSize: '0.58rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                    background: isActive ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.05)',
+                    color: isActive ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.45)',
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  {tab.label}
+                </Link>
+              )
+            })}
+          </div>
         </div>
 
         {rows.length === 0 ? (

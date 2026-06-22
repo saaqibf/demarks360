@@ -170,6 +170,23 @@ export function bookingConfirmationHtml({ booking: b, customer: c }: BookingEmai
     </table>
   </td></tr>
 
+  <!-- Manage booking -->
+  <tr><td style="background:#faf8f4;padding:24px 36px;border-top:1px solid #e8e3dd;text-align:center;">
+    <p style="margin:0 0 14px 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#888580;line-height:1.6;">
+      Need to reschedule, cancel, or check on your gallery after the event?
+    </p>
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+      <tr><td style="border:1px solid #c9913f;border-radius:2px;">
+        <a href="${APP_URL}/book/manage?id=${b.id}" style="display:inline-block;padding:11px 24px;font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c9913f;text-decoration:none;">
+          Manage My Booking &rarr;
+        </a>
+      </td></tr>
+    </table>
+    <p style="margin:12px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:10px;color:#bbb;line-height:1.5;">
+      Bookmark this page &mdash; your gallery link will appear here after your event.
+    </p>
+  </td></tr>
+
   <!-- Footer -->
   <tr><td style="background:#0F0F0F;padding:28px 36px;border-radius:0 0 3px 3px;">
     <p style="margin:0 0 6px 0;font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F5F0EA;">
