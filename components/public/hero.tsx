@@ -1,3 +1,6 @@
+import { CountUp } from './count-up'
+import { Timecode } from './timecode'
+
 export function Hero() {
   return (
     <section aria-label="Hero" style={{
@@ -36,8 +39,10 @@ export function Hero() {
       }} />
 
       {/* Letterbox bars */}
-      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: 'color-mix(in srgb, var(--color-charcoal) 60%, black)', zIndex: 5 }} />
-      <div aria-hidden style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: 'color-mix(in srgb, var(--color-charcoal) 60%, black)', zIndex: 5 }} />
+      <div aria-hidden className="letterbox-top" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: 'color-mix(in srgb, var(--color-charcoal) 60%, black)', zIndex: 5 }} />
+      <div aria-hidden className="letterbox-bottom" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: 'color-mix(in srgb, var(--color-charcoal) 60%, black)', zIndex: 5, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 1.5rem' }}>
+        <Timecode />
+      </div>
 
       {/* Content — centered like a title card */}
       <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
@@ -135,7 +140,7 @@ export function Hero() {
                   display: 'block',
                   lineHeight: 1,
                 }}>
-                  {val}
+                  <CountUp value={val} />
                 </span>
                 <span style={{
                   fontFamily: 'var(--font-body)',

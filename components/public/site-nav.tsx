@@ -7,11 +7,18 @@ export function SiteNav() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('')
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const pathname = usePathname()
   const onBookPage = pathname === '/book'
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
+    let lastY = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 8)
+      setHidden(y > 160 && y > lastY)
+      lastY = y
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -35,7 +42,13 @@ export function SiteNav() {
   ]
 
   return (
-    <header className={scrolled ? 'dm-nav--scrolled' : undefined} style={{
+    <header
+      className={[
+        'dm-nav-header',
+        scrolled ? 'dm-nav--scrolled' : '',
+        hidden && !open ? 'dm-nav-header--hidden' : '',
+      ].filter(Boolean).join(' ')}
+      style={{
       position: 'fixed',
       top: 0,
       left: 0,

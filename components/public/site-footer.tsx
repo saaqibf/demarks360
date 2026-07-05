@@ -21,7 +21,28 @@ export function SiteFooter() {
     <footer style={{
       background: 'var(--color-charcoal-2)',
       borderTop: '1px solid var(--color-border-dark)',
+      position: 'relative',
+      overflow: 'hidden',
     }}>
+      {/* Oversized wordmark watermark, like a title card fading out */}
+      <span aria-hidden style={{
+        position: 'absolute',
+        bottom: '-0.18em',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        fontFamily: 'var(--font-wordmark)',
+        fontStyle: 'italic',
+        fontSize: 'clamp(6rem, 18vw, 16rem)',
+        fontWeight: 400,
+        lineHeight: 1,
+        whiteSpace: 'nowrap',
+        color: 'transparent',
+        WebkitTextStroke: '1px rgba(201,145,63,0.13)',
+        pointerEvents: 'none',
+        userSelect: 'none',
+      }}>
+        Demarks 360
+      </span>
       <div className="footer-cinema-grid" style={{
         maxWidth: '1240px',
         margin: '0 auto',
