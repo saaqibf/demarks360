@@ -97,7 +97,7 @@ export function Pricing() {
       }}>
         {tiers.map((t, i) => (
           <Reveal key={t.duration} delay={i * 60}>
-            <article style={{
+            <article className="tier-card" style={{
               minHeight: '100%',
               padding: '2.25rem',
               border: t.highlight ? '1px solid var(--color-amber-light)' : '1px solid var(--color-border-dark)',

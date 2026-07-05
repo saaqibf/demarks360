@@ -56,6 +56,11 @@
 * { box-sizing: border-box; }
 html, body { overflow-x: hidden; max-width: 100vw; }
 
+:root {
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 body {
   font-family: var(--font-body);
   font-size: 1rem;          /* 16px minimum — never below this */
@@ -170,7 +175,11 @@ body {
 .hero-headline { animation: fade-up 0.9s cubic-bezier(.16,1,.3,1) 0.30s both; }
 .hero-sub      { animation: fade-up 0.8s cubic-bezier(.16,1,.3,1) 0.50s both; }
 .hero-ctas     { animation: fade-up 0.8s cubic-bezier(.16,1,.3,1) 0.65s both; }
+.hero-statbar  { animation: fade-in 0.9s ease 1.0s both; }
 .hero-video    { animation: fade-in 1.4s ease 0s both; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-label, .hero-headline, .hero-sub, .hero-ctas, .hero-statbar, .hero-video { animation: none; }
+}
 
 /* ─── Buttons ────────────────────────────────────────────────────── */
 .btn-primary {
@@ -191,6 +200,7 @@ body {
   min-height: 44px;
 }
 .btn-primary:hover { transform: scale(1.04); box-shadow: 0 12px 44px rgba(232,178,92,0.35); }
+.btn-primary:active { transform: scale(0.98); transition-duration: 0.1s; }
 
 .btn-secondary {
   font-family: var(--font-body);
@@ -210,6 +220,7 @@ body {
   min-height: 44px;
 }
 .btn-secondary:hover { background: var(--color-charcoal); color: var(--color-text-light); }
+.btn-secondary:active { transform: scale(0.98); }
 /* On dark sections the charcoal hover fill is invisible — use a sand wash instead */
 .btn-secondary--dark:hover { background: rgba(245,239,226,0.08); color: var(--color-sand); }
 
@@ -242,7 +253,20 @@ body {
 .dm-nav-link {
   transition: color 0.18s ease;
 }
+.dm-nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-amber-light);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out-expo);
+}
 .dm-nav-link:hover { color: var(--color-sand) !important; }
+.dm-nav-link:hover::after { transform: scaleX(1); }
 .dm-nav-hamburger { transition: opacity 0.2s ease; }
 .dm-nav-hamburger span { transition: background 0.2s ease; }
 .dm-nav-hamburger:hover span { background: var(--color-amber-light) !important; }
@@ -393,6 +417,20 @@ button, a, [role="button"] { min-height: 44px; }
 .card-hover:hover {
   box-shadow: 0 8px 32px rgba(26,23,20,0.1);
   transform: translateY(-2px);
+}
+
+/* ─── Pricing tier hover (dark sections) ─────────────────────────── */
+.tier-card {
+  transition: transform 0.3s var(--ease-out-quart), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.tier-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 145, 63, 0.55) !important;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.35);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tier-card, .card-hover { transition: none; }
+  .tier-card:hover, .card-hover:hover { transform: none; }
 }
 
 /* ─── Scroll offset for fixed header ────────────────────────────── */

@@ -110,7 +110,7 @@ export function Hero() {
       </div>
 
       {/* Bottom stat bar */}
-      <div style={{
+      <div className="hero-statbar" style={{
         position: 'absolute', bottom: 'clamp(18px, 4vh, 42px)', left: 0, right: 0, zIndex: 10,
         borderTop: '1px solid rgba(243,234,217,0.08)',
         background: 'rgba(20,16,9,0.55)',
