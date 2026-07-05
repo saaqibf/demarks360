@@ -156,7 +156,7 @@ export function DeviceUpload({ bookingId }: Props) {
                     {f.file.name}
                   </p>
                   <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0,
-                    color: f.status === 'done' ? '#34D399' : f.status === 'error' ? 'var(--color-amber-light)' : f.status === 'processing' ? '#FBB724' : 'rgba(245,240,234,0.35)'
+                    color: f.status === 'done' ? 'var(--color-success)' : f.status === 'error' ? 'var(--color-amber-light)' : f.status === 'processing' ? 'var(--color-pending)' : 'rgba(245,240,234,0.35)'
                   }}>
                     {f.status === 'done' ? '✓ Done' : f.status === 'error' ? 'Error' : f.status === 'processing' ? 'Processing…' : f.status === 'uploading' ? `${f.progress}%` : 'Ready'}
                   </span>
@@ -192,7 +192,7 @@ export function DeviceUpload({ bookingId }: Props) {
           )}
 
           {allDone && (
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: '#34D399' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-success)' }}>
               All videos uploaded. Gallery is ready to publish.
             </p>
           )}

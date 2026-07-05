@@ -6,8 +6,16 @@ import { usePathname } from 'next/navigation'
 export function SiteNav() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('')
+  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const onBookPage = pathname === '/book'
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     const ids = ['dm-experience', 'dm-packages', 'dm-gallery', 'dm-faq']
@@ -27,7 +35,7 @@ export function SiteNav() {
   ]
 
   return (
-    <header style={{
+    <header className={scrolled ? 'dm-nav--scrolled' : undefined} style={{
       position: 'fixed',
       top: 0,
       left: 0,
@@ -35,7 +43,7 @@ export function SiteNav() {
       zIndex: 1000,
       pointerEvents: 'none',
     }}>
-      <nav style={{
+      <nav className="dm-nav-bar" style={{
         maxWidth: '1280px',
         margin: '0 auto',
         display: 'flex',
@@ -70,7 +78,7 @@ export function SiteNav() {
               <a
                 key={id}
                 href={`/#${id}`}
-                className="nav-link"
+                className="dm-nav-link"
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.68rem',
@@ -112,7 +120,7 @@ export function SiteNav() {
 
           <button
             onClick={() => setOpen(o => !o)}
-            className="nav-hamburger"
+            className="dm-nav-hamburger"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             style={{
@@ -177,19 +185,6 @@ export function SiteNav() {
         </div>
       )}
 
-      <style>{`
-        .nav-link:hover {
-          color: var(--color-sand) !important;
-        }
-        @media (max-width: 768px) {
-          nav {
-            padding: 0 1.5rem !important;
-          }
-          .nav-links-desktop { display: none !important; }
-          .nav-hamburger { display: flex !important; }
-          .nav-book-btn { display: none !important; }
-        }
-      `}</style>
     </header>
   )
 }

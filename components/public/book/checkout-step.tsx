@@ -60,13 +60,21 @@ function PaymentForm({ bookingId, onBack }: { bookingId: string; onBack: () => v
         disabled={!stripe || submitting}
         style={{
           marginTop: '1.5rem', width: '100%',
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
           background: submitting ? 'rgba(232,178,92,0.45)' : 'var(--color-amber-light)',
           color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px', padding: '1rem 2rem',
           fontFamily: 'var(--font-ui)', fontSize: '0.75rem', fontWeight: 700,
           letterSpacing: '0.12em', textTransform: 'uppercase', cursor: submitting ? 'not-allowed' : 'pointer',
+          transition: 'background 0.2s ease',
         }}
       >
-        {submitting ? 'Processing…' : 'Pay Deposit & Confirm Booking'}
+        {submitting && (
+          <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" opacity="0.25" />
+            <path d="M22 12a10 10 0 00-10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+        )}
+        {submitting ? 'Processing' : 'Pay Deposit & Confirm Booking'}
       </button>
       <button
         type="button"
@@ -259,7 +267,8 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
                 clientSecret,
                 appearance: {
                   theme: 'night',
-                  variables: { fontFamily: 'DM Sans, sans-serif', colorPrimary: 'var(--color-amber-light)', colorBackground: 'var(--color-ink)', colorText: 'var(--color-text-light)' },
+                  // NOTE: Stripe renders in an iframe, so page CSS variables don't resolve here — literal values required
+                  variables: { fontFamily: 'Figtree, sans-serif', colorPrimary: '#E8B25C', colorBackground: '#141009', colorText: '#F3EAD9' },
                 },
               }}
             >

@@ -107,18 +107,20 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
             const disabled = isDisabled(dateStr)
             const selected = selectedDate === dateStr
             const isFull = fullDates.has(dateStr)
+            const isToday = dateStr === toDateStr(today.getFullYear(), today.getMonth(), today.getDate())
             return (
               <button
                 key={day}
                 onClick={() => !disabled && onSelect(dateStr)}
                 disabled={disabled}
                 style={{
-                  border: 'none', cursor: disabled ? 'not-allowed' : 'pointer',
+                  border: isToday && !selected ? '1px solid rgba(201,145,63,0.4)' : 'none',
+                  cursor: disabled ? 'not-allowed' : 'pointer',
                   padding: '0.6rem 0', margin: '2px', borderRadius: '2px',
                   textAlign: 'center',
                   fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: selected ? 600 : 400,
-                  background: selected ? 'var(--color-amber-light)' : 'transparent',
-                  color: selected ? 'var(--color-charcoal)' : disabled ? 'rgba(243,234,217,0.18)' : isFull ? 'var(--color-amber)' : 'var(--color-text-light)',
+                  background: selected ? 'var(--color-amber)' : 'transparent',
+                  color: selected ? 'var(--color-charcoal)' : disabled ? 'rgba(243,234,217,0.25)' : isFull ? 'var(--color-amber)' : 'var(--color-text-light)',
                   transition: 'background 0.15s',
                 }}
                 title={isFull ? 'Fully booked' : undefined}

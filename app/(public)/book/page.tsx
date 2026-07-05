@@ -113,12 +113,13 @@ function BookPageInner() {
               <div key={label} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                 <div style={{ padding: '1rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span style={{
-                    width: '22px', height: '22px', borderRadius: '50%', display: 'inline-flex',
-                    alignItems: 'center', justifyContent: 'center',
-                    background: done ? 'var(--color-amber-light)' : active ? 'var(--color-text-light)' : 'transparent',
-                    border: active || done ? 'none' : '1.5px solid var(--color-border-dark)',
+                    width: '30px', height: '30px', borderRadius: '50%', display: 'inline-flex',
+                    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    background: done ? 'var(--color-amber-light)' : active ? 'var(--color-amber)' : 'transparent',
+                    border: active ? '1px solid var(--color-amber)' : done ? 'none' : '1.5px solid var(--color-border-dark)',
                     color: active || done ? 'var(--color-charcoal)' : 'var(--color-muted-light)',
-                    fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
+                    fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700,
+                    transition: 'background 0.2s ease, color 0.2s ease',
                   }}>
                     {done ? '✓' : stepNum}
                   </span>

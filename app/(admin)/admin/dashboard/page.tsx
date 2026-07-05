@@ -11,8 +11,8 @@ const STATUS_TABS = [
 ]
 
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
-  pending:   { bg: 'rgba(251,191,36,0.12)',   color: '#FBB724' },
-  confirmed: { bg: 'rgba(52,211,153,0.10)',   color: '#34D399' },
+  pending:   { bg: 'rgba(251,191,36,0.12)',   color: 'var(--color-pending)' },
+  confirmed: { bg: 'rgba(52,211,153,0.10)',   color: 'var(--color-success)' },
   cancelled: { bg: 'rgba(201,145,63,0.12)',    color: 'var(--color-amber)' },
   completed: { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
 }

@@ -126,7 +126,7 @@ export function BookingActions({ bookingId, currentStatus, currentNotes }: Props
             marginTop: '0.5rem',
             padding: '0.5rem 1.25rem',
             background: notesSaved ? 'rgba(52,211,153,0.15)' : 'var(--color-amber-light)',
-            color: notesSaved ? '#34D399' : 'var(--color-charcoal)',
+            color: notesSaved ? 'var(--color-success)' : 'var(--color-charcoal)',
             border: 'none',
             borderRadius: '999px',
             fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700,

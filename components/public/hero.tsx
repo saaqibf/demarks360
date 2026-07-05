@@ -31,13 +31,13 @@ export function Hero() {
       {/* Amber light wash */}
       <div style={{
         position: 'absolute', bottom: 0, left: '15%', width: '70%', height: '60%', zIndex: 2,
-        background: 'radial-gradient(ellipse at 50% 100%, rgba(201,145,63,0.18) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse at 50% 100%, rgba(201,145,63,0.22) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
       {/* Letterbox bars */}
-      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: '#0c0a06', zIndex: 5 }} />
-      <div aria-hidden style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: '#0c0a06', zIndex: 5 }} />
+      <div aria-hidden style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: 'color-mix(in srgb, var(--color-charcoal) 60%, black)', zIndex: 5 }} />
+      <div aria-hidden style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 'clamp(18px, 4vh, 42px)', background: 'color-mix(in srgb, var(--color-charcoal) 60%, black)', zIndex: 5 }} />
 
       {/* Content — centered like a title card */}
       <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
@@ -62,7 +62,7 @@ export function Hero() {
             fontWeight: 400,
             lineHeight: 0.98,
             color: 'var(--color-text-light)',
-            letterSpacing: '-0.015em',
+            letterSpacing: '-0.02em',
             marginBottom: '0',
             maxWidth: '1000px',
           }}>
@@ -89,7 +89,7 @@ export function Hero() {
             <a href="/book" className="btn-primary" style={{ whiteSpace: 'nowrap' }}>
               Check your date
             </a>
-            <a href="#pricing" style={{
+            <a href="#pricing" className="hero-ghost-cta" style={{
               fontFamily: 'var(--font-body)',
               fontSize: '0.72rem',
               fontWeight: 400,
@@ -101,7 +101,6 @@ export function Hero() {
               borderRadius: '999px',
               textDecoration: 'none',
               display: 'inline-block',
-              transition: 'background 0.3s ease, color 0.3s ease',
               whiteSpace: 'nowrap',
             }}>
               See pricing

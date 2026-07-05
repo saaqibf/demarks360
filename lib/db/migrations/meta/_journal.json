@@ -8,6 +8,13 @@
       "when": 1778980897062,
       "tag": "0000_uneven_mikhail_rasputin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782079341589,
+      "tag": "0001_wandering_gateway",
+      "breakpoints": true
     }
   ]
 }

@@ -47,6 +47,10 @@
   --color-ink:      #141009;
   --color-surface:  #1A140B;
   --color-surface-2:#221A0F;
+
+  /* ── Semantic status (admin) ── */
+  --color-success:  #34D399;
+  --color-pending:  #FBB724;
 }
 
 * { box-sizing: border-box; }
@@ -72,7 +76,7 @@ body {
   font-size: var(--text-3xl);
   font-weight: 400;
   line-height: 0.98;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   text-transform: none;
 }
 .t-display em, .t-heading em, .t-subheading em {
@@ -155,6 +159,13 @@ body {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+.hero-ghost-cta {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.hero-ghost-cta:hover {
+  background: rgba(243, 234, 217, 0.06);
+  color: var(--color-sand);
+}
 .hero-label    { animation: fade-up 0.7s cubic-bezier(.16,1,.3,1) 0.15s both; }
 .hero-headline { animation: fade-up 0.9s cubic-bezier(.16,1,.3,1) 0.30s both; }
 .hero-sub      { animation: fade-up 0.8s cubic-bezier(.16,1,.3,1) 0.50s both; }
@@ -165,7 +176,7 @@ body {
 .btn-primary {
   font-family: var(--font-body);
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--color-charcoal);
@@ -199,6 +210,8 @@ body {
   min-height: 44px;
 }
 .btn-secondary:hover { background: var(--color-charcoal); color: var(--color-text-light); }
+/* On dark sections the charcoal hover fill is invisible — use a sand wash instead */
+.btn-secondary--dark:hover { background: rgba(245,239,226,0.08); color: var(--color-sand); }
 
 .btn-ghost {
   font-family: var(--font-body);
@@ -223,6 +236,25 @@ body {
   .sec-pad    { padding: 5rem 1.5rem; }
   .sec-pad-sm { padding: 3rem 1.5rem; }
   .sec-pad-lg { padding: 6rem 1.5rem; }
+}
+
+/* ─── Site nav (fixed header) ────────────────────────────────────── */
+.dm-nav-link {
+  transition: color 0.18s ease;
+}
+.dm-nav-link:hover { color: var(--color-sand) !important; }
+.dm-nav-hamburger { transition: opacity 0.2s ease; }
+.dm-nav-hamburger span { transition: background 0.2s ease; }
+.dm-nav-hamburger:hover span { background: var(--color-amber-light) !important; }
+.dm-nav--scrolled .nav-book-btn {
+  background: var(--color-amber);
+  box-shadow: 0 8px 30px rgba(201, 145, 63, 0.35);
+}
+@media (max-width: 768px) {
+  .dm-nav-bar { padding: 0 1.5rem !important; }
+  .nav-links-desktop { display: none !important; }
+  .dm-nav-hamburger { display: flex !important; }
+  .nav-book-btn { display: none !important; }
 }
 
 /* ─── Nav links ──────────────────────────────────────────────────── */

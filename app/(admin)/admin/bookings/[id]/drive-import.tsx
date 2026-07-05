@@ -175,7 +175,7 @@ export function DriveImport({ bookingId }: Props) {
                       borderRadius: '2px', padding: '0.3rem 0.75rem',
                       fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700,
                       letterSpacing: '0.1em', textTransform: 'uppercase',
-                      color: state === 'done' ? '#34D399' : state === 'loading' ? 'rgba(245,240,234,0.35)' : 'var(--color-text-light)',
+                      color: state === 'done' ? 'var(--color-success)' : state === 'loading' ? 'rgba(245,240,234,0.35)' : 'var(--color-text-light)',
                       cursor: state === 'loading' || state === 'done' ? 'not-allowed' : 'pointer',
                       whiteSpace: 'nowrap',
                     }}
@@ -204,7 +204,7 @@ export function DriveImport({ bookingId }: Props) {
           )}
 
           {allDone && (
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: '#34D399' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-success)' }}>
               All videos imported. Gallery is ready to publish.
             </p>
           )}

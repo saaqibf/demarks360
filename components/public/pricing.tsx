@@ -113,6 +113,7 @@ export function Pricing() {
                   top: '-0.85rem',
                   left: '50%',
                   transform: 'translateX(-50%)',
+                  fontSize: '0.58rem',
                   color: 'var(--color-charcoal)',
                   background: 'var(--color-amber-light)',
                   borderRadius: '999px',
@@ -145,7 +146,7 @@ export function Pricing() {
               }}>
                 {t.deposit} deposit today
               </p>
-              <a href="/book" className={t.highlight ? 'btn-primary' : 'btn-secondary'} style={{
+              <a href="/book" className={t.highlight ? 'btn-primary' : 'btn-secondary btn-secondary--dark'} style={{
                 marginTop: 'auto',
                 textAlign: 'center',
                 color: t.highlight ? undefined : 'var(--color-sand)',

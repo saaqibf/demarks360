@@ -62,13 +62,14 @@ export function Testimonials() {
                 lineHeight: 1,
                 color: 'var(--color-amber)',
                 opacity: 0.16,
+                pointerEvents: 'none',
+                userSelect: 'none',
+                zIndex: 0,
               }}>
                 &ldquo;
               </div>
-              <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '1.5rem' }} aria-label="5 star rating">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i} style={{ color: 'var(--color-amber-light)', fontSize: '1rem' }}>★</span>
-                ))}
+              <div style={{ display: 'flex', marginBottom: '1.5rem', color: 'var(--color-amber-light)', fontSize: '0.75rem', letterSpacing: '0.15em', position: 'relative', zIndex: 1 }} aria-label="5 star rating">
+                ★★★★★
               </div>
               <blockquote style={{
                 fontFamily: 'var(--font-display)',
@@ -79,13 +80,14 @@ export function Testimonials() {
                 color: 'var(--color-sand)',
                 margin: '0 0 2rem',
                 position: 'relative',
+                zIndex: 1,
               }}>
                 &ldquo;{featured.quote}&rdquo;
               </blockquote>
-              <p className="t-label" style={{ color: 'var(--color-sand)', marginBottom: '0.45rem' }}>
+              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '0.85rem', color: 'var(--color-sand)', marginBottom: '0.45rem', position: 'relative', zIndex: 1 }}>
                 {featured.name}
               </p>
-              <p className="t-body-dark" style={{ color: 'var(--color-muted-light)' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-muted-light)', position: 'relative', zIndex: 1 }}>
                 {featured.event}
               </p>
             </article>
@@ -106,12 +108,11 @@ export function Testimonials() {
                 padding: '1.75rem',
                 background: 'var(--color-charcoal)',
                 border: '1px solid var(--color-border-dark)',
+                borderLeft: '2px solid var(--color-amber)',
                 borderRadius: '8px',
               }}>
-                <div style={{ display: 'flex', gap: '0.15rem', marginBottom: '1rem' }} aria-label="5 star rating">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <span key={j} style={{ color: 'var(--color-amber-light)', fontSize: '0.9rem' }}>★</span>
-                  ))}
+                <div style={{ display: 'flex', marginBottom: '1rem', color: 'var(--color-amber-light)', fontSize: '0.75rem', letterSpacing: '0.15em' }} aria-label="5 star rating">
+                  ★★★★★
                 </div>
                 <p className="t-body-dark" style={{
                   color: 'var(--color-sand)',
@@ -120,10 +121,10 @@ export function Testimonials() {
                 }}>
                   &ldquo;{r.quote}&rdquo;
                 </p>
-                <p className="t-label" style={{ color: 'var(--color-sand)', marginBottom: '0.35rem' }}>
+                <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '0.85rem', color: 'var(--color-sand)', marginBottom: '0.35rem' }}>
                   {r.name}
                 </p>
-                <p className="t-body-dark" style={{ color: 'var(--color-muted-light)' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-muted-light)' }}>
                   {r.event}
                 </p>
               </article>
