@@ -45,3 +45,10 @@ Executed ~/fable5-prompt.md (D-1..D-10) in this working tree. NOT yet committed 
 - Hero: amber wash 0.22, headline -0.02em, letterbox bars via color-mix; pricing: "Most booked" pill sized, dark-context CTA hover; testimonials: ★ rows to spec, Bodoni italic names, caps event lines, amber left rule on secondary cards, quote mark hardened (z-index/pointer-events).
 - Booking: stepper circles 30px amber-active; date-picker today ring + amber selected; checkout pay button spinner; FIXED real bug: Stripe appearance.variables used var() strings (unresolvable in iframe) → literal values.
 - Verified: tsc PASS, pnpm build PASS, hex-class grep zero in app/ + components/.
+
+## CRITICAL DISCOVERY (2026-07-06): homepage does NOT use components/public/*
+The live landing is app/(public)/page.tsx (459-line monolith, dm-* classes) + _components/demarks-landing.css + demarks-landing-fx.tsx (GSAP+Lenis+Three.js ring, preloader, letterbox bars). components/public/hero|pricing|testimonials|how-it-works|faq|benefit-blocks are an OLD unused iteration — do not spend effort there. site-nav.tsx IS used on /book.
+Also: the Cloudinary video (dds3_1_rqhg7x.mp4) now returns 401 — no public media assets exist.
+
+## Media plumbing shipped (2026-07-06)
+All 9 landing media slots (hero film + 3 step frames + 5 gallery frames) render /media/* files with graceful fallback to designed placeholders. Founder drops real footage into public/media/ per public/media/README.md (exact filenames + specs there) and redeploys — page lights up with zero code changes. Timecode ticks in bottom letterbox bar. fx script removes missing media elements and pauses offscreen videos.
