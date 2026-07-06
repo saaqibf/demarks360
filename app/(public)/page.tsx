@@ -127,6 +127,8 @@ export default function HomePage() {
 
         {/* ── Hero ── */}
         <header className="dm-hero" id="dm-hero">
+          {/* Real event footage backdrop; invisible until /public/media/hero.mp4 exists */}
+          <video className="dm-media dm-hero-film" src="/media/hero.mp4" autoPlay muted loop playsInline aria-hidden="true" />
           <canvas id="dm-ring-canvas" aria-hidden="true" />
           <div className="dm-hero-copy">
             <p className="dm-hero-kicker">Calgary&apos;s 360° slow-motion video booth</p>
@@ -160,6 +162,8 @@ export default function HomePage() {
             <div className="dm-step">
               <div className="dm-step-visual">
                 <div className="dm-step-img" />
+                <img className="dm-media dm-step-media" src="/media/step-1.jpg" alt="" loading="lazy" />
+                <video className="dm-media dm-step-media" src="/media/step-1.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
                 <span className="dm-frame-lbl">Frame 001 · Step on</span>
               </div>
               <div className="dm-step-copy">
@@ -174,6 +178,8 @@ export default function HomePage() {
             <div className="dm-step">
               <div className="dm-step-visual">
                 <div className="dm-step-img" />
+                <img className="dm-media dm-step-media" src="/media/step-2.jpg" alt="" loading="lazy" />
+                <video className="dm-media dm-step-media" src="/media/step-2.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
                 <span className="dm-frame-lbl">Frame 002 · The spin</span>
               </div>
               <div className="dm-step-copy">
@@ -188,6 +194,8 @@ export default function HomePage() {
             <div className="dm-step">
               <div className="dm-step-visual">
                 <div className="dm-step-img" />
+                <img className="dm-media dm-step-media" src="/media/step-3.jpg" alt="" loading="lazy" />
+                <video className="dm-media dm-step-media" src="/media/step-3.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
                 <span className="dm-frame-lbl">Frame 003 · Same-day gallery</span>
               </div>
               <div className="dm-step-copy">
@@ -279,23 +287,23 @@ export default function HomePage() {
           </div>
           <div className="dm-reel" id="dm-reel">
             <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /></div>
+              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-1.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-1.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
               <figcaption><span>Aisha&apos;s 30th</span><span>YYC</span></figcaption>
             </figure>
             <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /></div>
+              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-2.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-2.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
               <figcaption><span>Singh wedding</span><span>YYC</span></figcaption>
             </figure>
             <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /></div>
+              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-3.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-3.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
               <figcaption><span>Stampede social</span><span>YYC</span></figcaption>
             </figure>
             <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /></div>
+              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-4.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-4.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
               <figcaption><span>UofC grad</span><span>YYC</span></figcaption>
             </figure>
             <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /></div>
+              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-5.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-5.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
               <figcaption><span>TELUS team night</span><span>YYC</span></figcaption>
             </figure>
           </div>

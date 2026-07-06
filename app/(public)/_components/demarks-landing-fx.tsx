@@ -6,6 +6,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import * as THREE from 'three'
 
+import { Timecode } from '@/components/public/timecode'
+
 export function DemarksLandingFx() {
   const initialized = useRef(false)
 
@@ -42,6 +44,31 @@ export function DemarksLandingFx() {
     const burger = document.getElementById('dm-burger')
     if (burger) {
       burger.addEventListener('click', () => document.body.classList.toggle('dm-menu-open'))
+    }
+
+    // Footage layers: remove any media element whose file hasn't been provided yet,
+    // so the designed placeholder underneath stays visible
+    document.querySelectorAll<HTMLElement>('.dm-media').forEach((el) => {
+      const remove = () => el.remove()
+      el.addEventListener('error', remove, { once: true })
+      if (el instanceof HTMLImageElement && el.complete && el.naturalWidth === 0) remove()
+    })
+
+    // Pause footage that has scrolled out of view
+    const footage = document.querySelectorAll<HTMLVideoElement>('video.dm-media')
+    let footageObserver: IntersectionObserver | null = null
+    if (footage.length) {
+      footageObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const v = entry.target as HTMLVideoElement
+            if (entry.isIntersecting) v.play().catch(() => {})
+            else v.pause()
+          })
+        },
+        { threshold: 0.15 },
+      )
+      footage.forEach((v) => footageObserver!.observe(v))
     }
 
     // WebGL torus ring
@@ -235,6 +262,7 @@ export function DemarksLandingFx() {
     return () => {
       lenis.destroy()
       ScrollTrigger.getAll().forEach((st) => st.kill())
+      footageObserver?.disconnect()
     }
   }, [])
 
@@ -245,7 +273,9 @@ export function DemarksLandingFx() {
         <div className="dm-loader-lbl">Demarks 360 · Calgary</div>
       </div>
       <div className="dm-bar-top" aria-hidden="true" />
-      <div className="dm-bar-bottom" aria-hidden="true" />
+      <div className="dm-bar-bottom" aria-hidden="true">
+        <Timecode />
+      </div>
       <div className="dm-grain" aria-hidden="true" />
     </>
   )
