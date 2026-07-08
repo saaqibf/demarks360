@@ -42,3 +42,4 @@ yarn-error.log*
 *.tsbuildinfo
 .superpowers/
 CLAUDE.local.md
+.claude/worktrees/
