@@ -30,11 +30,13 @@ const EVENT_TYPES = [
   'Engagement Party', 'Baby Shower & Gender Reveal', 'Holiday Party', 'Other',
 ]
 
+// No outline override here: the global :focus-visible amber outline in globals.css
+// must stay visible on every input in the money path (WCAG 2.4.7)
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.85rem 1rem',
   border: '1px solid var(--color-border-dark)', background: 'var(--color-surface)',
   fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-text-light)',
-  outline: 'none', boxSizing: 'border-box',
+  boxSizing: 'border-box',
 }
 
 const labelStyle: React.CSSProperties = {
@@ -45,7 +47,7 @@ const labelStyle: React.CSSProperties = {
 
 export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const isOtherMode = !EVENT_TYPES.filter(t => t !== 'Other').includes(state.eventType) && state.eventType !== ''
+  const isOtherMode = state.isOtherEventType
   const dropdownValue = isOtherMode ? 'Other' : state.eventType
 
   function validate(): boolean {
@@ -54,7 +56,11 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
     if (!state.customerEmail.includes('@')) e.customerEmail = 'Valid email required'
     if (state.customerPhone.replace(/\D/g, '').length < 10) e.customerPhone = 'Valid phone required'
     if (!state.locationAddress.trim()) e.locationAddress = 'Address is required'
-    if (!state.eventType.trim()) e.eventType = 'Event type is required'
+    if (!state.eventType.trim()) {
+      e.eventType = isOtherMode ? 'Please describe your event' : 'Event type is required'
+    } else if (state.eventType.trim().length < 2) {
+      e.eventType = 'Please describe your event in a few more characters'
+    }
     if (!state.agreedToTerms) e.agreedToTerms = 'You must agree to the Terms of Service'
     setErrors(e)
     return Object.keys(e).length === 0
@@ -151,9 +157,9 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             value={dropdownValue}
             onChange={e => {
               if (e.target.value === 'Other') {
-                onChange({ eventType: ' ' })
+                onChange({ eventType: '', isOtherEventType: true })
               } else {
-                onChange({ eventType: e.target.value })
+                onChange({ eventType: e.target.value, isOtherEventType: false })
               }
             }}
           >
@@ -166,8 +172,10 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             <input
               style={{ ...inputStyle, marginTop: '0.5rem' }}
               placeholder="Describe your event…"
-              value={state.eventType.trim()}
+              value={state.eventType}
               onChange={e => onChange({ eventType: e.target.value })}
+              maxLength={100}
+              aria-label="Describe your event"
               autoFocus
             />
           )}

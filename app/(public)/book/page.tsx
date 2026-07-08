@@ -1,5 +1,5 @@
 'use client'
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { SiteNav } from '@/components/public/site-nav'
 import { DatePicker } from '@/components/public/book/date-picker'
@@ -7,6 +7,7 @@ import { TimePicker } from '@/components/public/book/time-picker'
 import { AddonsStep } from '@/components/public/book/addons-step'
 import { DetailsForm } from '@/components/public/book/details-form'
 import { CheckoutStep } from '@/components/public/book/checkout-step'
+import { BOOKING_WIZARD_STORAGE_KEY } from '@/components/public/book/wizard-storage'
 
 export type BookingState = {
   step: 1 | 2 | 3 | 4 | 5
@@ -20,6 +21,8 @@ export type BookingState = {
   locationAddress: string
   locationCity: string
   eventType: string
+  // True when the user picked "Other" and eventType holds their free-text description
+  isOtherEventType: boolean
   eventName: string
   agreedToTerms: boolean
   // 360 design preferences
@@ -29,6 +32,10 @@ export type BookingState = {
   backgroundColorTheme: string
   designThemeTags: string[]
   songPreference: string
+  // Checkout idempotency: the pending booking created for this wizard session, reused on step 5 remounts
+  pendingBookingId: string | null
+  pendingClientSecret: string | null
+  pendingPayloadSig: string | null
 }
 
 const initialState: BookingState = {
@@ -43,6 +50,7 @@ const initialState: BookingState = {
   locationAddress: '',
   locationCity: 'Calgary',
   eventType: '',
+  isOtherEventType: false,
   eventName: '',
   agreedToTerms: false,
   videoType: 'video',
@@ -51,9 +59,80 @@ const initialState: BookingState = {
   backgroundColorTheme: '',
   designThemeTags: [],
   songPreference: '',
+  pendingBookingId: null,
+  pendingClientSecret: null,
+  pendingPayloadSig: null,
 }
 
 const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Checkout']
+
+// Matches the server's pending-booking expiry, so a restored session never reuses a stale PaymentIntent
+const STORAGE_TTL_MS = 30 * 60_000
+
+function optionalString(v: unknown): string | null {
+  return typeof v === 'string' ? v : null
+}
+
+function requiredString(v: unknown): string {
+  return typeof v === 'string' ? v : ''
+}
+
+function stringArray(v: unknown): string[] {
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : []
+}
+
+// Rebuild a BookingState from untrusted storage, field by field, and clamp the step
+// so a tampered or partial snapshot can never strand the wizard on an unreachable screen
+function rehydrateStoredState(raw: unknown): BookingState | null {
+  if (typeof raw !== 'object' || raw === null) return null
+  const o = raw as Partial<Record<keyof BookingState, unknown>>
+  if (o.step !== 1 && o.step !== 2 && o.step !== 3 && o.step !== 4 && o.step !== 5) return null
+
+  const state: BookingState = {
+    step: o.step,
+    date: optionalString(o.date),
+    startTime: optionalString(o.startTime),
+    endTime: optionalString(o.endTime),
+    addOnIds: stringArray(o.addOnIds),
+    customerName: requiredString(o.customerName),
+    customerEmail: requiredString(o.customerEmail),
+    customerPhone: requiredString(o.customerPhone),
+    locationAddress: requiredString(o.locationAddress),
+    locationCity: requiredString(o.locationCity) || 'Calgary',
+    eventType: requiredString(o.eventType),
+    isOtherEventType: o.isOtherEventType === true,
+    eventName: requiredString(o.eventName),
+    agreedToTerms: o.agreedToTerms === true,
+    videoType: o.videoType === 'slomo' ? 'slomo' : 'video',
+    videoDuration: typeof o.videoDuration === 'number' ? o.videoDuration : null,
+    slomoBoomerang: o.slomoBoomerang === true,
+    backgroundColorTheme: requiredString(o.backgroundColorTheme),
+    designThemeTags: stringArray(o.designThemeTags),
+    songPreference: requiredString(o.songPreference),
+    pendingBookingId: optionalString(o.pendingBookingId),
+    pendingClientSecret: optionalString(o.pendingClientSecret),
+    pendingPayloadSig: optionalString(o.pendingPayloadSig),
+  }
+
+  if (!state.date) state.step = 1
+  else if (state.step > 2 && (!state.startTime || !state.endTime)) state.step = 2
+
+  return state
+}
+
+function loadStoredState(): BookingState | null {
+  try {
+    const raw = sessionStorage.getItem(BOOKING_WIZARD_STORAGE_KEY)
+    if (!raw) return null
+    const parsed: unknown = JSON.parse(raw)
+    if (typeof parsed !== 'object' || parsed === null) return null
+    const { savedAt, state } = parsed as { savedAt?: unknown; state?: unknown }
+    if (typeof savedAt !== 'number' || Date.now() - savedAt > STORAGE_TTL_MS) return null
+    return rehydrateStoredState(state)
+  } catch {
+    return null
+  }
+}
 
 const EVENT_TYPE_ALIASES: Record<string, string> = {
   birthday: 'Birthday Party',
@@ -70,10 +149,14 @@ const EVENT_TYPE_ALIASES: Record<string, string> = {
   'holiday party': 'Holiday Party',
 }
 
-function normalizeEventType(value: string | null): string {
-  if (!value) return ''
+function normalizeEventType(value: string | null): { eventType: string; isOtherEventType: boolean } {
+  if (!value || !value.trim()) return { eventType: '', isOtherEventType: false }
   const normalized = value.trim().replace(/[-_]+/g, ' ').toLowerCase()
-  return EVENT_TYPE_ALIASES[normalized] ?? value.trim()
+  const canonical = EVENT_TYPE_ALIASES[normalized]
+  if (canonical) return { eventType: canonical, isOtherEventType: false }
+  if (normalized === 'other') return { eventType: '', isOtherEventType: true }
+  // Unknown marketing values become a custom event type; the server accepts sanitized free text
+  return { eventType: value.trim().slice(0, 100), isOtherEventType: true }
 }
 
 function BookPageInner() {
@@ -83,9 +166,27 @@ function BookPageInner() {
   const [state, setState] = useState<BookingState>({
     ...initialState,
     date: prefilledDate,
-    eventType: prefilledEventType,
+    ...prefilledEventType,
     step: prefilledDate ? 2 : 1,
   })
+  // Rehydrate after mount (not in the initializer) so server and client render the same
+  // initial markup; persisting is skipped until the restore attempt has run
+  const hydrated = useRef(false)
+
+  useEffect(() => {
+    const stored = loadStoredState()
+    if (stored) setState(stored)
+    hydrated.current = true
+  }, [])
+
+  useEffect(() => {
+    if (!hydrated.current) return
+    try {
+      sessionStorage.setItem(BOOKING_WIZARD_STORAGE_KEY, JSON.stringify({ savedAt: Date.now(), state }))
+    } catch {
+      // Storage full or blocked: the wizard still works, it just will not survive a refresh
+    }
+  }, [state])
 
   function update(patch: Partial<BookingState>) {
     setState((s) => ({ ...s, ...patch }))
@@ -175,6 +276,7 @@ function BookPageInner() {
         {state.step === 5 && (
           <CheckoutStep
             state={state}
+            onChange={update}
             onBack={() => update({ step: 4 })}
           />
         )}

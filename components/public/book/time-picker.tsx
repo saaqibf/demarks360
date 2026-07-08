@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { PRICING } from '@/lib/pricing'
 
 interface TimePickerProps {
   date: string
@@ -46,15 +47,32 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
   const [selectedEnd, setSelectedEnd] = useState<string | null>(endTime)
   const [availability, setAvailability] = useState<AvailabilityData | null>(null)
   const [loading, setLoading] = useState(true)
+  // Fail closed: on fetch failure no slot is selectable; the user gets a retry state instead
+  const [loadError, setLoadError] = useState(false)
+  const [retryNonce, setRetryNonce] = useState(0)
 
   useEffect(() => {
-    const empty: AvailabilityData = { bookedSlots: [], adminBlocks: [], isDateFull: false }
+    let cancelled = false
     setLoading(true)
+    setLoadError(false)
     fetch(`/api/availability?date=${date}`)
-      .then(r => r.ok ? r.json() : Promise.resolve(empty))
-      .then((data: AvailabilityData) => { setAvailability(data); setLoading(false) })
-      .catch(() => { setAvailability(empty); setLoading(false) })
-  }, [date])
+      .then(r => {
+        if (!r.ok) throw new Error(`availability ${r.status}`)
+        return r.json()
+      })
+      .then((data: AvailabilityData) => {
+        if (cancelled) return
+        setAvailability(data)
+        setLoading(false)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setAvailability(null)
+        setLoadError(true)
+        setLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [date, retryNonce])
 
   function isSlotBlocked(slot: string, avail: AvailabilityData): boolean {
     const slotMin = timeToMinutes(slot)
@@ -90,7 +108,32 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
     )
   }
 
-  if (!availability) return null
+  if (loadError || !availability) {
+    return (
+      <div style={{ padding: '4rem 0', textAlign: 'center' }}>
+        <p role="alert" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8rem', color: 'var(--color-amber-light)', marginBottom: '0.6rem' }}>
+          We could not load availability for this date.
+        </p>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'rgba(245,240,234,0.4)', marginBottom: '1.5rem' }}>
+          Time slots stay locked until availability loads, so booked times never show as free.
+        </p>
+        <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+          <button
+            onClick={() => setRetryNonce(n => n + 1)}
+            style={{ background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', padding: '0.75rem 1.75rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}
+          >
+            Retry
+          </button>
+          <button
+            onClick={onBack}
+            style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.75rem 1.6rem', transition: 'border-color 0.2s' }}
+          >
+            ← Back
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const slotsWithStatus = ALL_SLOTS.map(slot => ({
     slot,
@@ -156,7 +199,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             {' · '}
             {Math.round((timeToMinutes(selectedEnd) - timeToMinutes(selectedStart)) / 60 * 10) / 10} hrs
             {' · '}
-            ${Math.ceil((timeToMinutes(selectedEnd) - timeToMinutes(selectedStart)) / 60 * 150).toFixed(0)} estimate
+            ${Math.ceil((timeToMinutes(selectedEnd) - timeToMinutes(selectedStart)) / 60 * PRICING.HOURLY_RATE).toFixed(0)} estimate
           </p>
           <button
             onClick={() => onSelect(selectedStart, selectedEnd)}

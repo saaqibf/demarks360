@@ -56,6 +56,36 @@ export async function createBookingRecord(params: CreateBookingParams) {
   return booking
 }
 
+// Re-entry to checkout reuses the pending booking instead of inserting a duplicate.
+// createdAt is bumped so the pending-expiry window restarts with the refreshed intent.
+export async function updatePendingBooking(
+  id: string,
+  params: Omit<CreateBookingParams, 'customerId' | 'stripePaymentIntentId' | 'stripeCustomerId'>,
+) {
+  const [booking] = await db
+    .update(bookings)
+    .set({
+      eventDate: params.eventDate,
+      startTime: params.startTime,
+      endTime: params.endTime,
+      durationMinutes: params.durationMinutes,
+      addOns: params.addOns,
+      eventType: params.eventType,
+      locationAddress: params.locationAddress,
+      locationCity: params.locationCity,
+      travelSurcharge: String(params.travelSurcharge),
+      depositAmount: String(params.depositAmount),
+      balanceAmount: String(params.balanceAmount),
+      balanceChargeDate: params.balanceChargeDate,
+      eventName: params.eventName ?? null,
+      eventPreferences: params.eventPreferences ?? null,
+      createdAt: new Date(),
+    })
+    .where(eq(bookings.id, id))
+    .returning()
+  return booking ?? null
+}
+
 export async function getBookingById(id: string) {
   const [booking] = await db
     .select()

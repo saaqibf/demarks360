@@ -9,7 +9,33 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 
 interface CheckoutStepProps {
   state: BookingState
+  onChange: (patch: Partial<BookingState>) => void
   onBack: () => void
+}
+
+function buildBookingPayload(state: BookingState) {
+  return {
+    eventDate: state.date,
+    startTime: state.startTime,
+    endTime: state.endTime,
+    addOnIds: state.addOnIds,
+    customerName: state.customerName,
+    customerEmail: state.customerEmail,
+    customerPhone: state.customerPhone,
+    locationAddress: state.locationAddress,
+    locationCity: state.locationCity,
+    eventType: state.eventType.trim(),
+    eventName: state.eventName || undefined,
+    agreedToTerms: state.agreedToTerms,
+    eventPreferences: {
+      ...(state.videoType === 'slomo' && { videoType: 'slomo' as const }),
+      ...(state.videoDuration !== null && { videoDuration: state.videoDuration }),
+      ...(state.slomoBoomerang && { slomoBoomerang: true }),
+      ...(state.backgroundColorTheme && { backgroundColorTheme: state.backgroundColorTheme }),
+      ...(state.designThemeTags.length > 0 && { designThemeTags: state.designThemeTags }),
+      ...(state.songPreference && { songPreference: state.songPreference }),
+    },
+  }
 }
 
 function timeToMinutes(t: string): number {
@@ -87,7 +113,7 @@ function PaymentForm({ bookingId, onBack }: { bookingId: string; onBack: () => v
   )
 }
 
-export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
+export function CheckoutStep({ state, onChange, onBack }: CheckoutStepProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [bookingId, setBookingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -109,38 +135,40 @@ export function CheckoutStep({ state, onBack }: CheckoutStepProps) {
 
   useEffect(() => {
     if (!state.date || !state.startTime || !state.endTime) return
+
+    const payload = buildBookingPayload(state)
+    const payloadSig = JSON.stringify(payload)
+
+    // Idempotent init: remounting step 5 with unchanged details reuses the pending booking
+    // and PaymentIntent instead of creating duplicates
+    if (state.pendingBookingId && state.pendingClientSecret && state.pendingPayloadSig === payloadSig) {
+      setBookingId(state.pendingBookingId)
+      setClientSecret(state.pendingClientSecret)
+      setLoading(false)
+      return
+    }
+
     fetch('/api/bookings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        eventDate: state.date,
-        startTime: state.startTime,
-        endTime: state.endTime,
-        addOnIds: state.addOnIds,
-        customerName: state.customerName,
-        customerEmail: state.customerEmail,
-        customerPhone: state.customerPhone,
-        locationAddress: state.locationAddress,
-        locationCity: state.locationCity,
-        eventType: state.eventType,
-        eventName: state.eventName || undefined,
-        agreedToTerms: state.agreedToTerms,
-        eventPreferences: {
-          ...(state.videoType === 'slomo' && { videoType: 'slomo' as const }),
-          ...(state.videoDuration !== null && { videoDuration: state.videoDuration }),
-          ...(state.slomoBoomerang && { slomoBoomerang: true }),
-          ...(state.backgroundColorTheme && { backgroundColorTheme: state.backgroundColorTheme }),
-          ...(state.designThemeTags.length > 0 && { designThemeTags: state.designThemeTags }),
-          ...(state.songPreference && { songPreference: state.songPreference }),
-        },
-      }),
+      // If details changed since the last init, the server updates the existing pending booking
+      body: JSON.stringify({ ...payload, bookingId: state.pendingBookingId ?? undefined }),
     })
       .then(r => r.json())
       .then((data: { clientSecret?: string; bookingId?: string; error?: string }) => {
-        if (data.error) { setInitError(data.error); setLoading(false); return }
-        setClientSecret(data.clientSecret ?? null)
-        setBookingId(data.bookingId ?? null)
+        if (data.error || !data.clientSecret || !data.bookingId) {
+          setInitError(data.error ?? 'Failed to initialize checkout. Please try again.')
+          setLoading(false)
+          return
+        }
+        setClientSecret(data.clientSecret)
+        setBookingId(data.bookingId)
         setLoading(false)
+        onChange({
+          pendingBookingId: data.bookingId,
+          pendingClientSecret: data.clientSecret,
+          pendingPayloadSig: payloadSig,
+        })
       })
       .catch(() => { setInitError('Failed to initialize checkout. Please try again.'); setLoading(false) })
   // eslint-disable-next-line react-hooks/exhaustive-deps

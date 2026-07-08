@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Placeholders that satisfy module-load env reads at build time. Not real secrets.
+      DATABASE_URL: postgresql://ci:ci@ep-placeholder.us-east-2.aws.neon.tech/neondb?sslmode=require
+      STRIPE_SECRET_KEY: sk_test_ciplaceholder
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_ciplaceholder
+      STRIPE_WEBHOOK_SECRET: whsec_ciplaceholder
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2xlcmsuZXhhbXBsZS5jb20k
+      CLERK_SECRET_KEY: sk_test_ciplaceholder
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      RESEND_API_KEY: re_ciplaceholder
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+      # NOTE: no lint step yet. `pnpm lint` currently fails on pre-existing issues
+      # (admin pages, landing anchors, and eslint scanning .claude/worktrees).
+      # Add it back once that debt is cleared.
+
+      - name: Unit tests
+        run: pnpm test:run
+
+      - name: Build
+        run: pnpm build

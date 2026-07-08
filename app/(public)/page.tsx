@@ -2,12 +2,13 @@ export const revalidate = 300
 
 import type { Metadata } from 'next'
 import { DemarksLandingFx } from './_components/demarks-landing-fx'
+import { FAQS, FROM_PRICE, PACKAGES } from '@/lib/content/landing'
 import './_components/demarks-landing.css'
 
 export const metadata: Metadata = {
   title: 'Demarks 360: Calgary 360° Video Booth Rental',
   description:
-    '360° slow-motion video booth rental in Calgary. Same-day gallery delivery, unlimited takes, cinematic results. From $225. Book online.',
+    `360° slow-motion video booth rental in Calgary. Same-day gallery delivery, unlimited takes, cinematic results. From $${FROM_PRICE}. Book online.`,
   alternates: { canonical: 'https://demarks360.com' },
 }
 
@@ -36,51 +37,15 @@ const localBusinessSchema = {
   sameAs: ['https://instagram.com/demarks360'],
 }
 
+// Generated from the same FAQS array as the visible FAQ markup, so the two can never drift
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'How much space does the booth need?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'A 10 by 10 foot footprint with standard ceiling height. We have set up in living rooms, banquet halls, offices, and backyards. We just need a regular power outlet within 25 feet.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How do guests get their videos?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Right at the booth. We send your video straight to your phone by text or WhatsApp. Tap to save and it goes directly into your photos. No QR codes to scan, no downloading from a gallery link.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can the booth run outdoors?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes, from May to September with a covered or wind-sheltered spot. For winter events we keep it indoors.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How far do you travel?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Calgary and area is included: Airdrie, Chestermere, Okotoks, Cochrane. Travel farther is usually fine with a small fee shown upfront when you book.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What do you need to hold a date?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'A deposit through our secure checkout holds your date. The rest is due the week of the event. Cancel 7 or more days out and the deposit moves to a new date.',
-      },
-    },
-  ],
+  mainEntity: FAQS.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
 }
 
 export default function HomePage() {
@@ -220,43 +185,24 @@ export default function HomePage() {
           </div>
           <div className="dm-packs">
 
-            <div className="dm-pack">
-              <span className="dm-pack-tier">Essential</span>
-              <div className="dm-pack-price">$300<small> / 2 hrs</small></div>
-              <ul>
-                <li><b>2 hours</b> of unlimited spins</li>
-                <li>Professional attendant, setup &amp; teardown</li>
-                <li>Same-day shareable gallery</li>
-                <li>LED ring light</li>
-              </ul>
-              <a className="dm-ghost-btn" href="/book">Check your date</a>
-            </div>
-
-            <div className="dm-pack dm-pack--star">
-              <span className="dm-pack-badge">Most booked</span>
-              <span className="dm-pack-tier">Celebration</span>
-              <div className="dm-pack-price">$450<small> / 3 hrs</small></div>
-              <ul>
-                <li><b>3 hours</b> of unlimited spins</li>
-                <li>Everything in Essential</li>
-                <li>Props that are not tacky</li>
-                <li>Custom video overlay with your names</li>
-                <li>Backdrop matched to your theme</li>
-              </ul>
-              <a className="dm-cta-btn" href="/book">Check your date</a>
-            </div>
-
-            <div className="dm-pack">
-              <span className="dm-pack-tier">All-night</span>
-              <div className="dm-pack-price" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' }}>From $600<small> / 4+ hrs</small></div>
-              <ul>
-                <li><b>4+ hours</b>, evening to last dance</li>
-                <li>Everything in Celebration</li>
-                <li>Second attendant for big guest lists</li>
-                <li>Priority next-morning highlight reel</li>
-              </ul>
-              <a className="dm-ghost-btn" href="/book">Check your date</a>
-            </div>
+            {PACKAGES.map((pack) => (
+              <div key={pack.tier} className={pack.starred ? 'dm-pack dm-pack--star' : 'dm-pack'}>
+                {pack.badge && <span className="dm-pack-badge">{pack.badge}</span>}
+                <span className="dm-pack-tier">{pack.tier}</span>
+                <div
+                  className="dm-pack-price"
+                  style={pack.compactPrice ? { fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' } : undefined}
+                >
+                  {pack.priceLabel}<small>{pack.priceNote}</small>
+                </div>
+                <ul>
+                  {pack.features.map((f, i) => (
+                    <li key={i}>{f.lead && <b>{f.lead}</b>}{f.rest}</li>
+                  ))}
+                </ul>
+                <a className={pack.starred ? 'dm-cta-btn' : 'dm-ghost-btn'} href="/book">Check your date</a>
+              </div>
+            ))}
 
           </div>
           <p className="dm-packs-note">
@@ -362,56 +308,17 @@ export default function HomePage() {
             <h2>Before you <em>book.</em></h2>
           </div>
           <div className="dm-faq-wrap">
-            <details className="dm-faq" open>
-              <summary>
-                How much space does the booth need?
-                <span className="dm-faq-icon">+</span>
-              </summary>
-              <div className="dm-faq-ans">
-                A 10 by 10 foot footprint with standard ceiling height works perfectly. We have set up in living rooms,
-                banquet halls, offices, and backyards. We just need a regular power outlet within 25 feet.
-              </div>
-            </details>
-            <details className="dm-faq">
-              <summary>
-                How do guests get their videos?
-                <span className="dm-faq-icon">+</span>
-              </summary>
-              <div className="dm-faq-ans">
-                Right at the booth. We send your video straight to your phone by text or WhatsApp. Tap to save and it
-                goes directly into your photos. No QR codes to scan, no downloading from a gallery link.
-              </div>
-            </details>
-            <details className="dm-faq">
-              <summary>
-                Can it run outdoors?
-                <span className="dm-faq-icon">+</span>
-              </summary>
-              <div className="dm-faq-ans">
-                Yes, from May to September, with a covered or wind-sheltered spot. For winter events we keep it indoors.
-                This is Calgary after all.
-              </div>
-            </details>
-            <details className="dm-faq">
-              <summary>
-                How far do you travel?
-                <span className="dm-faq-icon">+</span>
-              </summary>
-              <div className="dm-faq-ans">
-                Calgary and area is included: Airdrie, Chestermere, Okotoks, Cochrane. Farther out is usually fine too,
-                with a small travel fee shown upfront when you book.
-              </div>
-            </details>
-            <details className="dm-faq">
-              <summary>
-                What do you need to hold a date?
-                <span className="dm-faq-icon">+</span>
-              </summary>
-              <div className="dm-faq-ans">
-                A deposit through our secure checkout holds your date. The rest is due the week of the event. Cancel 7 or
-                more days out and the deposit moves to a new date, no questions.
-              </div>
-            </details>
+            {FAQS.map((faq, i) => (
+              <details key={faq.q} className="dm-faq" open={i === 0}>
+                <summary>
+                  {faq.q}
+                  <span className="dm-faq-icon">+</span>
+                </summary>
+                <div className="dm-faq-ans">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
           </div>
         </section>
 

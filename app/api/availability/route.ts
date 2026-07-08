@@ -18,8 +18,10 @@ export async function GET(req: NextRequest) {
     try {
       const unavailableDates = await getUnavailableDatesForMonth(y, m)
       return NextResponse.json({ unavailableDates })
-    } catch {
-      return NextResponse.json({ unavailableDates: [] })
+    } catch (err) {
+      // Fail closed: never report booked dates as free. The client shows a retry state on non-200.
+      console.error('availability month lookup failed', err)
+      return NextResponse.json({ error: 'Availability is temporarily unavailable' }, { status: 503 })
     }
   }
 
@@ -32,7 +34,9 @@ export async function GET(req: NextRequest) {
   try {
     const availability = await checkBookingAvailability(date)
     return NextResponse.json(availability)
-  } catch {
-    return NextResponse.json({ status: 'available', bookedSlots: [], bookingCount: 0, adminBlocks: [] })
+  } catch (err) {
+    // Fail closed: never report booked slots as free. The client shows a retry state on non-200.
+    console.error('availability date lookup failed', err)
+    return NextResponse.json({ error: 'Availability is temporarily unavailable' }, { status: 503 })
   }
 }

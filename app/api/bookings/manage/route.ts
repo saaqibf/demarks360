@@ -3,19 +3,44 @@ import { db } from '@/lib/db'
 import { bookings, customers } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { getResend, FROM_EMAIL } from '@/lib/email/resend'
+import { escapeHtml } from '@/lib/email/escape-html'
+import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
-export async function GET(req: NextRequest) {
-  const id = req.nextUrl.searchParams.get('id')
-  if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
-
+async function getBookingRow(id: string) {
   const rows = await db
     .select({ booking: bookings, customer: customers })
     .from(bookings)
     .leftJoin(customers, eq(bookings.customerId, customers.id))
     .where(eq(bookings.id, id))
+  return rows[0] ?? null
+}
 
-  const row = rows[0]
-  if (!row) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+// Ownership proof: the caller must present the email the booking was made with.
+// Without it, a leaked booking id must never unlock PII or the gallery token.
+function emailMatches(row: { customer: { email: string } | null }, email: string | null): boolean {
+  if (!email || !row.customer?.email) return false
+  return row.customer.email.trim().toLowerCase() === email.trim().toLowerCase()
+}
+
+export async function GET(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const rl = checkRateLimit(`manage-get:${ip}`, { limit: 10, windowMs: 60_000 })
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      { status: 429, headers: rateLimitHeaders(0, rl.resetAt) },
+    )
+  }
+
+  const id = req.nextUrl.searchParams.get('id')
+  const email = req.nextUrl.searchParams.get('email')
+  if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+
+  const row = await getBookingRow(id)
+  // Same response for unknown id and wrong email, so the endpoint is not an existence oracle
+  if (!row || !emailMatches(row, email)) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
 
   const { booking: b, customer: c } = row
   return NextResponse.json({
@@ -32,33 +57,46 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const rl = checkRateLimit(`manage-post:${ip}`, { limit: 3, windowMs: 60_000 })
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      { status: 429, headers: rateLimitHeaders(0, rl.resetAt) },
+    )
+  }
+
   const body = await req.json().catch(() => null)
   if (!body) return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
 
-  const { bookingId, requestType, reason } = body as {
+  const { bookingId, email, requestType, reason } = body as {
     bookingId?: string
+    email?: string
     requestType?: 'cancel' | 'change'
     reason?: string
   }
 
-  if (!bookingId || !requestType || !reason?.trim()) {
+  if (!bookingId || !email || !requestType || !reason?.trim()) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   }
+  if (requestType !== 'cancel' && requestType !== 'change') {
+    return NextResponse.json({ error: 'Invalid request type' }, { status: 400 })
+  }
+  if (reason.length > 2000) {
+    return NextResponse.json({ error: 'Message is too long' }, { status: 400 })
+  }
 
-  const rows = await db
-    .select({ booking: bookings, customer: customers })
-    .from(bookings)
-    .leftJoin(customers, eq(bookings.customerId, customers.id))
-    .where(eq(bookings.id, bookingId))
-
-  const row = rows[0]
-  if (!row) return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+  const row = await getBookingRow(bookingId)
+  if (!row || !emailMatches(row, email)) {
+    return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+  }
 
   const { booking: b, customer: c } = row
   const adminEmail = process.env.ADMIN_EMAIL ?? 'hello@demarks360.com'
+  const safeName = escapeHtml(c?.name ?? 'Unknown')
   const subject = requestType === 'cancel'
-    ? `Cancellation Request — ${c?.name ?? 'Customer'} (${b.eventDate})`
-    : `Change Request — ${c?.name ?? 'Customer'} (${b.eventDate})`
+    ? `Cancellation Request - ${c?.name ?? 'Customer'} (${b.eventDate})`
+    : `Change Request - ${c?.name ?? 'Customer'} (${b.eventDate})`
 
   const resend = getResend()
   await resend.emails.send({
@@ -67,19 +105,19 @@ export async function POST(req: NextRequest) {
     subject,
     html: `
       <p style="font-family:sans-serif;font-size:14px;color:#333;">
-        <strong>${requestType === 'cancel' ? 'Cancellation' : 'Change'} request from ${c?.name ?? 'a customer'}</strong>
+        <strong>${requestType === 'cancel' ? 'Cancellation' : 'Change'} request from ${escapeHtml(c?.name ?? 'a customer')}</strong>
       </p>
       <table style="font-family:sans-serif;font-size:13px;color:#555;border-collapse:collapse;width:100%;max-width:480px;">
-        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;width:40%;">Booking ID</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${b.id.slice(0, 12).toUpperCase()}</td></tr>
-        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Customer</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${c?.name ?? 'Unknown'}</td></tr>
-        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Email</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${c?.email ?? 'Unknown'}</td></tr>
-        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Phone</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${c?.phone ?? 'Unknown'}</td></tr>
-        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Event Date</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${b.eventDate}</td></tr>
-        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Event Type</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${b.eventType}</td></tr>
-        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Status</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${b.status}</td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;width:40%;">Booking ID</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${escapeHtml(b.id.slice(0, 12).toUpperCase())}</td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Customer</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${safeName}</td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Email</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${escapeHtml(c?.email ?? 'Unknown')}</td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Phone</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${escapeHtml(c?.phone ?? 'Unknown')}</td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Event Date</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${escapeHtml(b.eventDate)}</td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Event Type</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${escapeHtml(b.eventType)}</td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid #eee;">Status</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${escapeHtml(b.status)}</td></tr>
       </table>
       <p style="font-family:sans-serif;font-size:13px;color:#333;margin-top:20px;"><strong>Their message:</strong></p>
-      <p style="font-family:sans-serif;font-size:13px;color:#555;background:#f9f9f9;padding:12px;border-left:3px solid #c9913f;">${reason.replace(/\n/g, '<br>')}</p>
+      <p style="font-family:sans-serif;font-size:13px;color:#555;background:#f9f9f9;padding:12px;border-left:3px solid #c9913f;">${escapeHtml(reason).replace(/\n/g, '<br>')}</p>
       <p style="font-family:sans-serif;font-size:12px;color:#aaa;margin-top:24px;">
         <a href="${process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'}/admin/bookings/${b.id}">View booking in admin &rarr;</a>
       </p>

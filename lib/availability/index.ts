@@ -1,4 +1,4 @@
-import { getAvailabilityForDate, getAvailabilityForDateRange } from '@/lib/db/queries/availability'
+import { getAvailabilityForDate, getAvailabilityForDateRange, isActiveBooking } from '@/lib/db/queries/availability'
 import type { BookedSlot } from '@/lib/db/queries/availability'
 import { PRICING } from '@/lib/pricing'
 
@@ -32,7 +32,7 @@ export async function getUnavailableDatesForMonth(year: number, month: number): 
 
   const counts = new Map<string, number>()
   for (const b of rangeBookings) {
-    if (b.status === 'confirmed' || b.status === 'pending') {
+    if (isActiveBooking(b)) {
       counts.set(b.eventDate, (counts.get(b.eventDate) ?? 0) + 1)
     }
   }
@@ -45,12 +45,15 @@ export async function getUnavailableDatesForMonth(year: number, month: number): 
   return [...unavailable].sort()
 }
 
-export async function checkBookingAvailability(date: string): Promise<DateAvailability> {
+export async function checkBookingAvailability(
+  date: string,
+  opts?: { excludeBookingId?: string },
+): Promise<DateAvailability> {
   if (daysFromToday(date) < PRICING.LEAD_TIME_DAYS) {
     return { status: 'too-soon' }
   }
 
-  const data = await getAvailabilityForDate(date)
+  const data = await getAvailabilityForDate(date, opts)
 
   if (data.adminBlocks.length > 0) {
     return { status: 'blocked', reason: data.adminBlocks[0].reason ?? 'Date unavailable' }

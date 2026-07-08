@@ -1,6 +1,7 @@
 import {
   pgTable, text, integer, timestamp, boolean,
   jsonb, date, time, numeric, pgEnum,
+  index, uniqueIndex,
 } from 'drizzle-orm/pg-core'
 import { createId } from '@paralleldrive/cuid2'
 
@@ -53,7 +54,12 @@ export const bookings = pgTable('bookings', {
     slomoBoomerang?: boolean
   }>(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => [
+  index('bookings_event_date_idx').on(t.eventDate),
+  index('bookings_customer_id_idx').on(t.customerId),
+  index('bookings_stripe_pi_idx').on(t.stripePaymentIntentId),
+  uniqueIndex('bookings_gallery_token_idx').on(t.galleryToken),
+])
 
 export const addOns = pgTable('add_ons', {
   id: text('id').primaryKey().$defaultFn(() => createId()),
@@ -73,7 +79,10 @@ export const galleryItems = pgTable('gallery_items', {
   published: boolean('published').default(false).notNull(),
   isPublicShowcase: boolean('is_public_showcase').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => [
+  index('gallery_items_booking_id_idx').on(t.bookingId),
+  index('gallery_items_showcase_idx').on(t.isPublicShowcase, t.published),
+])
 
 export const availabilityBlocks = pgTable('availability_blocks', {
   id: text('id').primaryKey().$defaultFn(() => createId()),
@@ -82,7 +91,9 @@ export const availabilityBlocks = pgTable('availability_blocks', {
   endTime: time('end_time'),
   reason: text('reason'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => [
+  index('availability_blocks_date_idx').on(t.blockedDate),
+])
 
 export const settings = pgTable('settings', {
   key: text('key').primaryKey(),

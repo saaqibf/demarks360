@@ -1,4 +1,5 @@
 import { ADDON_CATALOG } from '@/lib/pricing'
+import { escapeHtml } from '@/lib/email/escape-html'
 
 interface BookingEmailData {
   booking: {
@@ -101,7 +102,7 @@ export function bookingConfirmationHtml({ booking: b, customer: c }: BookingEmai
       You&rsquo;re<br>Booked.
     </h1>
     <p style="margin:20px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:rgba(245,240,234,0.55);font-weight:300;line-height:1.6;">
-      Hi ${c.name.split(' ')[0]} &mdash; your 360 video booth is locked in.<br>
+      Hi ${escapeHtml(c.name.split(' ')[0])} &mdash; your 360 video booth is locked in.<br>
       Here&rsquo;s everything you need to know.
     </p>
   </td></tr>
@@ -117,8 +118,8 @@ export function bookingConfirmationHtml({ booking: b, customer: c }: BookingEmai
     <table width="100%" cellpadding="0" cellspacing="0">
       ${row('Date', fmtDate(b.eventDate))}
       ${row('Time', `${fmtTime(b.startTime)} &rarr; ${fmtTime(b.endTime)}`)}
-      ${row('Event type', b.eventType)}
-      ${row('Location', `${b.locationAddress}, ${b.locationCity}`)}
+      ${row('Event type', escapeHtml(b.eventType))}
+      ${row('Location', escapeHtml(`${b.locationAddress}, ${b.locationCity}`))}
       ${addOnsList.length > 0 ? row('Add-ons', addOnsList.join(', ')) : ''}
       ${row('Booking reference', `<span style="font-family:monospace;font-size:12px;letter-spacing:1px;">${ref}</span>`)}
     </table>

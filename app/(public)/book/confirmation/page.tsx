@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getBookingById } from '@/lib/db/queries/bookings'
 import { SiteNav } from '@/components/public/site-nav'
 import { SiteFooter } from '@/components/public/site-footer'
+import { ClearWizardStorage } from './clear-wizard-storage'
 
 interface PageProps {
   searchParams: Promise<{ id?: string }>
@@ -66,6 +67,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
+      <ClearWizardStorage />
       <SiteNav />
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '6rem 3rem 4rem' }}>
         <div style={{ marginBottom: '3rem' }}>

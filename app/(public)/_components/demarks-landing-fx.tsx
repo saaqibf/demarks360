@@ -1,12 +1,19 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import * as THREE from 'three'
 
 import { Timecode } from '@/components/public/timecode'
+
+// three.js loads in its own async chunk, after the main bundle is interactive.
+// The canvas is decorative, so there is nothing to show while it loads.
+const RingScene = dynamic(() => import('./ring-scene').then((m) => m.RingScene), {
+  ssr: false,
+  loading: () => null,
+})
 
 export function DemarksLandingFx() {
   const initialized = useRef(false)
@@ -71,91 +78,8 @@ export function DemarksLandingFx() {
       footage.forEach((v) => footageObserver!.observe(v))
     }
 
-    // WebGL torus ring
-    const canvas = document.getElementById('dm-ring-canvas') as HTMLCanvasElement | null
-    if (canvas) {
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
-      const scene = new THREE.Scene()
-      const cam = new THREE.PerspectiveCamera(40, 1, 0.1, 100)
-      cam.position.set(0, 0.6, 7)
-
-      const ringGroup = new THREE.Group()
-      scene.add(ringGroup)
-
-      const ring = new THREE.Mesh(
-        new THREE.TorusGeometry(2.6, 0.045, 16, 200),
-        new THREE.MeshStandardMaterial({
-          color: 0xc9913f,
-          metalness: 0.9,
-          roughness: 0.25,
-          emissive: 0x3a2708,
-          emissiveIntensity: 0.6,
-        })
-      )
-      ring.rotation.x = Math.PI / 2.25
-      ringGroup.add(ring)
-
-      const ring2 = new THREE.Mesh(
-        new THREE.TorusGeometry(2.95, 0.012, 12, 200),
-        new THREE.MeshBasicMaterial({ color: 0xe8b25c, transparent: true, opacity: 0.35 })
-      )
-      ring2.rotation.x = Math.PI / 2.05
-      ringGroup.add(ring2)
-
-      const head = new THREE.Mesh(
-        new THREE.SphereGeometry(0.09, 24, 24),
-        new THREE.MeshBasicMaterial({ color: 0xf3ead9 })
-      )
-      ringGroup.add(head)
-      head.add(new THREE.PointLight(0xe8b25c, 8, 6))
-
-      scene.add(new THREE.AmbientLight(0xfff2dc, 0.25))
-      const key = new THREE.DirectionalLight(0xe8b25c, 1.4)
-      key.position.set(4, 6, 5)
-      scene.add(key)
-
-      const resize = () => {
-        const w = canvas.clientWidth
-        const h = canvas.clientHeight
-        renderer.setSize(w, h, false)
-        cam.aspect = w / h
-        cam.updateProjectionMatrix()
-      }
-      window.addEventListener('resize', resize)
-      resize()
-
-      let mx = 0
-      let my = 0
-      window.addEventListener('pointermove', (e) => {
-        mx = e.clientX / innerWidth - 0.5
-        my = e.clientY / innerHeight - 0.5
-      })
-
-      let t = 0
-      const ringTicker = () => {
-        if (!reduceMotion) t += 0.008
-        const a = t * 2
-        head.position.set(
-          Math.cos(a) * 2.6,
-          Math.sin(a) * 2.6 * Math.cos(Math.PI / 2.25),
-          Math.sin(a) * 2.6 * Math.sin(Math.PI / 2.25)
-        )
-        ringGroup.rotation.y = t * 0.35 + mx * 0.5
-        ringGroup.rotation.x = my * 0.25
-        renderer.render(scene, cam)
-      }
-      gsap.ticker.add(ringTicker)
-
-      gsap.to(ringGroup.scale, {
-        x: 1.6, y: 1.6, z: 1.6,
-        scrollTrigger: { trigger: '#dm-experience', start: 'top bottom', end: 'top top', scrub: true },
-      })
-      gsap.to(canvas, {
-        opacity: 0,
-        scrollTrigger: { trigger: '#dm-experience', start: 'top 70%', end: 'top 20%', scrub: true },
-      })
-    }
+    // The WebGL torus ring lives in <RingScene /> (dynamic import) so three.js
+    // stays out of this critical chunk
 
     // Preloader degree counter
     const degEl = document.querySelector('#dm-loader .dm-loader-deg') as HTMLElement | null
@@ -268,6 +192,7 @@ export function DemarksLandingFx() {
 
   return (
     <>
+      <RingScene />
       <div id="dm-loader" aria-hidden="true">
         <div className="dm-loader-deg">0°</div>
         <div className="dm-loader-lbl">Demarks 360 · Calgary</div>

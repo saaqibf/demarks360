@@ -15,6 +15,13 @@
       "when": 1782079341589,
       "tag": "0001_wandering_gateway",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783550964835,
+      "tag": "0002_colorful_bromley",
+      "breakpoints": true
     }
   ]
 }

@@ -31,16 +31,31 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
   const [viewYear, setViewYear] = useState(() => minDate.getFullYear())
   const [viewMonth, setViewMonth] = useState(() => minDate.getMonth())
   const [fullDates, setFullDates] = useState<Set<string>>(new Set())
+  // Fail closed: dates are only selectable once availability for the month has loaded
+  const [availStatus, setAvailStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [retryNonce, setRetryNonce] = useState(0)
 
   useEffect(() => {
+    let cancelled = false
     const month = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}`
+    setAvailStatus('loading')
     fetch(`/api/availability?month=${month}`)
-      .then((r) => (r.ok ? r.json() : Promise.resolve({ unavailableDates: [] })))
-      .then((data: { unavailableDates?: string[] }) => {
-        setFullDates(new Set(data.unavailableDates ?? []))
+      .then((r) => {
+        if (!r.ok) throw new Error(`availability ${r.status}`)
+        return r.json()
       })
-      .catch(() => {})
-  }, [viewYear, viewMonth])
+      .then((data: { unavailableDates?: string[] }) => {
+        if (cancelled) return
+        setFullDates(new Set(data.unavailableDates ?? []))
+        setAvailStatus('ready')
+      })
+      .catch(() => {
+        if (cancelled) return
+        setFullDates(new Set())
+        setAvailStatus('error')
+      })
+    return () => { cancelled = true }
+  }, [viewYear, viewMonth, retryNonce])
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth)
   const firstDay = getFirstDayOfMonth(viewYear, viewMonth)
@@ -56,7 +71,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
 
   function isDisabled(dateStr: string) {
     const d = new Date(dateStr + 'T00:00:00')
-    return d < minDate || fullDates.has(dateStr)
+    return availStatus !== 'ready' || d < minDate || fullDates.has(dateStr)
   }
 
   return (
@@ -97,6 +112,26 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
             </div>
           ))}
         </div>
+
+        {/* Availability status: while loading or after a failure, every date stays locked */}
+        {availStatus === 'loading' && (
+          <div role="status" style={{ padding: '0.6rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.4)' }}>
+            Loading availability…
+          </div>
+        )}
+        {availStatus === 'error' && (
+          <div role="alert" style={{ padding: '0.75rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'var(--color-amber-light)' }}>
+              We could not load availability. Dates are locked until it loads.
+            </span>
+            <button
+              onClick={() => setRetryNonce(n => n + 1)}
+              style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.4rem 1rem', transition: 'border-color 0.2s' }}
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
         {/* Day grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', padding: '0.75rem' }}>

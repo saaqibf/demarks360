@@ -55,8 +55,28 @@ describe('createBookingSchema — core fields', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejects an unknown eventType', () => {
-    const result = createBookingSchema.safeParse({ ...base, eventType: 'Rave' })
+  it('accepts a custom free-text eventType', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventType: 'Family reunion' })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects an eventType shorter than 2 characters', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventType: 'X' })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects an eventType longer than 100 characters', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventType: 'x'.repeat(101) })
+    expect(result.success).toBe(false)
+  })
+
+  it('strips control characters from eventType', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventType: 'Family\u0000\u001freunion' })
+    expect(result.success && result.data.eventType).toBe('Family reunion')
+  })
+
+  it('rejects an eventType that is only control characters', () => {
+    const result = createBookingSchema.safeParse({ ...base, eventType: '\u0000\u0001\u0002' })
     expect(result.success).toBe(false)
   })
 

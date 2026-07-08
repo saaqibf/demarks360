@@ -36,8 +36,13 @@ function ManageBookingInner() {
   const id = params.get('id')
 
   const [booking, setBooking] = useState<BookingData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [notFound, setNotFound] = useState(false)
+
+  // Ownership proof: the booking loads only after the visitor confirms the email they booked with
+  const [emailInput, setEmailInput] = useState('')
+  const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null)
+  const [verifyError, setVerifyError] = useState<string | null>(null)
 
   const [mode, setMode] = useState<null | 'cancel' | 'change'>(null)
   const [reason, setReason] = useState('')
@@ -46,26 +51,45 @@ function ManageBookingInner() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!id) { setNotFound(true); setLoading(false); return }
-    fetch(`/api/bookings/manage?id=${encodeURIComponent(id)}`)
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (data) setBooking(data)
-        else setNotFound(true)
-      })
-      .catch(() => setNotFound(true))
-      .finally(() => setLoading(false))
+    if (!id) setNotFound(true)
   }, [id])
 
+  async function verify(e: React.FormEvent) {
+    e.preventDefault()
+    if (!id || !emailInput.trim()) return
+    setLoading(true)
+    setVerifyError(null)
+    try {
+      const res = await fetch(
+        `/api/bookings/manage?id=${encodeURIComponent(id)}&email=${encodeURIComponent(emailInput.trim())}`,
+      )
+      if (res.status === 429) {
+        setVerifyError('Too many attempts. Please wait a minute and try again.')
+        return
+      }
+      if (!res.ok) {
+        setVerifyError('We could not find a booking matching that reference and email.')
+        return
+      }
+      const data = await res.json()
+      setBooking(data)
+      setVerifiedEmail(emailInput.trim())
+    } catch {
+      setVerifyError('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   async function submit() {
-    if (!booking || !mode || !reason.trim()) return
+    if (!booking || !verifiedEmail || !mode || !reason.trim()) return
     setSubmitting(true)
     setError(null)
     try {
       const res = await fetch('/api/bookings/manage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bookingId: booking.id, requestType: mode, reason: reason.trim() }),
+        body: JSON.stringify({ bookingId: booking.id, email: verifiedEmail, requestType: mode, reason: reason.trim() }),
       })
       if (!res.ok) throw new Error('Failed to send request')
       setSubmitted(true)
@@ -77,15 +101,6 @@ function ManageBookingInner() {
   }
 
   const baseStyle: React.CSSProperties = { minHeight: '100vh', background: 'var(--color-ink)', color: 'var(--color-text-light)' }
-
-  if (loading) return (
-    <div style={baseStyle}>
-      <SiteNav />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 72px)' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted-light)' }}>Loading…</p>
-      </div>
-    </div>
-  )
 
   if (notFound) return (
     <div style={baseStyle}>
@@ -102,7 +117,52 @@ function ManageBookingInner() {
     </div>
   )
 
-  if (!booking) return null
+  if (!booking) return (
+    <div style={baseStyle}>
+      <SiteNav />
+      <main style={{ maxWidth: '480px', margin: '0 auto', padding: '8rem 2rem 6rem' }}>
+        <p className="t-label" style={{ color: 'var(--color-amber)', marginBottom: '1rem' }}>Your booking</p>
+        <h1 className="t-heading" style={{ color: 'var(--color-sand)', marginBottom: '1rem' }}>Confirm your email</h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-muted-light)', lineHeight: 1.75, marginBottom: '2rem' }}>
+          To protect your booking details, enter the email address you booked with.
+        </p>
+        <form onSubmit={verify}>
+          <label htmlFor="manage-email" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-muted-light)', display: 'block', marginBottom: '0.4rem' }}>
+            Email Address
+          </label>
+          <input
+            id="manage-email"
+            type="email"
+            required
+            value={emailInput}
+            onChange={e => setEmailInput(e.target.value)}
+            placeholder="jane@example.com"
+            autoComplete="email"
+            style={{
+              width: '100%', padding: '0.85rem 1rem', boxSizing: 'border-box',
+              border: '1px solid rgba(255,255,255,0.1)', background: 'var(--color-surface)',
+              fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-text-light)',
+              marginBottom: '1rem',
+            }}
+          />
+          {verifyError && (
+            <p role="alert" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-amber-light)', marginBottom: '1rem' }}>
+              {verifyError}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={loading || !emailInput.trim()}
+            className="btn-primary"
+            style={{ fontSize: '0.65rem', padding: '0.75rem 1.75rem', opacity: (loading || !emailInput.trim()) ? 0.5 : 1 }}
+          >
+            {loading ? 'Checking…' : 'View my booking'}
+          </button>
+        </form>
+      </main>
+      <SiteFooter />
+    </div>
+  )
 
   const canManage = booking.status === 'pending' || booking.status === 'confirmed'
   const galleryUrl = booking.galleryToken ? `${APP_URL}/gallery/${booking.galleryToken}` : null
@@ -200,7 +260,7 @@ function ManageBookingInner() {
                     width: '100%', boxSizing: 'border-box',
                     background: 'var(--color-ink)', border: '1px solid rgba(255,255,255,0.1)',
                     color: 'var(--color-text-light)', fontFamily: 'var(--font-body)', fontSize: '0.88rem',
-                    padding: '0.9rem', resize: 'vertical', outline: 'none', marginBottom: '1rem',
+                    padding: '0.9rem', resize: 'vertical', marginBottom: '1rem',
                     lineHeight: 1.65,
                   }}
                 />
