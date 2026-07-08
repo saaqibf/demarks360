@@ -1,6 +1,13 @@
 # SESSION-STATE — Demarks360
 _Last updated: 2026-06-11, written for session handoff/compaction. THE canonical resume point._
 
+## Higgsfield media drop DONE (2026-07-07)
+- Founder enabled a Higgsfield 3-day Plus trial to generate real-looking assets. Full set of AI marketing media generated (Seedance 2.0 video + Nano Banana images), dropped into `public/media/`, and shipped live:
+  - `hero-loop.mp4` (cinematic 360-booth celebration loop; hero `<video>` src repointed from hero.mp4 to hero-loop.mp4).
+  - `step-1/2/3.jpg` for the Experience frames, `gallery-1..4.jpg` for the Fresh Reels gallery (birthday, wedding, grad, multigenerational family — inclusive, warm amber/gold, on-brand, not nightclub). gallery-5 still a placeholder.
+- BUG FIXED: `proxy.ts` Clerk `config.matcher` did not exclude video extensions, so every `/media/*.mp4` 404'd (jpgs worked). Added `mp4|webm|mov|m4v` to the matcher. See memory [[reference-demarks-video-middleware]].
+- Trial credits now spent (~2 left). To generate more (animate gallery stills into loops, variations), founder needs the Plus plan to continue; it auto-renews at $49/mo after the 3-day trial unless cancelled ("cancel auto-renewal" in chat).
+
 ## The contract (locked 2026-06-10 via founder grill interview — never re-ask)
 - Demarks360 + Harmony Living launch TOGETHER: real users, real payments, custom domains.
 - Founder picked Direction A "Golden Hour Cinema"; full-website mockup `~/design-directions/demarks-d-cinema-website.html` is the visual target.
