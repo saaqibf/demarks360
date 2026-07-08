@@ -8,6 +8,9 @@ _Last updated: 2026-06-11, written for session handoff/compaction. THE canonical
 - BUG FIXED: `proxy.ts` Clerk `config.matcher` did not exclude video extensions, so every `/media/*.mp4` 404'd (jpgs worked). Added `mp4|webm|mov|m4v` to the matcher. See memory [[reference-demarks-video-middleware]].
 - Trial credits now spent (~2 left). To generate more (animate gallery stills into loops, variations), founder needs the Plus plan to continue; it auto-renews at $49/mo after the 3-day trial unless cancelled ("cancel auto-renewal" in chat).
 
+## WAVE 2 AUDIT FIXES SHIPPED (2026-07-09, 5120e3d)
+- Agent-implemented, lead-verified (build/tsc/65 tests exit 0), shipped live. Money path: availability fails CLOSED (503 + locked dates + retry states), checkout idempotent (cached pendingBookingId/clientSecret, server updates pending in place), pending bookings expire after 30 min (PENDING_BOOKING_TTL_MINUTES) and no longer eat the 2/day cap, server-side slot-overlap 409. "Other"/free-text event types sanitized and accepted (no more end-of-funnel 422). /api/bookings/manage requires booking email as ownership proof (uniform 404, rate limited, HTML-escaped). Prices/FAQ single-sourced from lib/pricing + lib/content/landing.ts. Schema indexes added; migration 0002 generated but NOT run (run pnpm drizzle-kit migrate deliberately). Focus outlines restored on booking inputs. Wizard persists to sessionStorage (30 min TTL). three.js ring dynamically imported. CI at .github/workflows/ci.yml (lint step omitted; pre-existing lint debt documented). Full log: docs/reports/agents/implementation-log.md. Audit reports in docs/reports/agents/.
+
 ## The contract (locked 2026-06-10 via founder grill interview — never re-ask)
 - Demarks360 + Harmony Living launch TOGETHER: real users, real payments, custom domains.
 - Founder picked Direction A "Golden Hour Cinema"; full-website mockup `~/design-directions/demarks-d-cinema-website.html` is the visual target.
