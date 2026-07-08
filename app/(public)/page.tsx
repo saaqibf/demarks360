@@ -127,8 +127,8 @@ export default function HomePage() {
 
         {/* ── Hero ── */}
         <header className="dm-hero" id="dm-hero">
-          {/* Real event footage backdrop; invisible until /public/media/hero.mp4 exists */}
-          <video className="dm-media dm-hero-film" src="/media/hero.mp4" autoPlay muted loop playsInline aria-hidden="true" />
+          {/* Cinematic booth backdrop; invisible until /public/media/hero-loop.mp4 exists */}
+          <video className="dm-media dm-hero-film" src="/media/hero-loop.mp4" autoPlay muted loop playsInline aria-hidden="true" />
           <canvas id="dm-ring-canvas" aria-hidden="true" />
           <div className="dm-hero-copy">
             <p className="dm-hero-kicker">Calgary&apos;s 360° slow-motion video booth</p>
