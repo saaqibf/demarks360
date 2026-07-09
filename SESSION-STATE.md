@@ -62,3 +62,6 @@ Also: the Cloudinary video (dds3_1_rqhg7x.mp4) now returns 401 — no public med
 
 ## Media plumbing shipped (2026-07-06)
 All 9 landing media slots (hero film + 3 step frames + 5 gallery frames) render /media/* files with graceful fallback to designed placeholders. Founder drops real footage into public/media/ per public/media/README.md (exact filenames + specs there) and redeploys — page lights up with zero code changes. Timecode ticks in bottom letterbox bar. fx script removes missing media elements and pauses offscreen videos.
+
+## 4K media quality upgrade (2026-07-09, shipped)
+hero-loop.mp4 AI-upscaled 720p→4K master, served as 2560x1440 H.264 (5.1MB). gallery-1..4 + step-1..3 upscaled to 4K and re-cut at ~2x display res (1792/2400px wide JPEGs). 4K masters in media-masters/ (gitignored, local only). Verified live. NOTE: page.tsx references /media/gallery-{1..4}.mp4 which don't exist in the repo — poster JPGs show instead; harmless but worth deciding (add loops or drop the <video> tags).
