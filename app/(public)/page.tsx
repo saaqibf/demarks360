@@ -92,14 +92,22 @@ export default function HomePage() {
 
         {/* ── Hero ── */}
         <header className="dm-hero" id="dm-hero">
-          {/* Cinematic booth backdrop; invisible until /public/media/hero-loop.mp4 exists */}
-          <video className="dm-media dm-hero-film" src="/media/hero-loop.mp4" autoPlay muted loop playsInline aria-hidden="true" />
-          <canvas id="dm-ring-canvas" aria-hidden="true" />
+          <div className="dm-hero-set" aria-hidden="true">
+            <div className="dm-glow-horizon" />
+            <div className="dm-glow-high" />
+            <div className="dm-bokeh dm-bokeh--a" />
+            <div className="dm-bokeh dm-bokeh--b" />
+            <div className="dm-orbit">
+              <div className="dm-orbit-rotator" id="dm-orbit-rotator">
+                <span className="dm-orbit-head" />
+              </div>
+            </div>
+          </div>
           <div className="dm-hero-copy">
             <p className="dm-hero-kicker">Calgary&apos;s 360° slow-motion video booth</p>
             <h1>
               <span className="dm-line"><span>Every angle</span></span>
-              <span className="dm-line"><span>of <em>the moment.</em></span></span>
+              <span className="dm-line"><span>of <em className="dm-em">the moment.<span className="dm-em-glow" aria-hidden="true">the moment.</span></em></span></span>
             </h1>
             <p className="dm-hero-sub">
               Cinematic slow-motion video of your guests, captured in one spin and delivered the same day.
@@ -121,15 +129,15 @@ export default function HomePage() {
         <section className="dm-sect" id="dm-experience">
           <div className="dm-sect-head">
             <span className="dm-eyebrow">The experience · 001</span>
-            <h2>Your event, shot like a <em>film premiere.</em></h2>
+            <h2><span className="dm-line"><span>Your event, shot like a <em>film premiere.</em></span></span></h2>
           </div>
           <div className="dm-steps">
             <div className="dm-step">
               <div className="dm-step-visual">
                 <div className="dm-step-img" />
                 <img className="dm-media dm-step-media" src="/media/step-1.jpg" alt="" loading="lazy" />
-                <video className="dm-media dm-step-media" src="/media/step-1.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
                 <span className="dm-frame-lbl">Frame 001 · Step on</span>
+                <span className="dm-shutter" aria-hidden="true" />
               </div>
               <div className="dm-step-copy">
                 <span className="dm-step-no">01</span>
@@ -144,8 +152,8 @@ export default function HomePage() {
               <div className="dm-step-visual">
                 <div className="dm-step-img" />
                 <img className="dm-media dm-step-media" src="/media/step-2.jpg" alt="" loading="lazy" />
-                <video className="dm-media dm-step-media" src="/media/step-2.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
                 <span className="dm-frame-lbl">Frame 002 · The spin</span>
+                <span className="dm-shutter" aria-hidden="true" />
               </div>
               <div className="dm-step-copy">
                 <span className="dm-step-no">02</span>
@@ -160,8 +168,8 @@ export default function HomePage() {
               <div className="dm-step-visual">
                 <div className="dm-step-img" />
                 <img className="dm-media dm-step-media" src="/media/step-3.jpg" alt="" loading="lazy" />
-                <video className="dm-media dm-step-media" src="/media/step-3.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
                 <span className="dm-frame-lbl">Frame 003 · Same-day gallery</span>
+                <span className="dm-shutter" aria-hidden="true" />
               </div>
               <div className="dm-step-copy">
                 <span className="dm-step-no">03</span>
@@ -181,7 +189,7 @@ export default function HomePage() {
         <section className="dm-sect" id="dm-packages">
           <div className="dm-sect-head dm-center">
             <span className="dm-eyebrow">Packages · 002</span>
-            <h2>Clear pricing. <em>Zero surprises.</em></h2>
+            <h2><span className="dm-line"><span>Clear pricing. <em>Zero surprises.</em></span></span></h2>
           </div>
           <div className="dm-packs">
 
@@ -215,7 +223,7 @@ export default function HomePage() {
           <div className="dm-check-inner">
             <div>
               <span className="dm-eyebrow">Availability</span>
-              <h2>Is your date <em>still open?</em></h2>
+              <h2><span className="dm-line"><span>Is your date <em>still open?</em></span></span></h2>
             </div>
             <div className="dm-check-form">
               <a className="dm-cta-btn" href="/book" style={{ textAlign: 'center' }}>
@@ -229,29 +237,33 @@ export default function HomePage() {
         <section className="dm-gallery-wrap" id="dm-gallery">
           <div className="dm-gallery-head">
             <span className="dm-eyebrow">Fresh reels · 003</span>
-            <h2>From <em>last weekend&apos;s</em> events.</h2>
+            <h2><span className="dm-line"><span>From <em>last weekend&apos;s</em> events.</span></span></h2>
           </div>
-          <div className="dm-reel" id="dm-reel">
-            <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-1.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-1.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
-              <figcaption><span>Aisha&apos;s 30th</span><span>YYC</span></figcaption>
-            </figure>
-            <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-2.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-2.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
-              <figcaption><span>Singh wedding</span><span>YYC</span></figcaption>
-            </figure>
-            <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-3.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-3.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
-              <figcaption><span>Stampede social</span><span>YYC</span></figcaption>
-            </figure>
-            <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-4.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-4.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
-              <figcaption><span>UofC grad</span><span>YYC</span></figcaption>
-            </figure>
-            <figure className="dm-frame">
-              <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-5.jpg" alt="" loading="lazy" /><video className="dm-media dm-frame-media" src="/media/gallery-5.mp4" muted loop playsInline preload="metadata" aria-hidden="true" /></div>
-              <figcaption><span>TELUS team night</span><span>YYC</span></figcaption>
-            </figure>
+          <div className="dm-reel-scroller">
+            <div className="dm-reel" id="dm-reel">
+              <figure className="dm-frame">
+                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-1.jpg" alt="" loading="lazy" /></div>
+                <figcaption><span>Aisha&apos;s 30th</span><span>YYC</span></figcaption>
+              </figure>
+              <figure className="dm-frame">
+                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-2.jpg" alt="" loading="lazy" /></div>
+                <figcaption><span>Singh wedding</span><span>YYC</span></figcaption>
+              </figure>
+              <figure className="dm-frame">
+                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-3.jpg" alt="" loading="lazy" /></div>
+                <figcaption><span>Stampede social</span><span>YYC</span></figcaption>
+              </figure>
+              <figure className="dm-frame">
+                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-4.jpg" alt="" loading="lazy" /></div>
+                <figcaption><span>UofC grad</span><span>YYC</span></figcaption>
+              </figure>
+              <figure className="dm-frame">
+                <a className="dm-frame-link" href="/book">
+                  <div className="dm-frame-ph"><div className="dm-frame-fill" /><div className="dm-frame-card"><span>Your event, next weekend</span></div></div>
+                </a>
+                <figcaption><span>Reserve the date</span><span>YYC</span></figcaption>
+              </figure>
+            </div>
           </div>
           <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
             <a className="dm-ghost-btn" href="/gallery">Open the full gallery</a>
@@ -264,7 +276,7 @@ export default function HomePage() {
         <section className="dm-sect">
           <div className="dm-sect-head">
             <span className="dm-eyebrow">Reviews · 004</span>
-            <h2>The part of the night <em>everyone remembers.</em></h2>
+            <h2><span className="dm-line"><span>The part of the night <em>everyone remembers.</em></span></span></h2>
           </div>
           <div className="dm-reviews">
             <div className="dm-rev-main">
@@ -305,7 +317,7 @@ export default function HomePage() {
         <section className="dm-sect" id="dm-faq">
           <div className="dm-sect-head dm-center">
             <span className="dm-eyebrow">FAQ · 005</span>
-            <h2>Before you <em>book.</em></h2>
+            <h2><span className="dm-line"><span>Before you <em>book.</em></span></span></h2>
           </div>
           <div className="dm-faq-wrap">
             {FAQS.map((faq, i) => (
@@ -324,7 +336,12 @@ export default function HomePage() {
 
         {/* ── Finale ── */}
         <section className="dm-finale">
-          <h2>Some moments deserve <em>every angle.</em></h2>
+          <div className="dm-finale-orbit" aria-hidden="true">
+            <div className="dm-finale-rotator" id="dm-finale-rotator">
+              <span className="dm-orbit-head" />
+            </div>
+          </div>
+          <h2><span className="dm-line"><span>Some moments deserve <em className="dm-em">every angle.<span className="dm-em-glow" aria-hidden="true">every angle.</span></em></span></span></h2>
           <a className="dm-cta-btn" href="/book" style={{ padding: '1.3rem 3.2rem' }}>
             Check your date
           </a>

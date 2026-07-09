@@ -1,19 +1,12 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import dynamic from 'next/dynamic'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
-import { Timecode } from '@/components/public/timecode'
-
-// three.js loads in its own async chunk, after the main bundle is interactive.
-// The canvas is decorative, so there is nothing to show while it loads.
-const RingScene = dynamic(() => import('./ring-scene').then((m) => m.RingScene), {
-  ssr: false,
-  loading: () => null,
-})
+// One idle lap of the hero orbit takes 26 seconds: a real camera arm has constant angular velocity
+const IDLE_DEG_PER_SEC = 360 / 26
 
 export function DemarksLandingFx() {
   const initialized = useRef(false)
@@ -25,25 +18,41 @@ export function DemarksLandingFx() {
     gsap.registerPlugin(ScrollTrigger)
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const lenis = new Lenis({ lerp: 0.1 })
-    lenis.on('scroll', ScrollTrigger.update)
-    gsap.ticker.add((t) => lenis.raf(t * 1000))
-    gsap.ticker.lagSmoothing(0)
-
+    let velocity = 0
     const navEl = document.getElementById('dm-nav')
-    if (navEl) {
-      lenis.on('scroll', (l: { scroll?: number }) => {
-        navEl.classList.toggle('dm-nav--scrolled', (l.scroll ?? window.scrollY) > 80)
+    const toggleNav = (scroll: number) => {
+      if (navEl) navEl.classList.toggle('dm-nav--scrolled', scroll > 80)
+    }
+
+    // Reduced-motion users keep native scrolling; the Lenis glide is itself motion
+    let lenis: Lenis | null = null
+    let lenisRaf: ((time: number) => void) | null = null
+    let onNativeScroll: (() => void) | null = null
+    if (reduceMotion) {
+      onNativeScroll = () => toggleNav(window.scrollY)
+      window.addEventListener('scroll', onNativeScroll, { passive: true })
+      toggleNav(window.scrollY)
+    } else {
+      lenis = new Lenis({ lerp: 0.1 })
+      lenis.on('scroll', ScrollTrigger.update)
+      lenisRaf = (t) => lenis?.raf(t * 1000)
+      gsap.ticker.add(lenisRaf)
+      gsap.ticker.lagSmoothing(0)
+      lenis.on('scroll', (l: { scroll?: number; velocity?: number }) => {
+        velocity = l.velocity ?? 0
+        toggleNav(l.scroll ?? window.scrollY)
       })
     }
 
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
       a.addEventListener('click', (e) => {
         const href = (a as HTMLAnchorElement).getAttribute('href')
-        if (href && href.length > 1 && document.querySelector(href)) {
+        const target = href && href.length > 1 ? document.querySelector(href) : null
+        if (target) {
           e.preventDefault()
           document.body.classList.remove('dm-menu-open')
-          lenis.scrollTo(href, { offset: -70 })
+          if (lenis) lenis.scrollTo(href!, { offset: -70 })
+          else window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 70 })
         }
       })
     })
@@ -53,155 +62,140 @@ export function DemarksLandingFx() {
       burger.addEventListener('click', () => document.body.classList.toggle('dm-menu-open'))
     }
 
-    // Footage layers: remove any media element whose file hasn't been provided yet,
-    // so the designed placeholder underneath stays visible
+    // Remove any image whose file is missing so the designed placeholder underneath stays visible
     document.querySelectorAll<HTMLElement>('.dm-media').forEach((el) => {
       const remove = () => el.remove()
       el.addEventListener('error', remove, { once: true })
       if (el instanceof HTMLImageElement && el.complete && el.naturalWidth === 0) remove()
     })
 
-    // Pause footage that has scrolled out of view
-    const footage = document.querySelectorAll<HTMLVideoElement>('video.dm-media')
-    let footageObserver: IntersectionObserver | null = null
-    if (footage.length) {
-      footageObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const v = entry.target as HTMLVideoElement
-            if (entry.isIntersecting) v.play().catch(() => {})
-            else v.pause()
+    let orbitTick: ((time: number, deltaTime: number) => void) | null = null
+    let mm: gsap.MatchMedia | null = null
+
+    if (reduceMotion) {
+      // Everything sits at its final state; the orbit lights park mid-track
+      gsap.set('#dm-orbit-rotator', { rotation: -50 })
+      gsap.set('#dm-finale-rotator', { rotation: -50 })
+      gsap.set('.dm-em-glow', { opacity: 0.35 })
+    } else {
+      // Load entrance: the two H1 lines rise out of their masks. Nothing else animates on load.
+      gsap.from('#dm-hero h1 .dm-line > span', {
+        yPercent: 110, duration: 0.9, stagger: 0.1, ease: 'expo.out',
+      })
+
+      // Signature ambient motion: an amber light head laps the tilted track behind the
+      // headline, surged by scroll velocity like the real camera arm being spun
+      const rotator = document.getElementById('dm-orbit-rotator')
+      const emGlow = document.querySelector('.dm-hero .dm-em-glow')
+      const setRotation = rotator ? gsap.quickSetter(rotator, 'rotation', 'deg') : null
+      const setGlow = emGlow ? gsap.quickSetter(emGlow, 'opacity') : null
+      let angle = -50
+      let heroActive = true
+      orbitTick = (_t, deltaMS) => {
+        if (!heroActive) return
+        const dt = deltaMS / 1000
+        // Surge clamp: a hard flick reaches roughly 3x the idle lap speed, never a blur
+        angle += (IDLE_DEG_PER_SEC + Math.min(Math.abs(velocity) * 0.4, 30)) * dt
+        setRotation?.(angle)
+        // The em glints while the head passes behind the headline (near the top of the ellipse)
+        const rad = (angle * Math.PI) / 180
+        setGlow?.(Math.pow(Math.max(0, Math.cos(rad)), 8) * 0.85)
+      }
+      gsap.ticker.add(orbitTick)
+      ScrollTrigger.create({
+        trigger: '.dm-hero', start: 'top bottom', end: 'bottom top',
+        onToggle: (self) => { heroActive = self.isActive },
+      })
+
+      // H2 masked rises: the only per-section entrance
+      gsap.utils.toArray<HTMLElement>('.dm-landing h2 .dm-line > span').forEach((el) => {
+        gsap.from(el, {
+          yPercent: 110, duration: 0.9, ease: 'expo.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+        })
+      })
+
+      // Film-gate shutters open toward the copy side, plus a restrained image parallax
+      gsap.utils.toArray<HTMLElement>('.dm-step').forEach((step, i) => {
+        const shutter = step.querySelector('.dm-shutter')
+        const img = step.querySelector('.dm-step-img')
+        if (shutter) {
+          gsap.fromTo(shutter,
+            { xPercent: 0 },
+            {
+              xPercent: i % 2 === 1 ? 101 : -101,
+              duration: 1.0, ease: 'power4.inOut', immediateRender: true,
+              scrollTrigger: { trigger: step, start: 'top 75%', once: true },
+            },
+          )
+        }
+        if (img) {
+          gsap.to(img, {
+            yPercent: 8, ease: 'none',
+            scrollTrigger: { trigger: step, start: 'top bottom', end: 'bottom top', scrub: true },
           })
-        },
-        { threshold: 0.15 },
-      )
-      footage.forEach((v) => footageObserver!.observe(v))
-    }
-
-    // The WebGL torus ring lives in <RingScene /> (dynamic import) so three.js
-    // stays out of this critical chunk
-
-    // Preloader degree counter
-    const degEl = document.querySelector('#dm-loader .dm-loader-deg') as HTMLElement | null
-    if (degEl) {
-      const count = { v: 0 }
-      gsap.timeline()
-        .to(count, {
-          v: 360,
-          duration: reduceMotion ? 0 : 1.6,
-          ease: 'power2.inOut',
-          onUpdate: () => { degEl.textContent = Math.round(count.v) + '°' },
-        })
-        .to('#dm-loader', { yPercent: -100, duration: 0.9, ease: 'power4.inOut' })
-        // Bars fade in as the loader exits — never starts at scaleY:4 so nothing is ever clipped
-        .to('.dm-bar-top, .dm-bar-bottom', { scaleY: 1, duration: 0.5, ease: 'power2.out' }, '<0.2')
-        .from('#dm-hero h1 .dm-line span', {
-          yPercent: 110, duration: 1.1, stagger: 0.12, ease: 'power4.out',
-        }, '-=.5')
-        .from('.dm-hero-kicker, .dm-hero-sub, .dm-hero-ctas, .dm-hero-proof, .dm-scroll-hint', {
-          opacity: 0, y: 18, duration: 0.8, stagger: 0.09,
-        }, '-=.7')
-        .from('#dm-nav', { opacity: 0, y: -16, duration: 0.7 }, '-=.6')
-    }
-
-    // Bars fully disappear as user scrolls into experience section
-    gsap.to('.dm-bar-top, .dm-bar-bottom', {
-      scaleY: 0,
-      scrollTrigger: { trigger: '#dm-experience', start: 'top bottom', end: 'top 40%', scrub: true },
-    })
-
-    // Section head reveals
-    gsap.utils.toArray<HTMLElement>('.dm-sect-head').forEach((el) => {
-      gsap.from(el, {
-        opacity: 0, y: 50, duration: 1, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 80%' },
+        }
       })
-    })
 
-    // Step reveals + parallax
-    gsap.utils.toArray<HTMLElement>('.dm-step').forEach((step) => {
-      const copy = step.querySelector('.dm-step-copy')
-      const visual = step.querySelector('.dm-step-visual')
-      const img = step.querySelector('.dm-step-img')
-      if (copy) {
-        gsap.from(copy, {
-          opacity: 0, y: 50, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: step, start: 'top 75%' },
+      // Amber rules draw: the orbit path flattened into a line
+      gsap.utils.toArray<HTMLElement>('.dm-amber-rule').forEach((el) => {
+        gsap.from(el, {
+          scaleX: 0, duration: 1.2, ease: 'power4.inOut',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
         })
-      }
-      if (visual) {
-        gsap.from(visual, {
-          clipPath: 'inset(12% 12% 12% 12%)', duration: 1.2, ease: 'power3.out',
-          scrollTrigger: { trigger: step, start: 'top 75%' },
-        })
-      }
-      if (img) {
-        gsap.to(img, {
-          yPercent: 14, ease: 'none',
-          scrollTrigger: { trigger: step, start: 'top bottom', end: 'bottom top', scrub: true },
-        })
-      }
-    })
-
-    gsap.from('.dm-pack', {
-      opacity: 0, y: 60, stagger: 0.12, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: '.dm-packs', start: 'top 78%' },
-    })
-    gsap.from('.dm-check-inner > *', {
-      opacity: 0, y: 40, stagger: 0.15, duration: 0.9,
-      scrollTrigger: { trigger: '.dm-check-band', start: 'top 78%' },
-    })
-
-    // Gallery reel horizontal drift
-    const reel = document.getElementById('dm-reel')
-    if (reel) {
-      gsap.to('#dm-reel', {
-        x: () => -(reel.scrollWidth - innerWidth + 60),
-        ease: 'none',
-        scrollTrigger: { trigger: '.dm-gallery-wrap', start: 'top 70%', end: 'bottom top', scrub: 1 },
       })
-    }
-    gsap.from('.dm-frame', {
-      opacity: 0, y: 60, stagger: 0.1, duration: 0.9,
-      scrollTrigger: { trigger: '.dm-gallery-wrap', start: 'top 75%' },
-    })
 
-    gsap.from('.dm-rev-main, .dm-rev', {
-      opacity: 0, y: 50, stagger: 0.12, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: '.dm-reviews', start: 'top 78%' },
-    })
-    gsap.from('.dm-faq', {
-      opacity: 0, y: 30, stagger: 0.08, duration: 0.7, ease: 'power3.out',
-      scrollTrigger: { trigger: '.dm-faq-wrap', start: 'top 80%' },
-    })
-    gsap.from('.dm-finale h2, .dm-finale .dm-cta-btn', {
-      opacity: 0, y: 40, stagger: 0.15, duration: 1,
-      scrollTrigger: { trigger: '.dm-finale', start: 'top 75%' },
-    })
-    gsap.from('.dm-foot-grid > *', {
-      opacity: 0, y: 30, stagger: 0.08, duration: 0.8,
-      scrollTrigger: { trigger: 'footer', start: 'top 88%' },
-    })
+      // Gallery filmstrip: scrubbed drift on fine pointers; the scroller stays natively
+      // swipeable everywhere else (touch, reduced motion, no JS)
+      mm = gsap.matchMedia()
+      mm.add('(pointer: fine)', () => {
+        const reel = document.getElementById('dm-reel')
+        const scroller = document.querySelector<HTMLElement>('.dm-reel-scroller')
+        if (!reel || !scroller) return
+        scroller.style.overflowX = 'hidden'
+        gsap.to(reel, {
+          x: () => -Math.max(0, reel.scrollWidth - innerWidth + 60) * 0.6,
+          ease: 'none',
+          scrollTrigger: { trigger: '.dm-gallery-wrap', start: 'top 70%', end: 'bottom top', scrub: 1.5 },
+        })
+        return () => { scroller.style.overflowX = '' }
+      })
+
+      // Bokeh discs drift slowly as the hero scrolls away
+      gsap.to('.dm-bokeh--a', {
+        yPercent: -12, ease: 'none',
+        scrollTrigger: { trigger: '.dm-hero', start: 'top top', end: 'bottom top', scrub: true },
+      })
+      gsap.to('.dm-bokeh--b', {
+        yPercent: -20, ease: 'none',
+        scrollTrigger: { trigger: '.dm-hero', start: 'top top', end: 'bottom top', scrub: true },
+      })
+
+      // Finale: scrolling through the section personally turns the arm through one full 360
+      const finaleRotator = document.getElementById('dm-finale-rotator')
+      if (finaleRotator) {
+        const finaleSet = gsap.quickSetter(finaleRotator, 'rotation', 'deg')
+        ScrollTrigger.create({
+          trigger: '.dm-finale', start: 'top bottom', end: 'bottom top', scrub: true,
+          onUpdate: (self) => {
+            const deg = self.progress * 360 - 180
+            finaleSet(deg)
+            const rad = (deg * Math.PI) / 180
+            gsap.set('.dm-finale .dm-em-glow', { opacity: Math.pow(Math.max(0, Math.cos(rad)), 8) * 0.85 })
+          },
+        })
+      }
+    }
 
     return () => {
-      lenis.destroy()
+      if (orbitTick) gsap.ticker.remove(orbitTick)
+      if (lenisRaf) gsap.ticker.remove(lenisRaf)
+      if (onNativeScroll) window.removeEventListener('scroll', onNativeScroll)
+      mm?.revert()
+      lenis?.destroy()
       ScrollTrigger.getAll().forEach((st) => st.kill())
-      footageObserver?.disconnect()
     }
   }, [])
 
-  return (
-    <>
-      <RingScene />
-      <div id="dm-loader" aria-hidden="true">
-        <div className="dm-loader-deg">0°</div>
-        <div className="dm-loader-lbl">Demarks 360 · Calgary</div>
-      </div>
-      <div className="dm-bar-top" aria-hidden="true" />
-      <div className="dm-bar-bottom" aria-hidden="true">
-        <Timecode />
-      </div>
-      <div className="dm-grain" aria-hidden="true" />
-    </>
-  )
+  return <div className="dm-grain" aria-hidden="true" />
 }

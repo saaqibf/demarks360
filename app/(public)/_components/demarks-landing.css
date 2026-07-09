@@ -8,48 +8,6 @@
   overflow-x: hidden;
 }
 
-/* preloader */
-#dm-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: #0c0a06;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-.dm-loader-deg {
-  font-family: 'Bodoni Moda', Georgia, serif;
-  font-size: clamp(4rem, 12vw, 9rem);
-  font-style: italic;
-  color: #e8b25c;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.dm-loader-lbl {
-  font-size: 0.65rem;
-  letter-spacing: 0.45em;
-  text-transform: uppercase;
-  color: #b9ad97;
-}
-
-/* letterbox bars — hidden until GSAP activates them */
-.dm-bar-top,
-.dm-bar-bottom {
-  position: fixed;
-  left: 0;
-  width: 100%;
-  height: 11vh;
-  background: #0c0a06;
-  z-index: 50;
-  pointer-events: none;
-  transform: scaleY(0);
-}
-.dm-bar-top    { top: 0;    transform-origin: top; }
-.dm-bar-bottom { bottom: 0; transform-origin: bottom; }
-
 /* grain overlay */
 .dm-grain {
   position: fixed;
@@ -57,15 +15,7 @@
   z-index: 90;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  opacity: 0.05;
-  animation: dm-grain 8s steps(10) infinite;
-}
-@keyframes dm-grain {
-  0%,100% { transform: translate(0, 0); }
-  20%     { transform: translate(-3%, 2%); }
-  40%     { transform: translate(2%, -3%); }
-  60%     { transform: translate(-2%, -2%); }
-  80%     { transform: translate(3%, 3%); }
+  opacity: 0.04;
 }
 
 /* nav */
@@ -110,6 +60,8 @@
 
 .dm-cta-btn {
   display: inline-block;
+  position: relative;
+  overflow: hidden;
   font-family: 'Figtree', sans-serif;
   font-size: 0.68rem;
   letter-spacing: 0.3em;
@@ -121,12 +73,22 @@
   border-radius: 99px;
   border: 0;
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s;
+  transition: transform 0.2s ease-out;
 }
-.dm-cta-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 50px rgba(232, 178, 92, 0.35);
+.dm-cta-btn:hover { transform: translateY(-1px); }
+.dm-cta-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  left: 0;
+  background: linear-gradient(100deg, transparent, color-mix(in srgb, var(--color-sand) 45%, transparent), transparent);
+  transform: translateX(-150%) skewX(-18deg);
+  transition: transform 0.55s ease;
+  pointer-events: none;
 }
+.dm-cta-btn:hover::after { transform: translateX(320%) skewX(-18deg); }
 .dm-ghost-btn {
   display: inline-block;
   font-family: 'Figtree', sans-serif;
@@ -199,19 +161,105 @@
   display: grid;
   place-items: center;
 }
-#dm-ring-canvas {
+.dm-hero-set {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+.dm-glow-horizon {
+  position: absolute;
+  left: -20%;
+  bottom: -35%;
+  width: 120%;
+  height: 85%;
+  background: radial-gradient(ellipse at 40% 100%, color-mix(in srgb, var(--color-amber) 16%, transparent), transparent 55%);
+}
+.dm-glow-high {
+  position: absolute;
+  top: -12%;
+  right: -10%;
+  width: 60%;
+  height: 55%;
+  background: radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-sand) 4%, transparent), transparent 60%);
+}
+.dm-bokeh {
+  position: absolute;
+  border-radius: 50%;
+}
+.dm-bokeh--a {
+  width: 18vw;
+  height: 18vw;
+  left: 11%;
+  top: 26%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-amber) 22%, transparent), transparent 70%);
+  filter: blur(46px);
+}
+.dm-bokeh--b {
+  width: 10vw;
+  height: 10vw;
+  right: 15%;
+  bottom: 22%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-amber-light) 18%, transparent), transparent 70%);
+  filter: blur(32px);
+}
+/* The 3D tilt flattens the 1px circle into the camera arm's track seen at eye level */
+.dm-orbit {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: min(120vw, 1500px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-6deg);
+  border: 1px solid color-mix(in srgb, var(--color-amber) 28%, transparent);
+  border-radius: 50%;
+}
+.dm-orbit-rotator {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.dm-orbit-head {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: var(--color-text-light);
+  box-shadow:
+    0 0 12px 4px color-mix(in srgb, var(--color-amber-light) 80%, transparent),
+    0 0 42px 16px color-mix(in srgb, var(--color-amber) 35%, transparent);
+}
+.dm-orbit-head::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 9px;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(270deg, color-mix(in srgb, var(--color-amber-light) 70%, transparent), transparent);
+}
+.dm-em { position: relative; }
+.dm-em-glow {
+  position: absolute;
+  inset: 0;
+  color: var(--color-amber-light);
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--color-amber-light) 55%, transparent),
+    0 0 46px color-mix(in srgb, var(--color-amber) 35%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  font-style: italic;
 }
 .dm-hero-copy {
   position: relative;
   z-index: 5;
   text-align: center;
   padding: 0 1.5rem;
-  /* shift content above visual center to account for fixed nav */
-  margin-top: -8vh;
+  /* fixed nav needs clearance above the kicker */
+  padding-top: 9vh;
   /* ensure proof bar clears the scroll hint */
   padding-bottom: 8vh;
 }
@@ -225,12 +273,13 @@
 .dm-hero h1 {
   font-family: 'Bodoni Moda', Georgia, serif;
   font-weight: 400;
-  font-size: clamp(3rem, 9vw, 8rem);
+  font-size: clamp(3rem, 9vw, 8.5rem);
   line-height: 0.98;
   letter-spacing: -0.015em;
   color: #f3ead9;
 }
-.dm-hero h1 .dm-line {
+.dm-hero h1 .dm-line,
+.dm-landing h2 .dm-line {
   display: block;
   overflow: hidden;
   padding-top: 0.25em;
@@ -238,7 +287,8 @@
   margin-top: -0.25em;
   margin-bottom: -0.18em;
 }
-.dm-hero h1 .dm-line span { display: inline-block; }
+.dm-hero h1 .dm-line > span,
+.dm-landing h2 .dm-line > span { display: inline-block; }
 .dm-hero h1 em { font-style: italic; color: #e8b25c; }
 .dm-hero-sub {
   margin-top: 2.2rem;
@@ -286,13 +336,6 @@
   height: 38px;
   margin: 0.8rem auto 0;
   background: linear-gradient(#c9913f, transparent);
-  animation: dm-drip 1.8s ease-in-out infinite;
-}
-@keyframes dm-drip {
-  0%  { transform: scaleY(0); transform-origin: top; }
-  50% { transform: scaleY(1); transform-origin: top; }
-  51% { transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
 /* shared sections */
@@ -324,6 +367,7 @@
 .dm-sect-head.dm-center { margin-left: auto; margin-right: auto; text-align: center; }
 .dm-amber-rule {
   height: 1px;
+  transform-origin: left;
   background: linear-gradient(90deg, transparent, rgba(201, 145, 63, 0.4), transparent);
   border: 0;
   max-width: 1240px;
@@ -350,6 +394,14 @@
   inset: -12%;
   background-size: cover;
   background-position: center;
+}
+/* Film-gate shutter: default off-screen so no-JS and reduced-motion users see the image */
+.dm-shutter {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--color-charcoal);
+  transform: translateX(101%);
 }
 .dm-step:nth-child(1) .dm-step-img { background-image: radial-gradient(ellipse at 30% 60%, #c9913f55, transparent 60%), radial-gradient(ellipse at 75% 25%, #e8b25c33, transparent 55%), linear-gradient(160deg, #241c10, #0e0b07); }
 .dm-step:nth-child(2) .dm-step-img { background-image: radial-gradient(ellipse at 70% 70%, #c9913f44, transparent 55%), radial-gradient(circle at 25% 30%, #f3ead922, transparent 45%), linear-gradient(200deg, #1d160d, #0c0a06); }
@@ -528,19 +580,26 @@
 .dm-frame:nth-child(3) .dm-frame-fill { background: radial-gradient(circle at 50% 80%, #f3ead933, transparent 60%), linear-gradient(170deg, #20180d, #0e0b07); }
 .dm-frame:nth-child(4) .dm-frame-fill { background: radial-gradient(circle at 20% 20%, #e8b25c55, transparent 50%), linear-gradient(190deg, #281e10, #0c0a06); }
 .dm-frame:nth-child(5) .dm-frame-fill { background: radial-gradient(circle at 60% 40%, #c9913f55, transparent 55%), linear-gradient(140deg, #231a0e, #0e0b07); }
-.dm-frame-ph::after {
-  content: '▶';
+.dm-frame-link {
+  display: block;
+  text-decoration: none;
+}
+.dm-frame-card {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: grid;
   place-items: center;
-  color: #f3ead9;
-  font-size: 1.5rem;
-  background: rgba(12, 10, 6, 0.25);
-  opacity: 0;
-  transition: opacity 0.3s;
+  padding: 1.5rem;
+  text-align: center;
 }
-.dm-frame:hover .dm-frame-ph::after { opacity: 1; }
+.dm-frame-card span {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  color: var(--color-amber-light);
+  line-height: 1.3;
+}
 .dm-frame figcaption {
   display: flex;
   justify-content: space-between;
@@ -647,6 +706,25 @@
   padding: 16vh 3rem 14vh;
 }
 .dm-finale h2 { margin: 0 auto 3rem; max-width: 18ch; }
+/* The closing orbit reuses the hero track geometry at a smaller scale */
+.dm-finale-orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(70vw, 900px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-6deg);
+  border: 1px solid color-mix(in srgb, var(--color-amber) 28%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.dm-finale-rotator {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.dm-finale h2,
+.dm-finale .dm-cta-btn { position: relative; z-index: 2; }
 
 /* footer */
 .dm-landing footer {
@@ -721,31 +799,25 @@
   .dm-reel { padding: 0 1.4rem; }
   .dm-foot-grid { grid-template-columns: 1fr 1fr; padding: 3rem 1.4rem 2rem; }
   .dm-foot-base { padding: 1.4rem; }
-  .dm-bar-top,
-  .dm-bar-bottom { height: 7vh; }
   .dm-hero-proof { flex-direction: column; gap: 0.8rem; align-items: center; }
   .dm-scroll-hint { display: none; }
+  .dm-orbit { width: 150vw; }
 }
+
+/* Natively scrollable by default so touch, reduced-motion, and no-JS visitors can
+   reach every frame; the fine-pointer scrub JS hides the overflow while it drives */
+.dm-reel-scroller {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+.dm-frame { scroll-snap-align: start; }
 
 @media (pointer: coarse) {
   .dm-scroll-hint { display: none; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .dm-grain,
-  .dm-scroll-hint::after { animation: none; }
-}
-
 /* ── Real footage layers — drop files into /public/media and they light up ── */
-.dm-hero-film {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.4;
-  filter: saturate(0.92) contrast(1.06) brightness(0.68);
-}
 .dm-step-media,
 .dm-frame-media {
   position: absolute;
@@ -753,6 +825,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* One unified static grade so the stills read as a single curated edit; never animated */
+  filter: sepia(0.12) saturate(0.9) contrast(1.05);
 }
 .dm-step-visual::after,
 .dm-frame-ph::after {
@@ -764,10 +838,3 @@
   pointer-events: none;
 }
 
-/* ── Timecode inside the bottom letterbox bar ── */
-.dm-bar-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 1.6rem;
-}
