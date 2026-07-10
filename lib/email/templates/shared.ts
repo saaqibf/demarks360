@@ -6,11 +6,11 @@ export interface EmailContent {
   html: string
 }
 
-// Serif for headings and money (Georgia is the reliable cross-client serif),
-// system sans for body. Two typefaces, restrained palette, generous whitespace:
-// the pattern real transactional email (Stripe, Airbnb, Resy) is built on.
-const SERIF = "Georgia,'Times New Roman',serif"
-const SANS = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
+// Fraunces (refined modern serif) for headings and money, Figtree for body.
+// Both load via web font in clients that support it (Apple Mail, iOS) and fall
+// back to Georgia / system sans everywhere else, so nothing looks broken.
+const SERIF = "'Fraunces',Georgia,'Times New Roman',serif"
+const SANS = "'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
 const INK = '#1A140C'
 const MUTE = '#6B6355'
 const FAINT = '#9A9080'
@@ -101,6 +101,9 @@ export function emailShell(heading: string, bodyHtml: string, opts: ShellOptions
   <meta name="color-scheme" content="light">
   <meta name="supported-color-schemes" content="light">
   <title>${escapeHtml(heading)}</title>
+  <!--[if !mso]><!-->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!--<![endif]-->
 </head>
 <body style="margin:0;padding:0;background:#EEEAE2;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#EEEAE2;">
