@@ -5,12 +5,16 @@ import {
 } from 'drizzle-orm/pg-core'
 import { createId } from '@paralleldrive/cuid2'
 
+// 'pending' is legacy only: PG cannot remove enum values, so it stays but new code never writes it.
+// New values are appended at the end so drizzle emits pure ALTER TYPE ... ADD VALUE statements.
 export const bookingStatusEnum = pgEnum('booking_status', [
   'pending', 'confirmed', 'cancelled', 'completed',
+  'requested', 'approved', 'declined', 'expired',
 ])
 
 export const customers = pgTable('customers', {
-  id: text('id').primaryKey(), // Clerk user ID
+  // cuid2 for new rows; legacy rows keep their Stripe 'cus_...' PKs from the old checkout-first flow
+  id: text('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
   phone: text('phone').notNull(),
@@ -33,6 +37,17 @@ export const bookings = pgTable('bookings', {
   stripePaymentIntentId: text('stripe_payment_intent_id'),
   stripeSetupIntentId: text('stripe_setup_intent_id'),
   stripeCustomerId: text('stripe_customer_id'),
+  approvedAt: timestamp('approved_at'),
+  depositExpiresAt: timestamp('deposit_expires_at'),
+  depositPaidAt: timestamp('deposit_paid_at'),
+  autoPayOptIn: boolean('auto_pay_opt_in').default(false).notNull(),
+  // Public payment-page token, same pattern as galleryToken
+  payToken: text('pay_token').$defaultFn(() => createId()),
+  stripeDepositSessionId: text('stripe_deposit_session_id'),
+  stripeBalanceSessionId: text('stripe_balance_session_id'),
+  stripeBalancePaymentIntentId: text('stripe_balance_payment_intent_id'),
+  // Idempotency guard so a re-run cron never double-emails the balance-due link
+  balanceDueEmailSentAt: timestamp('balance_due_email_sent_at'),
   depositAmount: numeric('deposit_amount', { precision: 10, scale: 2 }),
   balanceAmount: numeric('balance_amount', { precision: 10, scale: 2 }),
   balanceChargeDate: date('balance_charge_date'),
@@ -61,6 +76,7 @@ export const bookings = pgTable('bookings', {
   index('bookings_customer_id_idx').on(t.customerId),
   index('bookings_stripe_pi_idx').on(t.stripePaymentIntentId),
   uniqueIndex('bookings_gallery_token_idx').on(t.galleryToken),
+  uniqueIndex('bookings_pay_token_idx').on(t.payToken),
 ])
 
 export const addOns = pgTable('add_ons', {

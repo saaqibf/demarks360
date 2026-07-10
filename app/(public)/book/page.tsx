@@ -6,7 +6,7 @@ import { DatePicker } from '@/components/public/book/date-picker'
 import { TimePicker } from '@/components/public/book/time-picker'
 import { AddonsStep } from '@/components/public/book/addons-step'
 import { DetailsForm } from '@/components/public/book/details-form'
-import { CheckoutStep } from '@/components/public/book/checkout-step'
+import { RequestReviewStep } from '@/components/public/book/request-review-step'
 import { BOOKING_WIZARD_STORAGE_KEY } from '@/components/public/book/wizard-storage'
 
 export type BookingState = {
@@ -33,9 +33,8 @@ export type BookingState = {
   designThemeTags: string[]
   designNotes: string
   songPreference: string
-  // Checkout idempotency: the pending booking created for this wizard session, reused on step 5 remounts
+  // Submit idempotency: the requested booking created for this wizard session, updated in place on re-submits
   pendingBookingId: string | null
-  pendingClientSecret: string | null
   pendingPayloadSig: string | null
 }
 
@@ -62,13 +61,12 @@ const initialState: BookingState = {
   designNotes: '',
   songPreference: '',
   pendingBookingId: null,
-  pendingClientSecret: null,
   pendingPayloadSig: null,
 }
 
-const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Checkout']
+const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Review']
 
-// Matches the server's pending-booking expiry, so a restored session never reuses a stale PaymentIntent
+// Stale wizard sessions restart fresh instead of resurfacing old dates and times
 const STORAGE_TTL_MS = 30 * 60_000
 
 function optionalString(v: unknown): string | null {
@@ -113,7 +111,6 @@ function rehydrateStoredState(raw: unknown): BookingState | null {
     designNotes: requiredString(o.designNotes),
     songPreference: requiredString(o.songPreference),
     pendingBookingId: optionalString(o.pendingBookingId),
-    pendingClientSecret: optionalString(o.pendingClientSecret),
     pendingPayloadSig: optionalString(o.pendingPayloadSig),
   }
 
@@ -277,7 +274,7 @@ function BookPageInner() {
           />
         )}
         {state.step === 5 && (
-          <CheckoutStep
+          <RequestReviewStep
             state={state}
             onChange={update}
             onBack={() => update({ step: 4 })}

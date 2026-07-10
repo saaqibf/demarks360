@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isAdmin } from '@/lib/auth/roles'
 import { updateBookingStatus, updateBookingNotes } from '@/lib/db/queries/bookings'
 
-const BOOKING_STATUSES = ['pending', 'confirmed', 'cancelled', 'completed'] as const
+// Approve/decline only via their dedicated endpoints so emails and Stripe side effects cannot be skipped
+const BOOKING_STATUSES = ['cancelled', 'completed'] as const
 type BookingStatus = typeof BOOKING_STATUSES[number]
 
 function isBookingStatus(value: unknown): value is BookingStatus {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { bookings, customers } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { getResend, FROM_EMAIL } from '@/lib/email/resend'
+import { ADMIN_EMAIL, sendEmail } from '@/lib/email/send'
 import { escapeHtml } from '@/lib/email/escape-html'
 import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
@@ -92,16 +92,13 @@ export async function POST(req: NextRequest) {
   }
 
   const { booking: b, customer: c } = row
-  const adminEmail = process.env.ADMIN_EMAIL ?? 'hello@demarks360.ca'
   const safeName = escapeHtml(c?.name ?? 'Unknown')
   const subject = requestType === 'cancel'
     ? `Cancellation Request - ${c?.name ?? 'Customer'} (${b.eventDate})`
     : `Change Request - ${c?.name ?? 'Customer'} (${b.eventDate})`
 
-  const resend = getResend()
-  await resend.emails.send({
-    from: FROM_EMAIL,
-    to: adminEmail,
+  await sendEmail({
+    to: ADMIN_EMAIL,
     subject,
     html: `
       <p style="font-family:sans-serif;font-size:14px;color:#333;">

@@ -30,13 +30,13 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: process.env.ADMIN_EMAIL ?? 'saaqibf.ayodimeji@gmail.com',
-      subject: 'New notify-me signup — Demarks 360',
+      subject: 'New notify-me signup - Demarks 360',
       html: `<p>New email captured: <strong>${email}</strong></p>`,
     })
     await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: "You're on the list — Demarks 360",
+      subject: "You're on the list - Demarks 360",
       html: `
         <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 2rem; color: #1A1714;">
           <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">You're on the list.</h2>
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
             We'll let you know when new dates open up and when we're running any promotions.
           </p>
           <p style="color: #7A7168; line-height: 1.75; margin-top: 1rem;">
-            In the meantime, feel free to <a href="https://demarks360.ca/book" style="color: #A87530;">book your experience</a> — dates go fast.
+            In the meantime, feel free to <a href="https://demarks360.ca/book" style="color: #A87530;">book your experience</a>. Dates go fast.
           </p>
           <p style="margin-top: 2rem; font-size: 0.85rem; color: #A8A099;">Demarks 360 · Calgary, AB</p>
         </div>

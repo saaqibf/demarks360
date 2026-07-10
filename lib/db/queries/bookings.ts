@@ -1,6 +1,7 @@
 import { db } from '@/lib/db'
 import { bookings, customers } from '@/lib/db/schema'
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc, and, isNull, lt, inArray } from 'drizzle-orm'
+import { createId } from '@paralleldrive/cuid2'
 
 export interface CreateBookingParams {
   customerId: string
@@ -26,8 +27,8 @@ export interface CreateBookingParams {
   depositAmount: number
   balanceAmount: number
   balanceChargeDate: string
-  stripePaymentIntentId: string
-  stripeCustomerId: string
+  stripePaymentIntentId?: string
+  stripeCustomerId?: string
 }
 
 export async function createBookingRecord(params: CreateBookingParams) {
@@ -40,7 +41,7 @@ export async function createBookingRecord(params: CreateBookingParams) {
       endTime: params.endTime,
       durationMinutes: params.durationMinutes,
       addOns: params.addOns,
-      status: 'pending',
+      status: 'requested',
       eventType: params.eventType,
       locationAddress: params.locationAddress,
       locationCity: params.locationCity,
@@ -48,8 +49,8 @@ export async function createBookingRecord(params: CreateBookingParams) {
       depositAmount: String(params.depositAmount),
       balanceAmount: String(params.balanceAmount),
       balanceChargeDate: params.balanceChargeDate,
-      stripePaymentIntentId: params.stripePaymentIntentId,
-      stripeCustomerId: params.stripeCustomerId,
+      stripePaymentIntentId: params.stripePaymentIntentId ?? null,
+      stripeCustomerId: params.stripeCustomerId ?? null,
       eventName: params.eventName ?? null,
       designNotes: params.designNotes ?? null,
       eventPreferences: params.eventPreferences ?? null,
@@ -58,15 +59,17 @@ export async function createBookingRecord(params: CreateBookingParams) {
   return booking
 }
 
-// Re-entry to checkout reuses the pending booking instead of inserting a duplicate.
-// createdAt is bumped so the pending-expiry window restarts with the refreshed intent.
-export async function updatePendingBooking(
+// Re-submitting the wizard updates the existing requested booking instead of inserting a
+// duplicate. customerId is re-set because the customer may have corrected their email
+// between submits, and the deposit link must go to the address they actually entered.
+export async function updateRequestedBooking(
   id: string,
-  params: Omit<CreateBookingParams, 'customerId' | 'stripePaymentIntentId' | 'stripeCustomerId'>,
+  params: Omit<CreateBookingParams, 'stripePaymentIntentId' | 'stripeCustomerId'>,
 ) {
   const [booking] = await db
     .update(bookings)
     .set({
+      customerId: params.customerId,
       eventDate: params.eventDate,
       startTime: params.startTime,
       endTime: params.endTime,
@@ -82,9 +85,10 @@ export async function updatePendingBooking(
       eventName: params.eventName ?? null,
       designNotes: params.designNotes ?? null,
       eventPreferences: params.eventPreferences ?? null,
-      createdAt: new Date(),
     })
-    .where(eq(bookings.id, id))
+    // Status guard: if the admin approved between the read and this write, the re-submit
+    // must not silently rewrite the date or price of an approved booking
+    .where(and(eq(bookings.id, id), eq(bookings.status, 'requested')))
     .returning()
   return booking ?? null
 }
@@ -106,6 +110,15 @@ export async function getBookingWithCustomer(id: string) {
   return row ?? null
 }
 
+export async function getBookingByPayToken(token: string) {
+  const [row] = await db
+    .select({ booking: bookings, customer: customers })
+    .from(bookings)
+    .leftJoin(customers, eq(bookings.customerId, customers.id))
+    .where(eq(bookings.payToken, token))
+  return row ?? null
+}
+
 export async function getAllBookings() {
   return db
     .select({ booking: bookings, customer: customers })
@@ -114,9 +127,11 @@ export async function getAllBookings() {
     .orderBy(desc(bookings.eventDate))
 }
 
+// Admin PATCH is limited to these two; approve/decline flow through their dedicated
+// endpoints so emails and Stripe side effects can never be skipped
 export async function updateBookingStatus(
   id: string,
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed',
+  status: 'cancelled' | 'completed',
 ) {
   await db.update(bookings).set({ status }).where(eq(bookings.id, id))
 }
@@ -125,24 +140,145 @@ export async function updateBookingNotes(id: string, notes: string) {
   await db.update(bookings).set({ notes }).where(eq(bookings.id, id))
 }
 
+export async function approveBooking(
+  id: string,
+  params: { stripeCustomerId: string; depositExpiresAt: Date },
+) {
+  // Status guard in the WHERE makes concurrent double-approves lose the race atomically,
+  // so only one deposit-link email can ever go out
+  const [booking] = await db
+    .update(bookings)
+    .set({
+      status: 'approved',
+      approvedAt: new Date(),
+      depositExpiresAt: params.depositExpiresAt,
+      stripeCustomerId: params.stripeCustomerId,
+    })
+    .where(and(eq(bookings.id, id), inArray(bookings.status, ['requested', 'expired'])))
+    .returning()
+  return booking ?? null
+}
+
+export async function declineBooking(id: string) {
+  const [booking] = await db
+    .update(bookings)
+    .set({ status: 'declined' })
+    .where(and(eq(bookings.id, id), eq(bookings.status, 'requested')))
+    .returning()
+  return booking ?? null
+}
+
+export async function setAutoPayOptIn(id: string, autoPayOptIn: boolean) {
+  await db.update(bookings).set({ autoPayOptIn }).where(eq(bookings.id, id))
+}
+
+export async function setDepositSessionId(id: string, sessionId: string) {
+  await db.update(bookings).set({ stripeDepositSessionId: sessionId }).where(eq(bookings.id, id))
+}
+
+export async function setBalanceSessionId(id: string, sessionId: string) {
+  await db.update(bookings).set({ stripeBalanceSessionId: sessionId }).where(eq(bookings.id, id))
+}
+
+// Only an 'approved' booking can transition to confirmed; the WHERE guard makes
+// concurrent webhook deliveries and cron races resolve to exactly one winner
+export async function markDepositPaid(
+  id: string,
+  params: { autoPayOptIn: boolean; stripePaymentIntentId: string | null; stripeCustomerId: string | null },
+) {
+  const [booking] = await db
+    .update(bookings)
+    .set({
+      status: 'confirmed',
+      depositPaidAt: new Date(),
+      autoPayOptIn: params.autoPayOptIn,
+      ...(params.stripePaymentIntentId ? { stripePaymentIntentId: params.stripePaymentIntentId } : {}),
+      ...(params.stripeCustomerId ? { stripeCustomerId: params.stripeCustomerId } : {}),
+    })
+    .where(and(eq(bookings.id, id), eq(bookings.status, 'approved')))
+    .returning()
+  return booking ?? null
+}
+
+// Guarded on balanceChargedAt IS NULL so a cron charge and a customer-link payment
+// racing each other can never both record the balance (or double-send the receipt)
+export async function markBalancePaid(id: string, stripeBalancePaymentIntentId: string | null) {
+  const [booking] = await db
+    .update(bookings)
+    .set({ balanceChargedAt: new Date(), stripeBalancePaymentIntentId })
+    .where(and(eq(bookings.id, id), isNull(bookings.balanceChargedAt)))
+    .returning()
+  return booking ?? null
+}
+
+export async function markChargeFailed(id: string) {
+  await db.update(bookings).set({ chargeFailedAt: new Date() }).where(eq(bookings.id, id))
+}
+
+export async function markBalanceDueEmailSent(id: string) {
+  await db.update(bookings).set({ balanceDueEmailSentAt: new Date() }).where(eq(bookings.id, id))
+}
+
+export async function markBookingExpired(id: string) {
+  // Status guard: if a delayed deposit webhook confirmed this booking after the cron
+  // selected it, expiring must lose the race instead of clobbering a paid booking
+  const [booking] = await db
+    .update(bookings)
+    .set({ status: 'expired' })
+    .where(and(eq(bookings.id, id), eq(bookings.status, 'approved')))
+    .returning()
+  return booking ?? null
+}
+
+export async function getBalanceDueBookings(eventDate: string) {
+  return db
+    .select({ booking: bookings, customer: customers })
+    .from(bookings)
+    .leftJoin(customers, eq(bookings.customerId, customers.id))
+    .where(and(
+      eq(bookings.status, 'confirmed'),
+      isNull(bookings.balanceChargedAt),
+      eq(bookings.eventDate, eventDate),
+    ))
+}
+
+export async function getExpiredApprovedBookings(now: Date) {
+  return db
+    .select({ booking: bookings, customer: customers })
+    .from(bookings)
+    .leftJoin(customers, eq(bookings.customerId, customers.id))
+    .where(and(
+      eq(bookings.status, 'approved'),
+      lt(bookings.depositExpiresAt, now),
+    ))
+}
+
+// Legacy bridge for in-flight old-flow PaymentElement payments. Old-flow bookings sit
+// in 'pending' (remapped to 'expired' by migration 0006); the status guard keeps a
+// replayed legacy event from clobbering a cancelled/completed booking or re-sending
+// the confirmation email for an already-confirmed one.
 export async function confirmBooking(stripePaymentIntentId: string) {
   const rows = await db
     .update(bookings)
     .set({ status: 'confirmed' })
-    .where(eq(bookings.stripePaymentIntentId, stripePaymentIntentId))
+    .where(and(
+      eq(bookings.stripePaymentIntentId, stripePaymentIntentId),
+      inArray(bookings.status, ['pending', 'expired']),
+    ))
     .returning({ id: bookings.id })
   return rows[0] ?? null
 }
 
-export async function getOrCreateCustomer(clerkUserId: string, name: string, email: string, phone: string) {
+export async function getOrCreateCustomer(name: string, email: string, phone: string) {
+  // Email-keyed: bookings are created before any Stripe object exists now
   const existing = await db
     .select()
     .from(customers)
-    .where(eq(customers.id, clerkUserId))
+    .where(eq(customers.email, email))
   if (existing.length > 0) return existing[0]
   const [created] = await db
     .insert(customers)
-    .values({ id: clerkUserId, name, email, phone })
+    .values({ id: createId(), name, email, phone })
     .returning()
   return created
 }

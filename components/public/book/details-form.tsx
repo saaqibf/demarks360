@@ -201,7 +201,6 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
       e.eventType = 'Please describe your event in a few more characters'
     }
     if (!state.eventName.trim()) e.eventName = 'Event name is required'
-    if (!state.agreedToTerms) e.agreedToTerms = 'You must agree to the Terms of Service'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -610,24 +609,6 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
               </div>
             </div>
             {/* ── end Your 360 Experience ──────────────────────────── */}
-
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginTop: '0.5rem' }}>
-              <input
-                type="checkbox"
-                id="tos"
-                checked={state.agreedToTerms}
-                onChange={e => onChange({ agreedToTerms: e.target.checked })}
-                style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: 'var(--color-amber-light)', flexShrink: 0, cursor: 'pointer' }}
-              />
-              <label htmlFor="tos" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-muted-light)', lineHeight: 1.6, cursor: 'pointer' }}>
-                I have read and agree to the{' '}
-                <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Terms of Service</a>
-                {' '}and{' '}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Privacy Policy</a>.
-                I understand my 30% deposit is non-refundable.
-              </label>
-            </div>
-            {errors.agreedToTerms && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '-0.75rem' }}>{errors.agreedToTerms}</p>}
           </div>
 
           <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -639,7 +620,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                 fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
               }}
             >
-              Continue to Payment →
+              Review My Request →
             </button>
             <button onClick={onBack} style={{ background: 'none', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
               ← Back

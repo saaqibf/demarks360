@@ -25,6 +25,7 @@ export interface PricingBreakdown {
   depositAmount: number
   balanceAmount: number
   depositCents: number
+  balanceCents: number
   lineItems: PricingLineItem[]
 }
 
@@ -41,6 +42,7 @@ export function calculateBookingCost(input: PricingInput): PricingBreakdown {
   const depositAmount = Math.round(subtotal * PRICING.DEPOSIT_PERCENT * 100) / 100
   const balanceAmount = Math.round((subtotal - depositAmount) * 100) / 100
   const depositCents = Math.round(depositAmount * 100)
+  const balanceCents = Math.round(balanceAmount * 100)
 
   const lineItems: PricingLineItem[] = [
     {
@@ -62,12 +64,14 @@ export function calculateBookingCost(input: PricingInput): PricingBreakdown {
     depositAmount,
     balanceAmount,
     depositCents,
+    balanceCents,
     lineItems,
   }
 }
 
 export function balanceChargeDate(eventDate: string): string {
-  const d = new Date(eventDate + 'T00:00:00')
-  d.setDate(d.getDate() - PRICING.BALANCE_CHARGE_DAYS_BEFORE_EVENT)
+  // UTC math so the result never drifts a day depending on the server timezone
+  const d = new Date(eventDate + 'T00:00:00Z')
+  d.setUTCDate(d.getUTCDate() - PRICING.BALANCE_CHARGE_DAYS_BEFORE_EVENT)
   return d.toISOString().split('T')[0]
 }

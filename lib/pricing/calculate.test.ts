@@ -3,19 +3,25 @@ import { describe, expect, it } from 'vitest'
 import { balanceChargeDate, calculateBookingCost, timeToMinutes } from './calculate'
 
 describe('calculateBookingCost', () => {
-  it('prices the 2-hour Calgary baseline: $240, $72 deposit, $168 balance', () => {
+  it('prices the 2-hour Calgary baseline: $240, $120 deposit, $120 balance', () => {
     const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: [], locationCity: 'Calgary' })
     expect(cost.subtotal).toBe(240)
-    expect(cost.depositAmount).toBe(72)
-    expect(cost.balanceAmount).toBe(168)
-    expect(cost.depositCents).toBe(7200)
+    expect(cost.depositAmount).toBe(120)
+    expect(cost.balanceAmount).toBe(120)
+    expect(cost.depositCents).toBe(12000)
+    expect(cost.balanceCents).toBe(12000)
   })
 
   it('deposit and balance always reassemble the subtotal exactly', () => {
-    // 2 hrs + firecrackers = $315: 30% is $94.50, a non-integer split
+    // 2 hrs + firecrackers = $315: 50% is $157.50, a non-integer split
     const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: ['firecrackers'], locationCity: 'Calgary' })
-    expect(cost.depositAmount).toBe(94.5)
+    expect(cost.depositAmount).toBe(157.5)
     expect(cost.depositAmount + cost.balanceAmount).toBe(cost.subtotal)
+  })
+
+  it('exposes the balance in cents for the Stripe balance charge', () => {
+    const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: ['firecrackers'], locationCity: 'Calgary' })
+    expect(cost.balanceCents).toBe(15750)
   })
 
   it('adds firecrackers flat and shows them as a line item', () => {
@@ -47,16 +53,16 @@ describe('calculateBookingCost', () => {
 })
 
 describe('balanceChargeDate', () => {
-  it('lands 7 days before the event', () => {
-    expect(balanceChargeDate('2026-08-15')).toBe('2026-08-08')
+  it('lands on the event day itself', () => {
+    expect(balanceChargeDate('2026-08-15')).toBe('2026-08-15')
   })
 
-  it('crosses month boundaries correctly', () => {
-    expect(balanceChargeDate('2026-08-03')).toBe('2026-07-27')
+  it('does not shift across month boundaries', () => {
+    expect(balanceChargeDate('2026-08-01')).toBe('2026-08-01')
   })
 
-  it('crosses year boundaries correctly', () => {
-    expect(balanceChargeDate('2027-01-04')).toBe('2026-12-28')
+  it('does not shift across year boundaries', () => {
+    expect(balanceChargeDate('2027-01-01')).toBe('2027-01-01')
   })
 })
 

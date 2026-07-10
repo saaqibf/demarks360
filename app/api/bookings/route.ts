@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createBookingSchema } from '@/lib/validations/booking'
 import { checkBookingAvailability } from '@/lib/availability'
-import { createBookingRecord, getBookingById, getOrCreateCustomer, updatePendingBooking } from '@/lib/db/queries/bookings'
+import { createBookingRecord, getBookingWithCustomer, getOrCreateCustomer, updateRequestedBooking } from '@/lib/db/queries/bookings'
 import { calculateBookingCost, balanceChargeDate, timeToMinutes, PRICING } from '@/lib/pricing'
-import { createBookingIntent } from '@/lib/stripe/booking-intent'
-import { stripe } from '@/lib/stripe'
+import { ADMIN_EMAIL, sendEmail } from '@/lib/email/send'
+import { requestReceivedEmail } from '@/lib/email/templates/request-received'
+import { adminNewRequestEmail } from '@/lib/email/templates/admin-new-request'
 import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
@@ -27,12 +28,17 @@ export async function POST(req: NextRequest) {
 
   const input = parsed.data
 
-  // Idempotent re-entry: if the wizard already created a pending booking this session, update it in place
-  const existingBooking = input.bookingId ? await getBookingById(input.bookingId) : null
+  // Idempotent re-entry: if the wizard already submitted a request this session, update it in
+  // place. bookingId is client-supplied (and appears in confirmation URLs), so reuse demands
+  // ownership evidence: the same email, or a booking fresh enough to be this wizard session.
+  const WIZARD_SESSION_TTL_MS = 30 * 60_000
+  const existingRow = input.bookingId ? await getBookingWithCustomer(input.bookingId) : null
+  const existingBooking = existingRow?.booking ?? null
+  const ownsExistingBooking =
+    existingRow?.customer?.email.trim().toLowerCase() === input.customerEmail.trim().toLowerCase() ||
+    (existingBooking !== null && Date.now() - existingBooking.createdAt.getTime() < WIZARD_SESSION_TTL_MS)
   const reusableBooking =
-    existingBooking && existingBooking.status === 'pending' && existingBooking.stripePaymentIntentId
-      ? existingBooking
-      : null
+    existingBooking && existingBooking.status === 'requested' && ownsExistingBooking ? existingBooking : null
 
   const availability = await checkBookingAvailability(
     input.eventDate,
@@ -85,45 +91,48 @@ export async function POST(req: NextRequest) {
     balanceChargeDate: balanceChargeDate(input.eventDate),
   }
 
+  // Resolved up front so a re-submit that corrected the email re-links the booking too
+  const customer = await getOrCreateCustomer(input.customerName, input.customerEmail, input.customerPhone)
+
+  let bookingId: string | null = null
   if (reusableBooking) {
-    try {
-      const intent = await stripe.paymentIntents.update(reusableBooking.stripePaymentIntentId!, {
-        amount: pricing.depositCents,
-        metadata: {
-          eventDate: input.eventDate,
-          startTime: input.startTime,
-          endTime: input.endTime,
-          customerEmail: input.customerEmail,
-        },
-      })
-      const updated = await updatePendingBooking(reusableBooking.id, bookingFields)
-      if (updated && intent.client_secret) {
-        return NextResponse.json({ clientSecret: intent.client_secret, bookingId: updated.id })
-      }
-    } catch (err) {
-      // PaymentIntent no longer updatable (canceled/succeeded); fall through and create fresh
-      console.error('pending booking reuse failed, creating a new booking', err)
-    }
+    const updated = await updateRequestedBooking(reusableBooking.id, { ...bookingFields, customerId: customer.id })
+    // Null means the admin approved mid-submit; keep the approved booking untouched
+    bookingId = updated ? updated.id : reusableBooking.id
   }
 
-  const { stripeCustomerId, paymentIntentId, clientSecret } = await createBookingIntent({
-    customerEmail: input.customerEmail,
-    customerName: input.customerName,
-    customerPhone: input.customerPhone,
-    depositCents: pricing.depositCents,
-    eventDate: input.eventDate,
-    startTime: input.startTime,
-    endTime: input.endTime,
+  if (!bookingId) {
+    const booking = await createBookingRecord({ ...bookingFields, customerId: customer.id })
+    bookingId = booking.id
+  }
+
+  // Notification failures must never fail the request itself; sendEmail logs and swallows
+  await sendEmail({
+    to: input.customerEmail,
+    ...requestReceivedEmail({
+      name: input.customerName,
+      eventDate: input.eventDate,
+      startTime: input.startTime,
+      endTime: input.endTime,
+      locationAddress: input.locationAddress,
+      locationCity: input.locationCity,
+    }),
+  })
+  await sendEmail({
+    to: ADMIN_EMAIL,
+    ...adminNewRequestEmail({
+      bookingId,
+      customerName: input.customerName,
+      customerEmail: input.customerEmail,
+      customerPhone: input.customerPhone,
+      eventDate: input.eventDate,
+      startTime: input.startTime,
+      endTime: input.endTime,
+      eventType: input.eventType,
+      locationAddress: input.locationAddress,
+      locationCity: input.locationCity,
+    }),
   })
 
-  const customer = await getOrCreateCustomer(stripeCustomerId, input.customerName, input.customerEmail, input.customerPhone)
-
-  const booking = await createBookingRecord({
-    ...bookingFields,
-    customerId: customer.id,
-    stripePaymentIntentId: paymentIntentId,
-    stripeCustomerId,
-  })
-
-  return NextResponse.json({ clientSecret, bookingId: booking.id })
+  return NextResponse.json({ bookingId })
 }

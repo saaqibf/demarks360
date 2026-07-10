@@ -164,7 +164,8 @@ function ManageBookingInner() {
     </div>
   )
 
-  const canManage = booking.status === 'pending' || booking.status === 'confirmed'
+  const canManage =
+    booking.status === 'requested' || booking.status === 'approved' || booking.status === 'confirmed'
   const galleryUrl = booking.galleryToken ? `${APP_URL}/gallery/${booking.galleryToken}` : null
 
   return (

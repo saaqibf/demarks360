@@ -8,14 +8,11 @@ export interface BookedSlot {
   status: string
 }
 
-// Pending bookings hold a slot only while the customer could plausibly still be paying.
-// Older pendings are abandoned checkouts and must not eat availability.
-export const PENDING_BOOKING_TTL_MINUTES = 30
-
-export function isActiveBooking(b: { status: string; createdAt: Date }): boolean {
-  if (b.status === 'confirmed') return true
-  if (b.status !== 'pending') return false
-  return b.createdAt.getTime() > Date.now() - PENDING_BOOKING_TTL_MINUTES * 60_000
+export function isActiveBooking(b: { status: string; depositExpiresAt: Date | null }): boolean {
+  if (b.status === 'requested' || b.status === 'confirmed') return true
+  // Approved holds the date only while the deposit window is open; cron formalizes expiry
+  if (b.status === 'approved') return !b.depositExpiresAt || b.depositExpiresAt.getTime() > Date.now()
+  return false
 }
 
 export interface AvailabilityResult {
@@ -38,7 +35,7 @@ export async function getAvailabilityForDate(
         startTime: bookings.startTime,
         endTime: bookings.endTime,
         status: bookings.status,
-        createdAt: bookings.createdAt,
+        depositExpiresAt: bookings.depositExpiresAt,
       })
       .from(bookings)
       .where(bookingFilter),
@@ -66,7 +63,7 @@ export async function getAvailabilityForDate(
 export async function getAvailabilityForDateRange(firstDate: string, lastDate: string) {
   const [rangeBookings, rangeBlocks] = await Promise.all([
     db
-      .select({ eventDate: bookings.eventDate, status: bookings.status, createdAt: bookings.createdAt })
+      .select({ eventDate: bookings.eventDate, status: bookings.status, depositExpiresAt: bookings.depositExpiresAt })
       .from(bookings)
       .where(and(gte(bookings.eventDate, firstDate), lte(bookings.eventDate, lastDate))),
     db

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "bookings_pay_token_idx" ON "bookings" USING btree ("pay_token");

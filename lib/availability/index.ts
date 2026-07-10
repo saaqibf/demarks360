@@ -47,13 +47,15 @@ export async function getUnavailableDatesForMonth(year: number, month: number): 
 
 export async function checkBookingAvailability(
   date: string,
-  opts?: { excludeBookingId?: string },
+  // skipLeadTime: a request legitimately submitted 7+ days out can cross inside the lead
+  // window while it sits in review; admin approval must not be blocked by the customer rule
+  opts?: { excludeBookingId?: string; skipLeadTime?: boolean },
 ): Promise<DateAvailability> {
-  if (daysFromToday(date) < PRICING.LEAD_TIME_DAYS) {
+  if (!opts?.skipLeadTime && daysFromToday(date) < PRICING.LEAD_TIME_DAYS) {
     return { status: 'too-soon' }
   }
 
-  const data = await getAvailabilityForDate(date, opts)
+  const data = await getAvailabilityForDate(date, { excludeBookingId: opts?.excludeBookingId })
 
   if (data.adminBlocks.length > 0) {
     return { status: 'blocked', reason: data.adminBlocks[0].reason ?? 'Date unavailable' }

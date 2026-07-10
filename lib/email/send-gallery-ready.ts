@@ -14,7 +14,7 @@ export async function sendGalleryReadyEmail(bookingId: string) {
   await getResend().emails.send({
     from: FROM_EMAIL,
     to: c.email,
-    subject: `Your Gallery is Ready — Demarks 360`,
+    subject: `Your Gallery is Ready - Demarks 360`,
     html: galleryReadyHtml({
       booking: {
         eventDate: b.eventDate,

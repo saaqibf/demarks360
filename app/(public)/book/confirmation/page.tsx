@@ -15,25 +15,37 @@ function formatTime(t: string): string {
   return `${hour}:${String(m).padStart(2, '0')} ${period}`
 }
 
-function googleCalendarUrl(booking: {
-  eventDate: string
-  startTime: string
-  endTime: string
-  eventType: string
-  locationAddress: string
-  locationCity: string
-}): string {
-  const dateStr = booking.eventDate.replace(/-/g, '')
-  const startStr = `${dateStr}T${booking.startTime.replace(':', '')}00`
-  const endStr = `${dateStr}T${booking.endTime.replace(':', '')}00`
-  const params = new URLSearchParams({
-    action: 'TEMPLATE',
-    text: `Demarks 360, ${booking.eventType}`,
-    dates: `${startStr}/${endStr}`,
-    location: `${booking.locationAddress}, ${booking.locationCity}, Alberta`,
-    details: 'Your Demarks 360 360-degree video booth is confirmed for this event.',
-  })
-  return `https://calendar.google.com/calendar/render?${params.toString()}`
+const STATUS_COPY: Record<string, { eyebrow: string; title: string; body: string }> = {
+  requested: {
+    eyebrow: 'Request Received',
+    title: 'Request received',
+    body: 'We review every request within 24 hours and will email you either a payment link or a note from us. No payment has been taken.',
+  },
+  approved: {
+    eyebrow: 'Approved',
+    title: 'Your date is waiting',
+    body: 'Your request was approved. Check your email for the deposit payment link that locks in your date.',
+  },
+  confirmed: {
+    eyebrow: 'Booking Confirmed',
+    title: 'You’re booked',
+    body: 'Your deposit is in and your date is locked. Check your inbox for the receipt and event details.',
+  },
+  declined: {
+    eyebrow: 'Request Declined',
+    title: 'We could not take this one',
+    body: 'We were not able to take this date and time. No charge was made. You are welcome to request another date.',
+  },
+  expired: {
+    eyebrow: 'Request Expired',
+    title: 'This request expired',
+    body: 'The deposit window closed, so the date was released. You are welcome to submit a new request.',
+  },
+  cancelled: {
+    eyebrow: 'Cancelled',
+    title: 'This booking was cancelled',
+    body: 'This booking is no longer active. Want to rebook? Check availability for a new date.',
+  },
 }
 
 export default async function ConfirmationPage({ searchParams }: PageProps) {
@@ -48,7 +60,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
           <div style={{ textAlign: 'center' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>Booking not found</h1>
             <p style={{ fontSize: '0.88rem', color: 'rgba(245,240,234,0.5)', lineHeight: 1.75, fontWeight: 300, marginBottom: '2rem' }}>
-              Your confirmation link may have expired. Check your email for your booking receipt and details.
+              Your link may have expired. Check your email for your booking details.
             </p>
             <Link href="/" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-charcoal)', background: 'var(--color-amber-light)', borderRadius: '999px', padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block' }}>Back to Home</Link>
           </div>
@@ -61,9 +73,20 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
   const eventDate = new Date(booking.eventDate + 'T00:00:00').toLocaleDateString('en-CA', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   })
-  const balanceDate = booking.balanceChargeDate
-    ? new Date(booking.balanceChargeDate + 'T00:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })
-    : null
+  const copy = STATUS_COPY[booking.status] ?? STATUS_COPY.requested
+  const isRequest = booking.status === 'requested'
+
+  const paymentRows = isRequest
+    ? [
+        { label: 'Deposit due after approval (50%)', value: `$${Number(booking.depositAmount ?? 0).toFixed(2)}` },
+        { label: 'Balance due on event day (50%)', value: `$${Number(booking.balanceAmount ?? 0).toFixed(2)}` },
+        { label: 'Booking Reference', value: booking.id.slice(0, 12).toUpperCase() },
+      ]
+    : [
+        { label: 'Deposit', value: `$${Number(booking.depositAmount ?? 0).toFixed(2)}` },
+        { label: 'Balance due on event day', value: `$${Number(booking.balanceAmount ?? 0).toFixed(2)}` },
+        { label: 'Booking Reference', value: booking.id.slice(0, 12).toUpperCase() },
+      ]
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
@@ -75,13 +98,13 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             <span style={{ color: 'var(--color-charcoal)', fontSize: '1.25rem' }}>✓</span>
           </div>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', marginBottom: '0.5rem' }}>
-            Booking Confirmed
+            {copy.eyebrow}
           </p>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 400, lineHeight: 0.95, color: 'var(--color-text-light)' }}>
-            You&apos;re booked
+            {copy.title}
           </h1>
           <p style={{ fontSize: '0.88rem', color: 'rgba(245,240,234,0.5)', lineHeight: 1.75, fontWeight: 300, marginTop: '1rem' }}>
-            A confirmation email has been sent. Check your inbox for the receipt and event details.
+            {copy.body}
           </p>
         </div>
 
@@ -98,30 +121,25 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             </p>
           </div>
 
-          {[
-            { label: 'Deposit Paid', value: `$${Number(booking.depositAmount).toFixed(2)}` },
-            { label: 'Balance Due', value: `$${Number(booking.balanceAmount).toFixed(2)}` },
-            { label: 'Balance Charge Date', value: balanceDate ?? 'Not set' },
-            { label: 'Booking Reference', value: booking.id.slice(0, 12).toUpperCase() },
-          ].map(({ label, value }) => (
+          {paymentRows.map(({ label, value }) => (
             <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)' }}>{label}</span>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', fontWeight: 600 }}>{value}</span>
             </div>
           ))}
 
-          <div style={{ padding: '1rem 1.5rem', background: 'rgba(255,255,255,0.02)' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)', lineHeight: 1.6 }}>
-              Your card is saved for the balance charge on {balanceDate}. It will be automatically deleted 7 days after your event.
-            </p>
-          </div>
+          {isRequest && (
+            <div style={{ padding: '1rem 1.5rem', background: 'rgba(255,255,255,0.02)' }}>
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)', lineHeight: 1.6 }}>
+                No payment is taken until we approve your request and you pay the deposit through your secure link.
+              </p>
+            </div>
+          )}
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <a
-            href={googleCalendarUrl(booking)}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/"
             style={{
               fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700,
               letterSpacing: '0.1em', textTransform: 'uppercase',
@@ -129,10 +147,10 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
               padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block',
             }}
           >
-            Add to Google Calendar
-          </a>
+            Back to Home
+          </Link>
           <Link
-            href="/"
+            href="/book/manage"
             style={{
               fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600,
               letterSpacing: '0.1em', textTransform: 'uppercase',
@@ -140,7 +158,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
               padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'inline-block',
             }}
           >
-            Back to Home
+            Manage My Booking
           </Link>
         </div>
       </div>

@@ -29,6 +29,27 @@
       "when": 1783644100624,
       "tag": "0003_broken_shinko_yamashiro",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783666238695,
+      "tag": "0004_handy_wilson_fisk",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783666259071,
+      "tag": "0005_dark_imperial_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783666266605,
+      "tag": "0006_request-first-status-remap",
+      "breakpoints": true
     }
   ]
 }

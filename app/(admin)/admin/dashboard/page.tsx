@@ -1,18 +1,25 @@
 import Link from 'next/link'
 import { getAllBookings } from '@/lib/db/queries/bookings'
 
-const VALID_STATUSES = ['pending', 'confirmed', 'cancelled', 'completed'] as const
+const VALID_STATUSES = ['requested', 'approved', 'pending', 'confirmed', 'declined', 'expired', 'cancelled', 'completed'] as const
 const STATUS_TABS = [
   { label: 'All', value: '' },
-  { label: 'Pending', value: 'pending' },
+  { label: 'Requested', value: 'requested' },
+  { label: 'Approved', value: 'approved' },
   { label: 'Confirmed', value: 'confirmed' },
+  { label: 'Declined', value: 'declined' },
+  { label: 'Expired', value: 'expired' },
   { label: 'Cancelled', value: 'cancelled' },
   { label: 'Completed', value: 'completed' },
 ]
 
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
+  requested: { bg: 'rgba(251,191,36,0.12)',   color: 'var(--color-pending)' },
+  approved:  { bg: 'rgba(96,165,250,0.12)',   color: '#60A5FA' },
   pending:   { bg: 'rgba(251,191,36,0.12)',   color: 'var(--color-pending)' },
   confirmed: { bg: 'rgba(52,211,153,0.10)',   color: 'var(--color-success)' },
+  declined:  { bg: 'rgba(192,41,58,0.12)',    color: '#e06a76' },
+  expired:   { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
   cancelled: { bg: 'rgba(201,145,63,0.12)',    color: 'var(--color-amber)' },
   completed: { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
 }
@@ -39,23 +46,30 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const today = new Date().toISOString().split('T')[0]
   const in30 = new Date(Date.now() + 30 * 864e5).toISOString().split('T')[0]
 
+  // Collected money only: deposit is always in by 'confirmed'; balance counts once charged
   const totalRevenue = allRows
     .filter(r => r.booking.status === 'confirmed' || r.booking.status === 'completed')
-    .reduce((sum, r) => sum + Number(r.booking.depositAmount ?? 0), 0)
+    .reduce((sum, r) =>
+      sum
+      + Number(r.booking.depositAmount ?? 0)
+      + (r.booking.balanceChargedAt ? Number(r.booking.balanceAmount ?? 0) : 0),
+    0)
 
   const upcoming = allRows.filter(r =>
     r.booking.eventDate >= today &&
     r.booking.eventDate <= in30 &&
-    (r.booking.status === 'confirmed' || r.booking.status === 'pending')
+    (r.booking.status === 'confirmed' || r.booking.status === 'requested' || r.booking.status === 'approved')
   ).length
 
-  const pending = allRows.filter(r => r.booking.status === 'pending').length
+  const needsReview = allRows.filter(r => r.booking.status === 'requested').length
+  const awaitingDeposit = allRows.filter(r => r.booking.status === 'approved').length
 
   const stats = [
     { label: 'Total Bookings', value: allRows.length },
     { label: 'Confirmed Revenue', value: `$${totalRevenue.toFixed(0)}` },
     { label: 'Next 30 Days', value: upcoming },
-    { label: 'Pending Payment', value: pending },
+    { label: 'Needs Review', value: needsReview },
+    { label: 'Awaiting Deposit', value: awaitingDeposit },
   ]
 
   return (
@@ -135,7 +149,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
             </thead>
             <tbody>
               {rows.map(({ booking: b, customer: c }) => {
-                const s = STATUS_STYLES[b.status] ?? STATUS_STYLES.pending
+                const s = STATUS_STYLES[b.status] ?? STATUS_STYLES.requested
                 return (
                   <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                     <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)', whiteSpace: 'nowrap' }}>

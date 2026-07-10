@@ -25,7 +25,7 @@ export function galleryReadyHtml({ booking: b, customer: c, appUrl }: GalleryRea
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Gallery is Ready — Demarks 360</title>
+<title>Your Gallery is Ready - Demarks 360</title>
 </head>
 <body style="margin:0;padding:0;background:#F5F0EA;font-family:Georgia,serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F5F0EA;">
@@ -72,7 +72,7 @@ export function galleryReadyHtml({ booking: b, customer: c, appUrl }: GalleryRea
       Your 360 video gallery from <strong>${fmtDate(b.eventDate)}</strong> is ready to view. All your moments have been processed and are available to watch and download.
     </p>
     <p style="margin:0;font-size:15px;color:#333;font-family:Arial,sans-serif;line-height:1.65;">
-      Click below to open your private gallery — the link is unique to your event and can be shared with your guests.
+      Click below to open your private gallery. The link is unique to your event and can be shared with your guests.
     </p>
   </td></tr>
 
