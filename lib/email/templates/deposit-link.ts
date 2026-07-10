@@ -16,17 +16,17 @@ export function depositLinkEmail(p: DepositLinkParams): EmailContent {
     timeZone: 'America/Edmonton', year: 'numeric', month: 'long', day: 'numeric',
   })
   const body = `
-    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#3A3A3A;line-height:1.65;">
+    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#D8CFC0;line-height:1.65;">
       Hi ${firstName(p.name)},
     </p>
-    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#3A3A3A;line-height:1.65;">
+    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#D8CFC0;line-height:1.65;">
       Good news, ${fmtDate(p.eventDate)} is yours if you want it. Pay half now
       (${money(p.depositAmount)}) to lock in your date. The other half
       (${money(p.balanceAmount)}) is due on event day.
     </p>
     ${ctaButton(payUrl, 'Pay deposit')}
-    <p style="margin:20px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#888580;line-height:1.65;">
-      Or copy this link: <a href="${payUrl}" style="color:#C0293A;word-break:break-all;">${payUrl}</a><br>
+    <p style="margin:20px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#9C8B6E;line-height:1.65;">
+      Or copy this link: <a href="${payUrl}" style="color:#E8B25C;word-break:break-all;">${payUrl}</a><br>
       This link is valid until ${validUntil}. After that the date is released again.
     </p>`
   return {

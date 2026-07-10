@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getBookingByPayToken } from '@/lib/db/queries/bookings'
-import { ADDON_CATALOG } from '@/lib/pricing'
+import { ADDON_CATALOG, addOnPrice } from '@/lib/pricing'
 import { SiteNav } from '@/components/public/site-nav'
 import { SiteFooter } from '@/components/public/site-footer'
 import { PayPanel } from './pay-panel'
@@ -64,7 +64,7 @@ export default async function PayPage({ params }: PageProps) {
     const subtotal = Number(b.depositAmount ?? 0) + Number(b.balanceAmount ?? 0)
     const addOnItems = (b.addOns as string[])
       .filter((id) => id in ADDON_CATALOG)
-      .map((id) => ({ label: ADDON_CATALOG[id].name, amount: `$${ADDON_CATALOG[id].price.toFixed(2)}` }))
+      .map((id) => ({ label: ADDON_CATALOG[id].name, amount: `$${addOnPrice(id, b.durationMinutes / 60).toFixed(2)}` }))
     const lineItems = [
       { label: `${(b.durationMinutes / 60).toFixed(1).replace('.0', '')} hours of 360 booth`, amount: '' },
       ...addOnItems,

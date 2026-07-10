@@ -52,6 +52,26 @@ describe('calculateBookingCost', () => {
   })
 })
 
+describe('smilecam scaled pricing', () => {
+  it('charges the base price up to two hours', () => {
+    const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: ['smilecam'], locationCity: 'Calgary' })
+    expect(cost.addOnSubtotal).toBe(149)
+  })
+
+  it('adds the hourly rate beyond the base hours', () => {
+    // 4 hrs = base 149 + 2 extra hours x 40
+    const cost = calculateBookingCost({ durationMinutes: 240, addOnIds: ['smilecam'], locationCity: 'Calgary' })
+    expect(cost.addOnSubtotal).toBe(229)
+    expect(cost.lineItems.map(l => l.label)).toContain('SmileCam Photo Booth')
+  })
+
+  it('rounds partial extra hours up', () => {
+    // 2.5 hrs = base 149 + ceil(0.5 x 40) = 169
+    const cost = calculateBookingCost({ durationMinutes: 150, addOnIds: ['smilecam'], locationCity: 'Calgary' })
+    expect(cost.addOnSubtotal).toBe(169)
+  })
+})
+
 describe('balanceChargeDate', () => {
   it('lands on the event day itself', () => {
     expect(balanceChargeDate('2026-08-15')).toBe('2026-08-15')

@@ -174,7 +174,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.35)' }}>
             <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
-            Unavailable (7-day lead time)
+            Unavailable (5-day lead time)
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ interface AdminNewRequestParams {
 
 export function adminNewRequestEmail(p: AdminNewRequestParams): EmailContent {
   const body = `
-    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#3A3A3A;line-height:1.65;">
+    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#D8CFC0;line-height:1.65;">
       A new booking request is waiting for review.
     </p>
     <table width="100%" cellpadding="0" cellspacing="0">

@@ -1,4 +1,4 @@
-import { ADDON_CATALOG, PRICING } from './config'
+import { ADDON_CATALOG, PRICING, addOnPrice } from './config'
 
 export function timeToMinutes(t: string): number {
   const [h, m] = t.split(':').map(Number)
@@ -33,7 +33,7 @@ export function calculateBookingCost(input: PricingInput): PricingBreakdown {
   const durationHours = input.durationMinutes / 60
   const hourlySubtotal = durationHours * PRICING.HOURLY_RATE
   const addOnSubtotal = input.addOnIds.reduce(
-    (sum, id) => sum + (ADDON_CATALOG[id]?.price ?? 0),
+    (sum, id) => sum + addOnPrice(id, durationHours),
     0,
   )
   const travelSurcharge = input.locationCity === 'Calgary' ? 0 : PRICING.TRAVEL_SURCHARGE
@@ -51,7 +51,7 @@ export function calculateBookingCost(input: PricingInput): PricingBreakdown {
     },
     ...input.addOnIds
       .filter(id => id in ADDON_CATALOG)
-      .map(id => ({ label: ADDON_CATALOG[id].name, amount: ADDON_CATALOG[id].price })),
+      .map(id => ({ label: ADDON_CATALOG[id].name, amount: addOnPrice(id, durationHours) })),
     ...(travelSurcharge > 0 ? [{ label: 'Travel surcharge', amount: travelSurcharge }] : []),
   ]
 

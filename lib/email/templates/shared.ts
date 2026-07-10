@@ -29,16 +29,16 @@ export function firstName(name: string): string {
 export function detailRow(label: string, value: string): string {
   return `
     <tr>
-      <td style="padding:9px 0;border-bottom:1px solid #e8e3dd;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#888580;width:42%;">${label}</td>
-      <td style="padding:9px 0;border-bottom:1px solid #e8e3dd;font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#0F0F0F;font-weight:500;text-align:right;">${value}</td>
+      <td style="padding:10px 0;border-bottom:1px solid #2E2418;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#9C8B6E;width:42%;">${label}</td>
+      <td style="padding:10px 0;border-bottom:1px solid #2E2418;font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#F5EFE2;font-weight:500;text-align:right;">${value}</td>
     </tr>`
 }
 
 export function ctaButton(href: string, label: string): string {
   return `
-    <table cellpadding="0" cellspacing="0" style="margin:24px 0 0 0;">
-      <tr><td style="background:#C0293A;border-radius:2px;">
-        <a href="${href}" style="display:inline-block;padding:13px 26px;font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#ffffff;text-decoration:none;">
+    <table cellpadding="0" cellspacing="0" style="margin:26px 0 0 0;">
+      <tr><td style="background:#E8B25C;border-radius:999px;">
+        <a href="${href}" style="display:inline-block;padding:14px 30px;font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#141009;text-decoration:none;">
           ${label}
         </a>
       </td></tr>
@@ -53,28 +53,32 @@ export function emailShell(heading: string, bodyHtml: string): string {
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>${escapeHtml(heading)}</title>
 </head>
-<body style="margin:0;padding:0;background:#F5F0EA;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#F5F0EA;padding:48px 20px;">
+<body style="margin:0;padding:0;background:#0B0906;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0B0906;padding:48px 20px;">
 <tr><td align="center">
 <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
-  <tr><td style="padding-bottom:28px;">
-    <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#0F0F0F;">
-      DEMARKS <span style="color:#C0293A;">360</span>
+  <tr><td align="center" style="padding-bottom:26px;">
+    <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#F5EFE2;">
+      Demarks<span style="color:#E8B25C;font-style:italic;">360</span>
+    </p>
+    <p style="margin:6px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#9C8B6E;">
+      We create the atmosphere for celebration
     </p>
   </td></tr>
-  <tr><td style="background:#080808;padding:32px 36px;border-radius:3px 3px 0 0;">
-    <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:32px;font-weight:700;line-height:1.05;color:#F5F0EA;">
+  <tr><td style="height:1px;font-size:0;line-height:0;background:#C9913F;">&nbsp;</td></tr>
+  <tr><td style="background:#17110A;padding:34px 36px 8px 36px;">
+    <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:30px;font-weight:400;line-height:1.1;color:#F5EFE2;">
       ${heading}
     </h1>
   </td></tr>
-  <tr><td style="background:#C0293A;height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>
-  <tr><td style="background:#ffffff;padding:32px 36px;border-radius:0 0 3px 3px;">
+  <tr><td style="background:#17110A;padding:20px 36px 36px 36px;">
     ${bodyHtml}
   </td></tr>
-  <tr><td style="padding:24px 36px;">
-    <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:11px;color:#a8a49e;line-height:1.6;">
-      Questions? Just reply to this email.<br>
-      &copy; ${new Date().getFullYear()} Demarks 360. Calgary, Alberta.
+  <tr><td style="height:1px;font-size:0;line-height:0;background:#C9913F;">&nbsp;</td></tr>
+  <tr><td align="center" style="padding:26px 36px;">
+    <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:11px;color:#9C8B6E;line-height:1.7;">
+      Questions? Just reply to this email &middot; 403 402 0816 &middot; demarks360.ca<br>
+      &copy; ${new Date().getFullYear()} Demarks 360 &middot; Calgary, Alberta
     </p>
   </td></tr>
 </table>

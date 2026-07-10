@@ -23,7 +23,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   }
 
   // The slot may have been taken by another booking while this request sat in review.
-  // skipLeadTime: a request can legitimately drift inside the 7-day customer lead window
+  // skipLeadTime: a request can legitimately drift inside the customer lead window
   // while it waits for review; that must not block the admin from approving it.
   const availability = await checkBookingAvailability(booking.eventDate, { excludeBookingId: id, skipLeadTime: true })
   if (availability.status !== 'available') {

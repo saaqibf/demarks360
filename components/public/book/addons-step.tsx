@@ -1,18 +1,21 @@
 'use client'
 import { useState } from 'react'
+import { addOnPrice } from '@/lib/pricing/config'
 
 interface AddonsStepProps {
   selectedIds: string[]
+  durationMinutes: number
   onNext: (ids: string[]) => void
   onBack: () => void
 }
 
 const ADDONS = [
-  { id: 'firecrackers', name: 'Firecrackers', price: 75, desc: 'Pyro-style sparks effect, maximum visual impact', active: true },
-  { id: 'smilecam', name: 'SmileCam', price: 0, desc: 'AI-powered smile detection camera', active: false, comingSoon: true },
+  { id: 'firecrackers', name: 'Firecrackers', desc: 'Pyro-style sparks effect, maximum visual impact', active: true },
+  { id: 'smilecam', name: 'SmileCam Photo Booth', desc: 'Unlimited photo sessions beside the 360 booth, with instant sharing. Priced for your full rental.', active: true },
 ]
 
-export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
+export function AddonsStep({ selectedIds, durationMinutes, onNext, onBack }: AddonsStepProps) {
+  const durationHours = durationMinutes / 60
   const [selected, setSelected] = useState<Set<string>>(new Set(selectedIds))
 
   function toggle(id: string) {
@@ -86,11 +89,6 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
                   <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-text-light)' }}>
                     {addon.name}
                   </span>
-                  {'comingSoon' in addon && addon.comingSoon && (
-                    <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.2rem 0.5rem', border: '1px solid var(--color-border-dark)', color: 'var(--color-muted-light)' }}>
-                      Coming Soon
-                    </span>
-                  )}
                 </div>
                 <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-muted-light)', fontWeight: 300, paddingLeft: '1.6rem' }}>
                   {addon.desc}
@@ -98,7 +96,7 @@ export function AddonsStep({ selectedIds, onNext, onBack }: AddonsStepProps) {
               </div>
               {addon.active && (
                 <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 400, color: isSelected ? 'var(--color-amber-light)' : 'var(--color-text-light)', marginLeft: '2rem', flexShrink: 0 }}>
-                  +${addon.price}
+                  +${addOnPrice(addon.id, durationHours)}
                 </span>
               )}
             </button>
