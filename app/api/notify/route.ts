@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
             We'll let you know when new dates open up and when we're running any promotions.
           </p>
           <p style="color: #7A7168; line-height: 1.75; margin-top: 1rem;">
-            In the meantime, feel free to <a href="https://demarks360.com/book" style="color: #A87530;">book your experience</a> — dates go fast.
+            In the meantime, feel free to <a href="https://demarks360.ca/book" style="color: #A87530;">book your experience</a> — dates go fast.
           </p>
           <p style="margin-top: 2rem; font-size: 0.85rem; color: #A8A099;">Demarks 360 · Calgary, AB</p>
         </div>

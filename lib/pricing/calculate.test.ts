@@ -3,25 +3,25 @@ import { describe, expect, it } from 'vitest'
 import { balanceChargeDate, calculateBookingCost, timeToMinutes } from './calculate'
 
 describe('calculateBookingCost', () => {
-  it('prices the 2-hour Calgary baseline: $300, $90 deposit, $210 balance', () => {
+  it('prices the 2-hour Calgary baseline: $240, $72 deposit, $168 balance', () => {
     const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: [], locationCity: 'Calgary' })
-    expect(cost.subtotal).toBe(300)
-    expect(cost.depositAmount).toBe(90)
-    expect(cost.balanceAmount).toBe(210)
-    expect(cost.depositCents).toBe(9000)
+    expect(cost.subtotal).toBe(240)
+    expect(cost.depositAmount).toBe(72)
+    expect(cost.balanceAmount).toBe(168)
+    expect(cost.depositCents).toBe(7200)
   })
 
   it('deposit and balance always reassemble the subtotal exactly', () => {
-    // 1.5 hrs = $225: 30% is $67.50, a non-integer split
-    const cost = calculateBookingCost({ durationMinutes: 90, addOnIds: [], locationCity: 'Calgary' })
-    expect(cost.depositAmount).toBe(67.5)
+    // 2 hrs + firecrackers = $315: 30% is $94.50, a non-integer split
+    const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: ['firecrackers'], locationCity: 'Calgary' })
+    expect(cost.depositAmount).toBe(94.5)
     expect(cost.depositAmount + cost.balanceAmount).toBe(cost.subtotal)
   })
 
   it('adds firecrackers flat and shows them as a line item', () => {
     const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: ['firecrackers'], locationCity: 'Calgary' })
     expect(cost.addOnSubtotal).toBe(75)
-    expect(cost.subtotal).toBe(375)
+    expect(cost.subtotal).toBe(315)
     expect(cost.lineItems.map(l => l.label)).toContain('Firecrackers')
   })
 
@@ -34,15 +34,15 @@ describe('calculateBookingCost', () => {
   it('charges the travel surcharge outside Calgary and itemizes it', () => {
     const cost = calculateBookingCost({ durationMinutes: 120, addOnIds: [], locationCity: 'Airdrie' })
     expect(cost.travelSurcharge).toBe(50)
-    expect(cost.subtotal).toBe(350)
+    expect(cost.subtotal).toBe(290)
     expect(cost.lineItems.map(l => l.label)).toContain('Travel surcharge')
   })
 
   it('formats whole hours without a trailing .0 in the line item', () => {
     const twoHours = calculateBookingCost({ durationMinutes: 120, addOnIds: [], locationCity: 'Calgary' })
-    expect(twoHours.lineItems[0].label).toBe('2 hrs × $150/hr')
+    expect(twoHours.lineItems[0].label).toBe('2 hrs × $120/hr')
     const ninetyMin = calculateBookingCost({ durationMinutes: 90, addOnIds: [], locationCity: 'Calgary' })
-    expect(ninetyMin.lineItems[0].label).toBe('1.5 hrs × $150/hr')
+    expect(ninetyMin.lineItems[0].label).toBe('1.5 hrs × $120/hr')
   })
 })
 

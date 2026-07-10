@@ -23,7 +23,7 @@ export default function TermsPage() {
           { title: '7. Our Cancellation', body: 'If Demarks 360 must cancel your booking (equipment failure, emergency), we will issue a full refund of all amounts paid, including the deposit. We will notify you as soon as possible.' },
           { title: '8. Liability', body: 'Demarks 360 is not liable for any indirect, incidental, or consequential damages arising from your use of our services. Our total liability is limited to the amount paid for the affected booking.' },
           { title: '9. Governing Law', body: 'These terms are governed by the laws of the Province of Alberta and the federal laws of Canada applicable therein.' },
-          { title: '10. Contact', body: 'For questions about these terms, email hello@demarks360.com.' },
+          { title: '10. Contact', body: 'For questions about these terms, email hello@demarks360.ca.' },
         ].map(({ title, body }) => (
           <div key={title} style={{ marginBottom: '2.5rem' }}>
             <h2 style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text)', marginBottom: '0.75rem' }}>{title}</h2>

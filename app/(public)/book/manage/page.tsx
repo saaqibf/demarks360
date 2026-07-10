@@ -94,7 +94,7 @@ function ManageBookingInner() {
       if (!res.ok) throw new Error('Failed to send request')
       setSubmitted(true)
     } catch {
-      setError('Something went wrong. Please email hello@demarks360.com directly.')
+      setError('Something went wrong. Please email hello@demarks360.ca directly.')
     } finally {
       setSubmitting(false)
     }
@@ -111,7 +111,7 @@ function ManageBookingInner() {
         <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', color: 'var(--color-muted-light)', lineHeight: 1.75, marginBottom: '2rem' }}>
           The link may have expired or the booking ID is incorrect. Check your confirmation email or contact us directly.
         </p>
-        <a href="mailto:hello@demarks360.com" className="btn-primary">Email us</a>
+        <a href="mailto:hello@demarks360.ca" className="btn-primary">Email us</a>
       </div>
       <SiteFooter />
     </div>
@@ -293,7 +293,7 @@ function ManageBookingInner() {
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', color: 'var(--color-muted-light)', lineHeight: 1.65 }}>
               We got your request and will be in touch within 24 hours at the email you booked with. You can also reach us at{' '}
-              <a href="tel:+15879179272" style={{ color: 'var(--color-amber-light)' }}>587-917-9272</a>.
+              <a href="tel:+14034020816" style={{ color: 'var(--color-amber-light)' }}>403-402-0816</a>.
             </p>
           </div>
         )}

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Demarks 360: Calgary 360° Video Booth Rental',
   description:
     `360° slow-motion video booth rental in Calgary. Same-day gallery delivery, unlimited takes, cinematic results. From $${FROM_PRICE}. Book online.`,
-  alternates: { canonical: 'https://demarks360.com' },
+  alternates: { canonical: 'https://demarks360.ca' },
 }
 
 const localBusinessSchema = {
@@ -17,7 +17,7 @@ const localBusinessSchema = {
   '@type': 'LocalBusiness',
   name: 'Demarks 360',
   description: '360° slow-motion video booth rental for events in Calgary and surrounding areas.',
-  url: 'https://demarks360.com',
+  url: 'https://demarks360.ca',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Calgary',
@@ -370,9 +370,9 @@ export default function HomePage() {
             </div>
             <div className="dm-fcol">
               <h5>Contact</h5>
-              <a href="tel:+15879179272">587-917-9272</a>
               <a href="tel:+14034020816">403-402-0816</a>
-              <a href="mailto:hello@demarks360.com">hello@demarks360.com</a>
+              <a href="tel:+14034020816">403-402-0816</a>
+              <a href="mailto:hello@demarks360.ca">hello@demarks360.ca</a>
               <a href="https://instagram.com/demarks360" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://tiktok.com/@demarks360" target="_blank" rel="noopener noreferrer">TikTok</a>
               <a href="/privacy">Privacy policy</a>

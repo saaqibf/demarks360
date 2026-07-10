@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/api/', '/sign-in', '/sign-up', '/gallery/', '/preview/'],
       },
     ],
-    sitemap: 'https://demarks360.com/sitemap.xml',
+    sitemap: 'https://demarks360.ca/sitemap.xml',
   };
 }

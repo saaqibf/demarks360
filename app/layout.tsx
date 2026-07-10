@@ -14,7 +14,7 @@ const greatVibes = Great_Vibes({
   variable: '--font-script',
 })
 
-const BASE_URL = 'https://demarks360.com'
+const BASE_URL = 'https://demarks360.ca'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

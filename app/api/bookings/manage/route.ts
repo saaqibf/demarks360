@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { booking: b, customer: c } = row
-  const adminEmail = process.env.ADMIN_EMAIL ?? 'hello@demarks360.com'
+  const adminEmail = process.env.ADMIN_EMAIL ?? 'hello@demarks360.ca'
   const safeName = escapeHtml(c?.name ?? 'Unknown')
   const subject = requestType === 'cancel'
     ? `Cancellation Request - ${c?.name ?? 'Customer'} (${b.eventDate})`
