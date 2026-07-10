@@ -69,17 +69,17 @@ export function adminNewRequestEmail(p: AdminNewRequestParams): EmailContent {
     ${p.subtotal != null ? `
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 0 0;background:#FBF8F1;border:1px solid #E7DFD0;border-radius:12px;">
       <tr>
-        <td width="33%" align="center" style="padding:18px 6px;border-right:1px solid #E7DFD0;">
+        <td width="33%" align="center" style="padding:16px 4px;border-right:1px solid #E7DFD0;">
           <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A917F;">Quote</p>
-          <p style="margin:6px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#231C10;">${money(p.subtotal)}</p>
+          <p style="margin:6px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#231C10;">${money(p.subtotal)}</p>
         </td>
-        <td width="34%" align="center" style="padding:18px 6px;border-right:1px solid #E7DFD0;">
-          <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A917F;">Deposit on approval</p>
-          <p style="margin:6px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#B07E2F;">${money(p.depositAmount ?? null)}</p>
+        <td width="34%" align="center" style="padding:16px 4px;border-right:1px solid #E7DFD0;">
+          <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9A917F;">Deposit</p>
+          <p style="margin:6px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#B07E2F;">${money(p.depositAmount ?? null)}</p>
         </td>
-        <td width="33%" align="center" style="padding:18px 6px;">
-          <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9A917F;">Balance event day</p>
-          <p style="margin:6px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#231C10;">${money(p.balanceAmount ?? null)}</p>
+        <td width="33%" align="center" style="padding:16px 4px;">
+          <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9A917F;">Balance</p>
+          <p style="margin:6px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#231C10;">${money(p.balanceAmount ?? null)}</p>
         </td>
       </tr>
     </table>` : ''}

@@ -58,31 +58,37 @@ export function emailShell(heading: string, bodyHtml: string): string {
   <meta name="supported-color-schemes" content="light">
   <title>${escapeHtml(heading)}</title>
 </head>
-<body style="margin:0;padding:0;background:#F2EDE3;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#F2EDE3;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#EDE7DB;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#EDE7DB;padding:32px 16px;">
 <tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
-  <tr><td align="center" style="padding:8px 0 26px 0;">
-    <img src="${APP_URL}/email/logo.png" width="208" height="33" alt="Demarks 360 - We create the atmosphere for celebration" style="display:block;border:0;max-width:208px;height:auto;">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#FFFFFF;border-radius:18px;overflow:hidden;box-shadow:0 12px 40px rgba(20,16,9,0.16);">
+  <!-- cinematic banner: an image, so email clients cannot recolor it -->
+  <tr><td style="font-size:0;line-height:0;">
+    <img src="${APP_URL}/email/header.jpg" width="600" alt="Demarks 360 - We create the atmosphere for celebration" style="display:block;border:0;width:100%;max-width:600px;height:auto;">
   </td></tr>
-  <tr><td style="background:#FFFFFF;border:1px solid #E7DFD0;border-radius:16px;overflow:hidden;">
-    <table width="100%" cellpadding="0" cellspacing="0">
-      <tr><td style="height:5px;font-size:0;line-height:0;background:#C9913F;">&nbsp;</td></tr>
-      <tr><td style="padding:36px 40px 10px 40px;">
-        <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:27px;font-weight:400;line-height:1.2;color:#231C10;">
-          ${heading}
-        </h1>
-      </td></tr>
-      <tr><td style="padding:16px 40px 40px 40px;">
-        ${bodyHtml}
-      </td></tr>
-    </table>
+  <tr><td style="padding:34px 26px 10px 26px;">
+    <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:400;line-height:1.18;color:#1E1810;letter-spacing:0.2px;">
+      ${heading}
+    </h1>
   </td></tr>
-  <tr><td align="center" style="padding:26px 36px;">
-    <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#9A917F;line-height:1.8;">
-      Questions? Just reply to this email &middot; 403 402 0816<br>
-      <a href="https://demarks360.ca" style="color:#B07E2F;text-decoration:none;font-weight:600;">demarks360.ca</a> &middot; Calgary, Alberta<br>
-      &copy; ${new Date().getFullYear()} Demarks 360
+  <tr><td style="padding:14px 26px 40px 26px;">
+    ${bodyHtml}
+  </td></tr>
+  <!-- gold texture divider strip -->
+  <tr><td style="font-size:0;line-height:0;">
+    <img src="${APP_URL}/email/gold-strip.jpg" width="600" alt="" style="display:block;border:0;width:100%;max-width:600px;height:auto;">
+  </td></tr>
+  <tr><td align="center" style="background:#17110A;padding:28px 40px;">
+    <p style="margin:0 0 12px 0;font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#F5EFE2;">
+      Demarks<span style="font-style:italic;color:#E8B25C;">360</span>
+    </p>
+    <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#B6A78C;line-height:1.9;">
+      Reply anytime &middot; 403 402 0816<br>
+      <a href="https://demarks360.ca" style="color:#E8B25C;text-decoration:none;font-weight:600;">demarks360.ca</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://instagram.com/demarks360" style="color:#E8B25C;text-decoration:none;font-weight:600;">@demarks360</a>
+      &nbsp;&middot;&nbsp; Calgary, Alberta<br>
+      <span style="color:#7C7159;">&copy; ${new Date().getFullYear()} Demarks 360</span>
     </p>
   </td></tr>
 </table>
