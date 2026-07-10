@@ -6,6 +6,17 @@ export interface EmailContent {
   html: string
 }
 
+// Serif for headings and money (Georgia is the reliable cross-client serif),
+// system sans for body. Two typefaces, restrained palette, generous whitespace:
+// the pattern real transactional email (Stripe, Airbnb, Resy) is built on.
+const SERIF = "Georgia,'Times New Roman',serif"
+const SANS = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
+const INK = '#1A140C'
+const MUTE = '#6B6355'
+const FAINT = '#9A9080'
+const GOLD = '#B8925A'
+const HAIR = '#E9E3D8'
+
 export function fmtDate(d: string): string {
   return new Date(d + 'T00:00:00').toLocaleDateString('en-CA', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
@@ -27,28 +38,61 @@ export function firstName(name: string): string {
   return escapeHtml(name.split(' ')[0])
 }
 
+// A clean two-column data row: muted label left, ink value right-of-label
 export function detailRow(label: string, value: string): string {
   return `
     <tr>
-      <td style="padding:11px 0;border-bottom:1px solid #EFE9DE;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#9A917F;width:42%;">${label}</td>
-      <td style="padding:11px 0;border-bottom:1px solid #EFE9DE;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#231C10;font-weight:500;text-align:right;">${value}</td>
+      <td style="padding:11px 0;font-family:${SANS};font-size:15px;color:${FAINT};width:38%;vertical-align:top;">${label}</td>
+      <td style="padding:11px 0;font-family:${SANS};font-size:15px;color:${INK};font-weight:500;vertical-align:top;">${value}</td>
+    </tr>`
+}
+
+// A money row with the amount set in serif, gold when it is the highlighted figure
+export function moneyRow(label: string, value: string | number | null, opts: { gold?: boolean; big?: boolean } = {}): string {
+  const border = opts.big ? '' : `border-bottom:1px solid ${HAIR};`
+  const size = opts.big ? '23px' : '18px'
+  const color = opts.gold ? GOLD : INK
+  return `
+    <tr>
+      <td style="padding:${opts.big ? '16px 0 0 0' : '13px 0'};${border}font-family:${SANS};font-size:15px;color:${MUTE};">${label}</td>
+      <td align="right" style="padding:${opts.big ? '16px 0 0 0' : '13px 0'};${border}font-family:${SERIF};font-size:${size};color:${color};">${money(value)}</td>
     </tr>`
 }
 
 export function ctaButton(href: string, label: string): string {
   return `
-    <table cellpadding="0" cellspacing="0" style="margin:28px 0 0 0;">
-      <tr><td style="background:#C9913F;border-radius:999px;">
-        <a href="${href}" style="display:inline-block;padding:15px 32px;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">
+    <table cellpadding="0" cellspacing="0" style="margin:32px 0 0 0;">
+      <tr><td style="background:${INK};border-radius:999px;">
+        <a href="${href}" style="display:inline-block;padding:16px 42px;font-family:${SANS};font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#F5EFE2;text-decoration:none;">
           ${label}
         </a>
       </td></tr>
     </table>`
 }
 
-// Light-first shell: dark email themes get unpredictably recolored by Gmail and
-// Outlook, so trust-critical emails stay cream/white with brand gold accents
-export function emailShell(heading: string, bodyHtml: string): string {
+export interface ShellOptions {
+  eyebrow?: string
+  // Photo hero: a hosted image with a serif title overlaid. Falls back to a
+  // clean serif headline in the body when omitted.
+  heroImage?: string
+  heroTitle?: string
+}
+
+export function emailShell(heading: string, bodyHtml: string, opts: ShellOptions = {}): string {
+  const hero = opts.heroImage
+    ? `
+      <tr><td style="font-size:0;line-height:0;">
+        <img src="${opts.heroImage}" width="600" alt="" style="display:block;border:0;width:100%;max-width:600px;height:auto;">
+      </td></tr>
+      <tr><td style="background:#141009;padding:24px 44px 26px 44px;">
+        <p style="margin:0;font-family:${SANS};font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#E8B25C;">Demarks 360</p>
+        <p style="margin:9px 0 0 0;font-family:${SERIF};font-style:italic;font-size:32px;line-height:1.1;color:#FFFFFF;">${escapeHtml(opts.heroTitle ?? heading)}</p>
+      </td></tr>`
+    : `
+      <tr><td style="padding:44px 44px 0 44px;">
+        <p style="margin:0;font-family:${SERIF};font-size:24px;color:${INK};">Demarks<span style="font-style:italic;color:${GOLD};">360</span></p>
+      </td></tr>`
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,31 +102,21 @@ export function emailShell(heading: string, bodyHtml: string): string {
   <meta name="supported-color-schemes" content="light">
   <title>${escapeHtml(heading)}</title>
 </head>
-<body style="margin:0;padding:0;background:#EDE7DB;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#EDE7DB;padding:32px 16px;">
+<body style="margin:0;padding:0;background:#EEEAE2;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#EEEAE2;">
 <tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#FFFFFF;border-radius:18px;overflow:hidden;box-shadow:0 12px 40px rgba(20,16,9,0.16);">
-  <!-- cinematic banner: an image, so email clients cannot recolor it -->
-  <tr><td style="font-size:0;line-height:0;">
-    <img src="${APP_URL}/email/header.jpg" width="600" alt="Demarks 360 - We create the atmosphere for celebration" style="display:block;border:0;width:100%;max-width:600px;height:auto;">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#FBFAF7;">
+  ${hero}
+  <tr><td style="padding:${opts.heroImage ? '36px' : '30px'} 44px 8px 44px;">
+    ${opts.eyebrow ? `<p style="margin:0 0 14px 0;font-family:${SANS};font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${GOLD};">${escapeHtml(opts.eyebrow)}</p>` : ''}
+    ${!opts.heroImage ? `<h1 style="margin:0;font-family:${SERIF};font-size:32px;font-weight:400;line-height:1.15;color:${INK};">${heading}</h1>` : ''}
   </td></tr>
-  <tr><td style="padding:34px 26px 10px 26px;">
-    <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:400;line-height:1.18;color:#1E1810;letter-spacing:0.2px;">
-      ${heading}
-    </h1>
-  </td></tr>
-  <tr><td style="padding:14px 26px 40px 26px;">
+  <tr><td style="padding:14px 44px 40px 44px;">
     ${bodyHtml}
   </td></tr>
-  <!-- gold texture divider strip -->
-  <tr><td style="font-size:0;line-height:0;">
-    <img src="${APP_URL}/email/gold-strip.jpg" width="600" alt="" style="display:block;border:0;width:100%;max-width:600px;height:auto;">
-  </td></tr>
-  <tr><td align="center" style="background:#17110A;padding:28px 40px;">
-    <p style="margin:0 0 12px 0;font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#F5EFE2;">
-      Demarks<span style="font-style:italic;color:#E8B25C;">360</span>
-    </p>
-    <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#B6A78C;line-height:1.9;">
+  <tr><td style="background:#141009;padding:32px 44px;text-align:center;">
+    <p style="margin:0;font-family:${SERIF};font-size:20px;color:#F5EFE2;">Demarks<span style="font-style:italic;color:#E8B25C;">360</span></p>
+    <p style="margin:12px 0 0 0;font-family:${SANS};font-size:12px;color:#9C8B6E;line-height:1.9;">
       Reply anytime &middot; 403 402 0816<br>
       <a href="https://demarks360.ca" style="color:#E8B25C;text-decoration:none;font-weight:600;">demarks360.ca</a>
       &nbsp;&middot;&nbsp;
