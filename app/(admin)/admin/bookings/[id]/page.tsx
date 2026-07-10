@@ -75,6 +75,7 @@ export default async function BookingDetailPage({ params }: Props) {
             { label: 'Time', value: `${fmt(b.startTime)} → ${fmt(b.endTime)}` },
             { label: 'Type', value: b.eventType },
             ...(b.eventName ? [{ label: 'Event Name', value: b.eventName }] : []),
+            ...(b.designNotes ? [{ label: 'Design Notes', value: b.designNotes }] : []),
             { label: 'Address', value: `${b.locationAddress}, ${b.locationCity}` },
             { label: 'Add-ons', value: (b.addOns as string[]).join(', ') || 'None' },
           ].map(({ label, value }) => (

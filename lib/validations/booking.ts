@@ -20,6 +20,8 @@ export const createBookingSchema = z.object({
     z.string().min(2, 'Event type is required').max(100),
   ),
   eventName: z.string().max(100).trim().optional(),
+  // "Describe your vision" free text, forwarded verbatim to the overlay designer
+  designNotes: z.string().max(500).trim().optional(),
   eventPreferences: z.object({
     backgroundColorTheme: z.string().max(200).optional(),
     designThemeTags: z.array(z.string().max(100)).optional(),

@@ -11,6 +11,7 @@ export interface CreateBookingParams {
   addOns: string[]
   eventType: string
   eventName?: string
+  designNotes?: string
   eventPreferences?: {
     backgroundColorTheme?: string
     designThemeTags?: string[]
@@ -50,6 +51,7 @@ export async function createBookingRecord(params: CreateBookingParams) {
       stripePaymentIntentId: params.stripePaymentIntentId,
       stripeCustomerId: params.stripeCustomerId,
       eventName: params.eventName ?? null,
+      designNotes: params.designNotes ?? null,
       eventPreferences: params.eventPreferences ?? null,
     })
     .returning()
@@ -78,6 +80,7 @@ export async function updatePendingBooking(
       balanceAmount: String(params.balanceAmount),
       balanceChargeDate: params.balanceChargeDate,
       eventName: params.eventName ?? null,
+      designNotes: params.designNotes ?? null,
       eventPreferences: params.eventPreferences ?? null,
       createdAt: new Date(),
     })

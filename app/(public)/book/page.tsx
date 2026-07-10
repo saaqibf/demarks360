@@ -31,6 +31,7 @@ export type BookingState = {
   slomoBoomerang: boolean
   backgroundColorTheme: string
   designThemeTags: string[]
+  designNotes: string
   songPreference: string
   // Checkout idempotency: the pending booking created for this wizard session, reused on step 5 remounts
   pendingBookingId: string | null
@@ -58,6 +59,7 @@ const initialState: BookingState = {
   slomoBoomerang: false,
   backgroundColorTheme: '',
   designThemeTags: [],
+  designNotes: '',
   songPreference: '',
   pendingBookingId: null,
   pendingClientSecret: null,
@@ -108,6 +110,7 @@ function rehydrateStoredState(raw: unknown): BookingState | null {
     slomoBoomerang: o.slomoBoomerang === true,
     backgroundColorTheme: requiredString(o.backgroundColorTheme),
     designThemeTags: stringArray(o.designThemeTags),
+    designNotes: requiredString(o.designNotes),
     songPreference: requiredString(o.songPreference),
     pendingBookingId: optionalString(o.pendingBookingId),
     pendingClientSecret: optionalString(o.pendingClientSecret),

@@ -26,6 +26,7 @@ function buildBookingPayload(state: BookingState) {
     locationCity: state.locationCity,
     eventType: state.eventType.trim(),
     eventName: state.eventName || undefined,
+    designNotes: state.designNotes || undefined,
     agreedToTerms: state.agreedToTerms,
     eventPreferences: {
       ...(state.videoType === 'slomo' && { videoType: 'slomo' as const }),

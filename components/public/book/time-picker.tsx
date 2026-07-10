@@ -32,8 +32,28 @@ function formatTime(t: string): string {
 }
 
 const ALL_SLOTS = generateSlots()
-const MIN_DURATION_MINUTES = 90
 const TRAVEL_BUFFER_MINUTES = 90
+// Plain-language durations: picking "how long" is far easier than scanning a
+// second grid of clock times for a valid end slot
+const DURATION_OPTIONS = [
+  { minutes: 90, label: '1.5 hours' },
+  { minutes: 120, label: '2 hours', popular: true },
+  { minutes: 180, label: '3 hours' },
+  { minutes: 240, label: '4 hours' },
+  { minutes: 300, label: '5 hours' },
+]
+
+function minutesToTime(min: number): string {
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+}
+
+function formatFriendlyDate(iso: string): string {
+  const [y, mo, d] = iso.split('-').map(Number)
+  const dt = new Date(y, mo - 1, d)
+  return dt.toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric' })
+}
 
 interface AvailabilityData {
   bookedSlots: { startTime: string; endTime: string }[]
@@ -42,7 +62,7 @@ interface AvailabilityData {
 }
 
 export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimePickerProps) {
-  const [phase, setPhase] = useState<'start' | 'end'>('start')
+  const [phase, setPhase] = useState<'start' | 'duration'>('start')
   const [selectedStart, setSelectedStart] = useState<string | null>(startTime)
   const [selectedEnd, setSelectedEnd] = useState<string | null>(endTime)
   const [availability, setAvailability] = useState<AvailabilityData | null>(null)
@@ -93,11 +113,15 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
     return false
   }
 
-  function isEndSlotValid(slot: string): boolean {
-    if (!selectedStart) return false
-    const startMin = timeToMinutes(selectedStart)
-    const slotMin = timeToMinutes(slot)
-    return slotMin >= startMin + MIN_DURATION_MINUTES
+  // A booking must fit inside the day and never cross a booked or blocked stretch,
+  // so every half-hour inside the span is checked, not just the endpoints
+  function isSpanFree(startMin: number, durationMin: number, avail: AvailabilityData): boolean {
+    const endMin = startMin + durationMin
+    if (endMin > 24 * 60) return false
+    for (let m = startMin; m < endMin; m += 30) {
+      if (isSlotBlocked(minutesToTime(m), avail)) return false
+    }
+    return true
   }
 
   if (loading) {
@@ -147,52 +171,88 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
         Step 2
       </p>
       <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 400, lineHeight: 0.95, color: 'var(--color-text-light)', marginBottom: '0.75rem' }}>
-        {phase === 'start' ? 'Pick a start time' : 'Pick an end time'}
+        {phase === 'start' ? 'What time does your event start?' : 'How long do you want the booth?'}
       </h2>
       <p style={{ fontSize: '0.82rem', color: 'rgba(245,240,234,0.4)', fontWeight: 300, marginBottom: '2.5rem' }}>
         {phase === 'start'
-          ? `${date} · Select when your event starts`
-          : `Started at ${selectedStart ? formatTime(selectedStart) : ''} · Minimum 1.5 hours`}
+          ? `${formatFriendlyDate(date)} · Tap the time guests start arriving`
+          : `${formatFriendlyDate(date)} · Starting at ${selectedStart ? formatTime(selectedStart) : ''}`}
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', maxWidth: '560px' }}>
-        {slotsWithStatus.map(({ slot, blocked }) => {
-          const isSelectedEnd = phase === 'end' && slot === selectedEnd
-          const isSelectedStart = slot === selectedStart
-          // In 'start' phase: highlight the chosen slot; in 'end' phase: highlight both start (dimmer) and end (full amber)
-          const isActivePrimary = phase === 'start' ? isSelectedStart : isSelectedEnd
-          const isActiveStart = phase === 'end' && isSelectedStart && !isSelectedEnd
-          const isDisabled = phase === 'end' ? !isEndSlotValid(slot) || blocked : blocked
-          return (
-            <button
-              key={slot}
-              disabled={isDisabled}
-              onClick={() => {
-                if (phase === 'start') {
+      {phase === 'start' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', maxWidth: '560px' }}>
+          {slotsWithStatus.map(({ slot, blocked }) => {
+            const isSelectedStart = slot === selectedStart
+            return (
+              <button
+                key={slot}
+                disabled={blocked}
+                onClick={() => {
                   setSelectedStart(slot)
                   setSelectedEnd(null)
-                  setPhase('end')
-                } else {
-                  setSelectedEnd(slot)
-                }
-              }}
-              style={{
-                padding: '0.75rem 0.5rem', border: '1px solid',
-                borderColor: isActivePrimary ? 'var(--color-amber-light)' : isActiveStart ? 'var(--color-amber)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
-                background: isActivePrimary ? 'var(--color-amber-light)' : isActiveStart ? 'rgba(201,145,63,0.18)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
-                color: isActivePrimary ? 'var(--color-charcoal)' : isActiveStart ? 'var(--color-amber-light)' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text-light)',
-                cursor: isDisabled ? 'not-allowed' : 'pointer',
-                fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: isActivePrimary || isActiveStart ? 700 : 600,
-                transition: 'all 0.15s',
-              }}
-            >
-              {formatTime(slot)}
-            </button>
-          )
-        })}
-      </div>
+                  setPhase('duration')
+                }}
+                style={{
+                  padding: '0.75rem 0.5rem', border: '1px solid',
+                  borderColor: isSelectedStart ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
+                  background: isSelectedStart ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
+                  color: isSelectedStart ? 'var(--color-charcoal)' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text-light)',
+                  cursor: blocked ? 'not-allowed' : 'pointer',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: isSelectedStart ? 700 : 600,
+                  transition: 'all 0.15s',
+                }}
+              >
+                {formatTime(slot)}
+              </button>
+            )
+          })}
+        </div>
+      )}
 
-      {phase === 'end' && selectedStart && selectedEnd && (
+      {phase === 'duration' && selectedStart && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '560px' }}>
+          <button
+            onClick={() => { setPhase('start'); setSelectedEnd(null) }}
+            style={{ alignSelf: 'flex-start', marginBottom: '0.5rem', background: 'rgba(201,145,63,0.14)', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--color-amber-light)', padding: '0.55rem 1.1rem' }}
+          >
+            Starts at {formatTime(selectedStart)} · Change
+          </button>
+          {DURATION_OPTIONS.map(({ minutes, label, popular }) => {
+            const startMin = timeToMinutes(selectedStart)
+            const endTimeStr = minutesToTime(Math.min(startMin + minutes, 24 * 60 - 1))
+            const fits = isSpanFree(startMin, minutes, availability)
+            const isSelected = selectedEnd !== null && timeToMinutes(selectedEnd) - startMin === minutes
+            const price = Math.ceil((minutes / 60) * PRICING.HOURLY_RATE)
+            return (
+              <button
+                key={minutes}
+                disabled={!fits}
+                onClick={() => setSelectedEnd(minutesToTime(startMin + minutes))}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
+                  padding: '1rem 1.25rem', border: '1px solid', textAlign: 'left',
+                  borderColor: isSelected ? 'var(--color-amber-light)' : fits ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
+                  background: isSelected ? 'rgba(232,178,92,0.14)' : fits ? 'var(--color-surface)' : 'rgba(255,255,255,0.02)',
+                  color: fits ? 'var(--color-text-light)' : 'rgba(245,240,234,0.2)',
+                  cursor: fits ? 'pointer' : 'not-allowed', transition: 'all 0.15s',
+                }}
+              >
+                <span style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                  <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9rem', fontWeight: 700, color: isSelected ? 'var(--color-amber-light)' : undefined }}>
+                    {label}{popular && fits ? '  ★ Most popular' : ''}
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: fits ? 'rgba(245,240,234,0.45)' : 'rgba(245,240,234,0.15)' }}>
+                    {fits ? `${formatTime(selectedStart)} to ${formatTime(endTimeStr)}` : 'Not available this day'}
+                  </span>
+                </span>
+                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', fontWeight: 700, whiteSpace: 'nowrap' }}>${price}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+
+      {phase === 'duration' && selectedStart && selectedEnd && (
         <div style={{ marginTop: '2rem', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', maxWidth: '560px' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)' }}>
             <strong>{formatTime(selectedStart)}</strong> → <strong>{formatTime(selectedEnd)}</strong>
@@ -216,7 +276,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
       )}
 
       <button
-        onClick={() => { if (phase === 'end') { setPhase('start'); setSelectedEnd(null) } else { onBack() } }}
+        onClick={() => { if (phase === 'duration') { setPhase('start'); setSelectedEnd(null) } else { onBack() } }}
         style={{ marginTop: '1.5rem', display: 'inline-block', background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.75rem 1.6rem', transition: 'border-color 0.2s' }}
       >
         ← Back

@@ -45,6 +45,8 @@ export const bookings = pgTable('bookings', {
   galleryPublishedAt: timestamp('gallery_published_at'),
   notes: text('notes'),
   eventName: text('event_name'),
+  // Customer's "describe your vision" free text, passed to the overlay designer
+  designNotes: text('design_notes'),
   eventPreferences: jsonb('event_preferences').$type<{
     backgroundColorTheme?: string
     designThemeTags?: string[]

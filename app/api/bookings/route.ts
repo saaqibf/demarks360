@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
     addOns: input.addOnIds,
     eventType: input.eventType,
     eventName: input.eventName,
+    designNotes: input.designNotes,
     eventPreferences: input.eventPreferences,
     locationAddress: input.locationAddress,
     locationCity: input.locationCity,

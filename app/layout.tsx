@@ -1,7 +1,18 @@
-import type { Metadata } from 'next'
+import { Great_Vibes } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { CookieConsent } from '@/components/public/cookie-consent'
 import './globals.css'
+
+import type { Metadata } from 'next'
+
+// Script face for the overlay preview's ribbon lettering only; Bodoni Moda and
+// Figtree stay the site faces (loaded in globals.css)
+const greatVibes = Great_Vibes({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-script',
+})
 
 const BASE_URL = 'https://demarks360.com'
 
@@ -60,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body>
+        <body className={greatVibes.variable}>
           <div className="grain" aria-hidden="true" />
           {children}
           <CookieConsent />

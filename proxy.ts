@@ -13,6 +13,7 @@ const isPublicRoute = createRouteMatcher([
   '/terms',
   '/api/availability(.*)',
   '/api/bookings(.*)',
+  '/api/overlay-preview(.*)',
   '/api/webhooks/(.*)',
 ])
 
