@@ -19,10 +19,10 @@ export function bookingConfirmedEmail(p: BookingConfirmedParams): EmailContent {
     ? `The remaining ${money(p.balanceAmount)} is due on event day. We'll charge your saved card that morning and email a receipt.`
     : `The remaining ${money(p.balanceAmount)} is due on event day. We'll email you a payment link that morning.`
   const body = `
-    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#D8CFC0;line-height:1.65;">
+    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
       Hi ${firstName(p.name)},
     </p>
-    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#D8CFC0;line-height:1.65;">
+    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
       Your deposit of ${money(p.depositAmount)} has been received and your date is locked in.
     </p>
     <table width="100%" cellpadding="0" cellspacing="0">
@@ -33,10 +33,10 @@ export function bookingConfirmedEmail(p: BookingConfirmedParams): EmailContent {
       ${detailRow('Deposit paid', money(p.depositAmount))}
       ${detailRow('Balance due on event day', money(p.balanceAmount))}
     </table>
-    <p style="margin:20px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#D8CFC0;line-height:1.65;">
+    <p style="margin:20px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
       ${balanceLine}
     </p>
-    <p style="margin:16px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#9C8B6E;line-height:1.65;">
+    <p style="margin:16px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#9A917F;line-height:1.65;">
       Your deposit is non-refundable. Same-day gallery link comes to this email after your event.
     </p>`
   return {

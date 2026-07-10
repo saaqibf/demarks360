@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createBookingSchema } from '@/lib/validations/booking'
 import { checkBookingAvailability } from '@/lib/availability'
 import { createBookingRecord, getBookingWithCustomer, getOrCreateCustomer, updateRequestedBooking } from '@/lib/db/queries/bookings'
-import { calculateBookingCost, balanceChargeDate, timeToMinutes, PRICING } from '@/lib/pricing'
+import { ADDON_CATALOG, calculateBookingCost, balanceChargeDate, timeToMinutes, PRICING } from '@/lib/pricing'
 import { ADMIN_EMAIL, sendEmail } from '@/lib/email/send'
 import { requestReceivedEmail } from '@/lib/email/templates/request-received'
 import { adminNewRequestEmail } from '@/lib/email/templates/admin-new-request'
@@ -131,6 +131,15 @@ export async function POST(req: NextRequest) {
       eventType: input.eventType,
       locationAddress: input.locationAddress,
       locationCity: input.locationCity,
+      eventName: input.eventName ?? null,
+      durationMinutes: timeToMinutes(input.endTime) - timeToMinutes(input.startTime),
+      subtotal: pricing.subtotal,
+      depositAmount: pricing.depositAmount,
+      balanceAmount: pricing.balanceAmount,
+      addOnNames: input.addOnIds.filter(id => id in ADDON_CATALOG).map(id => ADDON_CATALOG[id].name),
+      colorTheme: input.eventPreferences?.backgroundColorTheme ?? null,
+      designNotes: input.designNotes ?? null,
+      songPreference: input.eventPreferences?.songPreference ?? null,
     }),
   })
 
