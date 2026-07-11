@@ -250,19 +250,13 @@ export function DemarksLandingFx() {
         })
       })
 
-      // Film-gate shutters open toward the copy side; image parallax only on wider screens
-      gsap.utils.toArray<HTMLElement>('.dm-step').forEach((step, i) => {
-        const shutter = step.querySelector('.dm-shutter')
-        if (shutter) {
-          gsap.fromTo(shutter,
-            { xPercent: 0 },
-            {
-              xPercent: i % 2 === 1 ? 101 : -101,
-              duration: 1.0, ease: 'power4.inOut', immediateRender: true,
-              scrollTrigger: { trigger: step, start: 'top 75%', once: true },
-            },
-          )
-        }
+      // Step photos: a soft one-way fade-up as they enter. No covering shutter —
+      // that re-covered images on ScrollTrigger refresh and never reopened them.
+      gsap.utils.toArray<HTMLElement>('.dm-step-visual').forEach((el) => {
+        gsap.from(el, {
+          autoAlpha: 0, y: 40, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        })
       })
       mm.add('(min-width: 641px)', () => {
         const imgs = gsap.utils.toArray<HTMLElement>('.dm-step-img')
@@ -282,20 +276,30 @@ export function DemarksLandingFx() {
         })
       })
 
-      // Gallery filmstrip: scrubbed across its FULL overflow on fine pointers so the last
-      // frames are reachable; touch/reduced-motion/no-JS keep native swipe
-      mm.add('(pointer: fine)', () => {
-        const reel = document.getElementById('dm-reel')
-        const scroller = document.querySelector<HTMLElement>('.dm-reel-scroller')
-        if (!reel || !scroller) return
-        scroller.style.overflowX = 'hidden'
-        gsap.to(reel, {
-          x: () => -Math.max(0, reel.scrollWidth - scroller.clientWidth),
-          ease: 'none',
-          scrollTrigger: { trigger: '.dm-gallery-wrap', start: 'top 70%', end: 'bottom top', scrub: 1.5 },
-        })
-        return () => { scroller.style.overflowX = '' }
-      })
+      // Gallery filmstrip: plain native horizontal scroll, plus click-drag on desktop
+      // so mouse users can pull through the reel (touch/trackpad already work natively).
+      const reelScroller = document.querySelector<HTMLElement>('.dm-reel-scroller')
+      if (reelScroller) {
+        let down = false, startX = 0, startScroll = 0, moved = 0
+        const onDown = (e: PointerEvent) => {
+          down = true; moved = 0
+          startX = e.clientX; startScroll = reelScroller.scrollLeft
+          reelScroller.classList.add('dm-dragging')
+        }
+        const onMove = (e: PointerEvent) => {
+          if (!down) return
+          const dx = e.clientX - startX
+          moved = Math.max(moved, Math.abs(dx))
+          reelScroller.scrollLeft = startScroll - dx
+        }
+        const onUp = () => { down = false; reelScroller.classList.remove('dm-dragging') }
+        // Swallow the click that ends a real drag so it doesn't open a frame link
+        const onClick = (e: MouseEvent) => { if (moved > 6) { e.preventDefault(); e.stopPropagation() } }
+        reelScroller.addEventListener('pointerdown', onDown)
+        window.addEventListener('pointermove', onMove, { passive: true })
+        window.addEventListener('pointerup', onUp)
+        reelScroller.addEventListener('click', onClick, true)
+      }
 
       // Bokeh discs drift slowly as the hero scrolls away
       gsap.to('.dm-bokeh--a', {

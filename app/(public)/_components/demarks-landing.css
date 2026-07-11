@@ -290,6 +290,12 @@
 .dm-atmo-paused .dm-spot { animation-play-state: paused; }
 
 .dm-em { position: relative; }
+/* Soft amber glow baked onto the real text — no duplicate element to ghost */
+.dm-hero-copy .dm-em {
+  text-shadow:
+    0 0 22px color-mix(in srgb, var(--color-amber-light) 45%, transparent),
+    0 0 54px color-mix(in srgb, var(--color-amber) 28%, transparent);
+}
 .dm-em-glow {
   position: absolute;
   inset: 0;
@@ -661,12 +667,20 @@
   text-transform: uppercase;
   color: var(--color-muted-light);
 }
-/* Natively scrollable so touch, reduced-motion, and no-JS reach every frame;
-   the fine-pointer scrub hides the overflow while it drives */
+/* Natively scrollable so touch, mouse-drag, trackpad and no-JS reach every frame */
 .dm-reel-scroller {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
+  cursor: grab;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-amber) 40%, transparent) transparent;
+}
+.dm-reel-scroller.dm-dragging { cursor: grabbing; scroll-snap-type: none; }
+.dm-reel-scroller::-webkit-scrollbar { height: 6px; }
+.dm-reel-scroller::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-amber) 40%, transparent);
+  border-radius: 999px;
 }
 .dm-frame { scroll-snap-align: start; }
 

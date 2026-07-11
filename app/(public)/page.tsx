@@ -126,7 +126,7 @@ export default function HomePage() {
             <p className="dm-hero-kicker">Calgary&apos;s 360° slow-motion video booth</p>
             <h1>
               <span className="dm-line"><span>Every angle</span></span>
-              <span className="dm-line"><span>of <em className="dm-em">the moment.<span className="dm-em-glow" aria-hidden="true">the moment.</span></em></span></span>
+              <span className="dm-line"><span>of <em className="dm-em">the moment.</em></span></span>
             </h1>
             <p className="dm-hero-sub">
               Cinematic slow-motion video of your guests, captured in one spin and delivered the same day.
@@ -194,7 +194,7 @@ export default function HomePage() {
                 <span className="dm-step-no">03</span>
                 <h3>Leave with the video</h3>
                 <p>
-                  Your video lands in your texts or WhatsApp the moment it is ready. One tap saves it{' '}
+                  Scan the QR code at the booth and your clip is ready the moment it is. One tap saves it{' '}
                   <strong>directly to your camera roll.</strong>
                 </p>
               </div>

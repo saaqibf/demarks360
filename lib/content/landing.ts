@@ -73,7 +73,7 @@ export const FAQS: LandingFaq[] = [
   },
   {
     q: 'How do guests get their videos?',
-    a: 'Right at the booth. We send your video straight to your phone by text or WhatsApp. Tap to save and it goes directly into your photos. No QR codes to scan, no downloading from a gallery link.',
+    a: 'Right at the booth. A quick QR code pops up on screen, guests scan it with their phone camera, and the video is theirs to save and share in seconds. No app to install and no waiting until after the event.',
   },
   {
     q: 'Can it run outdoors?',
