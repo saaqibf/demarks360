@@ -402,7 +402,7 @@ export default function HomePage() {
               <span className="dm-orbit-head" />
             </div>
           </div>
-          <h2><span className="dm-line"><span>Some moments deserve <em className="dm-em">every angle.<span className="dm-em-glow" aria-hidden="true">every angle.</span></em></span></span></h2>
+          <h2><span className="dm-line"><span>Some moments deserve <em className="dm-em">every angle.</em></span></span></h2>
           <a className="btn-primary btn--lg" href="/book">
             Check your date
           </a>

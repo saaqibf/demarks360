@@ -291,7 +291,8 @@
 
 .dm-em { position: relative; }
 /* Soft amber glow baked onto the real text — no duplicate element to ghost */
-.dm-hero-copy .dm-em {
+.dm-hero-copy .dm-em,
+.dm-finale .dm-em {
   text-shadow:
     0 0 22px color-mix(in srgb, var(--color-amber-light) 45%, transparent),
     0 0 54px color-mix(in srgb, var(--color-amber) 28%, transparent);
