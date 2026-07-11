@@ -22,16 +22,11 @@ export function DemarksLandingFx() {
   const introRingRef = useRef<HTMLDivElement>(null)
   const introMarkRef = useRef<HTMLDivElement>(null)
 
-  // Decide ignition before the main effect runs. First-run visitors get the intro once
-  // per session; returning visitors and reduced-motion users skip straight to the hero rise.
+  // No full-screen ignition intro — the hero loads clean, with the H1 lines rising out of
+  // their masks over the live orbit, the way the original first page did. (The intro
+  // component below stays in the tree, gated off, so it can be re-enabled later.)
   useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!reduce && !sessionStorage.getItem('dm-ignition')) {
-      sessionStorage.setItem('dm-ignition', '1')
-      setPhase('intro')
-    } else {
-      setPhase('none')
-    }
+    setPhase('none')
   }, [])
 
   useEffect(() => {

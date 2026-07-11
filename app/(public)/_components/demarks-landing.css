@@ -96,6 +96,44 @@
   overflow: hidden;
   z-index: 1;
 }
+/* Cinematic booth footage fills the hero; the scrim keeps the headline legible */
+.dm-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 44%;
+}
+.dm-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(20,16,9,0.74) 0%,
+      rgba(20,16,9,0.34) 32%,
+      rgba(20,16,9,0.30) 58%,
+      rgba(20,16,9,0.88) 100%),
+    radial-gradient(130% 80% at 50% 44%, transparent 38%, rgba(20,16,9,0.5) 100%);
+}
+/* Cinematic fade-from-black reveal of the footage on load — no cover screen */
+.dm-hero-boot {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  background: #0c0a06;
+  pointer-events: none;
+  animation: dmHeroBoot 1.4s ease forwards;
+}
+@keyframes dmHeroBoot {
+  0%, 16% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dm-hero-boot { display: none; }
+  .dm-hero-video { display: none; }
+  .dm-hero-set { background: #0c0a06 url('/media/hero-still.jpg') center 44% / cover no-repeat; }
+}
 /* Parallax depth wrappers driven by gsap.quickTo on fine pointers */
 .dm-parallax {
   position: absolute;

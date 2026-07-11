@@ -73,53 +73,21 @@ export default function HomePage() {
         {/* ── Hero ── */}
         <header className="dm-hero" id="dm-hero" data-nav-section="dm-hero" data-nav-label="Home">
           <div className="dm-hero-set" id="dm-hero-set" aria-hidden="true">
-
-            {/* Far depth: back light rig, spotlight, big atmosphere */}
-            <div className="dm-parallax dm-parallax--far">
-              <div className="dm-glow-horizon" />
-              <div className="dm-glow-high" />
-              <div className="dm-spot" />
-              <div className="dm-orbit dm-orbit--far">
-                <div className="dm-orbit-rotator" id="dm-orbit-rotator-far">
-                  <span className="dm-orbit-head" />
-                </div>
-              </div>
-              <div className="dm-bokeh dm-bokeh--a" />
-              <div className="dm-bokeh dm-bokeh--d" />
-              <span className="dm-mote dm-mote--1" />
-              <span className="dm-mote dm-mote--2" />
-              <span className="dm-mote dm-mote--3 dm-mote--desk" />
-              <span className="dm-mote dm-mote--4 dm-mote--desk" />
-              <span className="dm-mote dm-mote--5 dm-mote--desk" />
-            </div>
-
-            {/* Mid depth: the signature orbit with its comet tail */}
-            <div className="dm-parallax dm-parallax--mid">
-              <div className="dm-bokeh dm-bokeh--b" />
-              <div className="dm-bokeh dm-bokeh--c" />
-              <div className="dm-orbit">
-                <div className="dm-orbit-trail" data-dm-trail="6"><span /></div>
-                <div className="dm-orbit-trail" data-dm-trail="5"><span /></div>
-                <div className="dm-orbit-trail" data-dm-trail="4"><span /></div>
-                <div className="dm-orbit-trail" data-dm-trail="3"><span /></div>
-                <div className="dm-orbit-trail" data-dm-trail="2"><span /></div>
-                <div className="dm-orbit-trail" data-dm-trail="1"><span /></div>
-                <div className="dm-orbit-rotator" id="dm-orbit-rotator">
-                  <span className="dm-orbit-head" />
-                </div>
-              </div>
-              <span className="dm-mote dm-mote--6" />
-              <span className="dm-mote dm-mote--7" />
-              <span className="dm-mote dm-mote--8" />
-              <span className="dm-mote dm-mote--9 dm-mote--desk" />
-              <span className="dm-mote dm-mote--10 dm-mote--desk" />
-            </div>
-
-            {/* Near depth: static dust closest to the lens */}
-            <span className="dm-mote dm-mote--11" />
-            <span className="dm-mote dm-mote--12" />
-            <span className="dm-mote dm-mote--13 dm-mote--desk" />
-            <span className="dm-mote dm-mote--14 dm-mote--desk" />
+            {/* Cinematic booth footage as the living hero background */}
+            <video
+              className="dm-hero-video"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/media/hero-still.jpg"
+            >
+              <source src="/media/hero-loop.webm" type="video/webm" />
+              <source src="/media/hero-loop.mp4" type="video/mp4" />
+            </video>
+            <div className="dm-hero-scrim" />
+            <div className="dm-hero-boot" aria-hidden="true" />
           </div>
 
           <div className="dm-hero-copy">
