@@ -5,8 +5,8 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
-// One idle lap of the hero orbit takes 26 seconds: a real camera arm holds constant angular velocity
-const IDLE_DEG_PER_SEC = 360 / 26
+// One idle lap of the hero orbit takes ~11 seconds — visibly alive without being dizzying
+const IDLE_DEG_PER_SEC = 360 / 11
 // The hero orbit's resting start angle; the intro head lands here so the light never teleports
 const HERO_START_ANGLE = -50
 

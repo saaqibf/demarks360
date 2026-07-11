@@ -241,6 +241,36 @@ export default function HomePage() {
           </p>
         </section>
 
+        {/* ── How booking works ── */}
+        <section className="dm-sect" id="dm-how" data-nav-section="dm-how" data-nav-label="Booking">
+          <div className="dm-sect-head dm-center">
+            <span className="dm-eyebrow">Booking · 003</span>
+            <h2><span className="dm-line"><span>Booking takes <em>two minutes.</em></span></span></h2>
+          </div>
+          <ol className="dm-flow">
+            <li className="dm-flow-step">
+              <span className="dm-flow-no">1</span>
+              <h3>Request your date</h3>
+              <p>Tell us the event and your vision. No payment, no card, no commitment yet.</p>
+            </li>
+            <li className="dm-flow-step">
+              <span className="dm-flow-no">2</span>
+              <h3>We confirm in 24 hours</h3>
+              <p>We review your request and email you a secure link to lock it in.</p>
+            </li>
+            <li className="dm-flow-step">
+              <span className="dm-flow-no">3</span>
+              <h3>Hold it with 50%</h3>
+              <p>A half deposit reserves your date. The balance is not due yet.</p>
+            </li>
+            <li className="dm-flow-step">
+              <span className="dm-flow-no">4</span>
+              <h3>Balance on event day</h3>
+              <p>Charged automatically the morning of. Then we show up and spin.</p>
+            </li>
+          </ol>
+        </section>
+
         {/* ── Date checker band ── */}
         <div className="dm-check-band" id="dm-check">
           <div className="dm-check-inner">
@@ -265,7 +295,7 @@ export default function HomePage() {
         {/* ── Gallery ── */}
         <section className="dm-gallery-wrap" id="dm-gallery" data-nav-section="dm-gallery" data-nav-label="Gallery">
           <div className="dm-gallery-head">
-            <span className="dm-eyebrow">Fresh reels · 003</span>
+            <span className="dm-eyebrow">Fresh reels · 004</span>
             <h2><span className="dm-line"><span>From <em>last weekend&apos;s</em> events.</span></span></h2>
           </div>
           <div className="dm-reel-scroller">
@@ -304,7 +334,7 @@ export default function HomePage() {
         {/* ── Reviews ── */}
         <section className="dm-sect">
           <div className="dm-sect-head">
-            <span className="dm-eyebrow">Reviews · 004</span>
+            <span className="dm-eyebrow">Reviews · 005</span>
             <h2><span className="dm-line"><span>The part of the night <em>everyone remembers.</em></span></span></h2>
           </div>
           <div className="dm-reviews">
@@ -345,7 +375,7 @@ export default function HomePage() {
         {/* ── FAQ ── */}
         <section className="dm-sect" id="dm-faq" data-nav-section="dm-faq" data-nav-label="FAQ">
           <div className="dm-sect-head dm-center">
-            <span className="dm-eyebrow">FAQ · 005</span>
+            <span className="dm-eyebrow">FAQ · 006</span>
             <h2><span className="dm-line"><span>Before you <em>book.</em></span></span></h2>
           </div>
           <div className="dm-faq-wrap">

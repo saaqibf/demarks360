@@ -309,20 +309,19 @@ export function OverlayPreview({ eventName, eventType, eventDate, locationCity, 
           {displayName}
         </p>
 
-        {/* Layer 7: mirrored celebrant duo in the bottom corners, overlapping the
-            glitter rails the way the production overlays do */}
-        {photoUrl && (['left', 'right'] as const).map(side => (
+        {/* Layer 7: the celebrants placed once, centred on the platform. A soft radial
+            feather dissolves the photo's own background into the overlay so it reads like
+            they are standing in the booth — no mirrored arches, no hard crop. The designer
+            does a clean background cut-out on the real overlay after booking. */}
+        {photoUrl && (
           <div
-            key={`${side}-${photoUrl}`}
             aria-hidden="true"
             className="ovp-bloom"
             style={{
-              position: 'absolute', bottom: '7%', width: '35cqw', aspectRatio: '4 / 5',
-              ...(side === 'left' ? { left: '2cqw' } : { right: '2cqw' }),
-              border: '1.5px solid var(--color-amber-light)',
-              borderRadius: '999px 999px 10px 10px', overflow: 'hidden',
-              WebkitMaskImage: 'linear-gradient(to bottom, black 70%, transparent 98%)',
-              maskImage: 'linear-gradient(to bottom, black 70%, transparent 98%)',
+              position: 'absolute', bottom: '8%', left: '50%', transform: 'translateX(-50%)',
+              width: '54cqw', aspectRatio: '3 / 4', overflow: 'hidden',
+              WebkitMaskImage: 'radial-gradient(68% 82% at 50% 40%, black 52%, transparent 90%)',
+              maskImage: 'radial-gradient(68% 82% at 50% 40%, black 52%, transparent 90%)',
               pointerEvents: 'none',
             }}
           >
@@ -330,10 +329,10 @@ export function OverlayPreview({ eventName, eventType, eventDate, locationCity, 
               src={photoUrl}
               alt=""
               draggable={false}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: side === 'right' ? 'scaleX(-1)' : undefined }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 28%', display: 'block' }}
             />
           </div>
-        ))}
+        )}
 
         <div aria-hidden="true" className="ovp-sweep" style={{ position: 'absolute', top: '-10%', bottom: '-10%', left: 0, width: '40cqw', background: 'linear-gradient(105deg, transparent, rgba(255,255,255,0.09), transparent)', pointerEvents: 'none' }} />
       </div>
