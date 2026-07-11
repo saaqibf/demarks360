@@ -783,6 +783,45 @@
 }
 .dm-faq.dm-faq--open .dm-faq-ans-inner { opacity: 1; }
 
+/* ─── Hover micro-interactions ───────────────────────────────────────
+   The rewrite dropped nearly all hover feedback; this restores it as one
+   cohesive layer. Guarded to real pointers so touch devices don't get
+   sticky :hover states. */
+.dm-pack,
+.dm-frame-ph,
+.dm-rev-main,
+.dm-rev-side {
+  transition: transform 0.45s cubic-bezier(.2,.7,.2,1), box-shadow 0.45s ease, border-color 0.45s ease;
+}
+.dm-frame-media,
+.dm-step-media { transition: transform 0.8s cubic-bezier(.2,.7,.2,1), filter 0.5s ease; }
+.dm-hero-proof span { transition: color 0.3s ease; }
+.dm-wordmark { transition: opacity 0.3s ease; }
+.dm-frame-card span { transition: transform 0.5s cubic-bezier(.2,.7,.2,1); }
+
+@media (hover: hover) and (pointer: fine) {
+  .dm-pack:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--color-amber-light) 50%, transparent);
+    box-shadow: 0 24px 60px -26px color-mix(in srgb, var(--color-amber) 42%, transparent);
+  }
+  .dm-frame:hover .dm-frame-ph {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--color-amber-light) 55%, transparent);
+    box-shadow: 0 26px 60px -28px rgba(0,0,0,0.7);
+  }
+  .dm-frame:hover .dm-frame-media { transform: scale(1.06); filter: brightness(1.08); }
+  .dm-frame:hover .dm-frame-card span { transform: translateY(-3px); }
+  .dm-step-visual:hover .dm-step-media { transform: scale(1.05); }
+  .dm-rev-main:hover,
+  .dm-rev-side:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--color-amber-light) 42%, transparent);
+  }
+  .dm-hero-proof span:hover { color: var(--color-sand); }
+  .dm-wordmark:hover { opacity: 0.72; }
+}
+
 /* ─── Finale ─────────────────────────────────────────────────────── */
 .dm-finale {
   position: relative;
