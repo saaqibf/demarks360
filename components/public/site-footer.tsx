@@ -83,7 +83,6 @@ export function SiteFooter() {
             Contact
           </p>
           <FooterAnchor href="tel:+14034020816">403-402-0816</FooterAnchor>
-          <FooterAnchor href="tel:+14034020816">403-402-0816</FooterAnchor>
           <FooterAnchor href="mailto:hello@demarks360.ca">
             hello@demarks360.ca
           </FooterAnchor>

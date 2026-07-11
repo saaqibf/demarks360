@@ -1,8 +1,12 @@
 export const revalidate = 300
 
 import type { Metadata } from 'next'
-import { DemarksLandingFx } from './_components/demarks-landing-fx'
+
+import { SiteFooter } from '@/components/public/site-footer'
+import { SiteNav } from '@/components/public/site-nav'
 import { FAQS, FROM_PRICE, PACKAGES } from '@/lib/content/landing'
+
+import { DemarksLandingFx } from './_components/demarks-landing-fx'
 import './_components/demarks-landing.css'
 
 export const metadata: Metadata = {
@@ -64,45 +68,60 @@ export default function HomePage() {
 
       <div className="dm-landing">
 
-        {/* ── Nav ── */}
-        <nav className="dm-nav" id="dm-nav">
-          <a className="dm-wordmark" href="/">Demarks<em>360</em></a>
-          <div className="dm-nav-links">
-            <a href="#dm-experience">The experience</a>
-            <a href="#dm-packages">Packages</a>
-            <a href="#dm-gallery">Gallery</a>
-            <a href="#dm-faq">FAQ</a>
-          </div>
-          <div className="dm-nav-right">
-            <a className="dm-ghost-btn" href="#dm-check">Check your date</a>
-            <a className="dm-cta-btn" href="/book">Book now</a>
-            <button className="dm-burger" id="dm-burger" aria-label="Open menu">
-              <i /><i /><i />
-            </button>
-          </div>
-        </nav>
-
-        <div id="dm-mobile-menu" role="dialog" aria-label="Navigation menu">
-          <a href="#dm-experience">The experience</a>
-          <a href="#dm-packages">Packages</a>
-          <a href="#dm-gallery">Gallery</a>
-          <a href="#dm-faq">FAQ</a>
-          <a className="dm-cta-btn" href="/book" style={{ fontSize: '0.72rem' }}>Book now</a>
-        </div>
+        <SiteNav />
 
         {/* ── Hero ── */}
-        <header className="dm-hero" id="dm-hero">
-          <div className="dm-hero-set" aria-hidden="true">
-            <div className="dm-glow-horizon" />
-            <div className="dm-glow-high" />
-            <div className="dm-bokeh dm-bokeh--a" />
-            <div className="dm-bokeh dm-bokeh--b" />
-            <div className="dm-orbit">
-              <div className="dm-orbit-rotator" id="dm-orbit-rotator">
-                <span className="dm-orbit-head" />
+        <header className="dm-hero" id="dm-hero" data-nav-section="dm-hero" data-nav-label="Home">
+          <div className="dm-hero-set" id="dm-hero-set" aria-hidden="true">
+
+            {/* Far depth: back light rig, spotlight, big atmosphere */}
+            <div className="dm-parallax dm-parallax--far">
+              <div className="dm-glow-horizon" />
+              <div className="dm-glow-high" />
+              <div className="dm-spot" />
+              <div className="dm-orbit dm-orbit--far">
+                <div className="dm-orbit-rotator" id="dm-orbit-rotator-far">
+                  <span className="dm-orbit-head" />
+                </div>
               </div>
+              <div className="dm-bokeh dm-bokeh--a" />
+              <div className="dm-bokeh dm-bokeh--d" />
+              <span className="dm-mote dm-mote--1" />
+              <span className="dm-mote dm-mote--2" />
+              <span className="dm-mote dm-mote--3 dm-mote--desk" />
+              <span className="dm-mote dm-mote--4 dm-mote--desk" />
+              <span className="dm-mote dm-mote--5 dm-mote--desk" />
             </div>
+
+            {/* Mid depth: the signature orbit with its comet tail */}
+            <div className="dm-parallax dm-parallax--mid">
+              <div className="dm-bokeh dm-bokeh--b" />
+              <div className="dm-bokeh dm-bokeh--c" />
+              <div className="dm-orbit">
+                <div className="dm-orbit-trail" data-dm-trail="6"><span /></div>
+                <div className="dm-orbit-trail" data-dm-trail="5"><span /></div>
+                <div className="dm-orbit-trail" data-dm-trail="4"><span /></div>
+                <div className="dm-orbit-trail" data-dm-trail="3"><span /></div>
+                <div className="dm-orbit-trail" data-dm-trail="2"><span /></div>
+                <div className="dm-orbit-trail" data-dm-trail="1"><span /></div>
+                <div className="dm-orbit-rotator" id="dm-orbit-rotator">
+                  <span className="dm-orbit-head" />
+                </div>
+              </div>
+              <span className="dm-mote dm-mote--6" />
+              <span className="dm-mote dm-mote--7" />
+              <span className="dm-mote dm-mote--8" />
+              <span className="dm-mote dm-mote--9 dm-mote--desk" />
+              <span className="dm-mote dm-mote--10 dm-mote--desk" />
+            </div>
+
+            {/* Near depth: static dust closest to the lens */}
+            <span className="dm-mote dm-mote--11" />
+            <span className="dm-mote dm-mote--12" />
+            <span className="dm-mote dm-mote--13 dm-mote--desk" />
+            <span className="dm-mote dm-mote--14 dm-mote--desk" />
           </div>
+
           <div className="dm-hero-copy">
             <p className="dm-hero-kicker">Calgary&apos;s 360° slow-motion video booth</p>
             <h1>
@@ -113,8 +132,8 @@ export default function HomePage() {
               Cinematic slow-motion video of your guests, captured in one spin and delivered the same day.
             </p>
             <div className="dm-hero-ctas">
-              <a className="dm-cta-btn" href="/book">Check your date</a>
-              <a className="dm-ghost-btn" href="#dm-experience">See it in action</a>
+              <a className="btn-primary btn--lg" href="/book">Check your date</a>
+              <a className="btn-ghost" href="#dm-experience">See it in action</a>
             </div>
             <div className="dm-hero-proof">
               <span><b>★ 5.0</b> Google reviews</span>
@@ -126,7 +145,7 @@ export default function HomePage() {
         </header>
 
         {/* ── Experience ── */}
-        <section className="dm-sect" id="dm-experience">
+        <section className="dm-sect" id="dm-experience" data-nav-section="dm-experience" data-nav-label="Experience">
           <div className="dm-sect-head">
             <span className="dm-eyebrow">The experience · 001</span>
             <h2><span className="dm-line"><span>Your event, shot like a <em>film premiere.</em></span></span></h2>
@@ -186,7 +205,7 @@ export default function HomePage() {
         <hr className="dm-amber-rule" />
 
         {/* ── Packages ── */}
-        <section className="dm-sect" id="dm-packages">
+        <section className="dm-sect" id="dm-packages" data-nav-section="dm-packages" data-nav-label="Packages">
           <div className="dm-sect-head dm-center">
             <span className="dm-eyebrow">Packages · 002</span>
             <h2><span className="dm-line"><span>Clear pricing. <em>Zero surprises.</em></span></span></h2>
@@ -194,13 +213,17 @@ export default function HomePage() {
           <div className="dm-packs">
 
             {PACKAGES.map((pack) => (
-              <div key={pack.tier} className={pack.starred ? 'dm-pack dm-pack--star' : 'dm-pack'}>
-                {pack.badge && <span className="dm-pack-badge">{pack.badge}</span>}
+              <div
+                key={pack.tier}
+                className={`dm-card dm-card--lift dm-pack${pack.starred ? ' dm-pack--star' : ''}`}
+              >
+                {pack.badge && (
+                  <span className="dm-pack-badge-mask">
+                    <span className="dm-pack-badge">{pack.badge}</span>
+                  </span>
+                )}
                 <span className="dm-pack-tier">{pack.tier}</span>
-                <div
-                  className="dm-pack-price"
-                  style={pack.compactPrice ? { fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' } : undefined}
-                >
+                <div className={`dm-pack-price${pack.compactPrice ? ' dm-pack-price--compact' : ''}`}>
                   {pack.priceLabel}<small>{pack.priceNote}</small>
                 </div>
                 <ul>
@@ -208,7 +231,7 @@ export default function HomePage() {
                     <li key={i}>{f.lead && <b>{f.lead}</b>}{f.rest}</li>
                   ))}
                 </ul>
-                <a className={pack.starred ? 'dm-cta-btn' : 'dm-ghost-btn'} href="/book">Check your date</a>
+                <a className={pack.starred ? 'btn-primary' : 'btn-ghost'} href="/book">Check your date</a>
               </div>
             ))}
 
@@ -226,15 +249,21 @@ export default function HomePage() {
               <h2><span className="dm-line"><span>Is your date <em>still open?</em></span></span></h2>
             </div>
             <div className="dm-check-form">
-              <a className="dm-cta-btn" href="/book" style={{ textAlign: 'center' }}>
-                Check availability
+              <input
+                id="dm-check-date"
+                className="dm-field"
+                type="date"
+                aria-label="Event date"
+              />
+              <a id="dm-check-cta" className="btn-primary" href="/book">
+                Check your date
               </a>
             </div>
           </div>
         </div>
 
         {/* ── Gallery ── */}
-        <section className="dm-gallery-wrap" id="dm-gallery">
+        <section className="dm-gallery-wrap" id="dm-gallery" data-nav-section="dm-gallery" data-nav-label="Gallery">
           <div className="dm-gallery-head">
             <span className="dm-eyebrow">Fresh reels · 003</span>
             <h2><span className="dm-line"><span>From <em>last weekend&apos;s</em> events.</span></span></h2>
@@ -265,8 +294,8 @@ export default function HomePage() {
               </figure>
             </div>
           </div>
-          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-            <a className="dm-ghost-btn" href="/gallery">Open the full gallery</a>
+          <div className="dm-gallery-cta">
+            <a className="btn-ghost" href="/gallery">Open the full gallery</a>
           </div>
         </section>
 
@@ -282,7 +311,7 @@ export default function HomePage() {
             <div className="dm-rev-main">
               <blockquote>
                 &ldquo;The videos were ready before the cake was cut. My cousins in Lagos were watching my mom&apos;s{' '}
-                <em>60th birthday spin</em> the same night.&rdquo;
+                <em>60th birthday spin</em>{' '}the same night.&rdquo;
               </blockquote>
               <div className="dm-rev-by">
                 <span>Funmi · 60th birthday, Skyview</span>
@@ -314,7 +343,7 @@ export default function HomePage() {
         <hr className="dm-amber-rule" />
 
         {/* ── FAQ ── */}
-        <section className="dm-sect" id="dm-faq">
+        <section className="dm-sect" id="dm-faq" data-nav-section="dm-faq" data-nav-label="FAQ">
           <div className="dm-sect-head dm-center">
             <span className="dm-eyebrow">FAQ · 005</span>
             <h2><span className="dm-line"><span>Before you <em>book.</em></span></span></h2>
@@ -326,8 +355,10 @@ export default function HomePage() {
                   {faq.q}
                   <span className="dm-faq-icon">+</span>
                 </summary>
-                <div className="dm-faq-ans">
-                  {faq.a}
+                <div className="dm-faq-ans-wrap">
+                  <div className="dm-faq-ans">
+                    <div className="dm-faq-ans-inner">{faq.a}</div>
+                  </div>
                 </div>
               </details>
             ))}
@@ -342,48 +373,14 @@ export default function HomePage() {
             </div>
           </div>
           <h2><span className="dm-line"><span>Some moments deserve <em className="dm-em">every angle.<span className="dm-em-glow" aria-hidden="true">every angle.</span></em></span></span></h2>
-          <a className="dm-cta-btn" href="/book" style={{ padding: '1.3rem 3.2rem' }}>
+          <a className="btn-primary btn--lg" href="/book">
             Check your date
           </a>
         </section>
 
-        {/* ── Footer ── */}
-        <footer>
-          <div className="dm-foot-grid">
-            <div className="dm-foot-brand">
-              <a className="dm-wordmark" href="/">Demarks<em>360</em></a>
-              <p>Calgary&apos;s 360° slow-motion video booth. Family-run, every event welcome, every moment cinematic.</p>
-            </div>
-            <div className="dm-fcol">
-              <h5>Book</h5>
-              <a href="#dm-packages">Packages</a>
-              <a href="/book">Check your date</a>
-              <a href="#dm-gallery">Gallery</a>
-              <a href="#dm-faq">FAQ</a>
-            </div>
-            <div className="dm-fcol">
-              <h5>Events</h5>
-              <a href="/book?eventType=Wedding">Weddings</a>
-              <a href="/book?eventType=Birthday">Birthdays</a>
-              <a href="/book?eventType=Corporate">Corporate</a>
-              <a href="/book?eventType=Graduation">Graduations</a>
-            </div>
-            <div className="dm-fcol">
-              <h5>Contact</h5>
-              <a href="tel:+14034020816">403-402-0816</a>
-              <a href="tel:+14034020816">403-402-0816</a>
-              <a href="mailto:hello@demarks360.ca">hello@demarks360.ca</a>
-              <a href="https://instagram.com/demarks360" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="https://tiktok.com/@demarks360" target="_blank" rel="noopener noreferrer">TikTok</a>
-              <a href="/privacy">Privacy policy</a>
-              <a href="/terms">Terms of service</a>
-            </div>
-          </div>
-          <div className="dm-foot-base">
-            <span>© 2026 Demarks 360</span>
-            <span>Calgary, Alberta</span>
-          </div>
-        </footer>
+        <div id="dm-contact" data-nav-section="dm-contact" data-nav-label="Contact">
+          <SiteFooter />
+        </div>
 
       </div>
     </>
