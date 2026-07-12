@@ -228,7 +228,9 @@ body {
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-charcoal);
-  background: var(--color-amber-light);
+  /* Richer, deeper gold (light catch-light on top, darker amber base) so the CTA
+     reads as solid metal, not a pale wash. */
+  background: linear-gradient(180deg, var(--color-amber-light) 0%, var(--color-amber) 100%);
   padding: 1rem 2.5rem;
   border-radius: 999px;
   text-decoration: none;

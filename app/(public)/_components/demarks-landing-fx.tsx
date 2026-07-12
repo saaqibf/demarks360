@@ -10,6 +10,35 @@ const IDLE_DEG_PER_SEC = 360 / 11
 // The hero orbit's resting start angle; the intro head lands here so the light never teleports
 const HERO_START_ANGLE = -50
 
+// Wrap every visible character of an element (recursing into <em> etc.) in an
+// inline-block span so each letter can be animated on its own — used for the
+// hero headline forming letter by letter. Returns the char spans in reading order.
+function splitToChars(root: HTMLElement): HTMLElement[] {
+  const chars: HTMLElement[] = []
+  const walk = (node: Node) => {
+    for (const child of Array.from(node.childNodes)) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const text = child.textContent ?? ''
+        const frag = document.createDocumentFragment()
+        for (const ch of text) {
+          if (ch === ' ') { frag.appendChild(document.createTextNode(' ')); continue }
+          const span = document.createElement('span')
+          span.textContent = ch
+          span.style.display = 'inline-block'
+          span.style.willChange = 'transform, opacity, filter'
+          chars.push(span)
+          frag.appendChild(span)
+        }
+        node.replaceChild(frag, child)
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        walk(child)
+      }
+    }
+  }
+  walk(root)
+  return chars
+}
+
 type Phase = 'pending' | 'intro' | 'none'
 
 export function DemarksLandingFx() {
@@ -159,10 +188,26 @@ export function DemarksLandingFx() {
         onSkip = () => { introTl?.progress(1) }
         skipEvents.forEach((ev) => window.addEventListener(ev, onSkip!, { once: true, passive: true }))
       } else {
-        // No intro: the two H1 lines rise out of their masks on load
-        gsap.from('#dm-hero h1 .dm-line > span', {
-          yPercent: 110, duration: 0.9, stagger: 0.1, ease: 'expo.out',
-        })
+        // Intro: the headline forms letter by letter — each character resolves from
+        // a blurred, slightly-enlarged state into focus, left to right, like it is
+        // being written into existence. This is the entrance the hero opens on.
+        const h1 = document.querySelector<HTMLElement>('#dm-hero h1')
+        if (h1) {
+          // the .dm-line masks clip for the old rise; the formation needs them open
+          h1.querySelectorAll<HTMLElement>('.dm-line').forEach((l) => { l.style.overflow = 'visible' })
+          const chars = splitToChars(h1)
+          gsap.set(h1, { autoAlpha: 1 })
+          gsap.from(chars, {
+            opacity: 0,
+            filter: 'blur(12px)',
+            scale: 0.6,
+            transformOrigin: '50% 62%',
+            duration: 0.6,
+            ease: 'power2.out',
+            stagger: 0.032,
+            delay: 0.15,
+          })
+        }
       }
 
       // Signature ambient motion: an amber head laps the tilted track with a comet tail,
