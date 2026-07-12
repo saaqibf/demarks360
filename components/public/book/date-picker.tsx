@@ -105,7 +105,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
         </div>
 
         {/* Day headers */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           {DAY_NAMES.map(d => (
             <div key={d} style={{ padding: '0.6rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)' }}>
               {d}
@@ -134,7 +134,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
         )}
 
         {/* Day grid */}
-        <div className="dm-cal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', padding: '0.75rem' }}>
+        <div className="dm-cal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', padding: '0.75rem' }}>
           {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
           {Array.from({ length: daysInMonth }, (_, i) => {
             const day = i + 1
