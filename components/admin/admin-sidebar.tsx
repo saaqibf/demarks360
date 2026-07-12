@@ -45,24 +45,30 @@ export function AdminSidebar() {
             <Link
               key={href}
               href={href}
+              aria-current={active ? 'page' : undefined}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.6rem',
-                padding: '0.6rem 0.75rem',
-                borderRadius: '6px',
-                marginBottom: '2px',
+                gap: '0.65rem',
+                padding: '0.65rem 0.85rem',
+                borderRadius: '10px',
+                marginBottom: '4px',
                 textDecoration: 'none',
                 fontFamily: 'var(--font-ui)',
                 fontSize: '0.72rem',
                 fontWeight: active ? 700 : 500,
                 letterSpacing: '0.04em',
                 color: active ? 'var(--color-text-light)' : 'rgba(245,240,234,0.45)',
-                background: active ? 'rgba(255,255,255,0.07)' : 'transparent',
-                transition: 'all 0.15s',
+                background: active
+                  ? 'color-mix(in srgb, var(--color-amber) 12%, transparent)'
+                  : 'transparent',
+                border: active
+                  ? '1px solid color-mix(in srgb, var(--color-amber) 24%, transparent)'
+                  : '1px solid transparent',
+                transition: 'color 0.25s ease, background 0.25s ease, border-color 0.25s ease',
               }}
             >
-              <Icon size={14} style={{ flexShrink: 0, color: active ? 'var(--color-amber)' : 'rgba(245,240,234,0.3)' }} />
+              <Icon size={15} style={{ flexShrink: 0, color: active ? 'var(--color-amber)' : 'rgba(245,240,234,0.3)' }} />
               {label}
             </Link>
           )

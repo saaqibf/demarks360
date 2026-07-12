@@ -148,16 +148,10 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
           Time slots stay locked until availability loads, so booked times never show as free.
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-          <button
-            onClick={() => setRetryNonce(n => n + 1)}
-            style={{ background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', padding: '0.75rem 1.75rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}
-          >
+          <button onClick={() => setRetryNonce(n => n + 1)} className="btn-primary btn--sm">
             Retry
           </button>
-          <button
-            onClick={onBack}
-            style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.75rem 1.6rem', transition: 'border-color 0.2s' }}
-          >
+          <button onClick={onBack} className="btn-back">
             ← Back
           </button>
         </div>
@@ -390,7 +384,8 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
 
       <button
         onClick={() => { if (phase === 'duration') { setPhase('start'); setSelectedEnd(null) } else { onBack() } }}
-        style={{ marginTop: '1.5rem', display: 'inline-block', background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.75rem 1.6rem', transition: 'border-color 0.2s' }}
+        className="btn-back"
+        style={{ marginTop: '1.5rem' }}
       >
         ← Back
       </button>

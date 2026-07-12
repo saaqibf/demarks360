@@ -87,19 +87,13 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
       <div style={{ maxWidth: '480px', border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)' }}>
         {/* Month nav */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          <button
-            onClick={prevMonth}
-            style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'var(--color-amber)', padding: '0.3rem 0.7rem', lineHeight: 1, transition: 'border-color 0.2s' }}
-          >
+          <button onClick={prevMonth} className="btn-icon" aria-label="Previous month">
             ←
           </button>
           <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)' }}>
             {MONTH_NAMES[viewMonth]} {viewYear}
           </span>
-          <button
-            onClick={nextMonth}
-            style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', color: 'var(--color-amber)', padding: '0.3rem 0.7rem', lineHeight: 1, transition: 'border-color 0.2s' }}
-          >
+          <button onClick={nextMonth} className="btn-icon" aria-label="Next month">
             →
           </button>
         </div>
@@ -124,10 +118,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
             <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'var(--color-amber-light)' }}>
               We could not load availability. Dates are locked until it loads.
             </span>
-            <button
-              onClick={() => setRetryNonce(n => n + 1)}
-              style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.4rem 1rem', transition: 'border-color 0.2s' }}
-            >
+            <button onClick={() => setRetryNonce(n => n + 1)} className="btn-back">
               Retry
             </button>
           </div>

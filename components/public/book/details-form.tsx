@@ -612,17 +612,10 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
           </div>
 
           <div className="dm-step-actions" style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button
-              onClick={handleSubmit}
-              style={{
-                background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px',
-                padding: '0.85rem 2rem', fontFamily: 'var(--font-ui)', fontSize: '0.7rem',
-                fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
-              }}
-            >
+            <button onClick={handleSubmit} className="btn-primary btn--sm">
               Review My Request →
             </button>
-            <button onClick={onBack} style={{ background: 'none', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
+            <button onClick={onBack} className="btn-back">
               ← Back
             </button>
           </div>

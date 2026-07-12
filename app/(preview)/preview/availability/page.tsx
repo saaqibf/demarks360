@@ -17,28 +17,10 @@ const PREVIEW_BLOCKS: Record<string, { reason: string; type: 'booked' | 'admin' 
   '2026-07-19': { reason: 'Fatima Al-Hassan, Family Gathering', type: 'booked' },
 }
 
-const inputStyle: React.CSSProperties = {
-  background: 'var(--color-ink)',
-  border: '1px solid rgba(255,255,255,0.08)',
-  color: 'var(--color-text-light)',
-  fontFamily: 'var(--font-body)',
-  fontSize: '0.85rem',
-  padding: '0.65rem 0.75rem',
-  outline: 'none',
-  width: '100%',
-  boxSizing: 'border-box',
-}
-
 const labelStyle: React.CSSProperties = {
   fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700,
   letterSpacing: '0.14em', textTransform: 'uppercase',
   color: 'rgba(245,240,234,0.35)', display: 'block', marginBottom: '0.35rem',
-}
-
-const sectionLabel: React.CSSProperties = {
-  fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700,
-  letterSpacing: '0.16em', textTransform: 'uppercase',
-  color: 'rgba(245,240,234,0.4)', marginBottom: '1rem',
 }
 
 function toKey(year: number, month: number, day: number): string {
@@ -91,26 +73,26 @@ export default function PreviewAvailability() {
   const selectedBlock = selected ? blocks[selected] : null
 
   return (
-    <div style={{ padding: '2.5rem', maxWidth: '960px' }}>
+    <div className="adm-page" style={{ maxWidth: '960px' }}>
       <div style={{ marginBottom: '2rem' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '0.5rem' }}>
+        <p className="adm-eyebrow" style={{ marginBottom: '0.5rem' }}>
           Admin
         </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
+        <h1 className="adm-h1">
           Availability
         </h1>
       </div>
 
       <div className="admin-2col" style={{ alignItems: 'flex-start' }}>
         {/* Calendar */}
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="adm-card">
           {/* Month nav */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-            <button onClick={prev} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.55)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', padding: '0.25rem 0.5rem' }}>‹</button>
+            <button onClick={prev} className="btn-icon" aria-label="Previous month">‹</button>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 400, color: 'var(--color-text-light)' }}>
               {MONTH_NAMES[month]} {year}
             </p>
-            <button onClick={next} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.55)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '1rem', padding: '0.25rem 0.5rem' }}>›</button>
+            <button onClick={next} className="btn-icon" aria-label="Next month">›</button>
           </div>
 
           {/* Day headers */}
@@ -175,52 +157,50 @@ export default function PreviewAvailability() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {/* Selected day info */}
-          <div style={{ background: 'var(--color-surface)', padding: '1.5rem', minHeight: '140px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="adm-card" style={{ minHeight: '140px' }}>
             {selected && selectedBlock ? (
               <>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: selectedBlock.type === 'booked' ? '#2d8a50' : 'var(--color-amber)', marginBottom: '0.6rem' }}>
+                <p className="adm-card-label" style={{ color: selectedBlock.type === 'booked' ? 'var(--color-success)' : 'var(--color-amber)', marginBottom: '0.6rem' }}>
                   {selectedBlock.type === 'booked' ? 'Booking' : 'Admin Block'} · {selected}
                 </p>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', marginBottom: '1rem', lineHeight: 1.5 }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-text-light)', marginBottom: '1rem', lineHeight: 1.5 }}>
                   {selectedBlock.reason}
                 </p>
                 {selectedBlock.type === 'admin' && (
-                  <button
-                    onClick={() => handleRemoveBlock(selected)}
-                    style={{ background: 'none', border: '1px solid rgba(201,145,63,0.35)', color: 'var(--color-amber-light)', padding: '0.35rem 0.85rem', fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', borderRadius: '999px' }}
-                  >
+                  <button onClick={() => handleRemoveBlock(selected)} className="btn-danger btn--sm">
                     Remove Block
                   </button>
                 )}
               </>
             ) : selected ? (
               <>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.6rem' }}>
+                <p className="adm-card-label" style={{ marginBottom: '0.6rem' }}>
                   {selected}
                 </p>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.45)' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)' }}>
                   Available. No bookings or blocks.
                 </p>
               </>
             ) : (
-              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.45)', lineHeight: 1.6 }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)', lineHeight: 1.6 }}>
                 Click a date to see details.
               </p>
             )}
           </div>
 
           {/* Block a date */}
-          <div style={{ background: 'var(--color-surface)', padding: '1.5rem', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <p style={sectionLabel}>Block a Date</p>
+          <div className="adm-card">
+            <p className="adm-card-label">Block a Date</p>
             <div style={{ marginBottom: '0.75rem' }}>
               <label style={labelStyle}>Date</label>
               <input
                 type="date"
                 value={formDate}
                 onChange={e => setFormDate(e.target.value)}
-                style={{ ...inputStyle, colorScheme: 'dark' }}
+                className="adm-input"
+                style={{ colorScheme: 'dark' }}
               />
             </div>
             <div style={{ marginBottom: '1rem' }}>
@@ -229,13 +209,10 @@ export default function PreviewAvailability() {
                 placeholder="e.g. Personal day off"
                 value={formReason}
                 onChange={e => setFormReason(e.target.value)}
-                style={inputStyle}
+                className="adm-input"
               />
             </div>
-            <button
-              onClick={handleAddBlock}
-              style={{ background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px', padding: '0.65rem 1.5rem', fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}
-            >
+            <button onClick={handleAddBlock} className="btn-primary btn--sm">
               {saved ? 'Blocked ✓' : 'Block Date'}
             </button>
           </div>
@@ -243,24 +220,21 @@ export default function PreviewAvailability() {
       </div>
 
       {/* All blocks list */}
-      <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
-        <p style={sectionLabel}>All Blocks & Bookings</p>
+      <div className="adm-card" style={{ marginTop: '1rem' }}>
+        <p className="adm-card-label">All Blocks &amp; Bookings</p>
         {Object.entries(blocks)
           .sort(([a], [b]) => a.localeCompare(b))
           .map(([key, block]) => (
-            <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)', gap: '1rem' }}>
+            <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid var(--color-border-dark)', gap: '1rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ display: 'inline-block', padding: '0.15rem 0.5rem', borderRadius: '3px', background: block.type === 'booked' ? 'rgba(52,168,83,0.1)' : 'rgba(201,145,63,0.12)', border: `1px solid ${block.type === 'booked' ? 'rgba(52,168,83,0.3)' : 'rgba(201,145,63,0.35)'}`, fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: block.type === 'booked' ? '#2d8a50' : 'var(--color-amber)' }}>
+                <span className={`adm-pill adm-pill--${block.type === 'booked' ? 'confirmed' : 'pending'}`}>
                   {block.type}
                 </span>
-                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'rgba(245,240,234,0.45)', minWidth: '90px' }}>{key}</span>
-                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>{block.reason}</span>
+                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-muted-light)', minWidth: '90px' }}>{key}</span>
+                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', color: 'var(--color-text-light)' }}>{block.reason}</span>
               </div>
               {block.type === 'admin' && (
-                <button
-                  onClick={() => handleRemoveBlock(key)}
-                  style={{ background: 'none', border: 'none', color: 'var(--color-amber-light)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0, opacity: 0.7 }}
-                >
+                <button onClick={() => handleRemoveBlock(key)} className="btn-danger btn--sm" style={{ flexShrink: 0 }}>
                   Remove
                 </button>
               )}

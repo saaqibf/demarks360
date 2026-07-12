@@ -1,11 +1,5 @@
 import Link from 'next/link'
-
-const STATUS_STYLES: Record<string, { bg: string; color: string; border: string }> = {
-  confirmed: { bg: 'rgba(52,168,83,0.1)', color: '#2d8a50', border: 'rgba(52,168,83,0.3)' },
-  pending:   { bg: 'rgba(201,145,63,0.12)', color: 'var(--color-amber)', border: 'rgba(201,145,63,0.35)' },
-  cancelled: { bg: 'rgba(201,145,63,0.12)', color: 'var(--color-amber)', border: 'rgba(201,145,63,0.35)' },
-  completed: { bg: 'rgba(255,255,255,0.05)', color: 'rgba(245,240,234,0.4)', border: 'rgba(255,255,255,0.1)' },
-}
+import { statusLabel } from '@/lib/admin-status'
 
 const PREVIEW_BOOKING = {
   id: 'bk_001aabbcc',
@@ -41,64 +35,36 @@ function fmtDate(d: string, opts?: Intl.DateTimeFormatOptions): string {
   })
 }
 
-const inputStyle: React.CSSProperties = {
-  background: 'var(--color-ink)',
-  border: '1px solid rgba(255,255,255,0.08)',
-  color: 'var(--color-text-light)',
-  fontFamily: 'var(--font-body)',
-  fontSize: '0.85rem',
-  padding: '0.65rem 0.75rem',
-  outline: 'none',
-  width: '100%',
-  boxSizing: 'border-box',
-}
-
-const labelStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700,
-  letterSpacing: '0.14em', textTransform: 'uppercase',
-  color: 'rgba(245,240,234,0.35)', display: 'block', marginBottom: '0.35rem',
-}
-
-const sectionLabel: React.CSSProperties = {
-  fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700,
-  letterSpacing: '0.16em', textTransform: 'uppercase',
-  color: 'rgba(245,240,234,0.3)', marginBottom: '1rem',
-}
-
 export default function PreviewBookingDetail() {
   const b = PREVIEW_BOOKING
-  const s = STATUS_STYLES[b.status]
   const balanceDate = fmtDate(b.balanceChargeDate, { month: 'long', day: 'numeric', year: 'numeric' })
 
   return (
-    <div style={{ padding: '2.5rem', maxWidth: '900px' }}>
-      <Link
-        href="/preview/dashboard"
-        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', textDecoration: 'none', marginBottom: '1.5rem' }}
-      >
+    <div className="adm-page" style={{ maxWidth: '900px' }}>
+      <Link href="/preview/dashboard" className="adm-link" style={{ marginBottom: '1.5rem' }}>
         ← All Bookings
       </Link>
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2rem', gap: '1rem', flexWrap: 'wrap' }}>
         <div>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.4rem' }}>
+          <p className="adm-eyebrow" style={{ color: 'var(--color-muted-light)', marginBottom: '0.4rem' }}>
             Booking · {b.id.slice(0, 12).toUpperCase()}
           </p>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1, marginBottom: '0.5rem' }}>
             {b.customer.name}
           </h1>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.5)' }}>{fmtDate(b.eventDate)}</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)' }}>{fmtDate(b.eventDate)}</p>
         </div>
-        <span style={{ display: 'inline-block', padding: '0.35rem 0.85rem', borderRadius: '4px', background: s.bg, border: `1px solid ${s.border}`, fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: s.color }}>
-          {b.status}
+        <span className={`adm-pill adm-pill--${b.status}`}>
+          {statusLabel(b.status)}
         </span>
       </div>
 
-      <div className="admin-2col" style={{ marginBottom: '1px' }}>
+      <div className="admin-2col" style={{ marginBottom: '1rem' }}>
         {/* Event info */}
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <p style={sectionLabel}>Event</p>
+        <div className="adm-card">
+          <p className="adm-card-label">Event</p>
           {[
             { label: 'Date', value: fmtDate(b.eventDate) },
             { label: 'Time', value: `${fmt(b.startTime)} → ${fmt(b.endTime)}` },
@@ -106,16 +72,16 @@ export default function PreviewBookingDetail() {
             { label: 'Address', value: `${b.locationAddress}, ${b.locationCity}` },
             { label: 'Add-ons', value: b.addOns.join(', ') },
           ].map(({ label, value }) => (
-            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)', textAlign: 'right', maxWidth: '55%' }}>{value}</span>
+            <div key={label} className="adm-row">
+              <span className="adm-row-label">{label}</span>
+              <span className="adm-row-value">{value}</span>
             </div>
           ))}
         </div>
 
         {/* Customer + payment */}
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <p style={sectionLabel}>Customer & Payment</p>
+        <div className="adm-card">
+          <p className="adm-card-label">Customer &amp; Payment</p>
           {[
             { label: 'Name', value: b.customer.name },
             { label: 'Email', value: b.customer.email },
@@ -125,85 +91,75 @@ export default function PreviewBookingDetail() {
             { label: 'Balance Date', value: balanceDate },
             { label: 'Gallery Token', value: b.galleryToken },
           ].map(({ label, value }) => (
-            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)', textAlign: 'right', maxWidth: '55%', wordBreak: 'break-all' }}>{value}</span>
+            <div key={label} className="adm-row">
+              <span className="adm-row-label">{label}</span>
+              <span className="adm-row-value" style={{ wordBreak: 'break-all' }}>{value}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Update Status */}
-      <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
-        <p style={sectionLabel}>Update Status</p>
-        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-          {(['confirmed', 'cancelled', 'completed'] as const).map(status => {
-            const st = STATUS_STYLES[status]
-            const isActive = status === b.status
-            return (
-              <button
-                key={status}
-                style={{
-                  background: isActive ? st.bg : 'transparent',
-                  border: `1px solid ${isActive ? st.border : 'rgba(255,255,255,0.1)'}`,
-                  color: isActive ? st.color : 'rgba(245,240,234,0.55)',
-                  padding: '0.4rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem',
-                  fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
-                  borderRadius: '999px',
-                }}
-              >
-                {status}
-              </button>
-            )
-          })}
+      <div className="adm-card" style={{ marginTop: '1rem' }}>
+        <p className="adm-card-label">Update Status</p>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+          <button className="btn-primary btn--sm">Mark Completed</button>
+          <button className="btn-back">Set Confirmed</button>
+          <button className="btn-danger btn--sm">Cancel Booking</button>
         </div>
         <div style={{ marginBottom: '0.75rem' }}>
-          <label style={labelStyle}>Internal Notes</label>
+          <label className="adm-card-label" style={{ display: 'block', marginBottom: '0.5rem' }}>Internal Notes</label>
           <textarea
             placeholder="Add notes about this booking..."
             rows={3}
-            style={{ ...inputStyle, resize: 'vertical' }}
+            className="adm-input"
           />
         </div>
-        <button style={{ background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px', padding: '0.65rem 1.5rem', fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}>
+        <button className="btn-primary btn--sm">
           Save Changes
         </button>
       </div>
 
-      {/* Video upload */}
-      <div className="admin-2col" style={{ marginTop: '1px' }}>
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <p style={sectionLabel}>Upload from Device</p>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.45)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
-            Select a video from your phone&apos;s camera roll to upload directly.
-          </p>
-          <button style={{ background: 'transparent', color: 'var(--color-text-light)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '999px', padding: '0.65rem 1.5rem', fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer' }}>
-            Choose File
-          </button>
-        </div>
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <p style={sectionLabel}>Import from Google Drive</p>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.45)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
-            Paste a Google Drive share link and the video will be imported to the gallery.
-          </p>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <input placeholder="https://drive.google.com/..." style={{ ...inputStyle, flex: 1 }} />
-            <button style={{ background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px', padding: '0.65rem 1.25rem', fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-              Import
+      {/* After the event — for the videographer */}
+      <div className="adm-card" style={{ marginTop: '1rem' }}>
+        <p className="adm-card-label" style={{ marginBottom: '0.4rem' }}>After the event</p>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)', marginBottom: '1.5rem' }}>
+          For the videographer. Upload the finished video and share the gallery link.
+        </p>
+
+        <div className="admin-2col">
+          <div>
+            <p className="adm-card-label">Upload from Device</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
+              Select a video from your phone&apos;s camera roll to upload directly.
+            </p>
+            <button className="btn-back">
+              Choose File
             </button>
           </div>
+          <div>
+            <p className="adm-card-label">Import from Google Drive</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
+              Paste a Google Drive share link and the video will be imported to the gallery.
+            </p>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <input placeholder="https://drive.google.com/..." className="adm-input" style={{ flex: 1 }} />
+              <button className="btn-primary btn--sm" style={{ whiteSpace: 'nowrap' }}>
+                Import
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Gallery link */}
-      <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
-        <p style={sectionLabel}>Client Gallery Link</p>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.45)', marginBottom: '0.75rem', wordBreak: 'break-all' }}>
-          https://demarks360.ca/gallery/{b.galleryToken}
-        </p>
-        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-amber-light)' }}>
-          Preview Gallery →
-        </span>
+        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border-dark)' }}>
+          <p className="adm-card-label" style={{ marginBottom: '0.75rem' }}>Client Gallery Link</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '0.75rem', wordBreak: 'break-all' }}>
+            https://demarks360.ca/gallery/{b.galleryToken}
+          </p>
+          <span className="adm-link">
+            Preview Gallery →
+          </span>
+        </div>
       </div>
     </div>
   )

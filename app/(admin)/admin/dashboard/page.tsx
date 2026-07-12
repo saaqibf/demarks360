@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getAllBookings } from '@/lib/db/queries/bookings'
+import { statusLabel } from '@/lib/admin-status'
 
 const VALID_STATUSES = ['requested', 'approved', 'pending', 'confirmed', 'declined', 'expired', 'cancelled', 'completed'] as const
 const STATUS_TABS = [
@@ -12,17 +13,6 @@ const STATUS_TABS = [
   { label: 'Cancelled', value: 'cancelled' },
   { label: 'Completed', value: 'completed' },
 ]
-
-const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
-  requested: { bg: 'rgba(251,191,36,0.12)',   color: 'var(--color-pending)' },
-  approved:  { bg: 'rgba(96,165,250,0.12)',   color: '#60A5FA' },
-  pending:   { bg: 'rgba(251,191,36,0.12)',   color: 'var(--color-pending)' },
-  confirmed: { bg: 'rgba(52,211,153,0.10)',   color: 'var(--color-success)' },
-  declined:  { bg: 'rgba(192,41,58,0.12)',    color: '#e06a76' },
-  expired:   { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
-  cancelled: { bg: 'rgba(201,145,63,0.12)',    color: 'var(--color-amber)' },
-  completed: { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
-}
 
 function fmt(t: string): string {
   const [h, m] = t.split(':').map(Number)
@@ -61,36 +51,75 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     (r.booking.status === 'confirmed' || r.booking.status === 'requested' || r.booking.status === 'approved')
   ).length
 
-  const needsReview = allRows.filter(r => r.booking.status === 'requested').length
+  const requests = allRows.filter(r => r.booking.status === 'requested')
+  const needsReview = requests.length
   const awaitingDeposit = allRows.filter(r => r.booking.status === 'approved').length
 
   const stats = [
-    { label: 'Total Bookings', value: allRows.length },
-    { label: 'Confirmed Revenue', value: `$${totalRevenue.toFixed(0)}` },
-    { label: 'Next 30 Days', value: upcoming },
-    { label: 'Needs Review', value: needsReview },
-    { label: 'Awaiting Deposit', value: awaitingDeposit },
+    { label: 'Total Bookings', value: allRows.length, action: false },
+    { label: 'Confirmed Revenue', value: `$${totalRevenue.toFixed(0)}`, action: false },
+    { label: 'Next 30 Days', value: upcoming, action: false },
+    { label: 'Needs Review', value: needsReview, action: needsReview > 0 },
+    { label: 'Awaiting Deposit', value: awaitingDeposit, action: awaitingDeposit > 0 },
   ]
 
   return (
-    <div style={{ padding: '2.5rem' }}>
+    <div className="adm-page">
       <div style={{ marginBottom: '2.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '0.5rem' }}>
+        <p className="adm-eyebrow" style={{ marginBottom: '0.5rem' }}>
           Admin
         </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
+        <h1 className="adm-h1">
           Overview
         </h1>
       </div>
 
+      {/* Needs your review */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        {needsReview > 0 ? (
+          <>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>
+              {needsReview} {needsReview === 1 ? 'request' : 'requests'} waiting for you
+            </h2>
+            <div style={{ display: 'grid', gap: '0.75rem' }}>
+              {requests.map(({ booking: b, customer: c }) => (
+                <div
+                  key={b.id}
+                  className="adm-card"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.25rem', flexWrap: 'wrap' }}
+                >
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1.1, marginBottom: '0.35rem' }}>
+                      {c?.name ?? 'New customer'}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)' }}>
+                      {fmtDate(b.eventDate)} · {b.eventType} · ${Number(b.depositAmount ?? 0).toFixed(0)} deposit
+                    </p>
+                  </div>
+                  <Link href={`/admin/bookings/${b.id}`} className="btn-primary btn--sm" style={{ flexShrink: 0 }}>
+                    Review →
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="adm-card">
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', color: 'var(--color-muted-light)', margin: 0 }}>
+              You&apos;re all caught up. No new requests.
+            </p>
+          </div>
+        )}
+      </div>
+
       {/* Stats */}
       <div className="admin-stats-grid">
-        {stats.map(({ label, value }) => (
-          <div key={label} style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>
+        {stats.map(({ label, value, action }) => (
+          <div key={label} className={`adm-stat${action ? ' adm-stat--action' : ''}`}>
+            <p className="adm-stat-label">
               {label}
             </p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
+            <p className="adm-stat-value">
               {value}
             </p>
           </div>
@@ -98,31 +127,19 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       </div>
 
       {/* Bookings table */}
-      <div style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'var(--color-surface)' }}>
-        <div style={{ padding: '0.75rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', margin: 0 }}>
+      <div className="adm-card" style={{ padding: 0 }}>
+        <div style={{ padding: '0.75rem 1.5rem', borderBottom: '1px solid var(--color-border-dark)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+          <p className="adm-card-label" style={{ margin: 0 }}>
             Bookings
           </p>
-          <div style={{ display: 'flex', gap: '0.35rem' }}>
+          <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
             {STATUS_TABS.map(tab => {
               const isActive = activeStatus === tab.value
               return (
                 <Link
                   key={tab.value}
                   href={tab.value ? `/admin/dashboard?status=${tab.value}` : '/admin/dashboard'}
-                  style={{
-                    padding: '0.3rem 0.8rem',
-                    borderRadius: '999px',
-                    fontFamily: 'var(--font-ui)',
-                    fontSize: '0.58rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    background: isActive ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.05)',
-                    color: isActive ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.45)',
-                    transition: 'all 0.15s',
-                  }}
+                  className={`adm-tab${isActive ? ' adm-tab--active' : ''}`}
                 >
                   {tab.label}
                 </Link>
@@ -132,16 +149,16 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         </div>
 
         {rows.length === 0 ? (
-          <div style={{ padding: '3rem', textAlign: 'center', color: 'rgba(245,240,234,0.25)', fontFamily: 'var(--font-ui)', fontSize: '0.78rem' }}>
+          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--color-muted)', fontFamily: 'var(--font-body)', fontSize: '0.85rem' }}>
             No bookings yet
           </div>
         ) : (
           <div className="admin-table-wrap">
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table className="adm-table">
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <tr>
                 {['Date', 'Customer', 'Event Type', 'Time', 'Status', 'Deposit', ''].map(h => (
-                  <th key={h} style={{ padding: '0.65rem 1rem', textAlign: 'left', fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)' }}>
+                  <th key={h}>
                     {h}
                   </th>
                 ))}
@@ -149,34 +166,30 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
             </thead>
             <tbody>
               {rows.map(({ booking: b, customer: c }) => {
-                const s = STATUS_STYLES[b.status] ?? STATUS_STYLES.requested
                 return (
-                  <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)', whiteSpace: 'nowrap' }}>
+                  <tr key={b.id}>
+                    <td style={{ whiteSpace: 'nowrap' }}>
                       {fmtDate(b.eventDate)}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
+                    <td>
                       {c?.name ?? 'Not set'}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.55)' }}>
+                    <td style={{ color: 'var(--color-muted-light)' }}>
                       {b.eventType}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'rgba(245,240,234,0.45)', whiteSpace: 'nowrap' }}>
+                    <td style={{ color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>
                       {fmt(b.startTime)} → {fmt(b.endTime)}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem' }}>
-                      <span style={{ display: 'inline-block', padding: '0.2rem 0.6rem', borderRadius: '3px', background: s.bg, fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.color }}>
-                        {b.status}
+                    <td>
+                      <span className={`adm-pill adm-pill--${b.status}`}>
+                        {statusLabel(b.status)}
                       </span>
                     </td>
-                    <td style={{ padding: '0.9rem 1rem', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
+                    <td>
                       ${Number(b.depositAmount ?? 0).toFixed(2)}
                     </td>
-                    <td style={{ padding: '0.9rem 1rem' }}>
-                      <Link
-                        href={`/admin/bookings/${b.id}`}
-                        style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-amber-light)', textDecoration: 'none' }}
-                      >
+                    <td>
+                      <Link href={`/admin/bookings/${b.id}`} className="adm-link">
                         View →
                       </Link>
                     </td>

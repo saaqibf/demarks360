@@ -187,15 +187,7 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
         <button
           onClick={handleSubmit}
           disabled={!state.agreedToTerms || submitting}
-          style={{
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-            background: (!state.agreedToTerms || submitting) ? 'rgba(232,178,92,0.45)' : 'var(--color-amber-light)',
-            color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px', padding: '1rem 2rem',
-            fontFamily: 'var(--font-ui)', fontSize: '0.75rem', fontWeight: 700,
-            letterSpacing: '0.12em', textTransform: 'uppercase',
-            cursor: (!state.agreedToTerms || submitting) ? 'not-allowed' : 'pointer',
-            transition: 'background 0.2s ease',
-          }}
+          className="btn-primary btn--sm"
         >
           {submitting && (
             <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -205,11 +197,7 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
           )}
           {submitting ? 'Submitting' : 'Submit Booking Request'}
         </button>
-        <button
-          type="button"
-          onClick={onBack}
-          style={{ background: 'none', border: '1px solid rgba(201,145,63,0.4)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}
-        >
+        <button type="button" onClick={onBack} className="btn-back">
           ← Back
         </button>
       </div>

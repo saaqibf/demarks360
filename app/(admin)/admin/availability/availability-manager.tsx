@@ -71,11 +71,6 @@ export function AvailabilityManager({ initialBlocks }: Props) {
     }
   }
 
-  const inputStyle: React.CSSProperties = {
-    background: 'var(--color-ink)', border: '1px solid rgba(255,255,255,0.08)',
-    color: 'var(--color-text-light)', fontFamily: 'var(--font-body)', fontSize: '0.85rem',
-    padding: '0.65rem 0.75rem', outline: 'none', width: '100%', boxSizing: 'border-box',
-  }
   const labelStyle: React.CSSProperties = {
     fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700,
     letterSpacing: '0.14em', textTransform: 'uppercase',
@@ -85,8 +80,8 @@ export function AvailabilityManager({ initialBlocks }: Props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* Add block form */}
-      <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', marginBottom: '1.25rem' }}>
+      <div className="adm-card">
+        <p className="adm-card-label">
           Block a Date
         </p>
 
@@ -97,7 +92,7 @@ export function AvailabilityManager({ initialBlocks }: Props) {
               type="date"
               value={form.date}
               onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-              style={inputStyle}
+              className="adm-input"
             />
           </div>
           <div>
@@ -106,7 +101,7 @@ export function AvailabilityManager({ initialBlocks }: Props) {
               type="time"
               value={form.startTime}
               onChange={e => setForm(f => ({ ...f, startTime: e.target.value }))}
-              style={inputStyle}
+              className="adm-input"
             />
           </div>
           <div>
@@ -115,7 +110,7 @@ export function AvailabilityManager({ initialBlocks }: Props) {
               type="time"
               value={form.endTime}
               onChange={e => setForm(f => ({ ...f, endTime: e.target.value }))}
-              style={inputStyle}
+              className="adm-input"
             />
           </div>
         </div>
@@ -127,60 +122,48 @@ export function AvailabilityManager({ initialBlocks }: Props) {
             value={form.reason}
             onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
             placeholder="e.g. Equipment maintenance"
-            style={inputStyle}
+            className="adm-input"
           />
         </div>
 
-        {error && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginBottom: '0.75rem' }}>{error}</p>}
+        {error && <p style={{ color: 'var(--color-amber-light)', fontSize: '0.8rem', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>{error}</p>}
 
-        <button
-          onClick={addBlock}
-          disabled={saving}
-          style={{
-            background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px',
-            padding: '0.65rem 1.5rem', fontFamily: 'var(--font-ui)', fontSize: '0.65rem',
-            fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-            cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1,
-          }}
-        >
+        <button onClick={addBlock} disabled={saving} className="btn-primary btn--sm">
           {saving ? 'Adding…' : 'Block Date'}
         </button>
       </div>
 
       {/* Existing blocks list */}
-      <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)' }}>
+      <div className="adm-card" style={{ padding: 0 }}>
+        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--color-border-dark)' }}>
+          <p className="adm-card-label" style={{ margin: 0 }}>
             Current Blocks ({blocks.length})
           </p>
         </div>
 
         {blocks.length === 0 ? (
-          <div style={{ padding: '2rem 1.5rem', textAlign: 'center', color: 'rgba(245,240,234,0.25)', fontFamily: 'var(--font-ui)', fontSize: '0.78rem' }}>
+          <div style={{ padding: '2rem 1.5rem', textAlign: 'center', color: 'var(--color-muted)', fontFamily: 'var(--font-body)', fontSize: '0.85rem' }}>
             No dates blocked
           </div>
         ) : (
           blocks.map(block => (
-            <div key={block.id} style={{ padding: '0.9rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+            <div key={block.id} style={{ padding: '0.9rem 1.5rem', borderBottom: '1px solid var(--color-border-dark)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
               <div>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-text-light)' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-light)' }}>
                   {fmtDate(block.blockedDate)}
                   {block.startTime && (
-                    <span style={{ fontWeight: 400, color: 'rgba(245,240,234,0.5)', marginLeft: '0.5rem' }}>
+                    <span style={{ fontWeight: 400, color: 'var(--color-muted-light)', marginLeft: '0.5rem' }}>
                       {fmtTime(block.startTime)}{block.endTime ? ` → ${fmtTime(block.endTime)}` : ''}
                     </span>
                   )}
                 </p>
                 {block.reason && (
-                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.65rem', color: 'rgba(245,240,234,0.35)', marginTop: '0.2rem' }}>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-muted)', marginTop: '0.2rem' }}>
                     {block.reason}
                   </p>
                 )}
               </div>
-              <button
-                onClick={() => removeBlock(block.id)}
-                style={{ background: 'none', border: '1px solid rgba(201,145,63,0.35)', color: 'var(--color-amber-light)', padding: '0.3rem 0.75rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}
-              >
+              <button onClick={() => removeBlock(block.id)} className="btn-danger btn--sm">
                 Remove
               </button>
             </div>

@@ -46,12 +46,13 @@ export function AddonsStep({ selectedIds, durationMinutes, onNext, onBack }: Add
               key={addon.id}
               onClick={() => !disabled && toggle(addon.id)}
               disabled={disabled}
+              className="dm-addon-toggle"
+              aria-pressed={isSelected}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '1.5rem', background: isSelected ? 'var(--color-surface-2)' : 'var(--color-surface)',
                 border: 'none', cursor: disabled ? 'default' : 'pointer',
                 textAlign: 'left', opacity: disabled ? 0.5 : 1,
-                transition: 'background 0.2s',
               }}
             >
               <div style={{ flex: 1 }}>
@@ -105,17 +106,10 @@ export function AddonsStep({ selectedIds, durationMinutes, onNext, onBack }: Add
       </div>
 
       <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <button
-          onClick={() => onNext(Array.from(selected))}
-          style={{
-            background: 'var(--color-amber-light)', color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px',
-            padding: '0.85rem 2rem', fontFamily: 'var(--font-ui)', fontSize: '0.7rem',
-            fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
-          }}
-        >
+        <button onClick={() => onNext(Array.from(selected))} className="btn-primary btn--sm">
           Continue →
         </button>
-        <button onClick={onBack} style={{ background: 'none', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-amber)', padding: '0.85rem 1.6rem', transition: 'border-color 0.2s' }}>
+        <button onClick={onBack} className="btn-back">
           ← Back
         </button>
       </div>

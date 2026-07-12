@@ -7,6 +7,7 @@ interface Props {
   currentStatus: string
   currentNotes: string
   payUrl: string | null
+  customerName?: string | null
   depositAmount: string
   balanceAmount: string
   depositExpiresAt: string | null
@@ -15,38 +16,15 @@ interface Props {
   balancePaid: boolean
 }
 
-const actionButtonStyle = (variant: 'primary' | 'danger' | 'ghost', disabled: boolean): React.CSSProperties => ({
-  padding: '0.6rem 1.3rem',
-  border: '1px solid',
-  borderColor: variant === 'primary' ? 'var(--color-amber-light)' : variant === 'danger' ? 'rgba(192,41,58,0.6)' : 'rgba(255,255,255,0.15)',
-  background: variant === 'primary' ? 'var(--color-amber-light)' : 'transparent',
-  color: variant === 'primary' ? 'var(--color-charcoal)' : variant === 'danger' ? '#e06a76' : 'rgba(245,240,234,0.65)',
-  borderRadius: '999px',
-  fontFamily: 'var(--font-ui)',
-  fontSize: '0.62rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  cursor: disabled ? 'not-allowed' : 'pointer',
-  opacity: disabled ? 0.5 : 1,
-  transition: 'all 0.15s',
-})
-
-const metaRowStyle: React.CSSProperties = {
-  display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0',
-  borderBottom: '1px solid rgba(255,255,255,0.04)',
-}
-const metaLabelStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)',
-}
-const metaValueStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)',
-}
-
 export function BookingActions({
-  bookingId, currentStatus, currentNotes, payUrl,
+  bookingId, currentStatus, currentNotes, payUrl, customerName,
   depositAmount, balanceAmount, depositExpiresAt, depositPaidAt, autoPayOptIn, balancePaid,
 }: Props) {
+  const firstName = customerName?.trim().split(/\s+/)[0] || null
+  const approveHint = firstName
+    ? `Approving emails ${firstName} their secure deposit link.`
+    : 'Approving emails the customer their secure deposit link.'
+
   const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [notes, setNotes] = useState(currentNotes)
@@ -114,50 +92,55 @@ export function BookingActions({
   let actions: React.ReactNode
   if (currentStatus === 'requested') {
     actions = (
-      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-        <button onClick={approve} disabled={saving} style={actionButtonStyle('primary', saving)}>
-          Approve &amp; Send Payment Link
-        </button>
-        {confirmingDecline ? (
-          <>
-            <button onClick={decline} disabled={saving} style={actionButtonStyle('danger', saving)}>
-              Yes, Decline
-            </button>
-            <button onClick={() => setConfirmingDecline(false)} disabled={saving} style={actionButtonStyle('ghost', saving)}>
-              Keep Request
-            </button>
-          </>
-        ) : (
-          <button onClick={() => setConfirmingDecline(true)} disabled={saving} style={actionButtonStyle('danger', saving)}>
-            Decline
+      <div>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <button onClick={approve} disabled={saving} className="btn-primary">
+            Approve booking
           </button>
-        )}
+          {confirmingDecline ? (
+            <>
+              <button onClick={decline} disabled={saving} className="btn-danger btn--sm">
+                Yes, Decline
+              </button>
+              <button onClick={() => setConfirmingDecline(false)} disabled={saving} className="btn-back">
+                Keep Request
+              </button>
+            </>
+          ) : (
+            <button onClick={() => setConfirmingDecline(true)} disabled={saving} className="btn-danger btn--sm">
+              Decline
+            </button>
+          )}
+        </div>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginTop: '0.75rem' }}>
+          {approveHint}
+        </p>
       </div>
     )
   } else if (currentStatus === 'approved') {
     actions = (
       <div>
         <div style={{ marginBottom: '1rem' }}>
-          <div style={metaRowStyle}>
-            <span style={metaLabelStyle}>Deposit awaiting payment</span>
-            <span style={metaValueStyle}>${Number(depositAmount).toFixed(2)}</span>
+          <div className="adm-row">
+            <span className="adm-row-label">Deposit awaiting payment</span>
+            <span className="adm-row-value">${Number(depositAmount).toFixed(2)}</span>
           </div>
-          <div style={metaRowStyle}>
-            <span style={metaLabelStyle}>Payment link expires</span>
-            <span style={metaValueStyle}>{depositExpiresAt ?? 'Not set'}</span>
+          <div className="adm-row">
+            <span className="adm-row-label">Payment link expires</span>
+            <span className="adm-row-value">{depositExpiresAt ?? 'Not set'}</span>
           </div>
         </div>
         {payUrl && (
           <div style={{ marginBottom: '1rem' }}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'rgba(245,240,234,0.45)', marginBottom: '0.5rem', wordBreak: 'break-all' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '0.5rem', wordBreak: 'break-all' }}>
               {payUrl}
             </p>
-            <button onClick={copyPayLink} disabled={saving} style={actionButtonStyle('ghost', saving)}>
+            <button onClick={copyPayLink} disabled={saving} className="btn-back">
               {linkCopied ? 'Copied ✓' : 'Copy Payment Link'}
             </button>
           </div>
         )}
-        <button onClick={() => setStatus('cancelled')} disabled={saving} style={actionButtonStyle('danger', saving)}>
+        <button onClick={() => setStatus('cancelled')} disabled={saving} className="btn-danger btn--sm">
           Cancel Booking
         </button>
       </div>
@@ -166,24 +149,24 @@ export function BookingActions({
     actions = (
       <div>
         <div style={{ marginBottom: '1rem' }}>
-          <div style={metaRowStyle}>
-            <span style={metaLabelStyle}>Deposit paid</span>
-            <span style={metaValueStyle}>{depositPaidAt ?? 'Paid (legacy flow)'}</span>
+          <div className="adm-row">
+            <span className="adm-row-label">Deposit paid</span>
+            <span className="adm-row-value">{depositPaidAt ?? 'Paid (legacy flow)'}</span>
           </div>
-          <div style={metaRowStyle}>
-            <span style={metaLabelStyle}>Balance</span>
-            <span style={metaValueStyle}>${Number(balanceAmount).toFixed(2)} {balancePaid ? '(paid)' : '(due event day)'}</span>
+          <div className="adm-row">
+            <span className="adm-row-label">Balance</span>
+            <span className="adm-row-value">${Number(balanceAmount).toFixed(2)} {balancePaid ? '(paid)' : '(due event day)'}</span>
           </div>
-          <div style={metaRowStyle}>
-            <span style={metaLabelStyle}>Auto-pay opt-in</span>
-            <span style={metaValueStyle}>{autoPayOptIn ? 'Yes' : 'No'}</span>
+          <div className="adm-row">
+            <span className="adm-row-label">Auto-pay opt-in</span>
+            <span className="adm-row-value">{autoPayOptIn ? 'Yes' : 'No'}</span>
           </div>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <button onClick={() => setStatus('completed')} disabled={saving} style={actionButtonStyle('primary', saving)}>
+          <button onClick={() => setStatus('completed')} disabled={saving} className="btn-primary btn--sm">
             Mark Completed
           </button>
-          <button onClick={() => setStatus('cancelled')} disabled={saving} style={actionButtonStyle('danger', saving)}>
+          <button onClick={() => setStatus('cancelled')} disabled={saving} className="btn-danger btn--sm">
             Cancel Booking
           </button>
         </div>
@@ -191,15 +174,20 @@ export function BookingActions({
     )
   } else if (currentStatus === 'expired') {
     actions = (
-      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <button onClick={approve} disabled={saving} style={actionButtonStyle('primary', saving)}>
-          Approve Again &amp; Send Fresh Link
-        </button>
+      <div>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button onClick={approve} disabled={saving} className="btn-primary">
+            Approve again
+          </button>
+        </div>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginTop: '0.75rem' }}>
+          {approveHint}
+        </p>
       </div>
     )
   } else {
     actions = (
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'rgba(245,240,234,0.4)' }}>
+      <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)' }}>
         No actions available for a {currentStatus} booking.
       </p>
     )
@@ -212,38 +200,25 @@ export function BookingActions({
       {/* Notes */}
       <div>
         {error && (
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-amber-light)', marginBottom: '0.75rem' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-amber-light)', marginBottom: '0.75rem' }}>
             {error}
           </p>
         )}
-        <label style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', display: 'block', marginBottom: '0.5rem' }}>
+        <label className="adm-card-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
           Internal Notes
         </label>
         <textarea
           value={notes}
           onChange={e => setNotes(e.target.value)}
           rows={3}
-          style={{
-            width: '100%', boxSizing: 'border-box',
-            background: 'var(--color-ink)', border: '1px solid rgba(255,255,255,0.08)',
-            color: 'var(--color-text-light)', fontFamily: 'var(--font-body)', fontSize: '0.85rem',
-            padding: '0.75rem', resize: 'vertical', outline: 'none',
-          }}
+          className="adm-input"
           placeholder="Add internal notes about this booking…"
         />
         <button
           onClick={saveNotes}
           disabled={saving}
-          style={{
-            marginTop: '0.5rem',
-            padding: '0.5rem 1.25rem',
-            background: notesSaved ? 'rgba(52,211,153,0.15)' : 'var(--color-amber-light)',
-            color: notesSaved ? 'var(--color-success)' : 'var(--color-charcoal)',
-            border: 'none',
-            borderRadius: '999px',
-            fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700,
-            letterSpacing: '0.1em', textTransform: 'uppercase', cursor: saving ? 'not-allowed' : 'pointer',
-          }}
+          className="btn-primary btn--sm"
+          style={{ marginTop: '0.5rem' }}
         >
           {notesSaved ? 'Saved ✓' : 'Save Notes'}
         </button>

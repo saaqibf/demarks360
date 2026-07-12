@@ -405,10 +405,126 @@ body {
   border-radius: 6px;
 }
 
+/* Compact size modifier for tighter surfaces (booking wizard actions).
+   Same domed gold body, smaller footprint so it sits beside a back pill. */
+.btn-primary.btn--sm {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  padding: 0.85rem 2rem;
+  min-height: 44px;
+}
+
+/* Disabled primary: still reads as the same object, just dimmed and inert.
+   Kills the lift, the glint, and the hover so a locked CTA never teases. */
+.btn-primary:disabled,
+.btn-primary[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: saturate(0.55) brightness(0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,235,0.22),
+    0 1px 4px rgba(20,16,9,0.15);
+}
+.btn-primary:disabled::before,
+.btn-primary[aria-disabled="true"]::before { display: none; }
+.btn-primary:disabled:hover,
+.btn-primary[aria-disabled="true"]:hover {
+  transform: none;
+  filter: saturate(0.55) brightness(0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,235,0.22),
+    0 1px 4px rgba(20,16,9,0.15);
+}
+
+/* Back / secondary / retry pill — the flow's ghost action. Amber outline at
+   rest, fills to solid amber with charcoal text on hover, lifts on a warm
+   glow, compresses on press. One shared look for every back/retry control. */
+.btn-back {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+  background: transparent;
+  padding: 0.8rem 1.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201,145,63,0.45);
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  transition:
+    transform 0.3s var(--btn-ease),
+    background 0.3s var(--btn-ease),
+    color 0.3s var(--btn-ease),
+    border-color 0.3s var(--btn-ease),
+    box-shadow 0.3s var(--btn-ease);
+}
+.btn-back:not(:disabled):hover {
+  transform: translateY(-2px);
+  background: var(--color-amber);
+  color: var(--color-charcoal);
+  border-color: var(--color-amber);
+  box-shadow: 0 10px 26px -10px rgba(201,145,63,0.6);
+}
+.btn-back:not(:disabled):active {
+  transform: translateY(0) scale(0.985);
+  box-shadow: 0 3px 10px -6px rgba(201,145,63,0.5);
+  transition-duration: 0.09s;
+}
+.btn-back:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-back:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+/* Square icon control — calendar month arrows. Same tactile language, smaller. */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(201,145,63,0.4);
+  border-radius: 8px;
+  color: var(--color-amber);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition:
+    transform 0.25s var(--btn-ease),
+    background 0.25s var(--btn-ease),
+    border-color 0.25s var(--btn-ease),
+    box-shadow 0.25s var(--btn-ease);
+}
+.btn-icon:hover {
+  transform: translateY(-1px);
+  background: rgba(201,145,63,0.14);
+  border-color: var(--color-amber);
+  box-shadow: 0 6px 16px -8px rgba(201,145,63,0.55);
+}
+.btn-icon:active {
+  transform: translateY(0) scale(0.95);
+  transition-duration: 0.09s;
+}
+.btn-icon:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn-primary,
   .btn-secondary,
   .btn-ghost,
+  .btn-back,
+  .btn-icon,
   .btn-primary::before,
   .btn-ghost::after,
   .btn-ghost svg,
@@ -418,6 +534,10 @@ body {
   .btn-primary:active,
   .btn-secondary:hover,
   .btn-secondary:active,
+  .btn-back:hover,
+  .btn-back:active,
+  .btn-icon:hover,
+  .btn-icon:active,
   .btn-ghost:active { transform: none; }
   .btn-primary:hover::before,
   .btn-primary:focus-visible::before { opacity: 0; transform: translateX(-120%); }
@@ -552,25 +672,120 @@ button, a, [role="button"] { min-height: 44px; }
 }
 @media (max-width: 640px) { .footer-bottom { flex-direction: column; align-items: flex-start; gap: 0.5rem; } }
 
-/* ─── Admin grids ────────────────────────────────────────────────── */
+/* ─── Admin — one connected premium surface language ───────────────── */
 .admin-2col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--color-border-light);
+  gap: 1rem;
 }
 @media (max-width: 700px) { .admin-2col { grid-template-columns: 1fr; } }
 
 .admin-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--color-border-light);
-  margin-bottom: 2.5rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
-@media (max-width: 700px) { .admin-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 1000px) { .admin-stats-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px)  { .admin-stats-grid { grid-template-columns: repeat(2, 1fr); } }
 
 .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.adm-page { padding: clamp(1.5rem, 3vw, 2.75rem); }
+.adm-eyebrow { font-family: var(--font-body); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--color-amber); }
+.adm-h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1; color: var(--color-text-light); }
+
+.adm-card {
+  background: linear-gradient(165deg, var(--color-charcoal-2), var(--color-charcoal-3));
+  border: 1px solid var(--color-border-dark);
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+.adm-card-label { font-family: var(--font-body); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted-light); margin: 0 0 1.1rem; }
+
+/* Stat cards — action items (Needs Review / Awaiting Deposit) glow amber */
+.adm-stat {
+  background: linear-gradient(165deg, var(--color-charcoal-2), var(--color-charcoal-3));
+  border: 1px solid var(--color-border-dark);
+  border-radius: 14px;
+  padding: 1.4rem 1.5rem;
+  transition: transform 0.4s var(--btn-ease), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+@media (hover: hover) { .adm-stat:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--color-amber) 32%, transparent); } }
+.adm-stat--action {
+  border-color: color-mix(in srgb, var(--color-amber) 45%, transparent);
+  background: linear-gradient(165deg, color-mix(in srgb, var(--color-amber) 12%, var(--color-charcoal-2)), var(--color-charcoal-3));
+  box-shadow: 0 18px 44px -28px color-mix(in srgb, var(--color-amber) 60%, transparent);
+}
+.adm-stat-label { font-family: var(--font-body); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-muted-light); margin: 0 0 0.6rem; }
+.adm-stat-value { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.9rem, 3vw, 2.4rem); line-height: 1; color: var(--color-text-light); }
+.adm-stat--action .adm-stat-value { color: var(--color-amber-light); }
+
+/* Definition-style rows */
+.adm-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--color-border-dark); }
+.adm-row:last-child { border-bottom: 0; }
+.adm-row-label { font-family: var(--font-body); font-size: 0.8rem; color: var(--color-muted-light); }
+.adm-row-value { font-family: var(--font-body); font-size: 0.85rem; color: var(--color-text-light); font-weight: 500; text-align: right; max-width: 58%; }
+
+/* Status pills with a leading dot */
+.adm-pill { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.34rem 0.8rem; border-radius: 999px; font-family: var(--font-body); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; border: 1px solid transparent; white-space: nowrap; }
+.adm-pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.adm-pill--requested { color: var(--color-pending); background: color-mix(in srgb, var(--color-pending) 13%, transparent); border-color: color-mix(in srgb, var(--color-pending) 32%, transparent); }
+.adm-pill--pending   { color: var(--color-pending); background: color-mix(in srgb, var(--color-pending) 13%, transparent); border-color: color-mix(in srgb, var(--color-pending) 32%, transparent); }
+.adm-pill--approved  { color: #6BA8FF; background: rgba(96,165,250,0.13); border-color: rgba(96,165,250,0.32); }
+.adm-pill--confirmed { color: var(--color-success); background: color-mix(in srgb, var(--color-success) 13%, transparent); border-color: color-mix(in srgb, var(--color-success) 32%, transparent); }
+.adm-pill--completed { color: var(--color-muted-light); background: rgba(255,255,255,0.05); border-color: var(--color-border-dark); }
+.adm-pill--declined,
+.adm-pill--cancelled { color: #E88A94; background: rgba(192,41,58,0.13); border-color: rgba(192,41,58,0.32); }
+.adm-pill--expired   { color: var(--color-muted-light); background: rgba(255,255,255,0.04); border-color: var(--color-border-dark); }
+
+/* Table */
+.adm-table { width: 100%; border-collapse: collapse; }
+.adm-table th { padding: 0.8rem 1rem; text-align: left; font-family: var(--font-body); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-muted); border-bottom: 1px solid var(--color-border-dark); white-space: nowrap; }
+.adm-table td { padding: 1rem; font-family: var(--font-body); font-size: 0.85rem; color: var(--color-text-light); border-bottom: 1px solid var(--color-border-dark); vertical-align: middle; }
+.adm-table tbody tr { transition: background 0.2s ease; }
+.adm-table tbody tr:hover { background: color-mix(in srgb, var(--color-amber) 6%, transparent); }
+.adm-table tbody tr:last-child td { border-bottom: 0; }
+
+/* Filter tabs */
+.adm-tab { padding: 0.42rem 0.9rem; border-radius: 999px; font-family: var(--font-body); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; background: rgba(255,255,255,0.05); color: var(--color-muted-light); border: 1px solid transparent; transition: color 0.25s var(--btn-ease), background 0.25s var(--btn-ease), border-color 0.25s ease; white-space: nowrap; }
+.adm-tab:hover { color: var(--color-text-light); border-color: var(--color-border-dark); }
+.adm-tab--active { background: linear-gradient(180deg, var(--color-amber-light), var(--color-amber)); color: var(--color-charcoal); box-shadow: inset 0 1px 0 rgba(255,248,235,0.5); }
+
+/* Inline link with a sliding arrow */
+.adm-link { font-family: var(--font-body); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-amber-light); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; transition: gap 0.3s var(--btn-ease), color 0.3s ease; }
+.adm-link:hover { gap: 0.6rem; color: var(--color-sand); }
+
+/* Destructive action pill — same tactile language, red intent */
+.btn-danger {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  font-family: var(--font-body); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #E88A94; background: transparent;
+  border: 1px solid rgba(192,41,58,0.5); border-radius: 999px;
+  padding: 0.7rem 1.5rem; min-height: 44px; cursor: pointer;
+  transition: transform 0.4s var(--btn-ease), background 0.3s var(--btn-ease), color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-danger:hover { transform: translateY(-2px); background: #B33341; color: #fff; border-color: #B33341; box-shadow: 0 12px 30px -12px rgba(192,41,58,0.6); }
+.btn-danger:active { transform: translateY(0) scale(0.985); transition-duration: 0.09s; }
+.btn-danger:focus-visible { outline: 2px solid #E88A94; outline-offset: 4px; }
+.btn-danger:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-danger.btn--sm { padding: 0.5rem 1.15rem; min-height: 38px; font-size: 0.64rem; }
+
+/* Admin form field — dark, amber focus, matches the site fields */
+.adm-input {
+  width: 100%; box-sizing: border-box;
+  background: var(--color-charcoal); border: 1px solid var(--color-border-dark); border-radius: 10px;
+  color: var(--color-text-light); font-family: var(--font-body); font-size: 0.9rem;
+  padding: 0.75rem 0.9rem; outline: none; resize: vertical;
+  transition: border-color 0.3s var(--btn-ease), box-shadow 0.3s var(--btn-ease);
+}
+.adm-input:focus { border-color: var(--color-amber); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-amber) 22%, transparent); }
+.adm-input::placeholder { color: var(--color-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-stat, .adm-stat:hover, .adm-table tbody tr, .adm-tab, .adm-link, .adm-link:hover,
+  .btn-danger, .btn-danger:hover, .btn-danger:active { transition: none; transform: none; }
+}
 
 /* ─── Gallery cell hover ─────────────────────────────────────────── */
 .gallery-cell {
@@ -694,6 +909,7 @@ button, a, [role="button"] { min-height: 44px; }
 .step-content input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
 .step-content select:focus,
 .step-content textarea:focus {
+  border-color: var(--color-amber);
   box-shadow: 0 0 0 3px rgba(201,145,63,0.18),
               inset 0 1px 0 rgba(255,255,255,0.04);
 }
@@ -725,16 +941,30 @@ button, a, [role="button"] { min-height: 44px; }
               0 18px 40px -24px rgba(0,0,0,0.70);
 }
 
-/* ── Primary action button: warm cinematic glow (desktop + mobile) ─── */
-.dm-step-actions button:first-child:not(:disabled) {
-  box-shadow: 0 8px 24px -10px rgba(201,145,63,0.55);
-  transition: box-shadow .2s cubic-bezier(.2,.7,.2,1),
-              transform .2s cubic-bezier(.2,.7,.2,1),
-              background .2s ease;
+/* The primary action button in the wizard now uses the shared .btn-primary
+   system, which owns its own domed shadow, hover lift, and glint. No override
+   here so those layered shadows are never flattened. */
+
+/* Add-on toggle cards — tactile lift + soft depth on hover, crisp press.
+   Colour/background stays inline (that's the selected-state brand logic). */
+.dm-addon-toggle {
+  transition:
+    background 0.3s var(--btn-ease),
+    transform 0.3s var(--btn-ease),
+    box-shadow 0.3s var(--btn-ease);
 }
-.dm-step-actions button:first-child:not(:disabled):hover {
+.dm-addon-toggle:not(:disabled):hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 30px -10px rgba(201,145,63,0.70);
+  box-shadow: 0 14px 34px -22px rgba(0,0,0,0.75);
+}
+.dm-addon-toggle:not(:disabled):active {
+  transform: translateY(0);
+  transition-duration: 0.09s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dm-addon-toggle { transition: background 0.3s var(--btn-ease); }
+  .dm-addon-toggle:not(:disabled):hover,
+  .dm-addon-toggle:not(:disabled):active { transform: none; }
 }
 
 /* Reveal only the CURRENT step's label on the compact progress bar so

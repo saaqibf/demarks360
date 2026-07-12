@@ -5,17 +5,7 @@ import { APP_URL } from '@/lib/app-url'
 import { BookingActions } from './booking-actions'
 import { DriveImport } from './drive-import'
 import { DeviceUpload } from './device-upload'
-
-const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
-  requested: { bg: 'rgba(251,191,36,0.12)',   color: 'var(--color-pending)' },
-  approved:  { bg: 'rgba(96,165,250,0.12)',   color: '#60A5FA' },
-  pending:   { bg: 'rgba(251,191,36,0.12)',   color: 'var(--color-pending)' },
-  confirmed: { bg: 'rgba(52,211,153,0.10)',   color: 'var(--color-success)' },
-  declined:  { bg: 'rgba(192,41,58,0.12)',    color: '#e06a76' },
-  expired:   { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
-  cancelled: { bg: 'rgba(201,145,63,0.12)',    color: 'var(--color-amber)' },
-  completed: { bg: 'rgba(255,255,255,0.05)',  color: 'rgba(245,240,234,0.4)' },
-}
+import { statusLabel } from '@/lib/admin-status'
 
 function fmt(t: string): string {
   const [h, m] = t.split(':').map(Number)
@@ -40,7 +30,6 @@ export default async function BookingDetailPage({ params }: Props) {
   if (!row) notFound()
 
   const { booking: b, customer: c } = row
-  const s = STATUS_STYLES[b.status] ?? STATUS_STYLES.requested
   const payUrl = b.payToken ? `${APP_URL}/pay/${b.payToken}` : null
   const fmtTimestamp = (d: Date | null) =>
     d ? d.toLocaleString('en-CA', { timeZone: 'America/Edmonton', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : null
@@ -49,35 +38,32 @@ export default async function BookingDetailPage({ params }: Props) {
     : null
 
   return (
-    <div style={{ padding: '2.5rem', maxWidth: '900px' }}>
+    <div className="adm-page" style={{ maxWidth: '900px' }}>
       {/* Back */}
-      <Link
-        href="/admin/dashboard"
-        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.4)', textDecoration: 'none', marginBottom: '1.5rem' }}
-      >
+      <Link href="/admin/dashboard" className="adm-link" style={{ marginBottom: '1.5rem' }}>
         ← All Bookings
       </Link>
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2rem', gap: '1rem', flexWrap: 'wrap' }}>
         <div>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.4rem' }}>
+          <p className="adm-eyebrow" style={{ color: 'var(--color-muted-light)', marginBottom: '0.4rem' }}>
             Booking · {b.id.slice(0, 12).toUpperCase()}
           </p>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1, marginBottom: '0.5rem' }}>
             {c?.name ?? 'Unknown customer'}
           </h1>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.5)' }}>{fmtDate(b.eventDate)}</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)' }}>{fmtDate(b.eventDate)}</p>
         </div>
-        <span style={{ display: 'inline-block', padding: '0.35rem 0.85rem', borderRadius: '4px', background: s.bg, fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: s.color }}>
-          {b.status}
+        <span className={`adm-pill adm-pill--${b.status}`}>
+          {statusLabel(b.status)}
         </span>
       </div>
 
-      <div className="admin-2col" style={{ marginBottom: '1px' }}>
+      <div className="admin-2col" style={{ marginBottom: '1rem' }}>
         {/* Event info */}
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '1rem' }}>Event</p>
+        <div className="adm-card">
+          <p className="adm-card-label">Event</p>
           {[
             { label: 'Date', value: fmtDate(b.eventDate) },
             { label: 'Time', value: `${fmt(b.startTime)} → ${fmt(b.endTime)}` },
@@ -87,16 +73,16 @@ export default async function BookingDetailPage({ params }: Props) {
             { label: 'Address', value: `${b.locationAddress}, ${b.locationCity}` },
             { label: 'Add-ons', value: (b.addOns as string[]).join(', ') || 'None' },
           ].map(({ label, value }) => (
-            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)', textAlign: 'right', maxWidth: '55%' }}>{value}</span>
+            <div key={label} className="adm-row">
+              <span className="adm-row-label">{label}</span>
+              <span className="adm-row-value">{value}</span>
             </div>
           ))}
         </div>
 
         {/* Customer + payment info */}
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '1rem' }}>Customer & Payment</p>
+        <div className="adm-card">
+          <p className="adm-card-label">Customer &amp; Payment</p>
           {[
             { label: 'Name', value: c?.name ?? 'Not set' },
             { label: 'Email', value: c?.email ?? 'Not set' },
@@ -106,34 +92,15 @@ export default async function BookingDetailPage({ params }: Props) {
             { label: 'Balance Date', value: balanceDate ?? 'Not set' },
             { label: 'Gallery Token', value: b.galleryToken ?? 'Not set' },
           ].map(({ label, value }) => (
-            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)', textAlign: 'right', maxWidth: '55%' }}>{value}</span>
+            <div key={label} className="adm-row">
+              <span className="adm-row-label">{label}</span>
+              <span className="adm-row-value">{value}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Actions */}
-      <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '1rem' }}>
-          Actions
-        </p>
-        <BookingActions
-          bookingId={b.id}
-          currentStatus={b.status}
-          currentNotes={b.notes ?? ''}
-          payUrl={payUrl}
-          depositAmount={String(b.depositAmount ?? 0)}
-          balanceAmount={String(b.balanceAmount ?? 0)}
-          depositExpiresAt={fmtTimestamp(b.depositExpiresAt)}
-          depositPaidAt={fmtTimestamp(b.depositPaidAt)}
-          autoPayOptIn={b.autoPayOptIn}
-          balancePaid={!!b.balanceChargedAt}
-        />
-      </div>
-
-      {/* 360 Design Preferences */}
+      {/* 360 Design Preferences — helpful context to read before deciding */}
       {b.eventPreferences && (() => {
         type Prefs = {
           backgroundColorTheme?: string
@@ -153,46 +120,64 @@ export default async function BookingDetailPage({ params }: Props) {
         ].filter(Boolean) as { label: string; value: string }[]
         if (!rows.length) return null
         return (
-          <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '1rem' }}>360 Design Preferences</p>
+          <div className="adm-card" style={{ marginTop: '1rem' }}>
+            <p className="adm-card-label" style={{ color: 'var(--color-amber)' }}>360 Design Preferences</p>
             {rows.map(({ label, value }) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }}>{label}</span>
-                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-amber-light)', textAlign: 'right', maxWidth: '60%' }}>{value}</span>
+              <div key={label} className="adm-row">
+                <span className="adm-row-label">{label}</span>
+                <span className="adm-row-value" style={{ color: 'var(--color-amber-light)' }}>{value}</span>
               </div>
             ))}
           </div>
         )
       })()}
 
-      {/* Video upload */}
-      <div className="admin-2col" style={{ marginTop: '1px' }}>
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <DeviceUpload bookingId={b.id} />
-        </div>
-        <div style={{ background: 'var(--color-surface)', padding: '1.5rem' }}>
-          <DriveImport bookingId={b.id} />
-        </div>
+      {/* Actions — read the essentials above, then decide here */}
+      <div className="adm-card" style={{ marginTop: '1rem' }}>
+        <p className="adm-card-label">
+          Actions
+        </p>
+        <BookingActions
+          bookingId={b.id}
+          currentStatus={b.status}
+          currentNotes={b.notes ?? ''}
+          payUrl={payUrl}
+          customerName={c?.name ?? null}
+          depositAmount={String(b.depositAmount ?? 0)}
+          balanceAmount={String(b.balanceAmount ?? 0)}
+          depositExpiresAt={fmtTimestamp(b.depositExpiresAt)}
+          depositPaidAt={fmtTimestamp(b.depositPaidAt)}
+          autoPayOptIn={b.autoPayOptIn}
+          balancePaid={!!b.balanceChargedAt}
+        />
       </div>
 
-      {/* Gallery link */}
-      {b.galleryToken && (
-        <div style={{ background: 'var(--color-surface)', border: '1px solid rgba(255,255,255,0.06)', padding: '1.5rem', marginTop: '1px' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '0.75rem' }}>
-            Client Gallery Link
-          </p>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.45)', marginBottom: '0.75rem', wordBreak: 'break-all' }}>
-            {process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'}/gallery/{b.galleryToken}
-          </p>
-          <Link
-            href={`/gallery/${b.galleryToken}`}
-            target="_blank"
-            style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-amber-light)', textDecoration: 'none' }}
-          >
-            Preview Gallery →
-          </Link>
+      {/* After the event — for the videographer */}
+      <div className="adm-card" style={{ marginTop: '1rem' }}>
+        <p className="adm-card-label" style={{ marginBottom: '0.4rem' }}>After the event</p>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)', marginBottom: '1.5rem' }}>
+          For the videographer. Upload the finished video and share the gallery link.
+        </p>
+
+        <div className="admin-2col">
+          <DeviceUpload bookingId={b.id} />
+          <DriveImport bookingId={b.id} />
         </div>
-      )}
+
+        {b.galleryToken && (
+          <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border-dark)' }}>
+            <p className="adm-card-label" style={{ marginBottom: '0.75rem' }}>
+              Client Gallery Link
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '0.75rem', wordBreak: 'break-all' }}>
+              {process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'}/gallery/{b.galleryToken}
+            </p>
+            <Link href={`/gallery/${b.galleryToken}`} target="_blank" className="adm-link">
+              Preview Gallery →
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
