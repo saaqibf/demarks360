@@ -290,12 +290,17 @@ export function DemarksLandingFx() {
         })
       })
 
-      // Step photos: a soft one-way fade-up as they enter. No covering shutter —
-      // that re-covered images on ScrollTrigger refresh and never reopened them.
-      gsap.utils.toArray<HTMLElement>('.dm-step-visual').forEach((el) => {
-        gsap.from(el, {
-          autoAlpha: 0, y: 40, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      // Each experience step fades up as it enters — photo first, copy a beat behind,
+      // so the section reveals itself dynamically as you reach it (the photos also
+      // drift continuously via the CSS Ken Burns). No covering shutter.
+      gsap.utils.toArray<HTMLElement>('.dm-step').forEach((step) => {
+        const visual = step.querySelector<HTMLElement>('.dm-step-visual')
+        const copy = step.querySelector<HTMLElement>('.dm-step-copy')
+        const targets = [visual, copy].filter(Boolean) as HTMLElement[]
+        if (!targets.length) return
+        gsap.from(targets, {
+          autoAlpha: 0, y: 44, duration: 0.9, ease: 'power3.out', stagger: 0.12,
+          scrollTrigger: { trigger: step, start: 'top 82%', once: true },
         })
       })
       mm.add('(min-width: 641px)', () => {

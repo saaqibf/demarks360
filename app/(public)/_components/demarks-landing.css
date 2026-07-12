@@ -898,7 +898,7 @@
   }
   .dm-frame:hover .dm-frame-media { transform: scale(1.06); filter: brightness(1.08); }
   .dm-frame:hover .dm-frame-card span { transform: translateY(-3px); }
-  .dm-step-visual:hover .dm-step-media { transform: scale(1.05); }
+  .dm-step-visual:hover .dm-step-media { animation-play-state: paused; filter: sepia(0.12) saturate(0.95) contrast(1.05) brightness(1.06); }
   .dm-rev-main:hover,
   .dm-rev-side:hover {
     transform: translateY(-4px);
@@ -946,6 +946,22 @@
   object-fit: cover;
   /* One unified static grade so the stills read as a single curated edit */
   filter: sepia(0.12) saturate(0.9) contrast(1.05);
+}
+/* Living booth photos: a slow continuous drift so the experience never sits still.
+   Each step drifts at its own pace/direction so they don't move in lockstep. */
+@keyframes dmKenBurns {
+  0%   { transform: scale(1.07) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.15) translate3d(-1.6%, -1.4%, 0); }
+  100% { transform: scale(1.07) translate3d(0, 0, 0); }
+}
+.dm-step-media {
+  animation: dmKenBurns 24s ease-in-out infinite;
+  will-change: transform;
+}
+.dm-step:nth-child(2) .dm-step-media { animation-duration: 28s; animation-direction: alternate-reverse; }
+.dm-step:nth-child(3) .dm-step-media { animation-duration: 32s; animation-delay: -6s; }
+@media (prefers-reduced-motion: reduce) {
+  .dm-step-media { animation: none; }
 }
 .dm-step-visual::after,
 .dm-frame-ph::after {
