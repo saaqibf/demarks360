@@ -3,14 +3,21 @@ import { useState, useEffect } from 'react'
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false)
+  const [entered, setEntered] = useState(false)
 
   useEffect(() => {
-    if (!localStorage.getItem('cookie-consent')) setVisible(true)
+    if (!localStorage.getItem('cookie-consent')) {
+      setVisible(true)
+      // next frame so the entrance transition actually plays
+      const id = requestAnimationFrame(() => setEntered(true))
+      return () => cancelAnimationFrame(id)
+    }
   }, [])
 
   function accept() {
+    setEntered(false)
     localStorage.setItem('cookie-consent', 'true')
-    setVisible(false)
+    setTimeout(() => setVisible(false), 260)
   }
 
   if (!visible) return null
@@ -18,31 +25,56 @@ export function CookieConsent() {
   return (
     <div
       role="region"
-      aria-label="Cookie consent"
+      aria-label="Cookie notice"
       style={{
-        position: 'fixed', bottom: '1rem', left: '1rem',
-        zIndex: 1000, background: 'color-mix(in srgb, var(--color-charcoal-2) 92%, transparent)',
-        backdropFilter: 'blur(6px)', color: 'var(--color-muted-light)',
-        fontFamily: 'var(--font-ui)', fontSize: '0.6rem', letterSpacing: '0.05em',
-        padding: '0.4rem 0.5rem 0.4rem 0.9rem', display: 'flex', alignItems: 'center', gap: '0.6rem',
-        borderRadius: '999px', whiteSpace: 'nowrap', border: '1px solid var(--color-border-dark)',
-        maxWidth: 'calc(100vw - 2rem)',
+        position: 'fixed', bottom: '1.25rem', left: '1.25rem', zIndex: 1000,
+        width: 'min(320px, calc(100vw - 2.5rem))',
+        background: 'color-mix(in srgb, var(--color-charcoal-2) 90%, transparent)',
+        backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+        border: '1px solid color-mix(in srgb, var(--color-amber) 22%, transparent)',
+        borderRadius: '14px',
+        boxShadow: '0 18px 50px -20px rgba(0,0,0,0.7)',
+        padding: '1rem 1.15rem 1.05rem',
+        color: 'var(--color-muted-light)',
+        transform: entered ? 'translateY(0)' : 'translateY(14px)',
+        opacity: entered ? 1 : 0,
+        transition: 'transform 0.4s cubic-bezier(.2,.7,.2,1), opacity 0.4s ease',
       }}
     >
-      <span>We use cookies to make this site work.</span>
-      <button
-        onClick={accept}
-        aria-label="Accept cookies"
-        style={{
-          background: 'var(--color-amber-light)',
-          color: 'var(--color-charcoal)', border: 'none', padding: '0.3rem 0.75rem',
-          borderRadius: '999px', flexShrink: 0,
-          fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 600,
-          letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer',
-        }}
-      >
-        OK
-      </button>
+      <p style={{
+        margin: 0, fontFamily: 'var(--font-body)', fontSize: '0.8rem', lineHeight: 1.55,
+        color: 'var(--color-sand)',
+      }}>
+        We use a few cookies to keep bookings and the site working. That is it.
+      </p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.85rem' }}>
+        <button
+          onClick={accept}
+          style={{
+            background: 'var(--color-amber-light)', color: 'var(--color-charcoal)',
+            border: 'none', padding: '0.5rem 1.3rem', borderRadius: '999px',
+            fontFamily: 'var(--font-body)', fontSize: '0.68rem', fontWeight: 700,
+            letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer',
+            boxShadow: 'inset 0 1px 0 rgba(255,248,235,0.5), 0 6px 18px -6px rgba(201,145,63,0.5)',
+            transition: 'transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.5), 0 10px 26px -6px rgba(232,178,92,0.6)' }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.5), 0 6px 18px -6px rgba(201,145,63,0.5)' }}
+        >
+          Sounds good
+        </button>
+        <a
+          href="/privacy"
+          style={{
+            fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'var(--color-muted-light)',
+            textDecoration: 'none', borderBottom: '1px solid transparent', transition: 'border-color 0.3s ease, color 0.3s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-amber-light)'; e.currentTarget.style.borderBottomColor = 'var(--color-amber-light)' }}
+          onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-muted-light)'; e.currentTarget.style.borderBottomColor = 'transparent' }}
+        >
+          Privacy
+        </a>
+      </div>
     </div>
   )
 }

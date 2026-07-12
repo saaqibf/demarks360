@@ -260,7 +260,9 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '560px' }}>
           <button
             onClick={() => { setPhase('start'); setSelectedEnd(null) }}
-            style={{ alignSelf: 'flex-start', marginBottom: '0.5rem', background: 'rgba(201,145,63,0.14)', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--color-amber-light)', padding: '0.55rem 1.1rem' }}
+            style={{ alignSelf: 'flex-start', marginBottom: '0.5rem', background: 'rgba(201,145,63,0.14)', border: '1px solid var(--color-amber)', borderRadius: '999px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.08em', color: 'var(--color-amber-light)', padding: '0.6rem 1.2rem', transition: 'background 0.3s cubic-bezier(.2,.7,.2,1), transform 0.3s cubic-bezier(.2,.7,.2,1)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,145,63,0.24)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(201,145,63,0.14)'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
             Starts at {formatTime(selectedStart)} · Change
           </button>
@@ -275,13 +277,16 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
                 key={minutes}
                 disabled={!fits}
                 onClick={() => setSelectedEnd(minutesToTime(startMin + minutes))}
+                onMouseEnter={e => { if (fits && !isSelected) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-amber-light) 55%, transparent)'; e.currentTarget.style.boxShadow = '0 14px 34px -18px color-mix(in srgb, var(--color-amber) 55%, transparent)' } }}
+                onMouseLeave={e => { if (fits && !isSelected) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' } }}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
-                  padding: '1rem 1.25rem', border: '1px solid', textAlign: 'left',
+                  padding: '1.15rem 1.35rem', border: '1px solid', borderRadius: '12px', textAlign: 'left',
                   borderColor: isSelected ? 'var(--color-amber-light)' : fits ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
                   background: isSelected ? 'rgba(232,178,92,0.14)' : fits ? 'var(--color-surface)' : 'rgba(255,255,255,0.02)',
                   color: fits ? 'var(--color-text-light)' : 'rgba(245,240,234,0.2)',
-                  cursor: fits ? 'pointer' : 'not-allowed', transition: 'all 0.15s',
+                  boxShadow: isSelected ? 'inset 0 0 0 1px color-mix(in srgb, var(--color-amber-light) 40%, transparent)' : 'none',
+                  cursor: fits ? 'pointer' : 'not-allowed', transition: 'transform 0.35s cubic-bezier(.2,.7,.2,1), border-color 0.35s ease, box-shadow 0.35s ease',
                 }}
               >
                 <span style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
@@ -311,30 +316,38 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             const valid = endMin > startMin && dur >= 60 && isSpanFree(startMin, dur, availability)
             const price = valid ? Math.ceil((dur / 60) * PRICING.HOURLY_RATE) : 0
             return (
-              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap', padding: '1rem 1.25rem', border: '1px solid rgba(201,145,63,0.4)', background: 'var(--color-surface)' }}>
-                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)' }}>Ends at</span>
-                <input
-                  type="time"
-                  value={customEnd}
-                  onChange={e => setCustomEnd(e.target.value)}
-                  aria-label="Custom end time"
-                  style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-amber)', borderRadius: '8px', color: 'var(--color-text-light)', fontFamily: 'var(--font-ui)', fontSize: '0.9rem', padding: '0.55rem 0.7rem', colorScheme: 'dark' }}
-                />
-                {valid && <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-amber-light)' }}>{(dur / 60).toFixed(dur % 60 ? 1 : 0)} hrs · ${price}</span>}
-                <button
-                  type="button"
-                  disabled={!valid}
-                  onClick={() => setSelectedEnd(customEnd)}
-                  style={{ background: valid ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.06)', color: valid ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)', border: 'none', padding: '0.55rem 1.2rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: valid ? 'pointer' : 'not-allowed' }}
-                >
-                  Use
-                </button>
-                <button type="button" onClick={() => { setShowCustomEnd(false); setCustomEnd('') }} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.5)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.72rem' }}>Cancel</button>
+              <div style={{ padding: '1.4rem 1.4rem 1.3rem', border: '1px solid color-mix(in srgb, var(--color-amber) 40%, transparent)', borderRadius: '14px', background: 'linear-gradient(160deg, var(--color-charcoal-2), var(--color-charcoal-3))', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 20px 50px -30px rgba(0,0,0,0.7)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                    <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.92rem', fontWeight: 600, color: 'var(--color-text-light)' }}>Ends at</span>
+                    <input
+                      type="time"
+                      value={customEnd}
+                      onChange={e => setCustomEnd(e.target.value)}
+                      aria-label="Custom end time"
+                      style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-amber)', borderRadius: '10px', color: 'var(--color-text-light)', fontFamily: 'var(--font-ui)', fontSize: '1.05rem', padding: '0.7rem 0.9rem', colorScheme: 'dark', letterSpacing: '0.02em' }}
+                    />
+                  </label>
+                  {valid && <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.15rem', color: 'var(--color-amber-light)', whiteSpace: 'nowrap' }}>{(dur / 60).toFixed(dur % 60 ? 1 : 0)} hrs &middot; ${price}</span>}
+                </div>
                 {customEnd && !valid && (
-                  <span style={{ width: '100%', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-amber)' }}>
+                  <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-amber)' }}>
                     {endMin <= startMin ? 'End time must be after the start.' : dur < 60 ? 'Minimum booking is 1 hour.' : 'That runs into another booking on this day.'}
                   </span>
                 )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', marginTop: '0.1rem' }}>
+                  <button
+                    type="button"
+                    disabled={!valid}
+                    onClick={() => setSelectedEnd(customEnd)}
+                    style={{ background: valid ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.06)', color: valid ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)', border: 'none', padding: '0.7rem 1.6rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: valid ? 'pointer' : 'not-allowed', boxShadow: valid ? 'inset 0 1px 0 rgba(255,248,235,0.5), 0 8px 22px -8px rgba(232,178,92,0.55)' : 'none', transition: 'transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s ease' }}
+                    onMouseEnter={e => { if (valid) e.currentTarget.style.transform = 'translateY(-1px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
+                  >
+                    Use this time
+                  </button>
+                  <button type="button" onClick={() => { setShowCustomEnd(false); setCustomEnd('') }} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.55)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.78rem' }}>Cancel</button>
+                </div>
               </div>
             )
           })()}
@@ -354,10 +367,14 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             onClick={() => onSelect(selectedStart, selectedEnd)}
             style={{
               marginTop: '1rem', background: 'var(--color-amber-light)',
-              color: 'var(--color-charcoal)', border: 'none', padding: '0.85rem 2rem',
-              borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700,
-              letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
+              color: 'var(--color-charcoal)', border: 'none', padding: '0.95rem 2.2rem',
+              borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.72rem', fontWeight: 700,
+              letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer',
+              boxShadow: 'inset 0 1px 0 rgba(255,248,235,0.55), 0 10px 26px -8px rgba(232,178,92,0.5)',
+              transition: 'transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s ease',
             }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.6), 0 16px 40px -10px rgba(232,178,92,0.6)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.55), 0 10px 26px -8px rgba(232,178,92,0.5)' }}
           >
             Continue →
           </button>
