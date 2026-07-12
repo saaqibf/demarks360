@@ -228,28 +228,35 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             const free = customStart && availability ? !isSlotBlocked(customStart, availability) : false
             const ok = min >= 0 && inHours && free
             return (
-              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                <input
-                  type="time"
-                  value={customStart}
-                  onChange={e => setCustomStart(e.target.value)}
-                  aria-label="Custom start time"
-                  style={{ background: 'var(--color-surface)', border: '1px solid var(--color-amber)', borderRadius: '8px', color: 'var(--color-text-light)', fontFamily: 'var(--font-ui)', fontSize: '0.9rem', padding: '0.6rem 0.8rem', colorScheme: 'dark' }}
-                />
-                <button
-                  type="button"
-                  disabled={!ok}
-                  onClick={() => { setSelectedStart(customStart); setSelectedEnd(null); setPhase('duration'); setShowCustomStart(false) }}
-                  style={{ background: ok ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.06)', color: ok ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: ok ? 'pointer' : 'not-allowed' }}
-                >
-                  Use this time
-                </button>
-                <button type="button" onClick={() => { setShowCustomStart(false); setCustomStart('') }} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.5)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.72rem' }}>Cancel</button>
+              <div style={{ padding: '1.4rem 1.4rem 1.3rem', border: '1px solid color-mix(in srgb, var(--color-amber) 40%, transparent)', borderRadius: '14px', background: 'linear-gradient(160deg, var(--color-charcoal-2), var(--color-charcoal-3))', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 20px 50px -30px rgba(0,0,0,0.7)' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                  <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.92rem', fontWeight: 600, color: 'var(--color-text-light)' }}>Starts at</span>
+                  <input
+                    type="time"
+                    value={customStart}
+                    onChange={e => setCustomStart(e.target.value)}
+                    aria-label="Custom start time"
+                    style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-amber)', borderRadius: '10px', color: 'var(--color-text-light)', fontFamily: 'var(--font-ui)', fontSize: '1.05rem', padding: '0.7rem 0.9rem', colorScheme: 'dark', letterSpacing: '0.02em' }}
+                  />
+                </label>
                 {customStart && !ok && (
-                  <span style={{ width: '100%', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-amber)' }}>
+                  <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-amber)' }}>
                     {!inHours ? 'Pick a time between 6:00 AM and 11:30 PM.' : 'That time overlaps another booking. Try another.'}
                   </span>
                 )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', marginTop: '0.1rem' }}>
+                  <button
+                    type="button"
+                    disabled={!ok}
+                    onClick={() => { setSelectedStart(customStart); setSelectedEnd(null); setPhase('duration'); setShowCustomStart(false) }}
+                    style={{ background: ok ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.06)', color: ok ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)', border: 'none', padding: '0.7rem 1.6rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: ok ? 'pointer' : 'not-allowed', boxShadow: ok ? 'inset 0 1px 0 rgba(255,248,235,0.5), 0 8px 22px -8px rgba(232,178,92,0.55)' : 'none', transition: 'transform 0.3s cubic-bezier(.2,.7,.2,1)' }}
+                    onMouseEnter={e => { if (ok) e.currentTarget.style.transform = 'translateY(-1px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
+                  >
+                    Use this time
+                  </button>
+                  <button type="button" onClick={() => { setShowCustomStart(false); setCustomStart('') }} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.55)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.78rem' }}>Cancel</button>
+                </div>
               </div>
             )
           })()}
