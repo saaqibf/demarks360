@@ -197,15 +197,15 @@ export function DemarksLandingFx() {
           h1.querySelectorAll<HTMLElement>('.dm-line').forEach((l) => { l.style.overflow = 'visible' })
           const chars = splitToChars(h1)
           gsap.set(h1, { autoAlpha: 1 })
+          // Each letter is "traced" in with a slow left-to-right stroke wipe, one
+          // after another, so the headline reads as being hand-written.
+          gsap.set(chars, { clipPath: 'inset(-15% 0% -15% 0%)', willChange: 'clip-path' })
           gsap.from(chars, {
-            opacity: 0,
-            filter: 'blur(12px)',
-            scale: 0.6,
-            transformOrigin: '50% 62%',
-            duration: 0.6,
-            ease: 'power2.out',
-            stagger: 0.032,
-            delay: 0.15,
+            clipPath: 'inset(-15% 100% -15% 0%)',
+            duration: 0.26,
+            ease: 'power1.inOut',
+            stagger: 0.078,
+            delay: 0.25,
           })
         }
       }

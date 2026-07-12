@@ -51,15 +51,17 @@ export function CookieConsent() {
         <button
           onClick={accept}
           style={{
-            background: 'var(--color-amber-light)', color: 'var(--color-charcoal)',
-            border: 'none', padding: '0.5rem 1.3rem', borderRadius: '999px',
-            fontFamily: 'var(--font-body)', fontSize: '0.68rem', fontWeight: 700,
-            letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer',
-            boxShadow: 'inset 0 1px 0 rgba(255,248,235,0.5), 0 6px 18px -6px rgba(201,145,63,0.5)',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            background: 'linear-gradient(180deg, var(--color-amber-light) 0%, var(--color-amber) 100%)',
+            color: 'var(--color-charcoal)',
+            border: 'none', padding: '0.62rem 1.5rem', borderRadius: '999px', lineHeight: 1,
+            fontFamily: 'var(--font-body)', fontSize: '0.72rem', fontWeight: 700,
+            letterSpacing: '0.14em', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap',
+            boxShadow: 'inset 0 1px 0 rgba(255,248,235,0.55), 0 8px 20px -8px rgba(201,145,63,0.55)',
             transition: 'transform 0.3s cubic-bezier(.2,.7,.2,1), box-shadow 0.3s ease',
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.5), 0 10px 26px -6px rgba(232,178,92,0.6)' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.5), 0 6px 18px -6px rgba(201,145,63,0.5)' }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.6), 0 12px 28px -8px rgba(232,178,92,0.6)' }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,248,235,0.55), 0 8px 20px -8px rgba(201,145,63,0.55)' }}
         >
           Sounds good
         </button>
