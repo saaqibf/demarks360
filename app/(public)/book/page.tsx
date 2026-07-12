@@ -224,7 +224,7 @@ function BookPageInner() {
                   }}>
                     {done ? '✓' : stepNum}
                   </span>
-                  <span className="step-label" style={{
+                  <span className={`step-label${active ? ' step-label-active' : ''}`} style={{
                     fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600,
                     letterSpacing: '0.1em', textTransform: 'uppercase',
                     color: active ? 'var(--color-text-light)' : 'var(--color-muted-light)',

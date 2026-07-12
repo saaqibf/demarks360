@@ -134,7 +134,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
         )}
 
         {/* Day grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', padding: '0.75rem' }}>
+        <div className="dm-cal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', padding: '0.75rem' }}>
           {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
           {Array.from({ length: daysInMonth }, (_, i) => {
             const day = i + 1

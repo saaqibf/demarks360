@@ -611,7 +611,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
             {/* ── end Your 360 Experience ──────────────────────────── */}
           </div>
 
-          <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div className="dm-step-actions" style={{ marginTop: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <button
               onClick={handleSubmit}
               style={{

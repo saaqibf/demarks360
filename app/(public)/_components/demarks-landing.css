@@ -1026,3 +1026,207 @@
   .dm-faq-icon,
   .dm-faq summary { transition: none; }
 }
+
+/* ─── Site-wide motion & micro-interactions (additive) — workflow ── */
+/* ═══ ADDITIVE MOTION & MICRO-INTERACTION LAYER ═══════════════════════
+   Appended polish only. Nothing above is modified or removed — every
+   existing animation, hover, transition and reveal stays intact.
+   Buttons (.btn-*, .dm-cta-btn) are intentionally left untouched.
+   All new work animates transform / opacity / filter / box-shadow only,
+   uses ease-out exponential curves, and degrades under reduced motion. */
+
+/* ── Easing refinement ────────────────────────────────────────────────
+   Nudge the hover layer's plain `ease` transitions toward an ease-out
+   exponential curve. Higher specificity so nothing existing is redeclared;
+   the timing-function is refined in place, the animated properties are
+   inherited from the base rules unchanged. */
+.dm-landing .dm-hero-proof span,
+.dm-landing .dm-wordmark,
+.dm-landing .dm-frame-card span { transition-timing-function: var(--ease-out-expo); }
+.dm-landing .dm-flow-step { transition-timing-function: var(--ease-out-expo); }
+.dm-landing .dm-faq summary { transition-timing-function: var(--ease-out-expo); }
+
+/* ── Eyebrow labels — editorial leading tick that draws in ─────────────
+   A short amber rule ignites before each section index, so the labels
+   read as film-slate markers instead of static text. */
+.dm-landing .dm-eyebrow { position: relative; }
+.dm-landing .dm-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 1.7rem;
+  height: 1px;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+  background: linear-gradient(90deg, var(--color-amber), color-mix(in srgb, var(--color-amber) 20%, transparent));
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: dmEyebrowTick 0.9s var(--ease-out-expo) 0.12s both;
+}
+.dm-landing .dm-sect-head.dm-center .dm-eyebrow::before { transform-origin: center; }
+@keyframes dmEyebrowTick { to { transform: scaleX(1); } }
+
+/* ── Section headings — em accent warms as the line settles ────────────
+   A whisper of extra glow on the italic amber phrase, breathing slowly so
+   the headings never feel frozen. Additive to the baked text-shadow. */
+.dm-landing h2 em {
+  transition: text-shadow 0.6s var(--ease-out-expo);
+  will-change: text-shadow;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dm-landing .dm-sect-head:hover h2 em,
+  .dm-landing .dm-check-inner:hover h2 em {
+    text-shadow:
+      0 0 24px color-mix(in srgb, var(--color-amber-light) 48%, transparent),
+      0 0 58px color-mix(in srgb, var(--color-amber) 30%, transparent);
+  }
+}
+
+/* ── Nav links — keyboard parity for the existing underline ────────────
+   (dm-nav-link lives in globals, outside .dm-landing, so this stays
+   unscoped. The hover underline already exists; this reveals it on
+   :focus-visible too.) */
+.dm-nav-link:focus-visible { color: var(--color-sand) !important; }
+.dm-nav-link:focus-visible::after { transform: scaleX(1); }
+
+/* ── Trust badges — lift and glint on hover ───────────────────────────
+   Keeps the existing colour swap, adds a small rise plus a warm bloom on
+   the bold stat so the proof row feels tactile. */
+.dm-landing .dm-hero-proof span {
+  display: inline-block;
+  transition: color 0.3s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+}
+.dm-landing .dm-hero-proof b { transition: text-shadow 0.4s var(--ease-out-expo); }
+@media (hover: hover) and (pointer: fine) {
+  .dm-landing .dm-hero-proof span:hover { transform: translateY(-2px); }
+  .dm-landing .dm-hero-proof span:hover b {
+    text-shadow: 0 0 18px color-mix(in srgb, var(--color-amber-light) 55%, transparent);
+  }
+}
+
+/* ── Scroll hint — the film-leader line drips on a slow loop ───────────*/
+.dm-landing .dm-scroll-hint::after {
+  transform-origin: top center;
+  animation: dmScrollDrip 2.4s var(--ease-out-quart) infinite;
+}
+@keyframes dmScrollDrip {
+  0%, 100% { transform: scaleY(0.55); opacity: 0.45; }
+  50%      { transform: scaleY(1);    opacity: 1; }
+}
+
+/* ── "How booking works" step numbers — arm the numerals ──────────────
+   The step already warms its top rule on hover; the serif number now
+   rises and glows with it, and reacts to keyboard focus within the step. */
+.dm-landing .dm-flow-no {
+  transition: transform 0.5s var(--ease-out-expo), color 0.4s var(--ease-out-expo), text-shadow 0.4s var(--ease-out-expo);
+  will-change: transform;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dm-landing .dm-flow-step:hover .dm-flow-no {
+    transform: translateY(-3px);
+    color: var(--color-amber-light);
+    text-shadow: 0 0 22px color-mix(in srgb, var(--color-amber) 40%, transparent);
+  }
+}
+.dm-landing .dm-flow-step:focus-within .dm-flow-no {
+  color: var(--color-amber-light);
+  text-shadow: 0 0 22px color-mix(in srgb, var(--color-amber) 40%, transparent);
+}
+
+/* ── FAQ chevron — springs on hover, brightens on focus ───────────────
+   Scoped tighter than the base rule so the rotate transition is preserved
+   (open state still rotates 45deg); we only add a scale + colour response. */
+.dm-landing .dm-faq summary .dm-faq-icon {
+  transition:
+    rotate var(--dur-base, 240ms) var(--ease-out-quart),
+    transform 0.4s var(--ease-out-expo),
+    color 0.3s var(--ease-out-expo);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dm-landing .dm-faq summary:hover .dm-faq-icon {
+    transform: scale(1.16);
+    color: var(--color-amber-light);
+  }
+}
+.dm-landing .dm-faq summary:focus-visible .dm-faq-icon { color: var(--color-amber-light); }
+
+/* ── Availability date field — cinematic focus ring ───────────────────
+   Native date picker rendered dark-appropriate, warm border on hover, and
+   an amber halo on focus that replaces (never removes) the visible ring. */
+.dm-landing .dm-check-form .dm-field {
+  color-scheme: dark;
+  transition:
+    border-color 0.35s var(--ease-out-expo),
+    box-shadow 0.35s var(--ease-out-expo),
+    background-color 0.35s var(--ease-out-expo);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dm-landing .dm-check-form .dm-field:hover {
+    border-color: color-mix(in srgb, var(--color-amber-light) 45%, transparent);
+  }
+}
+.dm-landing .dm-check-form .dm-field:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--color-amber-light) 70%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-amber) 26%, transparent),
+    0 10px 34px -18px color-mix(in srgb, var(--color-amber) 55%, transparent);
+}
+.dm-landing .dm-check-form .dm-field::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.68;
+  filter: sepia(0.4) saturate(1.5) hue-rotate(-12deg) brightness(1.05);
+  transition: opacity 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo);
+}
+.dm-landing .dm-check-form .dm-field:hover::-webkit-calendar-picker-indicator,
+.dm-landing .dm-check-form .dm-field:focus-visible::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+/* ── Gallery frames — keyboard parity for the hover lift ───────────────
+   Mirrors the existing pointer :hover so tabbing through the reel gives the
+   same rise, border and caption nudge. */
+.dm-landing .dm-frame-link:focus-visible .dm-frame-ph {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--color-amber-light) 55%, transparent);
+  box-shadow: 0 26px 60px -28px rgba(0, 0, 0, 0.7);
+}
+.dm-landing .dm-frame-link:focus-visible .dm-frame-card span { transform: translateY(-3px); }
+
+/* ── Footer links — drawn underline on hover and focus ────────────────
+   The links carry inline colour/transition, so we hook a pseudo-element
+   (which inline styles cannot touch) for an animated ink underline. */
+.dm-landing #dm-contact a {
+  position: relative;
+  display: inline-block;
+}
+.dm-landing #dm-contact a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.12rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.65;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dm-landing #dm-contact a:hover::after { transform: scaleX(1); }
+}
+.dm-landing #dm-contact a:focus-visible::after { transform: scaleX(1); }
+
+/* ── Reduced motion — final states, no looping or lifts ────────────────*/
+@media (prefers-reduced-motion: reduce) {
+  .dm-landing .dm-eyebrow::before { animation: none; transform: scaleX(1); }
+  .dm-landing .dm-scroll-hint::after { animation: none; }
+  .dm-landing .dm-hero-proof span:hover,
+  .dm-landing .dm-flow-step:hover .dm-flow-no,
+  .dm-landing .dm-frame-link:focus-visible .dm-frame-ph,
+  .dm-landing .dm-frame-link:focus-visible .dm-frame-card span,
+  .dm-landing .dm-faq summary:hover .dm-faq-icon,
+  .dm-landing .dm-check-form .dm-field:hover::-webkit-calendar-picker-indicator,
+  .dm-landing .dm-check-form .dm-field:focus-visible::-webkit-calendar-picker-indicator { transform: none; }
+}

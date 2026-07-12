@@ -109,7 +109,7 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
         Review your request
       </h2>
 
-      <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)' }}>
+      <div className="dm-summary" style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)' }}>
         <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>Booking Summary</p>
           <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)' }}>
@@ -183,7 +183,7 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
         </p>
       )}
 
-      <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div className="dm-step-actions" style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <button
           onClick={handleSubmit}
           disabled={!state.agreedToTerms || submitting}

@@ -1,67 +1,37 @@
-# SESSION-STATE — Demarks360
-_Last updated: 2026-06-11, written for session handoff/compaction. THE canonical resume point._
+# SESSION-STATE
 
-## Higgsfield media drop DONE (2026-07-07)
-- Founder enabled a Higgsfield 3-day Plus trial to generate real-looking assets. Full set of AI marketing media generated (Seedance 2.0 video + Nano Banana images), dropped into `public/media/`, and shipped live:
-  - `hero-loop.mp4` (cinematic 360-booth celebration loop; hero `<video>` src repointed from hero.mp4 to hero-loop.mp4).
-  - `step-1/2/3.jpg` for the Experience frames, `gallery-1..4.jpg` for the Fresh Reels gallery (birthday, wedding, grad, multigenerational family — inclusive, warm amber/gold, on-brand, not nightclub). gallery-5 still a placeholder.
-- BUG FIXED: `proxy.ts` Clerk `config.matcher` did not exclude video extensions, so every `/media/*.mp4` 404'd (jpgs worked). Added `mp4|webm|mov|m4v` to the matcher. See memory [[reference-demarks-video-middleware]].
-- Trial credits now spent (~2 left). To generate more (animate gallery stills into loops, variations), founder needs the Plus plan to continue; it auto-renews at $49/mo after the 3-day trial unless cancelled ("cancel auto-renewal" in chat).
+_Auto-written on PreCompact (manual) — Sat, Jul 11, 2026, 12:50 p.m. (America/Edmonton). Deterministic snapshot; not a substitute for judgement._
 
-## WAVE 2 AUDIT FIXES SHIPPED (2026-07-09, 5120e3d)
-- Agent-implemented, lead-verified (build/tsc/65 tests exit 0), shipped live. Money path: availability fails CLOSED (503 + locked dates + retry states), checkout idempotent (cached pendingBookingId/clientSecret, server updates pending in place), pending bookings expire after 30 min (PENDING_BOOKING_TTL_MINUTES) and no longer eat the 2/day cap, server-side slot-overlap 409. "Other"/free-text event types sanitized and accepted (no more end-of-funnel 422). /api/bookings/manage requires booking email as ownership proof (uniform 404, rate limited, HTML-escaped). Prices/FAQ single-sourced from lib/pricing + lib/content/landing.ts. Schema indexes added; migration 0002 generated but NOT run (run pnpm drizzle-kit migrate deliberately). Focus outlines restored on booking inputs. Wizard persists to sessionStorage (30 min TTL). three.js ring dynamically imported. CI at .github/workflows/ci.yml (lint step omitted; pre-existing lint debt documented). Full log: docs/reports/agents/implementation-log.md. Audit reports in docs/reports/agents/.
+## Git
+- **Branch:** `main`
+- **Uncommitted changes:**
+- `M app/(public)/_components/demarks-landing-fx.tsx`
+- `M app/(public)/_components/demarks-landing.css`
+- `M app/(public)/page.tsx`
+- `M components/public/site-footer.tsx`
+- `?? public/atmosphere/`
 
-## The contract (locked 2026-06-10 via founder grill interview — never re-ask)
-- Demarks360 + Harmony Living launch TOGETHER: real users, real payments, custom domains.
-- Founder picked Direction A "Golden Hour Cinema"; full-website mockup `~/design-directions/demarks-d-cinema-website.html` is the visual target.
-- Roles: Claude Code = design/immersive/backend/final review of ALL code. Codex CLI = section rollout/security/completion from Claude's written specs (Codex cannot use Claude skills).
-- Check-ins with founder ONLY for: design approval + money steps. Everything else autonomous with summary reports. Founder said "accept all edits", "if blocked just wait".
-- Budget: $0 build, ~$20-40/mo at launch. Founder owns NO launch assets yet.
-- Copy rules: NO em dashes anywhere; testimonials/reviews in natural human voice (founder reversed his old em-dash rule 2026-06-10).
-- Commits: author Saaqib Fagbenro <saaqibf.ayodimeji@gmail.com>, short messages, no AI mentions, no Co-Authored-By.
+## Recent commits
+```
+df7b74f Email: professional booth hero photo, Fraunces serif with web-safe fallback
+13ec0b4 Rebuild emails: photo hero, editorial layout, restrained palette
+46593ef Cinematic email header banner and refined ticket layout
+6344516 Redesign booking emails: light trust-first layout, logo, ticket summary
+5fd0e2c Enable SmileCam add-on, restyle emails to brand, 5 day lead time
+ae79234 Request-first booking: admin approval, 50 percent deposit links, event-day balance
+```
 
-## State right now
-- **Design foundation COMMITTED (ef186d9)**: globals.css swapped to Golden Hour Cinema (Bodoni Moda + Figtree, amber #C9913F/#E8B25C, stage charcoal #141009, cream #F5EFE2, pill buttons, em-italic-amber heading accents) + hero.tsx rebuilt (centered serif title card over the real Cloudinary event video, letterbox bars, amber pill CTA, italic stat bar). tsc + pnpm build PASS. Verified visually via Playwright on localhost:3777 (dev server may still be running, port 3777; kill it if stale).
-- **Codex RUNNING (detached, pid logged in codex-rollout.log)**: executing `DESIGN-ROLLOUT-SPEC.md` — restyling all remaining public components (how-it-works, date-checker, pricing, testimonials, faq, footer, nav, etc.) to the cinema system. It will NOT commit. **FIRST ACTION NEXT SESSION: check `~/demarks360/codex-rollout.log` tail + `git diff` → review → tsc + build → screenshot localhost → commit if sound.**
-- Security audit PASSED (rate limits on notify/availability/bookings, webhook sig validation, isAdmin on all admin routes). No TODOs. Drive import implemented (needs GOOGLE_SERVICE_ACCOUNT_JSON env, founder step).
-- Real pricing lives in pricing.tsx / PRODUCT copy ("From $225") — mockup's $349/$549/$749 were placeholders; spec told Codex to keep real prices. Founder still must confirm final pricing.
-- Visual QA loop tooling: `~/design-directions/shoot.mjs` (mockups) and `shoot-live.mjs` (localhost) — Playwright via harmony's node_modules, channel:'chrome'.
+## Recent asks (last 10)
+- continue
+- nope i wont lie [Image #14] [Image #15] [Image #16] the invintations still look horrible like i dont know what references you are getting but the proportions are all off so what we will do now is you will allow me to see many options that i
+- where are these options?
+- okay so i want you to combine the photo and the editorial one where i want the photo in the booking request and i like how the setup is for the editorial part
+- change the picture that is being used for booking request and give a more professional font and that will be perfect
+- /compact
+- This session is being continued from a previous conversation that ran out of context. The summary below covers the earlier portion of the conversation. Summary: 1. Primary Request and Intent: The conversation spans multiple requests for two
+- lets continue where you left off
+- option A
+- build the session-state hook
 
-## Design rollout + deploy DONE (2026-06-11/12)
-- ALL pages restyled to Golden Hour Cinema and committed: d50a9ce (16 public sections via Codex, reviewed), 8b248b6 (book flow, admin, gallery, sign-up, preview pages; crimson token retired), b77c759 (month availability endpoint: calendar now 1 request/month instead of 30 vs the 10/min rate limit; Clerk dev domain in CSP), 630efac (Cloudinary in media-src). DESIGN.md rewritten to the new system; .claude/rules/frontend.md updated.
-- DEPLOYED to production: https://demarks360.vercel.app (project existed with envs from 26d ago; alias auto-set; public 200). Verified live via screenshots: homepage + /book calendar render correctly.
-- **Hero video BROKEN at source: Cloudinary account dfonotyfb is DISABLED** ("cloud_name dfonotyfb is disabled"). No local/Mux copy of dds3_1_rqhg7x.mp4 exists. Hero degrades gracefully (dark stage + letterbox + glow, looks intentional). FOUNDER STEP: re-enable Cloudinary (or provide the original booth footage; Mux account is empty and ready as alternative host). Video element left in place; recovers automatically when the asset is reachable.
-
-## Mockup port DONE (2026-06-17, commit 000ace5)
-- `app/(public)/page.tsx` is now a direct structural port of `demarks-d-cinema-website.html`. All sections present: WebGL Three.js torus ring hero, 3-step experience, 3-pack pricing (real prices: $300/2hr, $450/3hr, from $600/4+hr), date check band (links to /book), horizontal-drift gallery reel, reviews grid, FAQ accordion, finale CTA, full footer.
-- `app/(public)/_components/demarks-landing.css` — dm- prefixed scoped CSS ported directly from the mockup.
-- `app/(public)/_components/demarks-landing-fx.tsx` — client component: Three.js 0.184 torus ring (amber metalness, orbiting cream sphere/light), GSAP 3.15 preloader degree counter, letterbox bar intro, Lenis 1.x smooth scroll, all scroll reveals + parallax + gallery drift. Returns loader+bars+grain JSX.
-- lenis 1.3.23 + three 0.184 + @types/three installed (pnpm).
-- Build + tsc PASS. Verified visually via Playwright shots: hero ✓, steps ✓, pricing ✓, check band ✓, gallery ✓, reviews ✓, FAQ ✓, finale ✓, footer ✓.
-- Deployed to demarks360.vercel.app (prod, 2026-06-17).
-
-## Next steps (in order)
-1. e2e booking test in Stripe test mode on the live deployment.
-2. Founder: confirm package pricing; Cloudinary account (above).
-3. Founder money steps: domain, Clerk pk_live, Stripe live, Vercel Pro.
-
-## Founder-pending
-- Confirm real package pricing (current: $300/2hr, $450/3hr, from $600/4+hr — derived from $150/hr base).
-
-## Fable 5 UI overhaul PASS 1 DONE (2026-07-05, uncommitted)
-Executed ~/fable5-prompt.md (D-1..D-10) in this working tree. NOT yet committed — founder to review first.
-- globals.css: .t-display letter-spacing → -0.02em, .btn-primary weight → 700, new .btn-secondary--dark hover, .hero-ghost-cta hover fill, .dm-nav-* rules (moved out of site-nav <style> tag), --color-success/--color-pending status tokens.
-- site-nav: scroll state (.dm-nav--scrolled) gives Book-now CTA stronger amber fill; hamburger hover; inline <style> removed.
-- Hero: amber wash 0.22, headline -0.02em, letterbox bars via color-mix; pricing: "Most booked" pill sized, dark-context CTA hover; testimonials: ★ rows to spec, Bodoni italic names, caps event lines, amber left rule on secondary cards, quote mark hardened (z-index/pointer-events).
-- Booking: stepper circles 30px amber-active; date-picker today ring + amber selected; checkout pay button spinner; FIXED real bug: Stripe appearance.variables used var() strings (unresolvable in iframe) → literal values.
-- Verified: tsc PASS, pnpm build PASS, hex-class grep zero in app/ + components/.
-
-## CRITICAL DISCOVERY (2026-07-06): homepage does NOT use components/public/*
-The live landing is app/(public)/page.tsx (459-line monolith, dm-* classes) + _components/demarks-landing.css + demarks-landing-fx.tsx (GSAP+Lenis+Three.js ring, preloader, letterbox bars). components/public/hero|pricing|testimonials|how-it-works|faq|benefit-blocks are an OLD unused iteration — do not spend effort there. site-nav.tsx IS used on /book.
-Also: the Cloudinary video (dds3_1_rqhg7x.mp4) now returns 401 — no public media assets exist.
-
-## Media plumbing shipped (2026-07-06)
-All 9 landing media slots (hero film + 3 step frames + 5 gallery frames) render /media/* files with graceful fallback to designed placeholders. Founder drops real footage into public/media/ per public/media/README.md (exact filenames + specs there) and redeploys — page lights up with zero code changes. Timecode ticks in bottom letterbox bar. fx script removes missing media elements and pauses offscreen videos.
-
-## 4K media quality upgrade (2026-07-09, shipped)
-hero-loop.mp4 AI-upscaled 720p→4K master, served as 2560x1440 H.264 (5.1MB). gallery-1..4 + step-1..3 upscaled to 4K and re-cut at ~2x display res (1792/2400px wide JPEGs). 4K masters in media-masters/ (gitignored, local only). Verified live. NOTE: page.tsx references /media/gallery-{1..4}.mp4 which don't exist in the repo — poster JPGs show instead; harmless but worth deciding (add loops or drop the <video> tags).
+## Where we left off (tail of last assistant message)
+Existing global settings has a `PostToolUse` hook — I'll add `PreCompact` and `SessionEnd` alongside it without touching it. First, the generator script.

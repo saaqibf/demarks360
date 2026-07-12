@@ -180,7 +180,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
       </p>
 
       {phase === 'start' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', maxWidth: '560px' }}>
+        <div className="dm-time-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', maxWidth: '560px' }}>
           {slotsWithStatus.map(({ slot, blocked }) => {
             const isSelectedStart = slot === selectedStart
             return (

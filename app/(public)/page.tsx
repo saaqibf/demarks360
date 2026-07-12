@@ -83,7 +83,6 @@ export default function HomePage() {
               preload="metadata"
               poster="/media/hero-still.jpg"
             >
-              <source src="/media/hero-loop.webm" type="video/webm" />
               <source src="/media/hero-loop.mp4" type="video/mp4" />
             </video>
             <div className="dm-hero-scrim" />

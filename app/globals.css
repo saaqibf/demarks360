@@ -206,62 +206,222 @@ body {
 }
 
 /* ─── Buttons ────────────────────────────────────────────────────── */
+/*
+ * Golden Hour Cinema button system.
+ * Primary reads as a warm, physical golden object: a top-edge catch-light
+ * and a deeper lower edge give it a domed feel, it rests on a warm shadow,
+ * lifts + glows with a single travelling glint on hover, and compresses
+ * crisply on press. Ghost + outline variants share the same lift/glow
+ * language on light and dark surfaces. Pill radius (999px) preserved.
+ */
+:root {
+  --btn-ease: cubic-bezier(.2,.7,.2,1);
+}
+
 .btn-primary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-charcoal);
   background: var(--color-amber-light);
-  padding: 0.95rem 2.5rem;
+  padding: 1rem 2.5rem;
   border-radius: 999px;
   text-decoration: none;
-  display: inline-block;
-  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   border: none;
   cursor: pointer;
-  min-height: 44px;
+  min-height: 46px;
+  /* domed top catch-light, warm lower edge, warm resting shadow */
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,235,0.55),
+    inset 0 -1px 0 rgba(20,16,9,0.18),
+    0 2px 10px rgba(20,16,9,0.22),
+    0 10px 26px rgba(201,145,63,0.20);
+  transition:
+    transform 0.4s var(--btn-ease),
+    box-shadow 0.4s var(--btn-ease),
+    filter 0.3s var(--btn-ease);
 }
-.btn-primary:hover { transform: scale(1.04); box-shadow: 0 12px 44px rgba(232,178,92,0.35); }
-.btn-primary:active { transform: scale(0.98); transition-duration: 0.1s; }
+/* single light glint: sits above the amber surface, below the text */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255,252,244,0.55) 48%,
+    transparent 76%
+  );
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: transform 0.7s var(--btn-ease), opacity 0.4s var(--btn-ease);
+  pointer-events: none;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.05) saturate(1.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,235,0.60),
+    inset 0 -1px 0 rgba(20,16,9,0.20),
+    0 4px 14px rgba(20,16,9,0.28),
+    0 16px 40px rgba(232,178,92,0.42);
+}
+.btn-primary:hover::before,
+.btn-primary:focus-visible::before {
+  transform: translateX(120%);
+  opacity: 1;
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.985);
+  filter: brightness(0.99);
+  /* pressed-in: inner shadow flips, outer glow collapses */
+  box-shadow:
+    inset 0 2px 6px rgba(20,16,9,0.28),
+    inset 0 -1px 0 rgba(255,248,235,0.22),
+    0 2px 8px rgba(20,16,9,0.22);
+  transition-duration: 0.09s;
+}
+/* large CTA (hero + finale): defined here, previously used but unstyled */
+.btn-primary.btn--lg {
+  font-size: 0.78rem;
+  letter-spacing: 0.26em;
+  padding: 1.2rem 3rem;
+  min-height: 54px;
+}
 
 .btn-secondary {
+  position: relative;
   font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-text);
   background: transparent;
-  padding: 0.95rem 2.5rem;
+  padding: 1rem 2.5rem;
   border-radius: 999px;
   text-decoration: none;
-  display: inline-block;
-  transition: background 0.3s ease, color 0.3s ease;
-  border: 1px solid rgba(28,22,16,0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(28,22,16,0.28);
   cursor: pointer;
-  min-height: 44px;
+  min-height: 46px;
+  transition:
+    transform 0.4s var(--btn-ease),
+    box-shadow 0.4s var(--btn-ease),
+    background 0.3s var(--btn-ease),
+    color 0.3s var(--btn-ease),
+    border-color 0.3s var(--btn-ease);
 }
-.btn-secondary:hover { background: var(--color-charcoal); color: var(--color-text-light); }
-.btn-secondary:active { transform: scale(0.98); }
-/* On dark sections the charcoal hover fill is invisible — use a sand wash instead */
-.btn-secondary--dark:hover { background: rgba(245,239,226,0.08); color: var(--color-sand); }
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  background: var(--color-charcoal);
+  color: var(--color-text-light);
+  border-color: var(--color-charcoal);
+  box-shadow: 0 10px 26px rgba(20,16,9,0.22);
+}
+.btn-secondary:active {
+  transform: translateY(0) scale(0.985);
+  box-shadow: 0 3px 10px rgba(20,16,9,0.20);
+  transition-duration: 0.09s;
+}
+/* On dark sections the charcoal fill is invisible: cream-tinted outline
+   that warms to amber and lifts on a soft golden glow instead. */
+.btn-secondary--dark {
+  color: var(--color-text-light);
+  border-color: rgba(245,239,226,0.28);
+}
+.btn-secondary--dark:hover {
+  background: rgba(245,239,226,0.08);
+  color: var(--color-sand);
+  border-color: var(--color-amber-light);
+  box-shadow: 0 10px 30px rgba(232,178,92,0.20);
+}
 
 .btn-ghost {
+  position: relative;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--color-text-light);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  opacity: 0.55;
-  transition: opacity 0.2s ease;
+  gap: 0.45rem;
+  opacity: 0.72;
+  transition: opacity 0.3s var(--btn-ease), color 0.3s var(--btn-ease);
 }
-.btn-ghost:hover { opacity: 1; }
+/* amber underline wipes in from the left (matches .dm-nav-link idiom) */
+.btn-ghost::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: var(--color-amber-light);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--btn-ease);
+}
+.btn-ghost:hover {
+  opacity: 1;
+  color: var(--color-amber-light);
+}
+.btn-ghost:hover::after { transform: scaleX(1); }
+.btn-ghost:active { transform: translateY(0.5px); transition-duration: 0.09s; }
+/* nudge a trailing arrow/icon forward on hover */
+.btn-ghost svg,
+.btn-ghost .btn-arrow { transition: transform 0.4s var(--btn-ease); }
+.btn-ghost:hover svg,
+.btn-ghost:hover .btn-arrow { transform: translateX(3px); }
+
+/* Pill-shaped keyboard focus ring; overrides the global :focus-visible
+   radius:3px so pills stay round when focused. Visible on light + dark. */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-primary::before,
+  .btn-ghost::after,
+  .btn-ghost svg,
+  .btn-ghost .btn-arrow { transition: none; }
+  /* keep colour + glow feedback, drop all movement */
+  .btn-primary:hover,
+  .btn-primary:active,
+  .btn-secondary:hover,
+  .btn-secondary:active,
+  .btn-ghost:active { transform: none; }
+  .btn-primary:hover::before,
+  .btn-primary:focus-visible::before { opacity: 0; transform: translateX(-120%); }
+  .btn-ghost:hover svg,
+  .btn-ghost:hover .btn-arrow { transform: none; }
+}
 
 /* ─── Section spacing — varied for rhythm, not uniform ──────────── */
 .sec-pad        { padding: 7rem 3rem; }
@@ -494,3 +654,142 @@ button, a, [role="button"] { min-height: 44px; }
 }
 .marquee-track:hover { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+/* ─── Booking flow (mobile-first + surfaces) — workflow ─────────── */
+/* ═══════════════════════════════════════════════════════════════════
+   Booking wizard — mobile-first flow + premium detail surfaces
+   Additive only. Scoped to .step-content / .step-bar so nothing else on
+   the site is touched. Component inline styles keep winning on color and
+   background (that's the brand); these rules add only what the inline
+   styles never set — radius, depth, tap-target floors, and phone
+   ergonomics. Motion is transform/opacity/box-shadow with the house
+   ease-out curve, no bounce. Reduced-motion respected at the bottom.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Every control in the flow clears the 44px WCAG floor (the boomerang
+   toggle sets its own 24px height, so it opts out via role="switch"). */
+.step-content button:not([role="switch"]) { min-height: 44px; }
+
+/* ── Form fields: rounded, deeper, thumb-friendly ──────────────────── */
+.step-content input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.step-content select,
+.step-content textarea {
+  border-radius: 10px;
+  min-height: 48px;
+  transition: box-shadow .18s cubic-bezier(.2,.7,.2,1),
+              border-color .18s cubic-bezier(.2,.7,.2,1),
+              background .18s cubic-bezier(.2,.7,.2,1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03),
+              0 1px 2px rgba(0,0,0,0.25);
+}
+.step-content textarea { min-height: 96px; }
+.step-content input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):hover,
+.step-content select:hover,
+.step-content textarea:hover {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05),
+              0 0 0 1px rgba(201,145,63,0.35);
+}
+.step-content input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+.step-content select:focus,
+.step-content textarea:focus {
+  box-shadow: 0 0 0 3px rgba(201,145,63,0.18),
+              inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+/* ── Calendar: generous, tactile day cells ─────────────────────────── */
+.dm-cal-grid button {
+  min-height: 44px;
+  border-radius: 8px !important;
+  transition: background .15s cubic-bezier(.2,.7,.2,1),
+              transform .15s cubic-bezier(.2,.7,.2,1),
+              box-shadow .15s cubic-bezier(.2,.7,.2,1);
+}
+.dm-cal-grid button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.30);
+}
+
+/* ── Start-time slots: tactile lift on tap-eligible cells ──────────── */
+.dm-time-grid button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+
+/* ── Premium surface: soft depth + rounded clip on the review summary ─ */
+.dm-summary {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05),
+              0 18px 40px -24px rgba(0,0,0,0.70);
+}
+
+/* ── Primary action button: warm cinematic glow (desktop + mobile) ─── */
+.dm-step-actions button:first-child:not(:disabled) {
+  box-shadow: 0 8px 24px -10px rgba(201,145,63,0.55);
+  transition: box-shadow .2s cubic-bezier(.2,.7,.2,1),
+              transform .2s cubic-bezier(.2,.7,.2,1),
+              background .2s ease;
+}
+.dm-step-actions button:first-child:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px -10px rgba(201,145,63,0.70);
+}
+
+/* Reveal only the CURRENT step's label on the compact progress bar so
+   the phone header reads "● Time" instead of five unlabeled dots.
+   Two-class specificity + !important beats the inline media rule. */
+@media (max-width: 640px) {
+  .step-bar .step-label-active { display: inline-flex !important; }
+}
+
+/* ═══════════ Phone (≤640px): dead-simple, one-handed ══════════════ */
+@media (max-width: 640px) {
+  /* 16px kills iOS's focus-zoom; inline sets 0.9rem so !important is required */
+  .step-content input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  .step-content select,
+  .step-content textarea { font-size: 16px !important; min-height: 52px; }
+  .step-content textarea { min-height: 104px; }
+
+  /* Calendar fills the thumb zone with big square targets */
+  .dm-cal-grid { padding: 0.5rem !important; }
+  .dm-cal-grid button { min-height: 48px; margin: 2px !important; }
+
+  /* Start-time grid drops from four cramped columns to two roomy ones */
+  .dm-time-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+  .dm-time-grid button { min-height: 52px; font-size: 0.95rem !important; }
+
+  /* Full-width primary CTA that sticks to the bottom of the long steps.
+     Negative gutters full-bleed it to the screen edges; sticky (not
+     fixed) keeps it in flow so it never orphans the last field. */
+  .dm-step-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 40;
+    margin-top: 2rem !important;
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    padding: 0.9rem 1.25rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(to top, var(--color-ink) 72%, rgba(20,16,9,0));
+    border-top: 1px solid var(--color-border-dark);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .dm-step-actions button { min-height: 52px; }
+  .dm-step-actions button:first-child { flex: 1 1 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-content input,
+  .step-content select,
+  .step-content textarea,
+  .dm-cal-grid button,
+  .dm-time-grid button,
+  .dm-step-actions button:first-child { transition: none; }
+  .dm-cal-grid button:not(:disabled):hover,
+  .dm-time-grid button:not(:disabled):hover,
+  .dm-step-actions button:first-child:not(:disabled):hover { transform: none; }
+}
