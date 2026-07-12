@@ -70,6 +70,12 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
   // Fail closed: on fetch failure no slot is selectable; the user gets a retry state instead
   const [loadError, setLoadError] = useState(false)
   const [retryNonce, setRetryNonce] = useState(0)
+  // "Other time" escape hatches so odd start times / lengths (2:30, ending 7:30)
+  // are possible without losing the easy one-tap presets.
+  const [showCustomStart, setShowCustomStart] = useState(false)
+  const [customStart, setCustomStart] = useState('')
+  const [showCustomEnd, setShowCustomEnd] = useState(false)
+  const [customEnd, setCustomEnd] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -179,7 +185,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
           : `${formatFriendlyDate(date)} · Starting at ${selectedStart ? formatTime(selectedStart) : ''}`}
       </p>
 
-      {phase === 'start' && (
+      {phase === 'start' && (<>
         <div className="dm-time-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', maxWidth: '560px' }}>
           {slotsWithStatus.map(({ slot, blocked }) => {
             const isSelectedStart = slot === selectedStart
@@ -207,7 +213,48 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             )
           })}
         </div>
-      )}
+        <div style={{ marginTop: '12px', maxWidth: '560px' }}>
+          {!showCustomStart ? (
+            <button
+              type="button"
+              onClick={() => setShowCustomStart(true)}
+              style={{ background: 'none', border: '1px dashed rgba(201,145,63,0.5)', borderRadius: '10px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-amber-light)', padding: '0.8rem 1.1rem', width: '100%' }}
+            >
+              Other time (any minute, e.g. 2:15 or 2:45)
+            </button>
+          ) : (() => {
+            const min = customStart ? timeToMinutes(customStart) : -1
+            const inHours = min >= 6 * 60 && min <= 23 * 60 + 30
+            const free = customStart && availability ? !isSlotBlocked(customStart, availability) : false
+            const ok = min >= 0 && inHours && free
+            return (
+              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <input
+                  type="time"
+                  value={customStart}
+                  onChange={e => setCustomStart(e.target.value)}
+                  aria-label="Custom start time"
+                  style={{ background: 'var(--color-surface)', border: '1px solid var(--color-amber)', borderRadius: '8px', color: 'var(--color-text-light)', fontFamily: 'var(--font-ui)', fontSize: '0.9rem', padding: '0.6rem 0.8rem', colorScheme: 'dark' }}
+                />
+                <button
+                  type="button"
+                  disabled={!ok}
+                  onClick={() => { setSelectedStart(customStart); setSelectedEnd(null); setPhase('duration'); setShowCustomStart(false) }}
+                  style={{ background: ok ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.06)', color: ok ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: ok ? 'pointer' : 'not-allowed' }}
+                >
+                  Use this time
+                </button>
+                <button type="button" onClick={() => { setShowCustomStart(false); setCustomStart('') }} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.5)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.72rem' }}>Cancel</button>
+                {customStart && !ok && (
+                  <span style={{ width: '100%', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-amber)' }}>
+                    {!inHours ? 'Pick a time between 6:00 AM and 11:30 PM.' : 'That time overlaps another booking. Try another.'}
+                  </span>
+                )}
+              </div>
+            )
+          })()}
+        </div>
+      </>)}
 
       {phase === 'duration' && selectedStart && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '560px' }}>
@@ -249,6 +296,48 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
               </button>
             )
           })}
+          {!showCustomEnd ? (
+            <button
+              type="button"
+              onClick={() => setShowCustomEnd(true)}
+              style={{ background: 'none', border: '1px dashed rgba(201,145,63,0.5)', borderRadius: '10px', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-amber-light)', padding: '0.95rem 1.25rem', textAlign: 'left' }}
+            >
+              Other length — pick an exact end time
+            </button>
+          ) : (() => {
+            const startMin = timeToMinutes(selectedStart)
+            const endMin = customEnd ? timeToMinutes(customEnd) : -1
+            const dur = endMin - startMin
+            const valid = endMin > startMin && dur >= 60 && isSpanFree(startMin, dur, availability)
+            const price = valid ? Math.ceil((dur / 60) * PRICING.HOURLY_RATE) : 0
+            return (
+              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap', padding: '1rem 1.25rem', border: '1px solid rgba(201,145,63,0.4)', background: 'var(--color-surface)' }}>
+                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)' }}>Ends at</span>
+                <input
+                  type="time"
+                  value={customEnd}
+                  onChange={e => setCustomEnd(e.target.value)}
+                  aria-label="Custom end time"
+                  style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-amber)', borderRadius: '8px', color: 'var(--color-text-light)', fontFamily: 'var(--font-ui)', fontSize: '0.9rem', padding: '0.55rem 0.7rem', colorScheme: 'dark' }}
+                />
+                {valid && <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-amber-light)' }}>{(dur / 60).toFixed(dur % 60 ? 1 : 0)} hrs · ${price}</span>}
+                <button
+                  type="button"
+                  disabled={!valid}
+                  onClick={() => setSelectedEnd(customEnd)}
+                  style={{ background: valid ? 'var(--color-amber-light)' : 'rgba(255,255,255,0.06)', color: valid ? 'var(--color-charcoal)' : 'rgba(245,240,234,0.3)', border: 'none', padding: '0.55rem 1.2rem', borderRadius: '999px', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: valid ? 'pointer' : 'not-allowed' }}
+                >
+                  Use
+                </button>
+                <button type="button" onClick={() => { setShowCustomEnd(false); setCustomEnd('') }} style={{ background: 'none', border: 'none', color: 'rgba(245,240,234,0.5)', cursor: 'pointer', fontFamily: 'var(--font-ui)', fontSize: '0.72rem' }}>Cancel</button>
+                {customEnd && !valid && (
+                  <span style={{ width: '100%', fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--color-amber)' }}>
+                    {endMin <= startMin ? 'End time must be after the start.' : dur < 60 ? 'Minimum booking is 1 hour.' : 'That runs into another booking on this day.'}
+                  </span>
+                )}
+              </div>
+            )
+          })()}
         </div>
       )}
 
