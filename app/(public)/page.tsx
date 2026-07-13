@@ -34,13 +34,6 @@ const localBusinessSchema = {
   areaServed: ['Calgary', 'Airdrie', 'Cochrane', 'Chestermere', 'Okotoks', 'Rocky View County'],
   priceRange: '$$',
   openingHours: 'Mo-Su 09:00-22:00',
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.9',
-    reviewCount: '150',
-    bestRating: '5',
-    worstRating: '1',
-  },
   sameAs: ['https://instagram.com/demarks360'],
 }
 
@@ -106,7 +99,7 @@ export default function HomePage() {
               <a className="btn-ghost" href="#dm-experience">See it in action</a>
             </div>
             <div className="dm-hero-proof">
-              <span><b>★ 4.9</b> Google reviews</span>
+              <span><b>Unlimited</b> takes</span>
               <span><b>120fps</b> slow motion</span>
               <span><b>Same-day</b> gallery</span>
             </div>
