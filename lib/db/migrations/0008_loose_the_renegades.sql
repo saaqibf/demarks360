@@ -1,0 +1,1 @@
+ALTER TABLE "bookings" ADD COLUMN "referred_by_booking_id" text;

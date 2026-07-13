@@ -1,0 +1,1 @@
+ALTER TABLE "bookings" ADD COLUMN "touchpix_gallery_url" text;
