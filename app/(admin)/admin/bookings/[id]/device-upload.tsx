@@ -13,7 +13,7 @@ interface Props {
   bookingId: string
 }
 
-const D = 'rgba(255,255,255,0.06)'
+const D = 'var(--adm-border)'
 
 export function DeviceUpload({ bookingId }: Props) {
   const router = useRouter()
@@ -109,7 +109,7 @@ export function DeviceUpload({ bookingId }: Props) {
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '1rem' }}>
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--adm-muted)', marginBottom: '1rem' }}>
         Upload from Device
       </p>
 
@@ -126,17 +126,17 @@ export function DeviceUpload({ bookingId }: Props) {
         onClick={() => inputRef.current?.click()}
         disabled={running}
         style={{
-          width: '100%', border: `1px dashed rgba(255,255,255,0.12)`, borderRadius: '2px',
+          width: '100%', border: `1px dashed var(--adm-border-2)`, borderRadius: '2px',
           padding: '2rem 1rem', background: 'transparent', cursor: running ? 'not-allowed' : 'pointer',
           marginBottom: files.length ? '1rem' : 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
         }}
       >
         <span style={{ fontSize: '1.5rem' }}>📱</span>
-        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.45)' }}>
+        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--adm-text-2)' }}>
           Select videos from camera roll
         </span>
-        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', color: 'rgba(245,240,234,0.25)' }}>
+        <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.58rem', color: 'var(--adm-muted)' }}>
           Tap to browse · multiple files supported
         </span>
       </button>
@@ -152,24 +152,24 @@ export function DeviceUpload({ bookingId }: Props) {
                 background: f.status === 'done' ? 'rgba(52,211,153,0.05)' : f.status === 'error' ? 'rgba(192,41,58,0.04)' : 'transparent',
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: f.status === 'uploading' ? '0.4rem' : 0 }}>
-                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--color-text-light)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '70%' }}>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--adm-text)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '70%' }}>
                     {f.file.name}
                   </p>
                   <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0,
-                    color: f.status === 'done' ? 'var(--color-success)' : f.status === 'error' ? 'var(--color-amber-light)' : f.status === 'processing' ? 'var(--color-pending)' : 'rgba(245,240,234,0.35)'
+                    color: f.status === 'done' ? 'var(--adm-success)' : f.status === 'error' ? 'var(--adm-danger)' : f.status === 'processing' ? 'var(--adm-pending)' : 'var(--adm-muted)'
                   }}>
                     {f.status === 'done' ? '✓ Done' : f.status === 'error' ? 'Error' : f.status === 'processing' ? 'Processing…' : f.status === 'uploading' ? `${f.progress}%` : 'Ready'}
                   </span>
                 </div>
 
                 {f.status === 'uploading' && (
-                  <div style={{ height: '2px', background: 'rgba(255,255,255,0.06)', borderRadius: '1px', overflow: 'hidden' }}>
+                  <div style={{ height: '2px', background: 'var(--adm-border)', borderRadius: '1px', overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${f.progress}%`, background: 'var(--color-amber-light)', transition: 'width 0.2s' }} />
                   </div>
                 )}
 
                 {f.error && (
-                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--color-amber-light)', margin: '0.25rem 0 0' }}>{f.error}</p>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--adm-danger)', margin: '0.25rem 0 0' }}>{f.error}</p>
                 )}
               </div>
             ))}
@@ -192,7 +192,7 @@ export function DeviceUpload({ bookingId }: Props) {
           )}
 
           {allDone && (
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-success)' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--adm-success)' }}>
               All videos uploaded. Gallery is ready to publish.
             </p>
           )}

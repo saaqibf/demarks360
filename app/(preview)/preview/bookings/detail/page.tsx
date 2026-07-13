@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { statusLabel } from '@/lib/admin-status'
+import { GalleryQr } from '@/components/admin/gallery-qr'
 
 const PREVIEW_BOOKING = {
   id: 'bk_001aabbcc',
@@ -48,13 +49,13 @@ export default function PreviewBookingDetail() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2rem', gap: '1rem', flexWrap: 'wrap' }}>
         <div>
-          <p className="adm-eyebrow" style={{ color: 'var(--color-muted-light)', marginBottom: '0.4rem' }}>
+          <p className="adm-eyebrow" style={{ color: 'var(--adm-text-2)', marginBottom: '0.4rem' }}>
             Booking · {b.id.slice(0, 12).toUpperCase()}
           </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1, marginBottom: '0.5rem' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 400, color: 'var(--adm-text)', lineHeight: 1, marginBottom: '0.5rem' }}>
             {b.customer.name}
           </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)' }}>{fmtDate(b.eventDate)}</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--adm-text-2)' }}>{fmtDate(b.eventDate)}</p>
         </div>
         <span className={`adm-pill adm-pill--${b.status}`}>
           {statusLabel(b.status)}
@@ -123,14 +124,14 @@ export default function PreviewBookingDetail() {
       {/* After the event — for the videographer */}
       <div className="adm-card" style={{ marginTop: '1rem' }}>
         <p className="adm-card-label" style={{ marginBottom: '0.4rem' }}>After the event</p>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)', marginBottom: '1.5rem' }}>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--adm-text-2)', marginBottom: '1.5rem' }}>
           For the videographer. Upload the finished video and share the gallery link.
         </p>
 
         <div className="admin-2col">
           <div>
             <p className="adm-card-label">Upload from Device</p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--adm-text-2)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
               Select a video from your phone&apos;s camera roll to upload directly.
             </p>
             <button className="btn-back">
@@ -139,7 +140,7 @@ export default function PreviewBookingDetail() {
           </div>
           <div>
             <p className="adm-card-label">Import from Google Drive</p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--adm-text-2)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
               Paste a Google Drive share link and the video will be imported to the gallery.
             </p>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -151,11 +152,14 @@ export default function PreviewBookingDetail() {
           </div>
         </div>
 
-        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border-dark)' }}>
+        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--adm-border)' }}>
           <p className="adm-card-label" style={{ marginBottom: '0.75rem' }}>Client Gallery Link</p>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '0.75rem', wordBreak: 'break-all' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--adm-text-2)', marginBottom: '1rem', wordBreak: 'break-all' }}>
             https://demarks360.ca/gallery/{b.galleryToken}
           </p>
+          <div style={{ marginBottom: '1rem' }}>
+            <GalleryQr url={`https://demarks360.ca/gallery/${b.galleryToken}`} />
+          </div>
           <span className="adm-link">
             Preview Gallery →
           </span>

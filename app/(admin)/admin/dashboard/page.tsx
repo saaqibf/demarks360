@@ -78,7 +78,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       <div style={{ marginBottom: '2.5rem' }}>
         {needsReview > 0 ? (
           <>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--adm-text)', marginBottom: '1rem' }}>
               {needsReview} {needsReview === 1 ? 'request' : 'requests'} waiting for you
             </h2>
             <div style={{ display: 'grid', gap: '0.75rem' }}>
@@ -89,10 +89,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.25rem', flexWrap: 'wrap' }}
                 >
                   <div>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1.1, marginBottom: '0.35rem' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 400, color: 'var(--adm-text)', lineHeight: 1.1, marginBottom: '0.35rem' }}>
                       {c?.name ?? 'New customer'}
                     </p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)' }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--adm-text-2)' }}>
                       {fmtDate(b.eventDate)} · {b.eventType} · ${Number(b.depositAmount ?? 0).toFixed(0)} deposit
                     </p>
                   </div>
@@ -105,7 +105,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </>
         ) : (
           <div className="adm-card">
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', color: 'var(--color-muted-light)', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', color: 'var(--adm-text-2)', margin: 0 }}>
               You&apos;re all caught up. No new requests.
             </p>
           </div>
@@ -128,7 +128,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
 
       {/* Bookings table */}
       <div className="adm-card" style={{ padding: 0 }}>
-        <div style={{ padding: '0.75rem 1.5rem', borderBottom: '1px solid var(--color-border-dark)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+        <div style={{ padding: '0.75rem 1.5rem', borderBottom: '1px solid var(--adm-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
           <p className="adm-card-label" style={{ margin: 0 }}>
             Bookings
           </p>
@@ -149,7 +149,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         </div>
 
         {rows.length === 0 ? (
-          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--color-muted)', fontFamily: 'var(--font-body)', fontSize: '0.85rem' }}>
+          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--adm-muted)', fontFamily: 'var(--font-body)', fontSize: '0.85rem' }}>
             No bookings yet
           </div>
         ) : (
@@ -174,10 +174,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
                     <td>
                       {c?.name ?? 'Not set'}
                     </td>
-                    <td style={{ color: 'var(--color-muted-light)' }}>
+                    <td style={{ color: 'var(--adm-text-2)' }}>
                       {b.eventType}
                     </td>
-                    <td style={{ color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>
+                    <td style={{ color: 'var(--adm-muted)', whiteSpace: 'nowrap' }}>
                       {fmt(b.startTime)} → {fmt(b.endTime)}
                     </td>
                     <td>

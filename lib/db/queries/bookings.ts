@@ -29,6 +29,7 @@ export interface CreateBookingParams {
   balanceChargeDate: string
   stripePaymentIntentId?: string
   stripeCustomerId?: string
+  referredByBookingId?: string | null
 }
 
 export async function createBookingRecord(params: CreateBookingParams) {
@@ -54,9 +55,46 @@ export async function createBookingRecord(params: CreateBookingParams) {
       eventName: params.eventName ?? null,
       designNotes: params.designNotes ?? null,
       eventPreferences: params.eventPreferences ?? null,
+      referredByBookingId: params.referredByBookingId ?? null,
     })
     .returning()
   return booking
+}
+
+/** Resolve a ?ref=<galleryToken> to the referring booking's id, if it exists. */
+export async function getBookingIdByGalleryToken(token: string): Promise<string | null> {
+  const [row] = await db
+    .select({ id: bookings.id })
+    .from(bookings)
+    .where(eq(bookings.galleryToken, token))
+    .limit(1)
+  return row?.id ?? null
+}
+
+/** The booking (with customer) that referred this one, for admin display. */
+export async function getReferrer(bookingId: string) {
+  const [self] = await db
+    .select({ referredBy: bookings.referredByBookingId })
+    .from(bookings)
+    .where(eq(bookings.id, bookingId))
+    .limit(1)
+  if (!self?.referredBy) return null
+  const [row] = await db
+    .select({ booking: bookings, customer: customers })
+    .from(bookings)
+    .leftJoin(customers, eq(bookings.customerId, customers.id))
+    .where(eq(bookings.id, self.referredBy))
+    .limit(1)
+  return row ?? null
+}
+
+/** How many bookings were driven by this booking's event gallery. */
+export async function countReferralsFrom(bookingId: string): Promise<number> {
+  const rows = await db
+    .select({ id: bookings.id })
+    .from(bookings)
+    .where(eq(bookings.referredByBookingId, bookingId))
+  return rows.length
 }
 
 // Re-submitting the wizard updates the existing requested booking instead of inserting a
@@ -138,6 +176,14 @@ export async function updateBookingStatus(
 
 export async function updateBookingNotes(id: string, notes: string) {
   await db.update(bookings).set({ notes }).where(eq(bookings.id, id))
+}
+
+export async function setTouchpixGalleryUrl(id: string, touchpixGalleryUrl: string | null) {
+  await db.update(bookings).set({ touchpixGalleryUrl }).where(eq(bookings.id, id))
+}
+
+export async function setClipCuration(id: string, clipCuration: { hidden?: string[]; featured?: string[] }) {
+  await db.update(bookings).set({ clipCuration }).where(eq(bookings.id, id))
 }
 
 export async function approveBooking(

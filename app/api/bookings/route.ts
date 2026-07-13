@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createBookingSchema } from '@/lib/validations/booking'
 import { checkBookingAvailability } from '@/lib/availability'
-import { createBookingRecord, getBookingWithCustomer, getOrCreateCustomer, updateRequestedBooking } from '@/lib/db/queries/bookings'
+import { createBookingRecord, getBookingWithCustomer, getOrCreateCustomer, updateRequestedBooking, getBookingIdByGalleryToken } from '@/lib/db/queries/bookings'
 import { ADDON_CATALOG, calculateBookingCost, balanceChargeDate, timeToMinutes, PRICING } from '@/lib/pricing'
 import { ADMIN_EMAIL, sendEmail } from '@/lib/email/send'
 import { requestReceivedEmail } from '@/lib/email/templates/request-received'
@@ -102,7 +102,13 @@ export async function POST(req: NextRequest) {
   }
 
   if (!bookingId) {
-    const booking = await createBookingRecord({ ...bookingFields, customerId: customer.id })
+    // Referral attribution: a guest who landed here from an event gallery carries
+    // a dm_ref cookie holding that event's gallery token. Resolve it to the
+    // referring booking (never self-referential for a brand-new booking).
+    const ref = req.cookies.get('dm_ref')?.value
+    const referredByBookingId = ref ? await getBookingIdByGalleryToken(ref).catch(() => null) : null
+
+    const booking = await createBookingRecord({ ...bookingFields, customerId: customer.id, referredByBookingId })
     bookingId = booking.id
   }
 

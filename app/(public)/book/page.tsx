@@ -179,6 +179,16 @@ function BookPageInner() {
     hydrated.current = true
   }, [])
 
+  // Referral capture: a guest arriving from an event gallery carries ?ref=<token>.
+  // Persist it in a cookie so it survives the multi-step wizard and is read
+  // server-side when the booking is created.
+  useEffect(() => {
+    const ref = params.get('ref')
+    if (ref && /^[a-z0-9]{6,40}$/i.test(ref)) {
+      document.cookie = `dm_ref=${encodeURIComponent(ref)}; path=/; max-age=${60 * 60 * 24 * 60}; SameSite=Lax`
+    }
+  }, [params])
+
   useEffect(() => {
     if (!hydrated.current) return
     try {

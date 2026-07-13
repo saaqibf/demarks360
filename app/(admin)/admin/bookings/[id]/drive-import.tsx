@@ -19,9 +19,9 @@ function fmtSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-const D = 'rgba(255,255,255,0.06)'
-const LABEL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)' }
-const VAL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)' }
+const D = 'var(--adm-border)'
+const LABEL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'var(--adm-muted)' }
+const VAL: React.CSSProperties = { fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--adm-text)' }
 
 export function DriveImport({ bookingId }: Props) {
   const router = useRouter()
@@ -104,7 +104,7 @@ export function DriveImport({ bookingId }: Props) {
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)', marginBottom: '1rem' }}>
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--adm-muted)', marginBottom: '1rem' }}>
         Import from Google Drive
       </p>
 
@@ -117,9 +117,9 @@ export function DriveImport({ bookingId }: Props) {
           placeholder="Paste Drive folder link or ID…"
           onKeyDown={e => e.key === 'Enter' && handleList()}
           style={{
-            flex: 1, background: 'rgba(255,255,255,0.04)', border: `1px solid ${D}`,
+            flex: 1, background: '#FFFFFF', border: `1px solid ${D}`,
             borderRadius: '2px', padding: '0.6rem 0.8rem',
-            fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-text-light)',
+            fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--adm-text)',
             outline: 'none',
           }}
         />
@@ -127,11 +127,11 @@ export function DriveImport({ bookingId }: Props) {
           onClick={handleList}
           disabled={listing || !folderUrl.trim()}
           style={{
-            background: 'rgba(255,255,255,0.06)', border: `1px solid ${D}`,
+            background: 'var(--adm-surface-2)', border: `1px solid ${D}`,
             borderRadius: '2px', padding: '0 1rem',
             fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700,
             letterSpacing: '0.1em', textTransform: 'uppercase',
-            color: listing ? 'rgba(245,240,234,0.3)' : 'var(--color-text-light)',
+            color: listing ? 'var(--adm-muted)' : 'var(--adm-text)',
             cursor: listing ? 'not-allowed' : 'pointer',
           }}
         >
@@ -140,7 +140,7 @@ export function DriveImport({ bookingId }: Props) {
       </div>
 
       {listError && (
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--color-amber-light)', marginBottom: '1rem' }}>
+        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--adm-danger)', marginBottom: '1rem' }}>
           {listError}
         </p>
       )}
@@ -162,7 +162,7 @@ export function DriveImport({ bookingId }: Props) {
                     <p style={{ ...VAL, marginBottom: '0.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</p>
                     <p style={{ ...LABEL, fontSize: '0.6rem' }}>{fmtSize(file.size)}</p>
                     {importErrors[file.id] && (
-                      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--color-amber-light)', marginTop: '0.2rem' }}>{importErrors[file.id]}</p>
+                      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--adm-danger)', marginTop: '0.2rem' }}>{importErrors[file.id]}</p>
                     )}
                   </div>
                   <button
@@ -170,12 +170,12 @@ export function DriveImport({ bookingId }: Props) {
                     disabled={state === 'loading' || state === 'done'}
                     style={{
                       flexShrink: 0,
-                      background: state === 'done' ? 'rgba(52,211,153,0.15)' : state === 'error' ? 'rgba(192,41,58,0.15)' : 'rgba(255,255,255,0.06)',
-                      border: `1px solid ${state === 'done' ? 'rgba(52,211,153,0.3)' : D}`,
+                      background: state === 'done' ? 'var(--adm-success-bg)' : state === 'error' ? 'var(--adm-danger-bg)' : 'var(--adm-surface-2)',
+                      border: `1px solid ${state === 'done' ? 'var(--adm-success)' : D}`,
                       borderRadius: '2px', padding: '0.3rem 0.75rem',
                       fontFamily: 'var(--font-ui)', fontSize: '0.58rem', fontWeight: 700,
                       letterSpacing: '0.1em', textTransform: 'uppercase',
-                      color: state === 'done' ? 'var(--color-success)' : state === 'loading' ? 'rgba(245,240,234,0.35)' : 'var(--color-text-light)',
+                      color: state === 'done' ? 'var(--adm-success)' : state === 'loading' ? 'var(--adm-muted)' : 'var(--adm-text)',
                       cursor: state === 'loading' || state === 'done' ? 'not-allowed' : 'pointer',
                       whiteSpace: 'nowrap',
                     }}
@@ -204,16 +204,16 @@ export function DriveImport({ bookingId }: Props) {
           )}
 
           {allDone && (
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-success)' }}>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--adm-success)' }}>
               All videos imported. Gallery is ready to publish.
             </p>
           )}
         </>
       )}
 
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.25)', marginTop: '1rem', lineHeight: 1.6 }}>
+      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'var(--adm-muted)', marginTop: '1rem', lineHeight: 1.6 }}>
         {serviceAccountEmail
-          ? <>Share the Drive folder with <strong style={{ color: 'rgba(245,240,234,0.45)' }}>{serviceAccountEmail}</strong> (Viewer access) before listing files.</>
+          ? <>Share the Drive folder with <strong style={{ color: 'var(--adm-text-2)' }}>{serviceAccountEmail}</strong> (Viewer access) before listing files.</>
           : 'Google Drive import requires GOOGLE_SERVICE_ACCOUNT_JSON with a service account client_email. Share folders with that service account; OAuth is intentionally not implemented here because it requires user secrets.'}
         {configNote && <span style={{ display: 'block', marginTop: '0.4rem' }}>{configNote}</span>}
       </p>

@@ -7,18 +7,13 @@ export function SiteNav() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('')
   const [scrolled, setScrolled] = useState(false)
-  const [hidden, setHidden] = useState(false)
   const pathname = usePathname()
   const onBookPage = pathname === '/book'
 
+  // The bar stays pinned at all times so navigation is always one tap away; it
+  // only shifts from transparent to a light frosted state once you leave the top.
   useEffect(() => {
-    let lastY = window.scrollY
-    const onScroll = () => {
-      const y = window.scrollY
-      setScrolled(y > 8)
-      setHidden(y > 160 && y > lastY)
-      lastY = y
-    }
+    const onScroll = () => setScrolled(window.scrollY > 8)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -46,7 +41,6 @@ export function SiteNav() {
       className={[
         'dm-nav-header',
         scrolled ? 'dm-nav--scrolled' : '',
-        hidden && !open ? 'dm-nav-header--hidden' : '',
       ].filter(Boolean).join(' ')}
       style={{
       position: 'fixed',
@@ -55,6 +49,14 @@ export function SiteNav() {
       right: 0,
       zIndex: 1000,
       pointerEvents: 'none',
+      // The bar itself is invisible: no panel, no blur, no border. Only a soft
+      // top-down scrim keeps the floating nav legible over whatever is behind
+      // it, applied the whole way down (a touch lighter once you have scrolled).
+      background: scrolled
+        ? 'linear-gradient(180deg, rgba(16,12,6,0.5) 0%, rgba(16,12,6,0.15) 55%, rgba(16,12,6,0) 100%)'
+        : 'linear-gradient(180deg, rgba(16,12,6,0.66) 0%, rgba(16,12,6,0.28) 44%, rgba(16,12,6,0) 100%)',
+      paddingBottom: '2.4rem',
+      transition: 'background 0.5s ease',
     }}>
       <nav className="dm-nav-bar" style={{
         maxWidth: '1280px',
@@ -66,10 +68,7 @@ export function SiteNav() {
         padding: '0 3rem',
         gap: '2rem',
         pointerEvents: 'auto',
-        background: 'color-mix(in srgb, var(--color-charcoal) 82%, transparent)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid var(--color-border-dark)',
+        background: 'transparent',
       }}>
         <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
           <span style={{

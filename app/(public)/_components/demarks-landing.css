@@ -379,6 +379,49 @@
 .dm-hero h1 .dm-line > span,
 .dm-landing h2 .dm-line > span { display: inline-block; }
 .dm-hero h1 em { font-style: italic; color: var(--color-amber-light); }
+
+/* Hero headline: written by hand. Each letter is a single pen-stroke from a
+   cursive single-line font, drawn one at a time so the line appears to be
+   written. A drop-shadow lifts the ink off the bright hero footage. */
+.dm-hero-headline {
+  display: block;
+  margin: 0 0 0 -0.4rem;
+}
+.dm-hw {
+  display: block;
+  width: 100%;
+  max-width: min(92vw, 46rem);
+  height: auto;
+  overflow: visible;
+  /* Tight near-black outline first, then a soft dark bloom, so thin cream ink
+     reads cleanly over the bright golden-hour footage. */
+  filter:
+    drop-shadow(0 0 2px rgba(8, 5, 2, 0.95))
+    drop-shadow(0 0 2px rgba(8, 5, 2, 0.9))
+    drop-shadow(0 2px 8px rgba(12, 8, 3, 0.8))
+    drop-shadow(0 0 18px rgba(12, 8, 3, 0.55));
+}
+.dm-hw-letter {
+  will-change: stroke-dashoffset;
+}
+/* Warm halo on the gold "the moment." so it glows the way the old italic did. */
+.dm-hw-gold {
+  filter: drop-shadow(0 0 9px color-mix(in srgb, var(--color-amber-light) 60%, transparent));
+}
+@media (prefers-reduced-motion: reduce) {
+  .dm-hw-letter { will-change: auto; }
+}
+.dm-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .dm-hero-sub {
   margin: 2.2rem auto 0;
   font-weight: 300;
@@ -821,7 +864,18 @@
   text-transform: uppercase;
   color: var(--color-muted-light);
 }
-.dm-stars { color: var(--color-amber-light); letter-spacing: 0.25em; }
+.dm-stars {
+  --rating: 5;
+  position: relative; display: inline-block; line-height: 1;
+  font-size: 0.85rem; letter-spacing: 0.22em;
+  color: color-mix(in srgb, var(--color-amber-light) 22%, transparent);
+}
+.dm-stars::before { content: '\2605\2605\2605\2605\2605'; }
+.dm-stars-fill {
+  position: absolute; top: 0; left: 0; overflow: hidden; white-space: nowrap;
+  width: calc(var(--rating) / 5 * 100%); color: var(--color-amber-light);
+}
+.dm-stars-fill::before { content: '\2605\2605\2605\2605\2605'; letter-spacing: 0.22em; }
 
 /* ─── FAQ ────────────────────────────────────────────────────────── */
 .dm-faq-wrap { max-width: 760px; margin: 0 auto; }
@@ -916,25 +970,89 @@
   padding: 16vh 3rem 14vh;
 }
 .dm-finale h2 { margin: 0 auto 3rem; max-width: 18ch; }
-/* The closing orbit reuses the hero track geometry at a smaller scale */
-.dm-finale-orbit {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: min(70vw, 900px);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%) rotateX(72deg) rotateZ(-6deg);
-  border: 1px solid color-mix(in srgb, var(--color-amber) 28%, transparent);
-  border-radius: 50%;
-  pointer-events: none;
+/* Closing scene: a real 360 clip as atmosphere (the spin = every angle),
+   blurred and scrimmed so the words stay front and centre, with rising embers. */
+.dm-finale-media { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+.dm-finale-video {
+  position: absolute; top: 50%; left: 50%; min-width: 108%; min-height: 108%;
+  transform: translate(-50%, -50%) scale(1.04);
+  object-fit: cover; opacity: 0.5; filter: blur(6px) saturate(1.05);
+  animation: dmFinaleDrift 24s ease-in-out infinite alternate;
 }
-.dm-finale-rotator {
-  position: absolute;
-  inset: 0;
-  will-change: transform;
+@keyframes dmFinaleDrift { from { transform: translate(-50%, -50%) scale(1.04); } to { transform: translate(-50%, -52%) scale(1.12); } }
+.dm-finale-scrim {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(58% 60% at 50% 46%, rgba(16,12,6,0.82) 0%, rgba(16,12,6,0.5) 55%, rgba(16,12,6,0.72) 100%),
+    linear-gradient(180deg, var(--color-ink) 0%, rgba(20,16,9,0.4) 22%, rgba(20,16,9,0.4) 78%, var(--color-ink) 100%);
 }
+
+.dm-finale-embers { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+.dm-finale-embers span {
+  position: absolute; bottom: -6%; left: calc((var(--n) + 1) * 6.6%);
+  width: 5px; height: 5px; border-radius: 50%; background: var(--color-amber-light);
+  box-shadow: 0 0 12px 2px color-mix(in srgb, var(--color-amber-light) 60%, transparent);
+  opacity: 0; animation: dmEmberRise 9s ease-in infinite;
+  animation-delay: calc(var(--n) * -0.72s);
+}
+.dm-finale-embers span:nth-child(even) { width: 3px; height: 3px; animation-duration: 12s; }
+.dm-finale-embers span:nth-child(3n) { width: 2px; height: 2px; animation-duration: 14s; }
+@keyframes dmEmberRise {
+  0% { transform: translate(0, 0); opacity: 0; }
+  14% { opacity: 0.9; }
+  70% { opacity: 0.6; }
+  100% { transform: translate(30px, -98vh); opacity: 0; }
+}
+
+/* The gold accent shimmers with warm light, echoing the hero's golden feel */
+.dm-finale .dm-em { animation: dmGoldShimmer 3.6s ease-in-out infinite; }
+@keyframes dmGoldShimmer {
+  0%, 100% { text-shadow: 0 0 14px color-mix(in srgb, var(--color-amber) 30%, transparent); }
+  50% { text-shadow: 0 0 36px color-mix(in srgb, var(--color-amber-light) 62%, transparent), 0 0 12px color-mix(in srgb, var(--color-amber-light) 42%, transparent); }
+}
+
+.dm-finale-eyebrow { display: block; margin-bottom: 1.5rem; }
+.dm-finale-lead { max-width: 44ch; margin: 0 auto 2.4rem; font-family: var(--font-body); font-weight: 300; font-size: 1rem; line-height: 1.7; color: var(--color-muted-light); }
+
 .dm-finale h2,
+.dm-finale .dm-finale-eyebrow,
+.dm-finale .dm-finale-lead,
 .dm-finale .btn-primary { position: relative; z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-finale-video, .dm-finale .dm-em { animation: none; }
+  .dm-finale-embers { display: none; }
+}
+
+/* ─── Opening intro: 0° → 360° over a golden orbit ───────────────── */
+.dm-intro {
+  position: fixed; inset: 0; z-index: 2000;
+  background: var(--color-ink);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; cursor: pointer; will-change: opacity, transform;
+}
+.dm-intro-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.62; }
+.dm-intro-scrim { position: absolute; inset: 0; background: radial-gradient(58% 60% at 50% 50%, rgba(16,12,6,0.3), rgba(16,12,6,0.84) 100%); }
+.dm-intro-center { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; }
+.dm-intro-ring { position: absolute; inset: 0; transform: rotate(-90deg); }
+.dm-intro-ring-track { fill: none; stroke: rgba(245,240,234,0.1); stroke-width: 2; }
+.dm-intro-ring-fill { fill: none; stroke: var(--color-amber-light); stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--color-amber-light) 60%, transparent)); }
+.dm-intro-count { position: relative; font-family: var(--font-display); font-weight: 400; font-size: clamp(2.6rem, 6vw, 3.6rem); color: var(--color-sand); letter-spacing: 0.02em; }
+.dm-intro-brand { position: absolute; bottom: 8vh; left: 50%; transform: translateX(-50%); font-family: var(--font-wordmark, var(--font-display)); font-size: 1.05rem; font-weight: 500; letter-spacing: 0.3em; color: rgba(245,240,234,0.5); margin: 0; }
+.dm-intro-brand span { color: var(--color-amber-light); }
+.dm-intro-skip { position: absolute; top: 1.6rem; right: 1.8rem; background: none; border: none; color: rgba(245,240,234,0.5); font-family: var(--font-body); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: color 0.25s ease; }
+.dm-intro-skip:hover { color: var(--color-sand); }
+
+/* "Real event" badge on the live reel in the landing gallery strip */
+.dm-frame-live {
+  position: absolute; top: 12px; left: 12px; z-index: 3;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.3rem 0.65rem; border-radius: 999px;
+  background: rgba(16,12,6,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-body); font-size: 0.52rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--color-sand);
+}
+.dm-frame-live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-amber-light); box-shadow: 0 0 8px var(--color-amber-light); }
 
 /* ─── Real footage layers — drop files into /public/media ────────── */
 .dm-step-media,

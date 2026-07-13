@@ -10,35 +10,6 @@ const IDLE_DEG_PER_SEC = 360 / 11
 // The hero orbit's resting start angle; the intro head lands here so the light never teleports
 const HERO_START_ANGLE = -50
 
-// Wrap every visible character of an element (recursing into <em> etc.) in an
-// inline-block span so each letter can be animated on its own — used for the
-// hero headline forming letter by letter. Returns the char spans in reading order.
-function splitToChars(root: HTMLElement): HTMLElement[] {
-  const chars: HTMLElement[] = []
-  const walk = (node: Node) => {
-    for (const child of Array.from(node.childNodes)) {
-      if (child.nodeType === Node.TEXT_NODE) {
-        const text = child.textContent ?? ''
-        const frag = document.createDocumentFragment()
-        for (const ch of text) {
-          if (ch === ' ') { frag.appendChild(document.createTextNode(' ')); continue }
-          const span = document.createElement('span')
-          span.textContent = ch
-          span.style.display = 'inline-block'
-          span.style.willChange = 'transform, opacity, filter'
-          chars.push(span)
-          frag.appendChild(span)
-        }
-        node.replaceChild(frag, child)
-      } else if (child.nodeType === Node.ELEMENT_NODE) {
-        walk(child)
-      }
-    }
-  }
-  walk(root)
-  return chars
-}
-
 type Phase = 'pending' | 'intro' | 'none'
 
 export function DemarksLandingFx() {
@@ -187,28 +158,9 @@ export function DemarksLandingFx() {
         // The intro can never block interaction: any input snaps it to the end
         onSkip = () => { introTl?.progress(1) }
         skipEvents.forEach((ev) => window.addEventListener(ev, onSkip!, { once: true, passive: true }))
-      } else {
-        // Intro: the headline forms letter by letter — each character resolves from
-        // a blurred, slightly-enlarged state into focus, left to right, like it is
-        // being written into existence. This is the entrance the hero opens on.
-        const h1 = document.querySelector<HTMLElement>('#dm-hero h1')
-        if (h1) {
-          // the .dm-line masks clip for the old rise; the formation needs them open
-          h1.querySelectorAll<HTMLElement>('.dm-line').forEach((l) => { l.style.overflow = 'visible' })
-          const chars = splitToChars(h1)
-          gsap.set(h1, { autoAlpha: 1 })
-          // Each letter is "traced" in with a slow left-to-right stroke wipe, one
-          // after another, so the headline reads as being hand-written.
-          gsap.set(chars, { clipPath: 'inset(-15% 0% -15% 0%)', willChange: 'clip-path' })
-          gsap.from(chars, {
-            clipPath: 'inset(-15% 100% -15% 0%)',
-            duration: 0.26,
-            ease: 'power1.inOut',
-            stagger: 0.078,
-            delay: 0.25,
-          })
-        }
       }
+      // The hero headline owns its own writing animation (see HeroHeadline); the fx
+      // no longer touches the H1 so the two never fight.
 
       // Signature ambient motion: an amber head laps the tilted track with a comet tail,
       // surged by scroll velocity like the real camera arm being spun

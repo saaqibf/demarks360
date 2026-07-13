@@ -49,7 +49,7 @@ export default function PreviewDashboard() {
       <div style={{ marginBottom: '2.5rem' }}>
         {requests.length > 0 ? (
           <>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '1rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--adm-text)', marginBottom: '1rem' }}>
               {requests.length} {requests.length === 1 ? 'request' : 'requests'} waiting for you
             </h2>
             <div style={{ display: 'grid', gap: '0.75rem' }}>
@@ -60,10 +60,10 @@ export default function PreviewDashboard() {
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.25rem', flexWrap: 'wrap' }}
                 >
                   <div>
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1.1, marginBottom: '0.35rem' }}>
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 400, color: 'var(--adm-text)', lineHeight: 1.1, marginBottom: '0.35rem' }}>
                       {b.customerName}
                     </p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--color-muted-light)' }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--adm-text-2)' }}>
                       {fmtDate(b.eventDate)} · {b.eventType} · ${b.deposit.toFixed(0)} deposit
                     </p>
                   </div>
@@ -76,7 +76,7 @@ export default function PreviewDashboard() {
           </>
         ) : (
           <div className="adm-card">
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', color: 'var(--color-muted-light)', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', color: 'var(--adm-text-2)', margin: 0 }}>
               You&apos;re all caught up. No new requests.
             </p>
           </div>
@@ -99,7 +99,7 @@ export default function PreviewDashboard() {
 
       {/* Bookings table */}
       <div className="adm-card" style={{ padding: 0 }}>
-        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--color-border-dark)' }}>
+        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--adm-border)' }}>
           <p className="adm-card-label" style={{ margin: 0 }}>
             All Bookings
           </p>
@@ -126,10 +126,10 @@ export default function PreviewDashboard() {
                     <td style={{ fontWeight: 600 }}>
                       {b.customerName}
                     </td>
-                    <td style={{ color: 'var(--color-muted-light)' }}>
+                    <td style={{ color: 'var(--adm-text-2)' }}>
                       {b.eventType}
                     </td>
-                    <td style={{ color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>
+                    <td style={{ color: 'var(--adm-muted)', whiteSpace: 'nowrap' }}>
                       {fmt(b.startTime)} → {fmt(b.endTime)}
                     </td>
                     <td>

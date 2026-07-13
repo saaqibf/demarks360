@@ -58,6 +58,15 @@ export const bookings = pgTable('bookings', {
   cardDeletedAt: timestamp('card_deleted_at'),
   galleryToken: text('gallery_token').$defaultFn(() => createId()),
   galleryPublishedAt: timestamp('gallery_published_at'),
+  // Public Touchpix gallery URL for this event. When set, the branded gallery
+  // page mirrors the booth clips live from Touchpix instead of Mux uploads.
+  touchpixGalleryUrl: text('touchpix_gallery_url'),
+  // Per-event clip curation: hidden = never shown publicly (consent/quality),
+  // featured = hand-picked to lead the gallery. Keyed by clip video URL.
+  clipCuration: jsonb('clip_curation').$type<{ hidden?: string[]; featured?: string[] }>(),
+  // Attribution: the booking whose event gallery drove this new booking (a guest
+  // at that event booked their own). Set from the ?ref=<galleryToken> link.
+  referredByBookingId: text('referred_by_booking_id'),
   notes: text('notes'),
   eventName: text('event_name'),
   // Customer's "describe your vision" free text, passed to the overlay designer

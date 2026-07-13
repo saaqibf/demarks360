@@ -9,66 +9,34 @@ const NAV = [
 
 function PreviewSidebar() {
   return (
-    <aside style={{
-      width: '220px',
-      flexShrink: 0,
-      background: 'var(--color-ink)',
-      borderRight: '1px solid rgba(255,255,255,0.06)',
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-      position: 'sticky',
-      top: 0,
-    }}>
-      <div style={{ padding: '1.5rem 1.25rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 500, color: 'var(--color-text-light)' }}>
-          DEMARKS <span style={{ color: 'var(--color-amber)' }}>360</span>
-        </p>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.25)', marginTop: '0.2rem' }}>
-          Admin Panel
-        </p>
+    <aside className="adm-sidebar">
+      <div className="adm-sidebar-head">
+        <p className="adm-sidebar-brand">DEMARKS <span>360</span></p>
+        <p className="adm-sidebar-sub">Admin Panel</p>
       </div>
 
-      <nav style={{ padding: '1rem 0.75rem', flex: 1 }}>
+      <nav className="adm-sidebar-nav">
         {NAV.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.6rem',
-              padding: '0.6rem 0.75rem',
-              borderRadius: '6px',
-              marginBottom: '2px',
-              textDecoration: 'none',
-              fontFamily: 'var(--font-ui)',
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              letterSpacing: '0.04em',
-              color: 'rgba(245,240,234,0.45)',
-              transition: 'all 0.15s',
-            }}
-          >
-            <Icon size={14} style={{ flexShrink: 0, color: 'rgba(245,240,234,0.3)' }} />
+          <Link key={href} href={href} className="adm-navlink">
+            <Icon size={15} />
             {label}
           </Link>
         ))}
       </nav>
 
-      <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="adm-sidebar-foot">
         <span style={{
           display: 'inline-block',
           padding: '0.25rem 0.65rem',
-          background: 'rgba(201,145,63,0.12)',
-          border: '1px solid rgba(201,145,63,0.35)',
+          background: 'color-mix(in srgb, var(--adm-accent-2) 15%, transparent)',
+          border: '1px solid color-mix(in srgb, var(--adm-accent-2) 40%, transparent)',
           borderRadius: '999px',
           fontFamily: 'var(--font-ui)',
           fontSize: '0.5rem',
           fontWeight: 700,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: 'var(--color-amber-light)',
+          color: 'var(--adm-accent)',
         }}>
           Preview Mode
         </span>
@@ -79,7 +47,7 @@ function PreviewSidebar() {
 
 export default function PreviewLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-ink)' }}>
+    <div className="adm-shell" style={{ display: 'flex', minHeight: '100vh' }}>
       <PreviewSidebar />
       <main style={{ flex: 1, overflow: 'auto', minHeight: '100vh' }}>
         {children}

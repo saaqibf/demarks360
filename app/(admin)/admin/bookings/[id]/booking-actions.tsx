@@ -31,6 +31,7 @@ export function BookingActions({
   const [notesSaved, setNotesSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [confirmingDecline, setConfirmingDecline] = useState(false)
+  const [confirmingCancel, setConfirmingCancel] = useState(false)
   const [linkCopied, setLinkCopied] = useState(false)
 
   async function callEndpoint(path: string, init: RequestInit) {
@@ -41,6 +42,7 @@ export function BookingActions({
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data.error ?? 'Request failed')
       setConfirmingDecline(false)
+      setConfirmingCancel(false)
       router.refresh()
     } catch (e) {
       setError((e as Error).message)
@@ -89,6 +91,22 @@ export function BookingActions({
     }
   }
 
+  // Cancelling a held or paid booking is destructive, so it always confirms first
+  const cancelControls = confirmingCancel ? (
+    <>
+      <button onClick={() => setStatus('cancelled')} disabled={saving} className="btn-danger btn--sm">
+        Yes, cancel booking
+      </button>
+      <button onClick={() => setConfirmingCancel(false)} disabled={saving} className="btn-back">
+        Keep booking
+      </button>
+    </>
+  ) : (
+    <button onClick={() => setConfirmingCancel(true)} disabled={saving} className="btn-danger btn--sm">
+      Cancel Booking
+    </button>
+  )
+
   let actions: React.ReactNode
   if (currentStatus === 'requested') {
     actions = (
@@ -112,7 +130,7 @@ export function BookingActions({
             </button>
           )}
         </div>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginTop: '0.75rem' }}>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--adm-text-2)', marginTop: '0.75rem' }}>
           {approveHint}
         </p>
       </div>
@@ -132,7 +150,7 @@ export function BookingActions({
         </div>
         {payUrl && (
           <div style={{ marginBottom: '1rem' }}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginBottom: '0.5rem', wordBreak: 'break-all' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--adm-text-2)', marginBottom: '0.5rem', wordBreak: 'break-all' }}>
               {payUrl}
             </p>
             <button onClick={copyPayLink} disabled={saving} className="btn-back">
@@ -140,9 +158,9 @@ export function BookingActions({
             </button>
           </div>
         )}
-        <button onClick={() => setStatus('cancelled')} disabled={saving} className="btn-danger btn--sm">
-          Cancel Booking
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          {cancelControls}
+        </div>
       </div>
     )
   } else if (currentStatus === 'confirmed') {
@@ -166,9 +184,7 @@ export function BookingActions({
           <button onClick={() => setStatus('completed')} disabled={saving} className="btn-primary btn--sm">
             Mark Completed
           </button>
-          <button onClick={() => setStatus('cancelled')} disabled={saving} className="btn-danger btn--sm">
-            Cancel Booking
-          </button>
+          {cancelControls}
         </div>
       </div>
     )
@@ -180,14 +196,14 @@ export function BookingActions({
             Approve again
           </button>
         </div>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)', marginTop: '0.75rem' }}>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--adm-text-2)', marginTop: '0.75rem' }}>
           {approveHint}
         </p>
       </div>
     )
   } else {
     actions = (
-      <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--color-muted-light)' }}>
+      <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'var(--adm-text-2)' }}>
         No actions available for a {currentStatus} booking.
       </p>
     )
@@ -200,7 +216,7 @@ export function BookingActions({
       {/* Notes */}
       <div>
         {error && (
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-amber-light)', marginBottom: '0.75rem' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--adm-danger)', marginBottom: '0.75rem' }}>
             {error}
           </p>
         )}

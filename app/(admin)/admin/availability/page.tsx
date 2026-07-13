@@ -1,22 +1,38 @@
-import { getAllBlocks } from '@/lib/db/queries/availability'
-import { AvailabilityManager } from './availability-manager'
+import { getAllBlocks, isActiveBooking } from '@/lib/db/queries/availability'
+import { getAllBookings } from '@/lib/db/queries/bookings'
+import { AvailabilityManager, type CalendarBooking } from './availability-manager'
+
+// Statuses that put a real event on the calendar. Declined / cancelled / expired
+// free the date, so they never show. Completed keeps past events visible for history.
+function showsOnCalendar(b: { status: string; depositExpiresAt: Date | null }): boolean {
+  return isActiveBooking(b) || b.status === 'completed'
+}
 
 export default async function AvailabilityPage() {
-  const blocks = await getAllBlocks()
+  const [blocks, rows] = await Promise.all([getAllBlocks(), getAllBookings()])
+
+  const bookings: CalendarBooking[] = rows
+    .filter(({ booking }) => showsOnCalendar(booking))
+    .map(({ booking, customer }) => ({
+      id: booking.id,
+      date: booking.eventDate,
+      start: booking.startTime,
+      end: booking.endTime,
+      name: customer?.name ?? 'Customer',
+      eventType: booking.eventType,
+      status: booking.status,
+    }))
+
   return (
-    <div style={{ padding: '2.5rem', maxWidth: '800px' }}>
-      <div style={{ marginBottom: '2.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '0.5rem' }}>
-          Admin
-        </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 400, color: 'var(--color-text-light)', lineHeight: 1 }}>
-          Availability
-        </h1>
-        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)', marginTop: '0.5rem' }}>
-          Block specific dates or time ranges to prevent new bookings.
+    <div className="adm-page" style={{ maxWidth: '960px' }}>
+      <div style={{ marginBottom: '2rem' }}>
+        <p className="adm-eyebrow" style={{ marginBottom: '0.5rem' }}>Admin</p>
+        <h1 className="adm-h1">Availability</h1>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--adm-text-2)', marginTop: '0.6rem' }}>
+          Every booked event and every date you have blocked, in one place.
         </p>
       </div>
-      <AvailabilityManager initialBlocks={blocks} />
+      <AvailabilityManager initialBlocks={blocks} bookings={bookings} />
     </div>
   )
 }

@@ -1,6 +1,5 @@
 import { Great_Vibes } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
-import { CookieConsent } from '@/components/public/cookie-consent'
 import './globals.css'
 
 import type { Metadata } from 'next'
@@ -74,7 +73,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body className={greatVibes.variable}>
           <div className="grain" aria-hidden="true" />
           {children}
-          <CookieConsent />
         </body>
       </html>
     </ClerkProvider>

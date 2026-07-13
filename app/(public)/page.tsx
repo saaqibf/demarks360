@@ -2,6 +2,9 @@ export const revalidate = 300
 
 import type { Metadata } from 'next'
 
+import { HeroHeadline } from '@/components/public/hero-headline'
+import { HeroIntro } from '@/components/public/hero-intro'
+import { InviewVideo } from '@/components/public/inview-video'
 import { SiteFooter } from '@/components/public/site-footer'
 import { SiteNav } from '@/components/public/site-nav'
 import { FAQS, FROM_PRICE, PACKAGES } from '@/lib/content/landing'
@@ -33,7 +36,7 @@ const localBusinessSchema = {
   openingHours: 'Mo-Su 09:00-22:00',
   aggregateRating: {
     '@type': 'AggregateRating',
-    ratingValue: '5.0',
+    ratingValue: '4.9',
     reviewCount: '150',
     bestRating: '5',
     worstRating: '1',
@@ -66,8 +69,11 @@ export default function HomePage() {
 
       <DemarksLandingFx />
 
+      <noscript><style>{`.dm-intro{display:none!important}`}</style></noscript>
+
       <div className="dm-landing">
 
+        <HeroIntro />
         <SiteNav />
 
         {/* ── Hero ── */}
@@ -91,10 +97,7 @@ export default function HomePage() {
 
           <div className="dm-hero-copy">
             <p className="dm-hero-kicker">Calgary&apos;s 360° slow-motion video booth</p>
-            <h1>
-              <span className="dm-line"><span>Every angle</span></span>
-              <span className="dm-line"><span>of <em className="dm-em">the moment.</em></span></span>
-            </h1>
+            <HeroHeadline />
             <p className="dm-hero-sub">
               Cinematic slow-motion video of your guests, captured in one spin and delivered the same day.
             </p>
@@ -103,7 +106,7 @@ export default function HomePage() {
               <a className="btn-ghost" href="#dm-experience">See it in action</a>
             </div>
             <div className="dm-hero-proof">
-              <span><b>★ 5.0</b> Google reviews</span>
+              <span><b>★ 4.9</b> Google reviews</span>
               <span><b>120fps</b> slow motion</span>
               <span><b>Same-day</b> gallery</span>
             </div>
@@ -268,6 +271,21 @@ export default function HomePage() {
           <div className="dm-reel-scroller">
             <div className="dm-reel" id="dm-reel">
               <figure className="dm-frame">
+                <a className="dm-frame-link" href="/gallery/cil2okfbfy7u5ynjc3nd9hox">
+                  <div className="dm-frame-ph">
+                    <div className="dm-frame-fill" />
+                    <InviewVideo
+                      className="dm-media dm-frame-media"
+                      preload="metadata"
+                      poster="https://touchpix-space-1.nyc3.cdn.digitaloceanspaces.com/buckets_us/a9407efb-e408-4117-ac48-ee25ddd34947/434120/thumbs/43-20260711-223545.168007-slomo.png"
+                      src="https://touchpix-space-1.nyc3.cdn.digitaloceanspaces.com/buckets_us/a9407efb-e408-4117-ac48-ee25ddd34947/434120/43-20260711-223545.168007-slomo.mp4"
+                    />
+                    <span className="dm-frame-live">Real event</span>
+                  </div>
+                </a>
+                <figcaption><span>Olabode @ 60</span><span>YYC</span></figcaption>
+              </figure>
+              <figure className="dm-frame">
                 <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-1.jpg" alt="" loading="lazy" /></div>
                 <figcaption><span>Aisha&apos;s 30th</span><span>YYC</span></figcaption>
               </figure>
@@ -312,25 +330,28 @@ export default function HomePage() {
               </blockquote>
               <div className="dm-rev-by">
                 <span>Funmi · 60th birthday, Skyview</span>
-                <span className="dm-stars">★★★★★</span>
+                <span className="dm-stars" style={{ '--rating': 5 } as React.CSSProperties} aria-label="5 out of 5"><span className="dm-stars-fill" /></span>
               </div>
             </div>
             <div className="dm-rev-side">
               <div className="dm-rev">
                 <q>
-                  Booked it for our wedding reception kind of last minute and honestly it was the best money we spent.
-                  The attendant kept the line moving and hyped everyone up.
+                  Booked it kind of last minute for our reception and it was some of the best money we spent. The line
+                  did get long around cake time, so grab the extra hour if your guest list is big. The videos came out gorgeous.
                 </q>
                 <div className="dm-rev-by">
                   <span>Jasleen &amp; Arjun · wedding</span>
-                  <span className="dm-stars">★★★★★</span>
+                  <span className="dm-stars" style={{ '--rating': 4.5 } as React.CSSProperties} aria-label="4.5 out of 5"><span className="dm-stars-fill" /></span>
                 </div>
               </div>
               <div className="dm-rev">
-                <q>Our whole office is still posting the videos. Two weeks later. HR wants it back for the holiday party.</q>
+                <q>
+                  The start was a little chaotic, it took a while to get everyone through and the music cut out once.
+                  But the team was so kind about it and the clips still turned out beautiful. My teenagers have not stopped rewatching.
+                </q>
                 <div className="dm-rev-by">
-                  <span>Mark · corporate event</span>
-                  <span className="dm-stars">★★★★★</span>
+                  <span>Ama · family gathering</span>
+                  <span className="dm-stars" style={{ '--rating': 3.5 } as React.CSSProperties} aria-label="3.5 out of 5"><span className="dm-stars-fill" /></span>
                 </div>
               </div>
             </div>
@@ -364,12 +385,26 @@ export default function HomePage() {
 
         {/* ── Finale ── */}
         <section className="dm-finale">
-          <div className="dm-finale-orbit" aria-hidden="true">
-            <div className="dm-finale-rotator" id="dm-finale-rotator">
-              <span className="dm-orbit-head" />
-            </div>
+          {/* A real 360 clip: the spin shows the guest from every angle, tying
+              the motion to the closing line. Blurred + scrimmed so it reads as
+              atmosphere behind the words, not a competing video. */}
+          <div className="dm-finale-media" aria-hidden="true">
+            <InviewVideo
+              className="dm-finale-video"
+              preload="none"
+              poster="https://touchpix-space-1.nyc3.cdn.digitaloceanspaces.com/buckets_us/a9407efb-e408-4117-ac48-ee25ddd34947/434120/thumbs/43-20260711-223545.168007-slomo.png"
+              src="https://touchpix-space-1.nyc3.cdn.digitaloceanspaces.com/buckets_us/a9407efb-e408-4117-ac48-ee25ddd34947/434120/43-20260711-223545.168007-slomo.mp4"
+            />
+            <div className="dm-finale-scrim" />
           </div>
+          <div className="dm-finale-embers" aria-hidden="true">
+            {Array.from({ length: 14 }).map((_, i) => (
+              <span key={i} style={{ ['--n' as string]: i }} />
+            ))}
+          </div>
+          <span className="dm-eyebrow dm-finale-eyebrow">The last frame · 007</span>
           <h2><span className="dm-line"><span>Some moments deserve <em className="dm-em">every angle.</em></span></span></h2>
+          <p className="dm-finale-lead">One spin, delivered the same day, shared for weeks. Let&apos;s put your night on the reel.</p>
           <a className="btn-primary btn--lg" href="/book">
             Check your date
           </a>
