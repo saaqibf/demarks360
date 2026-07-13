@@ -401,15 +401,14 @@
     drop-shadow(0 2px 8px rgba(12, 8, 3, 0.8))
     drop-shadow(0 0 18px rgba(12, 8, 3, 0.55));
 }
-.dm-hw-letter {
-  will-change: stroke-dashoffset;
-}
+.dm-hw-pen { will-change: stroke-dashoffset; }
+.dm-hw-fill { will-change: opacity; }
 /* Warm halo on the gold "the moment." so it glows the way the old italic did. */
 .dm-hw-gold {
   filter: drop-shadow(0 0 9px color-mix(in srgb, var(--color-amber-light) 60%, transparent));
 }
 @media (prefers-reduced-motion: reduce) {
-  .dm-hw-letter { will-change: auto; }
+  .dm-hw-pen, .dm-hw-fill { will-change: auto; }
 }
 .dm-visually-hidden {
   position: absolute;
