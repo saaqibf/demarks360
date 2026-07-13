@@ -15,6 +15,7 @@ const isPublicRoute = createRouteMatcher([
   '/terms',
   '/api/availability(.*)',
   '/api/bookings(.*)',
+  '/api/clip-download(.*)',
   '/api/cron(.*)',
   '/api/overlay-preview(.*)',
   '/api/pay(.*)',
