@@ -4,7 +4,11 @@ import { checkRateLimit } from '@/lib/rate-limit'
 
 export async function GET(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
-  const rl = checkRateLimit(`avail:${ip}`, { limit: 10, windowMs: 60_000 })
+  // Availability reads are cheap, idempotent, and fired once per month the
+  // customer flips through plus once per date they tap; the picker fails closed
+  // (locks every date) on a 429, so a tight ceiling silently blocks bookings —
+  // worse on mobile where carrier-grade NAT shares one IP across many phones.
+  const rl = checkRateLimit(`avail:${ip}`, { limit: 60, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   }

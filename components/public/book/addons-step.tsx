@@ -56,27 +56,6 @@ export function AddonsStep({ selectedIds, durationMinutes, onNext, onBack }: Add
               }}
             >
               <div style={{ flex: 1 }}>
-                {addon.id === 'firecrackers' && (
-                  <div style={{
-                    aspectRatio: '16 / 9',
-                    width: '100%',
-                    marginBottom: '1rem',
-                    border: '1px solid var(--color-amber)',
-                    borderRadius: '8px',
-                    background: 'var(--color-ink)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden',
-                  }}>
-                    <span className="t-label" style={{
-                      color: 'var(--color-amber-light)',
-                      letterSpacing: '0.14em',
-                    }}>
-                      Preview coming soon
-                    </span>
-                  </div>
-                )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.3rem' }}>
                   <span style={{
                     width: '18px', height: '18px', borderRadius: '2px', flexShrink: 0,

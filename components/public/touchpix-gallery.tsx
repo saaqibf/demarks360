@@ -164,7 +164,7 @@ function ClipModal({ item, shareBase, eventLabel, onClose }: { item: ClipItem; s
         <button className="clip-modal-close" onClick={onClose} aria-label="Close">✕</button>
         <video src={item.videoUrl} poster={item.thumbnailUrl} controls autoPlay playsInline className="clip-modal-video" />
         <div className="clip-modal-actions">
-          <a href={item.videoUrl} download className="btn-primary btn--sm">Download my video</a>
+          <a href={`/api/clip-download?url=${encodeURIComponent(item.videoUrl)}`} download className="btn-primary btn--sm">Download my video</a>
           <button onClick={share} className="gallery-share-chip">{copied ? 'Link copied ✓' : 'Share'}</button>
           <a href={`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + deepLink)}`} target="_blank" rel="noopener noreferrer" className="gallery-share-chip">WhatsApp</a>
         </div>

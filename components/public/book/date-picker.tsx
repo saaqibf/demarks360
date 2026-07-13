@@ -143,6 +143,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
                   border: isToday && !selected ? '1px solid rgba(201,145,63,0.4)' : 'none',
                   cursor: disabled ? 'not-allowed' : 'pointer',
                   padding: '0.6rem 0', margin: '2px', borderRadius: '2px',
+                  minHeight: '44px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   textAlign: 'center',
                   fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: selected ? 600 : 400,
                   background: selected ? 'var(--color-amber)' : 'transparent',

@@ -60,6 +60,7 @@ const labelStyle: React.CSSProperties = {
 
 export function AvailabilityManager({ initialBlocks, bookings }: Props) {
   const now = new Date()
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
   const [year, setYear] = useState(now.getFullYear())
   const [month, setMonth] = useState(now.getMonth())
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks)
@@ -204,7 +205,7 @@ export function AvailabilityManager({ initialBlocks, bookings }: Props) {
                   style={{
                     position: 'relative', background: bg, border, borderRadius: '4px', color,
                     fontFamily: 'var(--font-ui)', fontSize: '0.72rem', fontWeight: hasBooking || hasBlock ? 700 : 500,
-                    padding: '0.55rem 0', textAlign: 'center', cursor: 'pointer', transition: 'all 0.12s',
+                    padding: '0.55rem 0', minHeight: '44px', textAlign: 'center', cursor: 'pointer', transition: 'all 0.12s',
                   }}
                 >
                   {day}
@@ -291,7 +292,7 @@ export function AvailabilityManager({ initialBlocks, bookings }: Props) {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
               <div style={{ gridColumn: '1 / -1' }}>
                 <label style={labelStyle}>Date</label>
-                <input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="adm-input" />
+                <input type="date" min={todayStr} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="adm-input" />
               </div>
               <div>
                 <label style={labelStyle}>Start (optional)</label>

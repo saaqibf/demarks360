@@ -9,7 +9,7 @@ export async function sendGalleryReadyEmail(bookingId: string) {
   if (!row?.customer?.email || !row.booking.galleryToken) return
 
   const { booking: b, customer: c } = row
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.ca'
 
   await getResend().emails.send({
     from: FROM_EMAIL,

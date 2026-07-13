@@ -101,9 +101,12 @@ export async function fetchTouchpixGallery(
   galleryUrl: string,
   opts?: { revalidate?: number },
 ): Promise<TouchpixGallery> {
+  // Cap the wait: this runs during the admin booking page's server render, so a
+  // slow or hung Touchpix CDN must not hang the whole page on the operator's phone.
   const res = await fetch(galleryUrl, {
     headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Demarks360Gallery/1.0)' },
     next: { revalidate: opts?.revalidate ?? 300 },
+    signal: AbortSignal.timeout(6000),
   })
   if (!res.ok) throw new Error(`Touchpix gallery fetch failed: ${res.status}`)
   const html = await res.text()

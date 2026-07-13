@@ -9,8 +9,8 @@ const RING_C = 2 * Math.PI * RING_R
 /**
  * Opening intro: a cinematic 0°→360° revolution. A golden orbit clip plays under
  * a degree counter that ticks to 360 as its ring fills, then the whole thing
- * dissolves into the hero. Plays once per session; reduced-motion and no-JS skip
- * straight to the site.
+ * dissolves into the hero. Plays on every load of the landing (the founder wants
+ * the entrance each visit); reduced-motion and no-JS skip straight to the site.
  */
 export function HeroIntro() {
   const [done, setDone] = useState(false)

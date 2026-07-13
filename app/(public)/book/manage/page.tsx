@@ -29,7 +29,7 @@ function fmtTime(t: string) {
   return `${hour}:${String(m).padStart(2, '0')} ${period}`
 }
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.ca'
 
 function ManageBookingInner() {
   const params = useSearchParams()

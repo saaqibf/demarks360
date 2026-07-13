@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
       <p style="font-family:sans-serif;font-size:13px;color:#333;margin-top:20px;"><strong>Their message:</strong></p>
       <p style="font-family:sans-serif;font-size:13px;color:#555;background:#f9f9f9;padding:12px;border-left:3px solid #c9913f;">${escapeHtml(reason).replace(/\n/g, '<br>')}</p>
       <p style="font-family:sans-serif;font-size:12px;color:#aaa;margin-top:24px;">
-        <a href="${process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.vercel.app'}/admin/bookings/${b.id}">View booking in admin &rarr;</a>
+        <a href="${process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.ca'}/admin/bookings/${b.id}">View booking in admin &rarr;</a>
       </p>
     `,
   })

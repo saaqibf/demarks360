@@ -180,7 +180,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
       </p>
 
       {phase === 'start' && (<>
-        <div className="dm-time-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', maxWidth: '560px' }}>
+        <div className="dm-time-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))', gap: '8px', maxWidth: '560px' }}>
           {slotsWithStatus.map(({ slot, blocked }) => {
             const isSelectedStart = slot === selectedStart
             return (
@@ -193,7 +193,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
                   setPhase('duration')
                 }}
                 style={{
-                  padding: '0.75rem 0.5rem', border: '1px solid',
+                  padding: '0.75rem 0.5rem', minHeight: '44px', border: '1px solid',
                   borderColor: isSelectedStart ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.08)',
                   background: isSelectedStart ? 'var(--color-amber-light)' : blocked ? 'rgba(255,255,255,0.02)' : 'var(--color-surface)',
                   color: isSelectedStart ? 'var(--color-charcoal)' : blocked ? 'rgba(245,240,234,0.15)' : 'var(--color-text-light)',
