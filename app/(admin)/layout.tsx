@@ -1,6 +1,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
+import { ADMIN_EMAILS, isAdminEmail } from '@/lib/admin-emails'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const { sessionClaims, userId } = await auth()
@@ -10,13 +11,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // Check 1: Clerk publicMetadata role
   const role = (sessionClaims?.metadata as { role?: string } | undefined)?.role
   if (role !== 'admin') {
-    // Check 2: ADMIN_EMAIL env var fallback (set this in Vercel project settings)
-    const adminEmail = process.env.ADMIN_EMAIL
-    if (adminEmail) {
-      const user = await currentUser()
-      const userEmail = user?.primaryEmailAddress?.emailAddress
-      if (userEmail !== adminEmail) redirect('/admin-login?error=unauthorized')
-    } else {
+    // Check 2: ADMIN_EMAIL allow-list fallback (one or more comma-separated
+    // addresses, set in Vercel project settings).
+    if (!process.env.ADMIN_EMAIL || ADMIN_EMAILS.length === 0) {
+      redirect('/admin-login?error=unauthorized')
+    }
+    const user = await currentUser()
+    if (!isAdminEmail(user?.primaryEmailAddress?.emailAddress)) {
       redirect('/admin-login?error=unauthorized')
     }
   }

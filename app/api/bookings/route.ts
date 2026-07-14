@@ -3,7 +3,7 @@ import { createBookingSchema } from '@/lib/validations/booking'
 import { checkBookingAvailability } from '@/lib/availability'
 import { createBookingRecord, getBookingWithCustomer, getOrCreateCustomer, updateRequestedBooking, getBookingIdByGalleryToken } from '@/lib/db/queries/bookings'
 import { ADDON_CATALOG, calculateBookingCost, balanceChargeDate, timeToMinutes, PRICING } from '@/lib/pricing'
-import { ADMIN_EMAIL, sendEmail } from '@/lib/email/send'
+import { ADMIN_EMAILS, sendEmail } from '@/lib/email/send'
 import { requestReceivedEmail } from '@/lib/email/templates/request-received'
 import { adminNewRequestEmail } from '@/lib/email/templates/admin-new-request'
 import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
     }),
   })
   await sendEmail({
-    to: ADMIN_EMAIL,
+    to: ADMIN_EMAILS,
     ...adminNewRequestEmail({
       bookingId,
       customerName: input.customerName,

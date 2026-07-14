@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { bookings, customers } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { ADMIN_EMAIL, sendEmail } from '@/lib/email/send'
+import { ADMIN_EMAILS, sendEmail } from '@/lib/email/send'
 import { escapeHtml } from '@/lib/email/escape-html'
 import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
     : `Change Request - ${c?.name ?? 'Customer'} (${b.eventDate})`
 
   await sendEmail({
-    to: ADMIN_EMAIL,
+    to: ADMIN_EMAILS,
     subject,
     html: `
       <p style="font-family:sans-serif;font-size:14px;color:#333;">

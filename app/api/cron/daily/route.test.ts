@@ -30,7 +30,7 @@ vi.mock('@/lib/db/queries/bookings', () => ({
 const sendEmail = vi.fn()
 vi.mock('@/lib/email/send', () => ({
   sendEmail: (...args: unknown[]) => sendEmail(...args),
-  ADMIN_EMAIL: 'admin@test.local',
+  ADMIN_EMAILS: ['admin@test.local'],
 }))
 
 import { GET } from './route'

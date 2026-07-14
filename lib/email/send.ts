@@ -1,17 +1,22 @@
 import { getResend, FROM_EMAIL } from './resend'
+import { ADMIN_EMAILS } from '../admin-emails'
 
-export const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? 'saaqibf.ayodimeji@gmail.com'
+// Kept for callers that want the operator inbox(es). Resend accepts an array of
+// recipients, so both emails on the allow-list get booking alerts.
+export { ADMIN_EMAILS }
 
 export interface SendEmailParams {
-  to: string
+  to: string | string[]
   subject: string
   html: string
 }
 
 // Customer addresses are PII and must never land in logs verbatim
-function maskEmail(email: string): string {
-  const [local, domain] = email.split('@')
-  return `${local?.slice(0, 2) ?? ''}***@${domain ?? ''}`
+function maskEmail(to: string | string[]): string {
+  const first = Array.isArray(to) ? to[0] ?? '' : to
+  const [local, domain] = first.split('@')
+  const extra = Array.isArray(to) && to.length > 1 ? ` (+${to.length - 1})` : ''
+  return `${local?.slice(0, 2) ?? ''}***@${domain ?? ''}${extra}`
 }
 
 // Email must never take down the request that triggered it: without an API key we

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getResend, FROM_EMAIL } from '@/lib/email/resend'
+import { ADMIN_EMAILS } from '@/lib/admin-emails'
 import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
 const schema = z.object({
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
     const resend = getResend()
     await resend.emails.send({
       from: FROM_EMAIL,
-      to: process.env.ADMIN_EMAIL ?? 'saaqibf.ayodimeji@gmail.com',
+      to: ADMIN_EMAILS,
       subject: 'New notify-me signup - Demarks 360',
       html: `<p>New email captured: <strong>${email}</strong></p>`,
     })
