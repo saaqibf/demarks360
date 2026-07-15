@@ -316,15 +316,13 @@ export async function confirmBooking(stripePaymentIntentId: string) {
 }
 
 export async function getOrCreateCustomer(name: string, email: string, phone: string) {
-  // Email-keyed: bookings are created before any Stripe object exists now
-  const existing = await db
-    .select()
-    .from(customers)
-    .where(eq(customers.email, email))
-  if (existing.length > 0) return existing[0]
-  const [created] = await db
+  // Atomic upsert on the unique email: two concurrent bookings for the same
+  // customer both resolve to one row instead of one throwing a unique-violation
+  // 500 (the old check-then-insert had a race between the SELECT and the INSERT).
+  const [customer] = await db
     .insert(customers)
     .values({ id: createId(), name, email, phone })
+    .onConflictDoUpdate({ target: customers.email, set: { name, phone } })
     .returning()
-  return created
+  return customer
 }

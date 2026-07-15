@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/server'
+import { isAdminEmail } from '@/lib/admin-emails'
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)', '/api/admin(.*)'])
 const isPublicRoute = createRouteMatcher([
@@ -49,7 +50,11 @@ export default clerkMiddleware(async (auth, req) => {
     const client = await clerkClient()
     const user = await client.users.getUser(userId)
 
-    if (!hasAdminRole(user)) return redirectToSignIn({ returnBackUrl: req.url })
+    // Same policy as the (admin) layout: a Clerk admin role OR an email on the
+    // ADMIN_EMAIL allow-list. Without this second check the allow-list is dead —
+    // the middleware would bounce every non-role user before the layout runs.
+    const email = user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)?.emailAddress
+    if (!hasAdminRole(user) && !isAdminEmail(email)) return redirectToSignIn({ returnBackUrl: req.url })
   } else if (!isPublicRoute(req)) {
     await auth.protect()
   }

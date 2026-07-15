@@ -71,6 +71,9 @@ export async function POST(req: NextRequest) {
       method: 'PUT',
       body: Readable.toWeb(driveStream) as ReadableStream,
       headers: { 'Content-Type': 'application/octet-stream' },
+      // Bound a hung upload just under the 300s function limit so it fails cleanly
+      // instead of silently consuming the whole invocation.
+      signal: AbortSignal.timeout(280_000),
       // Node fetch requires duplex for streaming request bodies.
       // @ts-expect-error duplex is supported by Node but not yet in the DOM RequestInit type.
       duplex: 'half',

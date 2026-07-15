@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
 
 // Same-origin download proxy. Browsers ignore the <a download> attribute on
 // cross-origin URLs, so a guest tapping "Download my video" on a Touchpix CDN
 // link just opens the clip instead of saving it. This route streams the clip
 // back same-origin with Content-Disposition: attachment so it lands in the
-// camera roll. Host is allow-listed so it can't be used as an open proxy.
-const ALLOWED_HOST = /(^|\.)digitaloceanspaces\.com$/i
+// camera roll. Host is pinned to the exact Touchpix CDN buckets so it can't be
+// used as an open proxy to arbitrary DigitalOcean Spaces objects.
+const ALLOWED_HOSTS = new Set([
+  'touchpix-space-1.nyc3.cdn.digitaloceanspaces.com',
+  'touchpix-space-1.nyc3.digitaloceanspaces.com',
+])
+const MAX_BYTES = 200 * 1024 * 1024 // clips are short; cap to bound bandwidth abuse
 
 export async function GET(req: NextRequest) {
+  const ip = getClientIp(req)
+  const rl = checkRateLimit(`clip-download:${ip}`, { limit: 30, windowMs: 60_000 })
+  if (!rl.allowed) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+
   const raw = req.nextUrl.searchParams.get('url')
   if (!raw) return NextResponse.json({ error: 'Missing url' }, { status: 400 })
 
@@ -17,7 +27,7 @@ export async function GET(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: 'Invalid url' }, { status: 400 })
   }
-  if (target.protocol !== 'https:' || !ALLOWED_HOST.test(target.hostname)) {
+  if (target.protocol !== 'https:' || !ALLOWED_HOSTS.has(target.hostname)) {
     return NextResponse.json({ error: 'Host not allowed' }, { status: 403 })
   }
 
@@ -33,6 +43,10 @@ export async function GET(req: NextRequest) {
   }
   if (!upstream.ok || !upstream.body) {
     return NextResponse.json({ error: 'Clip unavailable' }, { status: 502 })
+  }
+  const len = Number(upstream.headers.get('content-length') ?? 0)
+  if (len > MAX_BYTES) {
+    return NextResponse.json({ error: 'Clip too large' }, { status: 413 })
   }
 
   const name = target.pathname.split('/').pop() || 'demarks360-clip.mp4'

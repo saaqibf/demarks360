@@ -53,6 +53,11 @@ export function parseFolderId(input: string): string {
 }
 
 export async function listDriveFolderVideos(folderId: string) {
+  // folderId is interpolated into the Drive query language, so it must be a bare
+  // Drive id — reject anything with quotes/operators to prevent query injection.
+  if (!/^[a-zA-Z0-9_-]+$/.test(folderId)) {
+    throw new Error('Invalid Google Drive folder id')
+  }
   const drive = getDrive()
   const res = await drive.files.list({
     q: `'${folderId}' in parents and mimeType contains 'video/' and trashed = false`,

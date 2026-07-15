@@ -21,8 +21,10 @@ export interface TouchpixGallery {
   items: TouchpixItem[]
 }
 
+// Host is pinned to the DigitalOcean Spaces CDN Touchpix uses (https only) so a
+// tampered gallery page can't make us mirror or proxy media from an arbitrary host.
 const MEDIA_RE =
-  /https?:\/\/[a-z0-9.-]+\/buckets_[a-z0-9]+\/[a-z0-9-]+\/(\d+)\/([^"'\\\s]+?\.mp4)/gi
+  /https:\/\/[a-z0-9.-]+\.digitaloceanspaces\.com\/buckets_[a-z0-9]+\/[a-z0-9-]+\/(\d+)\/([^"'\\\s]+?\.mp4)/gi
 
 /** Derive the /thumbs/<name>.png poster URL from a Touchpix video URL. */
 function thumbFromVideo(videoUrl: string): string {
@@ -117,7 +119,10 @@ export async function fetchTouchpixGallery(
 export function isTouchpixGalleryUrl(url: string): boolean {
   try {
     const u = new URL(url)
-    return /phtbth-upload\.com$/i.test(u.hostname) || /touchpix/i.test(u.hostname)
+    return (
+      u.protocol === 'https:' &&
+      (u.hostname === 'phtbth-upload.com' || u.hostname.endsWith('.phtbth-upload.com'))
+    )
   } catch {
     return false
   }

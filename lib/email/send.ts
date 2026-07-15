@@ -26,9 +26,15 @@ export async function sendEmail({ to, subject, html }: SendEmailParams): Promise
     console.log('[email:dev]', maskEmail(to), subject)
     return
   }
+  // Bound the wait: these sends sit on the booking/approve request path, so a
+  // slow or hung Resend must not stall the response (which would trigger client
+  // retries and duplicate submissions). Errors and timeouts are swallowed.
   try {
-    await getResend().emails.send({ from: FROM_EMAIL, to, subject, html })
+    await Promise.race([
+      getResend().emails.send({ from: FROM_EMAIL, to, subject, html }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('email send timeout')), 8000)),
+    ])
   } catch (err) {
-    console.error(`[email] send failed: "${subject}"`, err)
+    console.error(`[email] send failed or timed out: "${subject}"`, err)
   }
 }

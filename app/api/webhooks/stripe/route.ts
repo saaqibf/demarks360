@@ -8,8 +8,9 @@ import {
   markBalancePaid,
   markDepositPaid,
 } from '@/lib/db/queries/bookings'
+import * as Sentry from '@sentry/nextjs'
 import { sendBookingConfirmationEmail } from '@/lib/email/send-booking-confirmation'
-import { sendEmail } from '@/lib/email/send'
+import { sendEmail, ADMIN_EMAILS } from '@/lib/email/send'
 import { balanceReceiptEmail } from '@/lib/email/templates/balance-receipt'
 
 export async function POST(req: NextRequest) {
@@ -71,9 +72,16 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     // (cron expired it, or the admin cancelled). Money was taken for a booking that
     // cannot be confirmed, so never send "you're booked": flag it for manual refund.
     if (!confirmed) {
-      console.error(
-        `[webhook] deposit paid for booking ${bookingId} but it is '${booking.status}', not 'approved'; needs manual review/refund`,
-      )
+      const msg = `[webhook] deposit paid for booking ${bookingId} but it is '${booking.status}', not 'approved'; needs manual review/refund`
+      console.error(msg)
+      // console.error alone is invisible in prod; raise a real alert + email so a
+      // customer who paid for a booking that can't be confirmed is refunded.
+      Sentry.captureMessage(msg, 'error')
+      await sendEmail({
+        to: ADMIN_EMAILS,
+        subject: 'ACTION NEEDED: deposit paid on a non-approved Demarks booking',
+        html: `<p>A deposit was paid but booking <strong>${bookingId}</strong> is '${booking.status}', not 'approved'. It cannot be confirmed, so it likely needs a manual refund. Please review in Stripe + admin.</p>`,
+      })
       return
     }
     try {

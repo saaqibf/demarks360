@@ -116,8 +116,10 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
               {formatTime(booking.startTime)} → {formatTime(booking.endTime)}
               {' · '}{booking.eventType}
             </p>
+            {/* City only — never the street address. This page is reachable with just a
+                bookingId (no ownership check), so it must not expose the customer's PII. */}
             <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)', marginTop: '0.15rem' }}>
-              {booking.locationAddress}, {booking.locationCity}
+              {booking.locationCity}
             </p>
           </div>
 
