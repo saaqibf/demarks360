@@ -4,7 +4,7 @@ import { bookings, customers } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { ADMIN_EMAILS, sendEmail } from '@/lib/email/send'
 import { escapeHtml } from '@/lib/email/escape-html'
-import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
 async function getBookingRow(id: string) {
   const rows = await db
@@ -23,7 +23,7 @@ function emailMatches(row: { customer: { email: string } | null }, email: string
 }
 
 export async function GET(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = getClientIp(req)
   const rl = checkRateLimit(`manage-get:${ip}`, { limit: 10, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = getClientIp(req)
   const rl = checkRateLimit(`manage-post:${ip}`, { limit: 3, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(

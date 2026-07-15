@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkBookingAvailability, getUnavailableDatesForMonth } from '@/lib/availability'
-import { checkRateLimit } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
 
 export async function GET(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = getClientIp(req)
   // Availability reads are cheap, idempotent, and fired once per month the
   // customer flips through plus once per date they tap; the picker fails closed
   // (locks every date) on a 429, so a tight ceiling silently blocks bookings —

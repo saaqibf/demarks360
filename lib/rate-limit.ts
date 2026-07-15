@@ -1,9 +1,26 @@
+import type { NextRequest } from 'next/server';
+
 interface Bucket {
   count: number;
   resetAt: number;
 }
 
 const store = new Map<string, Bucket>();
+
+// The leftmost X-Forwarded-For value is attacker-controlled, so we never key
+// limits on it. On Vercel, x-real-ip is set at the edge to the true client IP
+// and overwritten on every request, so it can't be spoofed. Fall back to the
+// LAST X-Forwarded-For entry (the one the platform appended), never the first.
+export function getClientIp(req: NextRequest): string {
+  const realIp = req.headers.get('x-real-ip')?.trim();
+  if (realIp) return realIp;
+  const xff = req.headers.get('x-forwarded-for');
+  if (xff) {
+    const parts = xff.split(',').map((s) => s.trim()).filter(Boolean);
+    if (parts.length) return parts[parts.length - 1];
+  }
+  return 'unknown';
+}
 
 setInterval(() => {
   const now = Date.now();

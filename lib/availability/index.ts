@@ -1,6 +1,7 @@
 import { getAvailabilityForDate, getAvailabilityForDateRange, isActiveBooking } from '@/lib/db/queries/availability'
 import type { BookedSlot } from '@/lib/db/queries/availability'
 import { PRICING } from '@/lib/pricing'
+import { todayInEdmonton } from '@/lib/dates/edmonton'
 
 export type { BookedSlot }
 
@@ -16,11 +17,14 @@ export type DateAvailability =
   | { status: 'too-soon' }
   | { status: 'blocked'; reason: string }
 
+const DAY_MS = 24 * 60 * 60 * 1000
+// Anchor "today" to Edmonton (the operator's timezone), not the server's UTC.
+// Both dates are parsed at UTC midnight so the subtraction is a pure calendar-day
+// count, immune to server timezone and DST. Using server-local time here made the
+// earliest bookable date flip a day every evening once UTC crossed midnight.
 function daysFromToday(date: string): number {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const requested = new Date(date + 'T00:00:00')
-  return Math.floor((requested.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+  const utcMidnight = (d: string) => Date.parse(`${d}T00:00:00Z`)
+  return Math.round((utcMidnight(date) - utcMidnight(todayInEdmonton())) / DAY_MS)
 }
 
 export async function getUnavailableDatesForMonth(year: number, month: number): Promise<string[]> {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 import { buildOverlayPrompt, keyWhiteCenter } from '@/lib/overlay-generate'
 
 export const runtime = 'nodejs'
@@ -30,13 +30,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Custom preview generation is not configured' }, { status: 503 })
   }
 
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = getClientIp(req)
   // Each generation spends real credits; keep bots and refresh-spammers off the faucet
   const rl = checkRateLimit(`overlay-preview:${ip}`, { limit: 5, windowMs: 60 * 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Preview limit reached for now. Our designer will take it from here after booking.' },
       { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetAt - Date.now()) / 1000)), ...rateLimitHeaders(0, rl.resetAt) } },
+    )
+  }
+
+  // Backstop independent of IP so header/IP rotation can't drain the credit
+  // balance. A durable store (Upstash / Vercel KV) is the complete fix and is
+  // flagged for provisioning; this bounds worst-case spend per instance.
+  const day = new Date().toISOString().slice(0, 10)
+  const globalRl = checkRateLimit(`overlay-preview:global:${day}`, { limit: 100, windowMs: 24 * 60 * 60_000 })
+  if (!globalRl.allowed) {
+    return NextResponse.json(
+      { error: 'Custom previews are paused for today. Our designer will craft yours after booking.' },
+      { status: 429 },
     )
   }
 
@@ -70,7 +82,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Generation did not complete' }, { status: 502 })
     }
 
-    const imageRes = await fetch(url)
+    const imageRes = await fetch(url, { signal: AbortSignal.timeout(15_000) })
     if (!imageRes.ok) {
       return NextResponse.json({ error: 'Could not fetch generated image' }, { status: 502 })
     }

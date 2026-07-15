@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { getBookingByPayToken, setAutoPayOptIn, setBalanceSessionId, setDepositSessionId } from '@/lib/db/queries/bookings'
 import { stripe } from '@/lib/stripe'
 import { APP_URL } from '@/lib/app-url'
-import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
 const checkoutSchema = z.object({
   token: z.string().min(1).max(64),
@@ -14,7 +14,7 @@ const THIRTY_MINUTES_MS = 30 * 60 * 1000
 const DAY_MS = 24 * 3600 * 1000
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = getClientIp(req)
   const rl = checkRateLimit(`pay:${ip}`, { limit: 5, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(

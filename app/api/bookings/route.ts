@@ -6,10 +6,10 @@ import { ADDON_CATALOG, calculateBookingCost, balanceChargeDate, timeToMinutes, 
 import { ADMIN_EMAILS, sendEmail } from '@/lib/email/send'
 import { requestReceivedEmail } from '@/lib/email/templates/request-received'
 import { adminNewRequestEmail } from '@/lib/email/templates/admin-new-request'
-import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = getClientIp(req)
   const rl = checkRateLimit(`booking:${ip}`, { limit: 5, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(

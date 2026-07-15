@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getResend, FROM_EMAIL } from '@/lib/email/resend'
 import { ADMIN_EMAILS } from '@/lib/admin-emails'
-import { checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
 
 const schema = z.object({
   email: z.string().email(),
 })
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = getClientIp(req)
   const rl = checkRateLimit(`notify:${ip}`, { limit: 3, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(

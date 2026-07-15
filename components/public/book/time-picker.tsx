@@ -86,9 +86,21 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
         if (!r.ok) throw new Error(`availability ${r.status}`)
         return r.json()
       })
-      .then((data: AvailabilityData) => {
+      .then((data: Partial<AvailabilityData> & { status?: string }) => {
         if (cancelled) return
-        setAvailability(data)
+        // Non-available shapes (too-soon / blocked) lack bookedSlots. Fail closed
+        // rather than crash — never render a not-bookable day as free.
+        if (!Array.isArray(data.bookedSlots)) {
+          setAvailability(null)
+          setLoadError(true)
+          setLoading(false)
+          return
+        }
+        setAvailability({
+          bookedSlots: data.bookedSlots,
+          adminBlocks: Array.isArray(data.adminBlocks) ? data.adminBlocks : [],
+          isDateFull: Boolean(data.isDateFull) || data.status === 'full',
+        })
         setLoading(false)
       })
       .catch(() => {
@@ -314,7 +326,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             const startMin = timeToMinutes(selectedStart)
             const endMin = customEnd ? timeToMinutes(customEnd) : -1
             const dur = endMin - startMin
-            const valid = endMin > startMin && dur >= 60 && isSpanFree(startMin, dur, availability)
+            const valid = endMin > startMin && dur >= PRICING.MIN_DURATION_MINUTES && isSpanFree(startMin, dur, availability)
             const price = valid ? Math.ceil((dur / 60) * PRICING.HOURLY_RATE) : 0
             return (
               <div style={{ padding: '1.4rem 1.4rem 1.3rem', border: '1px solid color-mix(in srgb, var(--color-amber) 40%, transparent)', borderRadius: '14px', background: 'linear-gradient(160deg, var(--color-charcoal-2), var(--color-charcoal-3))', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 20px 50px -30px rgba(0,0,0,0.7)' }}>

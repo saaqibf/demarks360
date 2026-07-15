@@ -4,9 +4,18 @@ import { SERVICE_CITIES } from './cities'
 export const createBookingSchema = z.object({
   // Set when checkout re-initializes: the server updates this pending booking instead of inserting a duplicate
   bookingId: z.string().min(1).max(64).optional(),
-  eventDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
-  startTime: z.string().regex(/^\d{2}:\d{2}$/, 'Invalid time format'),
-  endTime: z.string().regex(/^\d{2}:\d{2}$/, 'Invalid time format'),
+  eventDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format')
+    // Reject impossible calendar dates (e.g. 2026-02-31, 2026-13-40) that pass the
+    // shape regex but blow up as an out-of-range value at the database.
+    .refine((d) => {
+      const [y, m, day] = d.split('-').map(Number)
+      const dt = new Date(Date.UTC(y, m - 1, day))
+      return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === day
+    }, 'Not a real calendar date'),
+  startTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Invalid time format'),
+  endTime: z.string().regex(/^(([01]\d|2[0-3]):[0-5]\d|24:00)$/, 'Invalid time format'),
   addOnIds: z.array(z.string()),
   customerName: z.string().min(2).max(100),
   customerEmail: z.string().email(),
