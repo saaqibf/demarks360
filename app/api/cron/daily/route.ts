@@ -8,6 +8,7 @@ import {
   markBalancePaid,
   markBookingExpired,
   markChargeFailed,
+  redactOldBookingPii,
 } from '@/lib/db/queries/bookings'
 import { stripe } from '@/lib/stripe'
 import { sendEmail } from '@/lib/email/send'
@@ -131,5 +132,16 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ charged, linked, failed, expired })
+  // Data-retention: redact the street address on bookings whose event was 18+
+  // months ago and are in a terminal state (no business need to keep the PII).
+  let redacted = 0
+  try {
+    const cutoff = new Date(`${todayInEdmonton()}T00:00:00Z`)
+    cutoff.setUTCMonth(cutoff.getUTCMonth() - 18)
+    redacted = await redactOldBookingPii(cutoff.toISOString().slice(0, 10))
+  } catch (err) {
+    console.error('[cron] PII retention pass failed:', err)
+  }
+
+  return NextResponse.json({ charged, linked, failed, expired, redacted })
 }

@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { bookings, customers } from '@/lib/db/schema'
-import { eq, desc, and, isNull, lt, inArray } from 'drizzle-orm'
+import { eq, desc, and, isNull, lt, ne, inArray } from 'drizzle-orm'
 import { createId } from '@paralleldrive/cuid2'
 
 export interface CreateBookingParams {
@@ -313,6 +313,23 @@ export async function confirmBooking(stripePaymentIntentId: string) {
     ))
     .returning({ id: bookings.id })
   return rows[0] ?? null
+}
+
+// Data-retention: redact the event street address (the most sensitive PII) on
+// long-past bookings in a terminal state. Amounts/dates stay for business records.
+export async function redactOldBookingPii(cutoffDate: string): Promise<number> {
+  const rows = await db
+    .update(bookings)
+    .set({ locationAddress: '[redacted]' })
+    .where(
+      and(
+        lt(bookings.eventDate, cutoffDate),
+        inArray(bookings.status, ['completed', 'cancelled', 'declined', 'expired']),
+        ne(bookings.locationAddress, '[redacted]'),
+      ),
+    )
+    .returning({ id: bookings.id })
+  return rows.length
 }
 
 export async function getOrCreateCustomer(name: string, email: string, phone: string) {
