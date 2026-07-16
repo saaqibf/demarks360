@@ -44,3 +44,14 @@ yarn-error.log*
 CLAUDE.local.md
 .claude/worktrees/
 media-masters/
+
+# Internal tooling, AI agent config, session/planning notes and logs (not public)
+.claude/
+.agents/
+.mcp.json
+skills-lock.json
+docs/
+SESSION-STATE.md
+CLAUDE.md
+CODEX_TASKS.md
+*.log
