@@ -25,6 +25,7 @@ vi.mock('@/lib/db/queries/bookings', () => ({
   markChargeFailed: (...args: unknown[]) => markChargeFailed(...args),
   markBalanceDueEmailSent: (...args: unknown[]) => markBalanceDueEmailSent(...args),
   markBookingExpired: (...args: unknown[]) => markBookingExpired(...args),
+  redactOldBookingPii: vi.fn().mockResolvedValue(0),
 }))
 
 const sendEmail = vi.fn()
@@ -106,7 +107,7 @@ describe('daily cron balance pass', () => {
       { idempotencyKey: 'balance-bk_1' },
     )
     expect(markBalancePaid).toHaveBeenCalledWith('bk_1', 'pi_bal_1')
-    await expect(res.json()).resolves.toEqual({ charged: 1, linked: 0, failed: 0, expired: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 1, linked: 0, failed: 0, expired: 0, redacted: 0 })
   })
 
   it('sends no receipt and reports a failure when the balance was paid concurrently', async () => {
@@ -118,7 +119,7 @@ describe('daily cron balance pass', () => {
     const res = await GET(cronRequest(`Bearer ${CRON_SECRET}`))
 
     expect(sendEmail).not.toHaveBeenCalled()
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, expired: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, expired: 0, redacted: 0 })
   })
 
   it('falls back to the payment link once when the charge fails', async () => {
@@ -134,7 +135,7 @@ describe('daily cron balance pass', () => {
       subject: 'Your remaining balance is due today',
     }))
     expect(markBalanceDueEmailSent).toHaveBeenCalledWith('bk_1')
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, expired: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, expired: 0, redacted: 0 })
   })
 
   it('emails the payment link for bookings without auto-pay opt-in', async () => {
@@ -147,7 +148,7 @@ describe('daily cron balance pass', () => {
       subject: 'Your remaining balance is due today',
     }))
     expect(markBalanceDueEmailSent).toHaveBeenCalledWith('bk_1')
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 1, failed: 0, expired: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 1, failed: 0, expired: 0, redacted: 0 })
   })
 
   it('never re-emails a link once the balance-due email was stamped', async () => {
@@ -179,7 +180,7 @@ describe('daily cron expiry pass', () => {
       to: 'ada@test.local',
       subject: 'Your booking request has expired',
     }))
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, expired: 1 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, expired: 1, redacted: 0 })
   })
 
   it('sends no expiry email when a deposit webhook confirmed the booking first', async () => {
@@ -194,6 +195,6 @@ describe('daily cron expiry pass', () => {
     const res = await GET(cronRequest(`Bearer ${CRON_SECRET}`))
 
     expect(sendEmail).not.toHaveBeenCalled()
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, expired: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, expired: 0, redacted: 0 })
   })
 })
