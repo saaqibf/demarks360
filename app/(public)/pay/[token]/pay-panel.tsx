@@ -58,14 +58,8 @@ export function PayPanel({ token, purpose, amount }: PayPanelProps) {
       <button
         onClick={handlePay}
         disabled={submitting}
-        style={{
-          width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          background: submitting ? 'rgba(232,178,92,0.45)' : 'var(--color-amber-light)',
-          color: 'var(--color-charcoal)', border: 'none', borderRadius: '999px', padding: '1rem 2rem',
-          fontFamily: 'var(--font-ui)', fontSize: '0.75rem', fontWeight: 700,
-          letterSpacing: '0.12em', textTransform: 'uppercase',
-          cursor: submitting ? 'not-allowed' : 'pointer', transition: 'background 0.2s ease',
-        }}
+        className="btn-primary"
+        style={{ width: '100%', opacity: submitting ? 0.65 : 1, cursor: submitting ? 'not-allowed' : 'pointer' }}
       >
         {submitting
           ? 'Redirecting to payment'

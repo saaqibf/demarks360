@@ -280,19 +280,19 @@ export default function HomePage() {
               </figure>
               <figure className="dm-frame">
                 <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-1.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>Aisha&apos;s 30th</span><span>YYC</span></figcaption>
+                <figcaption><span>Birthday</span><span>YYC</span></figcaption>
               </figure>
               <figure className="dm-frame">
                 <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-2.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>Singh wedding</span><span>YYC</span></figcaption>
+                <figcaption><span>Wedding</span><span>YYC</span></figcaption>
               </figure>
               <figure className="dm-frame">
                 <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-3.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>Stampede social</span><span>YYC</span></figcaption>
+                <figcaption><span>Corporate event</span><span>YYC</span></figcaption>
               </figure>
               <figure className="dm-frame">
                 <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-4.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>UofC grad</span><span>YYC</span></figcaption>
+                <figcaption><span>Grad night</span><span>YYC</span></figcaption>
               </figure>
               <figure className="dm-frame">
                 <a className="dm-frame-link" href="/book">
