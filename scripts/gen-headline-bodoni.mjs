@@ -40,7 +40,7 @@ const RAW = {
 function freshFont(which) {
   const buf = RAW[which]
   const font = opentype.parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength))
-  font.variation.set({ wght: 400, opsz: 96 })
+  font.variation.set({ wght: Number(process.env.WGHT ?? 500), opsz: 96 })
   return font
 }
 const advanceOf = (which, text) => freshFont(which).getAdvanceWidth(text, FONT_SIZE)
@@ -312,7 +312,7 @@ const vbW = round(maxX + PAD - vbMinX), vbH = round(maxY + PAD - vbMinY)
 const viewBox = `${vbMinX} ${vbMinY} ${vbW} ${vbH}`
 
 const banner = `// GENERATED FILE — do not edit by hand.
-// Source: scripts/gen-headline-bodoni.mjs (Bodoni Moda regular + italic, wght 400 / opsz 96).
+// Source: scripts/gen-headline-bodoni.mjs (Bodoni Moda regular + italic, wght 500 / opsz 96).
 // Per letter: the true Bodoni outline (fill) plus its centreline writing spine,
 // so the hero can reveal the real font letter by letter as if written by hand.`
 
