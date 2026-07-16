@@ -12,6 +12,14 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
+      // Close base-tag hijacking, plugin/object embedding, framing (clickjacking) and
+      // stray form posts. script-src keeps 'unsafe-inline'/'unsafe-eval' because Next.js
+      // hydration + Clerk need them without a nonce-based CSP (a tested nonce migration
+      // is tracked separately).
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "form-action 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.stripe.com",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.stripe.com https://*.clerk.com https://*.clerk.accounts.dev https://*.sentry.io",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",

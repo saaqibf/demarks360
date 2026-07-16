@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { getBookingByPayToken, setAutoPayOptIn, setBalanceSessionId, setDepositSessionId } from '@/lib/db/queries/bookings'
 import { stripe } from '@/lib/stripe'
 import { APP_URL } from '@/lib/app-url'
-import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimitDb, rateLimitHeaders } from '@/lib/rate-limit'
 
 const checkoutSchema = z.object({
   token: z.string().min(1).max(64),
@@ -15,7 +15,7 @@ const DAY_MS = 24 * 3600 * 1000
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req)
-  const rl = checkRateLimit(`pay:${ip}`, { limit: 5, windowMs: 60_000 })
+  const rl = await checkRateLimitDb(`pay:${ip}`, { limit: 5, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many attempts. Please wait before trying again.' },

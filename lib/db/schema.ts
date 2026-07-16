@@ -127,3 +127,12 @@ export const settings = pgTable('settings', {
   value: text('value').notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
+
+// Durable, cross-instance rate-limit buckets. The in-memory limiter is a per-
+// instance fast fallback; this table makes a limit hold across every serverless
+// instance and cold start, which is what the money/abuse endpoints need.
+export const rateLimits = pgTable('rate_limits', {
+  key: text('key').primaryKey(),
+  count: integer('count').notNull().default(0),
+  resetAt: timestamp('reset_at').notNull(),
+})

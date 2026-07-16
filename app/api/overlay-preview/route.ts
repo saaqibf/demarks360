@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimitDb, rateLimitHeaders } from '@/lib/rate-limit'
 import { buildOverlayPrompt, keyWhiteCenter } from '@/lib/overlay-generate'
 
 export const runtime = 'nodejs'
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
   const ip = getClientIp(req)
   // Each generation spends real credits; keep bots and refresh-spammers off the faucet
-  const rl = checkRateLimit(`overlay-preview:${ip}`, { limit: 5, windowMs: 60 * 60_000 })
+  const rl = await checkRateLimitDb(`overlay-preview:${ip}`, { limit: 5, windowMs: 60 * 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Preview limit reached for now. Our designer will take it from here after booking.' },
@@ -41,10 +41,9 @@ export async function POST(req: NextRequest) {
   }
 
   // Backstop independent of IP so header/IP rotation can't drain the credit
-  // balance. A durable store (Upstash / Vercel KV) is the complete fix and is
-  // flagged for provisioning; this bounds worst-case spend per instance.
+  // balance: a hard global daily cap held in the durable (DB-backed) limiter.
   const day = new Date().toISOString().slice(0, 10)
-  const globalRl = checkRateLimit(`overlay-preview:global:${day}`, { limit: 100, windowMs: 24 * 60 * 60_000 })
+  const globalRl = await checkRateLimitDb(`overlay-preview:global:${day}`, { limit: 100, windowMs: 24 * 60 * 60_000 })
   if (!globalRl.allowed) {
     return NextResponse.json(
       { error: 'Custom previews are paused for today. Our designer will craft yours after booking.' },

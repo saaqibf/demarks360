@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getResend, FROM_EMAIL } from '@/lib/email/resend'
 import { ADMIN_EMAILS } from '@/lib/admin-emails'
-import { getClientIp, checkRateLimit, rateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp, checkRateLimitDb, rateLimitHeaders } from '@/lib/rate-limit'
 
 const schema = z.object({
   email: z.string().email(),
@@ -10,7 +10,7 @@ const schema = z.object({
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req)
-  const rl = checkRateLimit(`notify:${ip}`, { limit: 3, windowMs: 60_000 })
+  const rl = await checkRateLimitDb(`notify:${ip}`, { limit: 3, windowMs: 60_000 })
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please wait before trying again.' },
