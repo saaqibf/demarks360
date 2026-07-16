@@ -4,7 +4,7 @@ import { SiteNav } from '@/components/public/site-nav'
 import { ShowcasePlayer } from '@/components/public/showcase-player'
 import { getPublicShowcaseItems } from '@/lib/db/queries/gallery'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'The Gallery | Demarks 360',

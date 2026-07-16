@@ -101,7 +101,7 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
         {/* Day headers */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           {DAY_NAMES.map(d => (
-            <div key={d} style={{ padding: '0.6rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.3)' }}>
+            <div key={d} style={{ padding: '0.6rem 0', textAlign: 'center', fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.62)' }}>
               {d}
             </div>
           ))}
@@ -147,7 +147,8 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
                   textAlign: 'center',
                   fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: selected ? 600 : 400,
                   background: selected ? 'var(--color-amber)' : 'transparent',
-                  color: selected ? 'var(--color-charcoal)' : disabled ? 'rgba(243,234,217,0.25)' : isFull ? 'var(--color-amber)' : 'var(--color-text-light)',
+                  color: selected ? 'var(--color-charcoal)' : isFull ? 'var(--color-amber)' : disabled ? 'rgba(243,234,217,0.25)' : 'var(--color-text-light)',
+                  textDecoration: isFull && !selected ? 'line-through' : undefined,
                   transition: 'background 0.15s',
                 }}
                 title={isFull ? 'Fully booked' : undefined}
@@ -160,11 +161,11 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
 
         {/* Legend */}
         <div style={{ padding: '0.75rem 1.5rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.35)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.62)' }}>
             <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-amber)' }} />
             Fully booked
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.35)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.6rem', color: 'rgba(245,240,234,0.62)' }}>
             <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
             Unavailable (5-day lead time)
           </div>

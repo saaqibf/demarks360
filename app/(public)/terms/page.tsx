@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SiteNav } from '@/components/public/site-nav'
 import { SiteFooter } from '@/components/public/site-footer'
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  description: 'The terms governing Demarks 360 video booth rental bookings in Calgary and surrounding areas.',
+  alternates: { canonical: 'https://demarks360.ca/terms' },
+}
 
 export default function TermsPage() {
   return (

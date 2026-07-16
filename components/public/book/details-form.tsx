@@ -357,8 +357,8 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 0.95 }}>
                   Design your <em style={{ color: 'var(--color-amber-light)', fontStyle: 'italic' }}>moment</em>
                 </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.38)', maxWidth: '46ch', lineHeight: 1.65 }}>
-                  Watch your custom overlay build itself in the live preview as you fill these in.
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.62)', maxWidth: '46ch', lineHeight: 1.65 }}>
+                  Every field below is optional. Watch your custom overlay build itself in the live preview as you fill these in.
                 </p>
               </div>
 
@@ -378,7 +378,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   placeholder="e.g. Bolu @ 80, Sarah's Graduation, NCMCC Sisters' Forum"
                 />
                 {errors.eventName && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventName}</p>}
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.35)', marginTop: '0.35rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.62)', marginTop: '0.35rem' }}>
                   This becomes the headline of your overlay. Watch it appear in the preview.
                 </p>
               </div>
@@ -396,7 +396,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   placeholder="e.g. Gold and Black, Hot Pink, Navy and Silver, Rose Gold"
                   maxLength={200}
                 />
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.35rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.62)', marginTop: '0.35rem' }}>
                   Type your colors and watch the preview restyle itself.
                 </p>
               </div>
@@ -415,7 +415,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   placeholder="e.g. Elegant and classy, mostly gold, she loves roses, nothing childish"
                   maxLength={500}
                 />
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.35rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.62)', marginTop: '0.35rem' }}>
                   Goes straight to our designer with your booking, and tunes the live preview as you type.
                 </p>
               </div>
@@ -459,7 +459,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                     </>
                   )}
                 </div>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.45rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.62)', marginTop: '0.45rem' }}>
                   Your photo appears in both bottom corners of the overlay, mirrored like our real frames. Preview only. It stays on your device and is never uploaded.
                 </p>
               </div>
@@ -494,8 +494,8 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
 
               {/* Video Format */}
               <div>
-                <label style={labelStyle}>Video Format</label>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <span id="df-video-format-label" style={labelStyle}>Video Format</span>
+                <div role="group" aria-labelledby="df-video-format-label" style={{ display: 'flex', gap: '0.75rem' }}>
                   {(['video', 'slomo'] as const).map(type => (
                     <button
                       key={type}
@@ -507,7 +507,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                     </button>
                   ))}
                 </div>
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.45rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.62)', marginTop: '0.45rem' }}>
                   {state.videoType === 'video'
                     ? 'Standard video. Recommended 15-20 seconds for the best crowd moment.'
                     : 'Cinematic slow motion. Up to 12 seconds. Looks incredible on every screen.'}
@@ -516,10 +516,10 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
 
               {/* Clip Duration */}
               <div>
-                <label style={labelStyle}>
+                <span id="df-clip-duration-label" style={labelStyle}>
                   Clip Duration <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional)</span>
-                </label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                </span>
+                <div role="group" aria-labelledby="df-clip-duration-label" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                   {(state.videoType === 'slomo' ? [4, 6, 8, 10, 12] : [5, 10, 15, 20]).map(s => {
                     const isRec = state.videoType === 'video' && s === 20
                     const selected = state.videoDuration === s
@@ -543,7 +543,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   })}
                 </div>
                 {state.videoType === 'video' && (
-                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.4rem' }}>
+                  <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.62)', marginTop: '0.4rem' }}>
                     20s ★ is our recommended length.
                   </p>
                 )}
@@ -603,7 +603,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   placeholder="Artist / Song title, or describe the vibe (e.g. afrobeats energy)"
                   maxLength={200}
                 />
-                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.32)', marginTop: '0.35rem' }}>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.62rem', color: 'rgba(245,240,234,0.62)', marginTop: '0.35rem' }}>
                   We queue this up while the booth runs at your event.
                 </p>
               </div>

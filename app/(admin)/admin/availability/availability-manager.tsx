@@ -291,21 +291,21 @@ export function AvailabilityManager({ initialBlocks, bookings }: Props) {
             <p className="adm-card-label">Block a date</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={labelStyle}>Date</label>
-                <input type="date" min={todayStr} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="adm-input" />
+                <label htmlFor="blk-date" style={labelStyle}>Date</label>
+                <input id="blk-date" type="date" min={todayStr} value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="adm-input" />
               </div>
               <div>
-                <label style={labelStyle}>Start (optional)</label>
-                <input type="time" value={form.startTime} onChange={e => setForm(f => ({ ...f, startTime: e.target.value }))} className="adm-input" />
+                <label htmlFor="blk-start" style={labelStyle}>Start (optional)</label>
+                <input id="blk-start" type="time" value={form.startTime} onChange={e => setForm(f => ({ ...f, startTime: e.target.value }))} className="adm-input" />
               </div>
               <div>
-                <label style={labelStyle}>End (optional)</label>
-                <input type="time" value={form.endTime} onChange={e => setForm(f => ({ ...f, endTime: e.target.value }))} className="adm-input" />
+                <label htmlFor="blk-end" style={labelStyle}>End (optional)</label>
+                <input id="blk-end" type="time" value={form.endTime} onChange={e => setForm(f => ({ ...f, endTime: e.target.value }))} className="adm-input" />
               </div>
             </div>
             <div style={{ marginBottom: '1rem' }}>
-              <label style={labelStyle}>Reason (optional)</label>
-              <input type="text" value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} placeholder="e.g. Personal day off" className="adm-input" />
+              <label htmlFor="blk-reason" style={labelStyle}>Reason (optional)</label>
+              <input id="blk-reason" type="text" value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} placeholder="e.g. Personal day off" className="adm-input" />
             </div>
             {error && <p style={{ color: 'var(--adm-danger)', fontSize: '0.8rem', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>{error}</p>}
             <button onClick={addBlock} disabled={saving} className="btn-primary btn--sm">

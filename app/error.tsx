@@ -50,7 +50,7 @@ export default function Error({
       <p style={{
         fontFamily: 'var(--font-body)',
         fontSize: '0.9rem',
-        color: 'rgba(237,232,223,0.38)',
+        color: 'rgba(237,232,223,0.62)',
         marginBottom: '2.5rem',
         maxWidth: '360px',
         lineHeight: 1.75,
@@ -59,37 +59,10 @@ export default function Error({
         Something went wrong on our end. Try again, or head back home.
       </p>
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-        <button
-          onClick={reset}
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.72rem',
-            fontWeight: 700,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: '#fff',
-            background: 'var(--color-amber)',
-            padding: '0.9rem 2rem',
-            borderRadius: '3px',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
+        <button onClick={reset} className="btn-primary">
           Try Again
         </button>
-        <a href="/" style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.72rem',
-          fontWeight: 600,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'rgba(237,232,223,0.45)',
-          background: 'transparent',
-          padding: '0.9rem 2rem',
-          borderRadius: '3px',
-          border: '1.5px solid rgba(237,232,223,0.15)',
-          textDecoration: 'none',
-        }}>
+        <a href="/" className="btn-secondary btn-secondary--dark">
           Back to Home
         </a>
       </div>

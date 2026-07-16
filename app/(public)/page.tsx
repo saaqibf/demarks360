@@ -229,7 +229,7 @@ export default function HomePage() {
             <li className="dm-flow-step">
               <span className="dm-flow-no">4</span>
               <h3>Balance on event day</h3>
-              <p>Charged automatically the morning of. Then we show up and spin.</p>
+              <p>Save your card at deposit and we charge it the morning of, or we email you a link. Then we show up and spin.</p>
             </li>
           </ol>
         </section>

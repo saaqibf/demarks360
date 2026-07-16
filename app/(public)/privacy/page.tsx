@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SiteNav } from '@/components/public/site-nav'
 import { SiteFooter } from '@/components/public/site-footer'
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: 'How Demarks 360 collects, uses, and protects your personal information under PIPEDA.',
+  alternates: { canonical: 'https://demarks360.ca/privacy' },
+}
 
 export default function PrivacyPage() {
   return (

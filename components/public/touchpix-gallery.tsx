@@ -143,12 +143,43 @@ function ClipModal({ item, shareBase, eventLabel, onClose }: { item: ClipItem; s
   const [copied, setCopied] = useState(false)
   const deepLink = `${shareBase}?v=${item.seq}`
   const shareText = `My 360 video from ${eventLabel} 🎬 · Demarks 360`
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
 
+  // Move focus into the dialog on open, lock the page scroll, and restore focus
+  // to whatever opened it on close.
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
+    const previouslyFocused = document.activeElement as HTMLElement | null
     document.body.style.overflow = 'hidden'
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+    closeButtonRef.current?.focus()
+    return () => {
+      document.body.style.overflow = ''
+      previouslyFocused?.focus?.()
+    }
+  }, [])
+
+  // Escape closes; Tab / Shift+Tab cycle within the dialog so focus cannot reach
+  // the page underneath while the overlay is modal.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return }
+      if (e.key !== 'Tab') return
+      const inner = innerRef.current
+      if (!inner) return
+      const focusables = inner.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])',
+      )
+      if (focusables.length === 0) return
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
   async function share() {
@@ -160,8 +191,8 @@ function ClipModal({ item, shareBase, eventLabel, onClose }: { item: ClipItem; s
 
   return (
     <div className="clip-modal" role="dialog" aria-modal="true" onClick={onClose}>
-      <div className="clip-modal-inner" onClick={e => e.stopPropagation()}>
-        <button className="clip-modal-close" onClick={onClose} aria-label="Close">✕</button>
+      <div className="clip-modal-inner" ref={innerRef} onClick={e => e.stopPropagation()}>
+        <button ref={closeButtonRef} className="clip-modal-close" onClick={onClose} aria-label="Close">✕</button>
         <video src={item.videoUrl} poster={item.thumbnailUrl} controls autoPlay playsInline className="clip-modal-video" />
         <div className="clip-modal-actions">
           <a href={`/api/clip-download?url=${encodeURIComponent(item.videoUrl)}`} download className="btn-primary btn--sm">Download my video</a>

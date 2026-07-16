@@ -8,6 +8,7 @@ import { AddonsStep } from '@/components/public/book/addons-step'
 import { DetailsForm } from '@/components/public/book/details-form'
 import { RequestReviewStep } from '@/components/public/book/request-review-step'
 import { BOOKING_WIZARD_STORAGE_KEY } from '@/components/public/book/wizard-storage'
+import { PRICING } from '@/lib/pricing'
 
 export type BookingState = {
   step: 1 | 2 | 3 | 4 | 5
@@ -65,6 +66,22 @@ const initialState: BookingState = {
 }
 
 const STEP_LABELS = ['Date', 'Time', 'Add-ons', 'Details', 'Review']
+
+const srOnly: React.CSSProperties = {
+  position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px',
+  overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0,
+}
+
+// The landing "check your date" band deep-links to /book?date=…; only skip the
+// DatePicker (which enforces lead time) when the prefilled date actually clears it.
+function isDateBookable(dateStr: string | null): boolean {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const minDate = new Date(today)
+  minDate.setDate(minDate.getDate() + PRICING.LEAD_TIME_DAYS)
+  return new Date(dateStr + 'T00:00:00') >= minDate
+}
 
 // Stale wizard sessions restart fresh instead of resurfacing old dates and times
 const STORAGE_TTL_MS = 30 * 60_000
@@ -163,11 +180,15 @@ function BookPageInner() {
   const params = useSearchParams()
   const prefilledDate = params.get('date') ?? null
   const prefilledEventType = normalizeEventType(params.get('eventType'))
+  // A prefilled date only skips step 1 if it clears the lead-time gate; otherwise
+  // fall back to the DatePicker so an invalid date is caught here, not after a
+  // full funnel of contact/design entry ends in a 409/422 at submit.
+  const canUsePrefilledDate = isDateBookable(prefilledDate)
   const [state, setState] = useState<BookingState>({
     ...initialState,
-    date: prefilledDate,
+    date: canUsePrefilledDate ? prefilledDate : null,
     ...prefilledEventType,
-    step: prefilledDate ? 2 : 1,
+    step: canUsePrefilledDate ? 2 : 1,
   })
   // Rehydrate after mount (not in the initializer) so server and client render the same
   // initial markup; persisting is skipped until the restore attempt has run
@@ -214,16 +235,16 @@ function BookPageInner() {
           .step-content { padding: 2rem 1.25rem !important; }
         }
       `}</style>
-      <div style={{ borderBottom: '1px solid var(--color-border-dark)', background: 'var(--color-ink)', position: 'sticky', top: '72px', zIndex: 100 }}>
-        <div className="step-bar" style={{ maxWidth: '960px', margin: '0 auto', padding: '0 3rem', display: 'flex', alignItems: 'center', gap: '0' }}>
+      <nav aria-label="Booking progress" style={{ borderBottom: '1px solid var(--color-border-dark)', background: 'var(--color-ink)', position: 'sticky', top: '72px', zIndex: 100 }}>
+        <ol className="step-bar" style={{ maxWidth: '960px', margin: '0 auto', padding: '0 3rem', display: 'flex', alignItems: 'center', gap: '0', listStyle: 'none' }}>
           {STEP_LABELS.map((label, i) => {
             const stepNum = (i + 1) as 1 | 2 | 3 | 4 | 5
             const active = stepNum === state.step
             const done = stepNum < state.step
             return (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+              <li key={label} aria-current={active ? 'step' : undefined} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                 <div style={{ padding: '1rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{
+                  <span aria-hidden="true" style={{
                     width: '30px', height: '30px', borderRadius: '50%', display: 'inline-flex',
                     alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                     background: done ? 'var(--color-amber-light)' : active ? 'var(--color-amber)' : 'transparent',
@@ -234,22 +255,25 @@ function BookPageInner() {
                   }}>
                     {done ? '✓' : stepNum}
                   </span>
-                  <span className={`step-label${active ? ' step-label-active' : ''}`} style={{
+                  <span aria-hidden="true" className={`step-label${active ? ' step-label-active' : ''}`} style={{
                     fontFamily: 'var(--font-ui)', fontSize: '0.62rem', fontWeight: 600,
                     letterSpacing: '0.1em', textTransform: 'uppercase',
                     color: active ? 'var(--color-text-light)' : 'var(--color-muted-light)',
                   }}>
                     {label}
                   </span>
+                  <span style={srOnly}>
+                    {`${label}: ${done ? 'completed' : active ? 'current step' : 'upcoming'}, step ${stepNum} of ${STEP_LABELS.length}`}
+                  </span>
                 </div>
                 {i < STEP_LABELS.length - 1 && (
-                  <div style={{ flex: 1, height: '1px', background: 'var(--color-border-dark)', margin: '0 0.75rem' }} />
+                  <div aria-hidden="true" style={{ flex: 1, height: '1px', background: 'var(--color-border-dark)', margin: '0 0.75rem' }} />
                 )}
-              </div>
+              </li>
             )
           })}
-        </div>
-      </div>
+        </ol>
+      </nav>
 
       {/* Step content */}
       <div className="step-content" style={{ maxWidth: '960px', margin: '0 auto', padding: '3rem' }}>

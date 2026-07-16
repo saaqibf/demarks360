@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -7,6 +8,10 @@ import { APP_URL } from '@/lib/app-url'
 import { GalleryPlayer } from './gallery-player'
 import { GalleryShare } from '@/components/public/gallery-share'
 import { TouchpixGallery } from '@/components/public/touchpix-gallery'
+
+// resolveGalleryAccess is a direct DB query (not fetch), so it isn't request-
+// memoized on its own; cache() dedupes the generateMetadata + render lookups.
+const getGalleryAccess = cache(resolveGalleryAccess)
 
 interface Props {
   params: Promise<{ token: string }>
@@ -41,7 +46,7 @@ function pickHighlights<T>(items: T[], n: number): T[] {
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { token } = await params
   const { v } = await searchParams
-  const result = await resolveGalleryAccess(token)
+  const result = await getGalleryAccess(token)
   if (result.status === 'not-found' || result.status === 'cancelled') {
     return { title: 'Gallery | Demarks 360' }
   }
@@ -74,7 +79,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
 export default async function GalleryPage({ params }: Props) {
   const { token } = await params
-  const result = await resolveGalleryAccess(token)
+  const result = await getGalleryAccess(token)
   if (result.status === 'not-found' || result.status === 'cancelled') notFound()
 
   const b = result.booking
