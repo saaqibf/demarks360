@@ -2,12 +2,18 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingState } from '@/app/(public)/book/page'
-import { calculateBookingCost, PRICING } from '@/lib/pricing'
 
 interface RequestReviewStepProps {
   state: BookingState
   onChange: (patch: Partial<BookingState>) => void
   onBack: () => void
+}
+
+// Public-facing add-on names only. Prices never reach the customer path, so this
+// maps ids to labels without importing the pricing config.
+const ADDON_LABELS: Record<string, string> = {
+  firecrackers: 'Firecrackers',
+  smilecam: 'SmileCam Photo Booth',
 }
 
 function buildBookingPayload(state: BookingState) {
@@ -57,12 +63,9 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
     ? timeToMinutes(state.endTime) - timeToMinutes(state.startTime)
     : 0
 
-  const pricing = calculateBookingCost({
-    durationMinutes,
-    addOnIds: state.addOnIds,
-    locationCity: state.locationCity ?? 'Calgary',
-  })
-  const { lineItems, depositAmount: deposit, balanceAmount: balance, subtotal } = pricing
+  const selectedAddOns = state.addOnIds
+    .map((id) => ADDON_LABELS[id])
+    .filter((label): label is string => Boolean(label))
 
   async function handleSubmit() {
     if (!state.agreedToTerms || submitting) return
@@ -111,7 +114,7 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
 
       <div className="dm-summary" style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)' }}>
         <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>Booking Summary</p>
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,240,234,0.35)', marginBottom: '0.5rem' }}>Event Summary</p>
           <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 400, color: 'var(--color-text-light)' }}>
             {state.date ? new Date(state.date + 'T00:00:00').toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''}
           </p>
@@ -129,33 +132,23 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
           </p>
         </div>
 
-        {lineItems.map(({ label, amount }) => (
-          <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.55)' }}>{label}</span>
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', fontWeight: 600 }}>${amount.toFixed(2)}</span>
+        {state.eventType && (
+          <div style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.55)' }}>Event type</span>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', fontWeight: 600, textAlign: 'right' }}>{state.eventType}</span>
           </div>
-        ))}
+        )}
 
-        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)' }}>Subtotal</span>
-          <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)' }}>${subtotal.toFixed(2)}</span>
-        </div>
-
-        <div style={{ padding: '1.25rem 1.5rem', background: 'var(--color-ink)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>Deposit due after approval ({PRICING.DEPOSIT_PERCENT * 100}%)</p>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.1rem' }}>
-              Balance of ${balance.toFixed(2)} due on your event day
-            </p>
+        {selectedAddOns.length > 0 && (
+          <div style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.55)' }}>Add-ons of interest</span>
+            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', fontWeight: 600, textAlign: 'right' }}>{selectedAddOns.join(', ')}</span>
           </div>
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', color: 'var(--color-amber-light)', fontWeight: 500 }}>
-            ${deposit.toFixed(2)}
-          </span>
-        </div>
+        )}
 
         <div style={{ padding: '1rem 1.5rem', background: 'rgba(255,255,255,0.02)' }}>
           <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)', lineHeight: 1.6 }}>
-            No payment is taken now. We review every request within 24 hours and email you a secure payment link once approved.
+            No payment is taken now. We review every request within 24 hours and reply with a tailored quote for your event.
           </p>
         </div>
       </div>
@@ -173,7 +166,7 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
           <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Terms of Service</a>
           {' '}and{' '}
           <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-amber-light)', textDecoration: 'underline' }}>Privacy Policy</a>.
-          I understand a 50% deposit is due after my request is approved, the balance is due on my event day, and the deposit is non-refundable once paid.
+          I understand this is a quote request, that pricing and a deposit to hold my date will be shared in my quote, and that no payment is taken until I accept it.
         </label>
       </div>
 
@@ -195,7 +188,7 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
               <path d="M22 12a10 10 0 00-10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
             </svg>
           )}
-          {submitting ? 'Submitting' : 'Submit Booking Request'}
+          {submitting ? 'Submitting' : 'Send my quote request'}
         </button>
         <button type="button" onClick={onBack} className="btn-back">
           ← Back

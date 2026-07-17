@@ -7,7 +7,7 @@ import { HeroIntro } from '@/components/public/hero-intro'
 import { InviewVideo } from '@/components/public/inview-video'
 import { SiteFooter } from '@/components/public/site-footer'
 import { SiteNav } from '@/components/public/site-nav'
-import { FAQS, FROM_PRICE, PACKAGES } from '@/lib/content/landing'
+import { FAQS, PACKAGES } from '@/lib/content/landing'
 
 import { DemarksLandingFx } from './_components/demarks-landing-fx'
 import './_components/demarks-landing.css'
@@ -15,7 +15,7 @@ import './_components/demarks-landing.css'
 export const metadata: Metadata = {
   title: 'Demarks 360: Calgary 360° Video Booth Rental',
   description:
-    `360° slow-motion video booth rental in Calgary. Same-day gallery delivery, unlimited takes, cinematic results. From $${FROM_PRICE}. Book online.`,
+    '360° slow-motion video booth rental in Calgary. Same-day gallery delivery, unlimited takes, cinematic results. Request a quote.',
   alternates: { canonical: 'https://demarks360.ca' },
 }
 
@@ -32,7 +32,6 @@ const localBusinessSchema = {
     addressCountry: 'CA',
   },
   areaServed: ['Calgary', 'Airdrie', 'Cochrane', 'Chestermere', 'Okotoks', 'Rocky View County'],
-  priceRange: '$$',
   openingHours: 'Mo-Su 09:00-22:00',
   sameAs: ['https://instagram.com/demarks360'],
 }
@@ -95,7 +94,7 @@ export default function HomePage() {
               Cinematic slow-motion video of your guests, captured in one spin and delivered the same day.
             </p>
             <div className="dm-hero-ctas">
-              <a className="btn-primary btn--lg" href="/book">Check your date</a>
+              <a className="btn-primary btn--lg" href="/book">Request a quote</a>
               <a className="btn-ghost" href="#dm-experience">See it in action</a>
             </div>
             <div className="dm-hero-proof">
@@ -171,7 +170,7 @@ export default function HomePage() {
         <section className="dm-sect" id="dm-packages" data-nav-section="dm-packages" data-nav-label="Packages">
           <div className="dm-sect-head dm-center">
             <span className="dm-eyebrow">Packages · 002</span>
-            <h2><span className="dm-line"><span>Clear pricing. <em>Zero surprises.</em></span></span></h2>
+            <h2><span className="dm-line"><span>Built for <em>your kind of night.</em></span></span></h2>
           </div>
           <div className="dm-packs">
 
@@ -186,21 +185,21 @@ export default function HomePage() {
                   </span>
                 )}
                 <span className="dm-pack-tier">{pack.tier}</span>
-                <div className={`dm-pack-price${pack.compactPrice ? ' dm-pack-price--compact' : ''}`}>
-                  {pack.priceLabel}<small>{pack.priceNote}</small>
+                <div className="dm-pack-price">
+                  {pack.quoteLabel}
                 </div>
                 <ul>
                   {pack.features.map((f, i) => (
                     <li key={i}>{f.lead && <b>{f.lead}</b>}{f.rest}</li>
                   ))}
                 </ul>
-                <a className={pack.starred ? 'btn-primary' : 'btn-ghost'} href="/book">Check your date</a>
+                <a className={pack.starred ? 'btn-primary' : 'btn-ghost'} href="/book">Request a quote</a>
               </div>
             ))}
 
           </div>
           <p className="dm-packs-note">
-            Travel included within Calgary. Weddings and corporate events get a custom quote in the booking flow.
+            Travel included within Calgary. Every event gets a custom quote, tailored to your date, hours, and add-ons.
           </p>
         </section>
 
@@ -208,28 +207,28 @@ export default function HomePage() {
         <section className="dm-sect" id="dm-how" data-nav-section="dm-how" data-nav-label="Booking">
           <div className="dm-sect-head dm-center">
             <span className="dm-eyebrow">Booking · 003</span>
-            <h2><span className="dm-line"><span>Booking takes <em>two minutes.</em></span></span></h2>
+            <h2><span className="dm-line"><span>Requesting a quote takes <em>two minutes.</em></span></span></h2>
           </div>
           <ol className="dm-flow">
             <li className="dm-flow-step">
               <span className="dm-flow-no">1</span>
-              <h3>Request your date</h3>
+              <h3>Request your quote</h3>
               <p>Tell us the event and your vision. No payment, no card, no commitment yet.</p>
             </li>
             <li className="dm-flow-step">
               <span className="dm-flow-no">2</span>
-              <h3>We confirm in 24 hours</h3>
-              <p>We review your request and email you a secure link to lock it in.</p>
+              <h3>We reply in 24 hours</h3>
+              <p>We review your details and send back a tailored quote for your event.</p>
             </li>
             <li className="dm-flow-step">
               <span className="dm-flow-no">3</span>
-              <h3>Hold it with 50%</h3>
-              <p>A half deposit reserves your date. The balance is not due yet.</p>
+              <h3>Hold your date</h3>
+              <p>Once you love the quote, a deposit reserves your date. The balance is not due yet.</p>
             </li>
             <li className="dm-flow-step">
               <span className="dm-flow-no">4</span>
               <h3>Balance on event day</h3>
-              <p>Save your card at deposit and we charge it the morning of, or we email you a link. Then we show up and spin.</p>
+              <p>The balance is settled the week of your event. Then we show up and spin.</p>
             </li>
           </ol>
         </section>
@@ -249,7 +248,7 @@ export default function HomePage() {
                 aria-label="Event date"
               />
               <a id="dm-check-cta" className="btn-primary" href="/book">
-                Check your date
+                Request a quote
               </a>
             </div>
           </div>
@@ -399,7 +398,7 @@ export default function HomePage() {
           <h2><span className="dm-line"><span>Some moments deserve <em className="dm-em">every angle.</em></span></span></h2>
           <p className="dm-finale-lead">One spin, delivered the same day, shared for weeks. Let&apos;s put your night on the reel.</p>
           <a className="btn-primary btn--lg" href="/book">
-            Check your date
+            Request a quote
           </a>
         </section>
 

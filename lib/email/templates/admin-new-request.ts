@@ -40,7 +40,7 @@ export function adminNewRequestEmail(p: AdminNewRequestParams): EmailContent {
 
   const body = `
     <p style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:16px;line-height:1.65;color:#5E5647;max-width:46ch;">
-      A new request is waiting for your review. Approve it to send the customer a secure link for their 50% deposit.
+      A new quote request is waiting for your review. Reply with a tailored quote, then send the deposit link when they are ready to hold the date.
     </p>
 
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0;">
@@ -70,9 +70,9 @@ export function adminNewRequestEmail(p: AdminNewRequestParams): EmailContent {
     </p>`
 
   return {
-    subject: `New request: ${p.eventType} on ${weekday} ${month} ${dayNum}${p.subtotal != null ? ` (${money(p.subtotal)})` : ''}`,
-    html: emailShell('You have a new booking request', body, {
-      eyebrow: 'New booking request',
+    subject: `New quote request: ${p.eventType} on ${weekday} ${month} ${dayNum}${p.subtotal != null ? ` (${money(p.subtotal)})` : ''}`,
+    html: emailShell('You have a new quote request', body, {
+      eyebrow: 'New quote request',
       heroImage: `${APP_URL}/email/hero.jpg`,
       heroTitle: p.eventName || p.eventType,
     }),

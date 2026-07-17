@@ -295,7 +295,6 @@ function BookPageInner() {
         {state.step === 3 && (
           <AddonsStep
             selectedIds={state.addOnIds}
-            durationMinutes={state.startTime && state.endTime ? (Number(state.endTime.split(':')[0]) * 60 + Number(state.endTime.split(':')[1])) - (Number(state.startTime.split(':')[0]) * 60 + Number(state.startTime.split(':')[1])) : 120}
             onNext={(addOnIds) => update({ addOnIds, step: 4 })}
             onBack={() => update({ step: 2 })}
           />

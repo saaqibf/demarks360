@@ -1,8 +1,3 @@
-import { PRICING } from '@/lib/pricing'
-
-// Landing-page pricing anchor: the cheapest possible booking (minimum duration at the hourly rate)
-export const FROM_PRICE = Math.round(PRICING.HOURLY_RATE * (PRICING.MIN_DURATION_MINUTES / 60))
-
 export interface PackageFeature {
   lead?: string
   rest: string
@@ -12,19 +7,18 @@ export interface LandingPackage {
   tier: string
   badge?: string
   starred?: boolean
-  priceLabel: string
-  priceNote: string
-  compactPrice?: boolean
+  // No public prices: every tier is quoted per event, so this slot carries a
+  // quote-oriented label instead of a dollar amount.
+  quoteLabel: string
   features: PackageFeature[]
 }
 
-// All package prices derive from lib/pricing/config.ts so the landing page,
-// the JSON-LD, and the checkout can never quote different numbers.
+// Tiers and their feature lists are public; the dollar amounts are not. Pricing
+// is shared privately in each customer's quote.
 export const PACKAGES: LandingPackage[] = [
   {
     tier: 'Essential',
-    priceLabel: `$${2 * PRICING.HOURLY_RATE}`,
-    priceNote: ' / 2 hrs',
+    quoteLabel: 'Custom quote',
     features: [
       { lead: '2 hours', rest: ' of unlimited spins' },
       { rest: 'Professional attendant, setup & teardown' },
@@ -36,8 +30,7 @@ export const PACKAGES: LandingPackage[] = [
     tier: 'Celebration',
     badge: 'Most booked',
     starred: true,
-    priceLabel: `$${3 * PRICING.HOURLY_RATE}`,
-    priceNote: ' / 3 hrs',
+    quoteLabel: 'Custom quote',
     features: [
       { lead: '3 hours', rest: ' of unlimited spins' },
       { rest: 'Everything in Essential' },
@@ -48,9 +41,7 @@ export const PACKAGES: LandingPackage[] = [
   },
   {
     tier: 'All-night',
-    priceLabel: `From $${4 * PRICING.HOURLY_RATE}`,
-    priceNote: ' / 4+ hrs',
-    compactPrice: true,
+    quoteLabel: 'Custom quote',
     features: [
       { lead: '4+ hours', rest: ', evening to last dance' },
       { rest: 'Everything in Celebration' },
@@ -81,10 +72,10 @@ export const FAQS: LandingFaq[] = [
   },
   {
     q: 'How far do you travel?',
-    a: 'Calgary and area is included: Airdrie, Chestermere, Okotoks, Cochrane. Farther out is usually fine too, with a small travel fee shown upfront when you book.',
+    a: 'Calgary and area is included: Airdrie, Chestermere, Okotoks, Cochrane. Farther out is usually fine too, with any small travel cost included in your quote.',
   },
   {
-    q: 'What do you need to hold a date?',
-    a: 'A deposit through our secure checkout holds your date. The rest is due the week of the event. Cancel 7 or more days out and the deposit moves to a new date, no questions.',
+    q: 'How does pricing work?',
+    a: 'You request a quote with your event details and we reply with tailored pricing for your date, hours, and any add-ons. Once you are happy with it, a deposit holds your date. The rest is due the week of the event. Cancel 7 or more days out and the deposit moves to a new date, no questions.',
   },
 ]

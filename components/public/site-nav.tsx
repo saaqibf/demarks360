@@ -126,7 +126,7 @@ export function SiteNav() {
             <Link href="/book" className="btn-primary nav-book-btn" style={{
               padding: '0.75rem 1.75rem',
             }}>
-              Book now
+              Request a quote
             </Link>
           )}
 
@@ -189,7 +189,7 @@ export function SiteNav() {
                   display: 'block',
                   textAlign: 'center',
                 }}>
-                  Book now
+                  Request a quote
                 </Link>
               </div>
             )}

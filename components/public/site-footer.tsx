@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 const bookLinks = [
-  { label: 'Check your date', href: '/book' },
-  { label: 'Book now', href: '/book' },
+  { label: 'Request a quote', href: '/book' },
+  { label: 'Get pricing', href: '/book' },
   { label: 'Packages', href: '/#dm-packages' },
   { label: 'FAQ', href: '/#dm-faq' },
 ]

@@ -284,7 +284,6 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             const endTimeStr = minutesToTime(Math.min(startMin + minutes, 24 * 60 - 1))
             const fits = isSpanFree(startMin, minutes, availability)
             const isSelected = selectedEnd !== null && timeToMinutes(selectedEnd) - startMin === minutes
-            const price = Math.ceil((minutes / 60) * PRICING.HOURLY_RATE)
             return (
               <button
                 key={minutes}
@@ -310,7 +309,6 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
                     {fits ? `${formatTime(selectedStart)} to ${formatTime(endTimeStr)}` : 'Not available this day'}
                   </span>
                 </span>
-                <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', fontWeight: 700, whiteSpace: 'nowrap' }}>${price}</span>
               </button>
             )
           })}
@@ -327,7 +325,6 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             const endMin = customEnd ? timeToMinutes(customEnd) : -1
             const dur = endMin - startMin
             const valid = endMin > startMin && dur >= PRICING.MIN_DURATION_MINUTES && isSpanFree(startMin, dur, availability)
-            const price = valid ? Math.ceil((dur / 60) * PRICING.HOURLY_RATE) : 0
             return (
               <div style={{ padding: '1.4rem 1.4rem 1.3rem', border: '1px solid color-mix(in srgb, var(--color-amber) 40%, transparent)', borderRadius: '14px', background: 'linear-gradient(160deg, var(--color-charcoal-2), var(--color-charcoal-3))', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 20px 50px -30px rgba(0,0,0,0.7)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
@@ -341,7 +338,7 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
                       style={{ background: 'var(--color-charcoal)', border: '1px solid var(--color-amber)', borderRadius: '10px', color: 'var(--color-text-light)', fontFamily: 'var(--font-ui)', fontSize: '1.05rem', padding: '0.7rem 0.9rem', colorScheme: 'dark', letterSpacing: '0.02em' }}
                     />
                   </label>
-                  {valid && <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.15rem', color: 'var(--color-amber-light)', whiteSpace: 'nowrap' }}>{(dur / 60).toFixed(dur % 60 ? 1 : 0)} hrs &middot; ${price}</span>}
+                  {valid && <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.15rem', color: 'var(--color-amber-light)', whiteSpace: 'nowrap' }}>{(dur / 60).toFixed(dur % 60 ? 1 : 0)} hrs</span>}
                 </div>
                 {customEnd && !valid && (
                   <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem', color: 'var(--color-amber)' }}>
@@ -373,8 +370,6 @@ export function TimePicker({ date, startTime, endTime, onSelect, onBack }: TimeP
             <strong>{formatTime(selectedStart)}</strong> → <strong>{formatTime(selectedEnd)}</strong>
             {' · '}
             {Math.round((timeToMinutes(selectedEnd) - timeToMinutes(selectedStart)) / 60 * 10) / 10} hrs
-            {' · '}
-            ${Math.ceil((timeToMinutes(selectedEnd) - timeToMinutes(selectedStart)) / 60 * PRICING.HOURLY_RATE).toFixed(0)} estimate
           </p>
           <button
             onClick={() => onSelect(selectedStart, selectedEnd)}

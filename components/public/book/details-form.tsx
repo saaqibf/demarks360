@@ -309,7 +309,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                 onChange={e => onChange({ locationCity: e.target.value })}
               >
                 {SERVICE_CITIES.map(city => (
-                  <option key={city} value={city}>{city}{city !== 'Calgary' ? ' (+$50 travel fee)' : ''}</option>
+                  <option key={city} value={city}>{city}{city !== 'Calgary' ? ' (travel included in quote)' : ''}</option>
                 ))}
               </select>
             </div>

@@ -19,17 +19,17 @@ const STATUS_COPY: Record<string, { eyebrow: string; title: string; body: string
   requested: {
     eyebrow: 'Request Received',
     title: 'Request received',
-    body: 'We review every request within 24 hours and will email you either a payment link or a note from us. No payment has been taken.',
+    body: 'Thanks for your request. We review every request within 24 hours and reply with a tailored quote for your event. No payment has been taken.',
   },
   approved: {
-    eyebrow: 'Approved',
-    title: 'Your date is waiting',
-    body: 'Your request was approved. Check your email for the deposit payment link that locks in your date.',
+    eyebrow: 'Quote Ready',
+    title: 'Your quote is on its way',
+    body: 'We reviewed your request. Check your email for your quote and a link to hold your date with a deposit whenever you are ready.',
   },
   confirmed: {
-    eyebrow: 'Booking Confirmed',
+    eyebrow: 'Date Held',
     title: 'You’re booked',
-    body: 'Your deposit is in and your date is locked. Check your inbox for the receipt and event details.',
+    body: 'Your deposit is in and your date is locked. Check your inbox for your event details.',
   },
   declined: {
     eyebrow: 'Request Declined',
@@ -39,12 +39,12 @@ const STATUS_COPY: Record<string, { eyebrow: string; title: string; body: string
   expired: {
     eyebrow: 'Request Expired',
     title: 'This request expired',
-    body: 'The deposit window closed, so the date was released. You are welcome to submit a new request.',
+    body: 'The window to hold this date closed, so it was released. You are welcome to submit a new request.',
   },
   cancelled: {
     eyebrow: 'Cancelled',
     title: 'This booking was cancelled',
-    body: 'This booking is no longer active. Want to rebook? Check availability for a new date.',
+    body: 'This booking is no longer active. Want to rebook? Request a quote for a new date.',
   },
 }
 
@@ -76,17 +76,9 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
   const copy = STATUS_COPY[booking.status] ?? STATUS_COPY.requested
   const isRequest = booking.status === 'requested'
 
-  const paymentRows = isRequest
-    ? [
-        { label: 'Deposit due after approval (50%)', value: `$${Number(booking.depositAmount ?? 0).toFixed(2)}` },
-        { label: 'Balance due on event day (50%)', value: `$${Number(booking.balanceAmount ?? 0).toFixed(2)}` },
-        { label: 'Booking Reference', value: booking.id.slice(0, 12).toUpperCase() },
-      ]
-    : [
-        { label: 'Deposit', value: `$${Number(booking.depositAmount ?? 0).toFixed(2)}` },
-        { label: 'Balance due on event day', value: `$${Number(booking.balanceAmount ?? 0).toFixed(2)}` },
-        { label: 'Booking Reference', value: booking.id.slice(0, 12).toUpperCase() },
-      ]
+  const detailRows = [
+    { label: 'Reference', value: booking.id.slice(0, 12).toUpperCase() },
+  ]
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-ink)' }}>
@@ -123,7 +115,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             </p>
           </div>
 
-          {paymentRows.map(({ label, value }) => (
+          {detailRows.map(({ label, value }) => (
             <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)' }}>{label}</span>
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', fontWeight: 600 }}>{value}</span>
@@ -133,7 +125,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
           {isRequest && (
             <div style={{ padding: '1rem 1.5rem', background: 'rgba(255,255,255,0.02)' }}>
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)', lineHeight: 1.6 }}>
-                No payment is taken until we approve your request and you pay the deposit through your secure link.
+                No payment has been taken. We will reply with your tailored quote by email.
               </p>
             </div>
           )}
