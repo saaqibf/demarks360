@@ -9,6 +9,10 @@ interface GalleryReadyParams {
     email: string
   }
   appUrl: string
+  // Google review link. When set, the email asks for a review right after the
+  // gallery CTA — the moment the customer is happiest. Omitted entirely when
+  // unset (i.e. before the Google Business Profile exists).
+  reviewUrl?: string
 }
 
 function fmtDate(d: string): string {
@@ -17,8 +21,25 @@ function fmtDate(d: string): string {
   })
 }
 
-export function galleryReadyHtml({ booking: b, customer: c, appUrl }: GalleryReadyParams): string {
+export function galleryReadyHtml({ booking: b, customer: c, appUrl, reviewUrl }: GalleryReadyParams): string {
   const galleryUrl = `${appUrl}/gallery/${b.galleryToken}`
+
+  const reviewBlock = reviewUrl
+    ? `
+  <tr><td style="padding:0 40px 40px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FFFFFF;border:1px solid #ede8e1;border-radius:4px;">
+      <tr><td style="padding:28px 32px;text-align:center;">
+        <p style="margin:0 0 6px;font-size:20px;letter-spacing:0.1em;color:#C9913F;font-family:Arial,sans-serif;">★★★★★</p>
+        <p style="margin:0 0 14px;font-size:15px;color:#333;font-family:Arial,sans-serif;line-height:1.6;">
+          Loved your videos? A quick Google review helps other Calgary hosts find us — it takes about 30 seconds.
+        </p>
+        <a href="${reviewUrl}" style="display:inline-block;background:#111111;color:#FFFFFF;text-decoration:none;font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:14px 32px;border-radius:2px;">
+          Leave a Review →
+        </a>
+      </td></tr>
+    </table>
+  </td></tr>`
+    : ''
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -85,7 +106,7 @@ export function galleryReadyHtml({ booking: b, customer: c, appUrl }: GalleryRea
       Or copy this link: <a href="${galleryUrl}" style="color:#B07E2F;word-break:break-all;">${galleryUrl}</a>
     </p>
   </td></tr>
-
+${reviewBlock}
   <!-- Footer -->
   <tr><td style="background:#FBF8F1;padding:28px 40px;text-align:center;">
     <p style="margin:0 0 8px;font-family:Arial Black,Arial,sans-serif;font-size:13px;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:#FFFFFF;">

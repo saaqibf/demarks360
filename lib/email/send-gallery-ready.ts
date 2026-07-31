@@ -10,6 +10,7 @@ export async function sendGalleryReadyEmail(bookingId: string) {
 
   const { booking: b, customer: c } = row
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://demarks360.ca'
+  const reviewUrl = process.env.GOOGLE_REVIEW_URL?.trim() || undefined
 
   await getResend().emails.send({
     from: FROM_EMAIL,
@@ -23,6 +24,7 @@ export async function sendGalleryReadyEmail(bookingId: string) {
       },
       customer: { name: c.name, email: c.email },
       appUrl,
+      reviewUrl,
     }),
   })
 }
