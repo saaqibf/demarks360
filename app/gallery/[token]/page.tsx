@@ -58,7 +58,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   if (b.touchpixGalleryUrl) {
     try {
       const g = await fetchTouchpixGallery(b.touchpixGalleryUrl)
-      if (g.eventName?.trim()) label = g.eventName.trim()
+      if (!b.eventName?.trim() && g.eventName?.trim()) label = g.eventName.trim()
       const clip = v ? g.items.find(i => i.seq === Number(v)) : g.items[0]
       if (clip) image = clip.thumbnailUrl
     } catch { /* keep default */ }
@@ -86,8 +86,9 @@ export default async function GalleryPage({ params }: Props) {
   const shareBase = `${APP_URL}/gallery/${token}`
 
   // Touchpix-backed events mirror the booth clips live; this is the primary path.
-  // When connected, the event's real name + date come from Touchpix (the booth
-  // is ground truth), not the booking record.
+  // The display name comes from the booking (operator-controlled) so it can be
+  // corrected regardless of the booth gallery's own title; the date still comes
+  // from the booth clips, which are ground truth for when the event happened.
   let touchpixItems: TouchpixItem[] | null = null
   let touchpixName: string | null = null
   let touchpixDate: string | null = null
@@ -103,7 +104,7 @@ export default async function GalleryPage({ params }: Props) {
     }
   }
 
-  const label = touchpixName?.trim() || b.eventName?.trim() || b.eventType
+  const label = b.eventName?.trim() || touchpixName?.trim() || b.eventType
   const displayDate = touchpixDate ?? b.eventDate
 
   // Per-event curation set by the operator in the admin: hidden clips never show,
