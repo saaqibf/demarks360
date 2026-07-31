@@ -278,20 +278,29 @@ export default function HomePage() {
                 <figcaption><span>Olabode @ 60</span><span>YYC</span></figcaption>
               </figure>
               <figure className="dm-frame">
-                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-1.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>Birthday</span><span>YYC</span></figcaption>
+                <a className="dm-frame-link" href="/gallery/hz920bua1lhwypsmgbsl8s7a">
+                  <div className="dm-frame-ph">
+                    <div className="dm-frame-fill" />
+                    <InviewVideo
+                      className="dm-media dm-frame-media"
+                      preload="metadata"
+                      poster="https://touchpix-space-1.nyc3.cdn.digitaloceanspaces.com/buckets_us/a9407efb-e408-4117-ac48-ee25ddd34947/441081/thumbs/32-20260725-200701.573022-slomo.png"
+                      src="https://touchpix-space-1.nyc3.cdn.digitaloceanspaces.com/buckets_us/a9407efb-e408-4117-ac48-ee25ddd34947/441081/32-20260725-200701.573022-slomo.mp4"
+                    />
+                    <span className="dm-frame-live">Real event</span>
+                  </div>
+                </a>
+                <figcaption><span>Ruth &amp; Azeez</span><span>YYC</span></figcaption>
               </figure>
               <figure className="dm-frame">
-                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-2.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>Wedding</span><span>YYC</span></figcaption>
-              </figure>
-              <figure className="dm-frame">
-                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-3.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>Corporate event</span><span>YYC</span></figcaption>
-              </figure>
-              <figure className="dm-frame">
-                <div className="dm-frame-ph"><div className="dm-frame-fill" /><img className="dm-media dm-frame-media" src="/media/gallery-4.jpg" alt="" loading="lazy" /></div>
-                <figcaption><span>Grad night</span><span>YYC</span></figcaption>
+                <a className="dm-frame-link" href="https://fotoshare.co/e/ITA2oC15xRM33iFi_FjMm" target="_blank" rel="noopener noreferrer">
+                  <div className="dm-frame-ph">
+                    <div className="dm-frame-fill" />
+                    <img className="dm-media dm-frame-media" src="/media/laitan-1.jpg" alt="Guests at Laitan's 50th in the Demarks 360 photo booth" loading="lazy" />
+                    <span className="dm-frame-live">Real event</span>
+                  </div>
+                </a>
+                <figcaption><span>Laitan @ 50</span><span>Photo booth</span></figcaption>
               </figure>
               <figure className="dm-frame">
                 <a className="dm-frame-link" href="/book">
