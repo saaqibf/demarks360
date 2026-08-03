@@ -139,6 +139,8 @@ export function DatePicker({ selectedDate, onSelect }: DatePickerProps) {
                 key={day}
                 onClick={() => !disabled && onSelect(dateStr)}
                 disabled={disabled}
+                aria-pressed={selected}
+                aria-label={`${new Date(dateStr + 'T00:00:00').toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}${isFull ? ', fully booked' : disabled ? ', unavailable' : ''}${selected ? ', selected' : ''}`}
                 style={{
                   border: isToday && !selected ? '1px solid rgba(201,145,63,0.4)' : 'none',
                   cursor: disabled ? 'not-allowed' : 'pointer',

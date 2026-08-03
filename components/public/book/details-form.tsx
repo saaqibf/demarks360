@@ -189,12 +189,14 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
     generatedFrameUrl: aiFrameUrl,
   }
 
-  function validate(): boolean {
+  // Client rules mirror the server schema (lib/validations/booking.ts) so a
+  // request never passes here only to be rejected on the final step.
+  function validate(): Record<string, string> {
     const e: Record<string, string> = {}
-    if (!state.customerName.trim()) e.customerName = 'Name is required'
-    if (!state.customerEmail.includes('@')) e.customerEmail = 'Valid email required'
+    if (state.customerName.trim().length < 2) e.customerName = 'Name is required'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.customerEmail.trim())) e.customerEmail = 'Valid email required'
     if (state.customerPhone.replace(/\D/g, '').length < 10) e.customerPhone = 'Valid phone required'
-    if (!state.locationAddress.trim()) e.locationAddress = 'Address is required'
+    if (state.locationAddress.trim().length < 5) e.locationAddress = 'Address is required'
     if (!state.eventType.trim()) {
       e.eventType = isOtherMode ? 'Please describe your event' : 'Event type is required'
     } else if (state.eventType.trim().length < 2) {
@@ -202,11 +204,33 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
     }
     if (!state.eventName.trim()) e.eventName = 'Event name is required'
     setErrors(e)
-    return Object.keys(e).length === 0
+    return e
+  }
+
+  // Field order top-to-bottom, so a failed submit can jump to the first error.
+  const FIELD_IDS: Record<string, string> = {
+    customerName: 'df-name',
+    customerEmail: 'df-email',
+    customerPhone: 'df-phone',
+    locationAddress: 'df-address',
+    eventType: 'df-event-type',
+    eventName: 'df-event-name',
   }
 
   function handleSubmit() {
-    if (validate()) onNext()
+    const e = validate()
+    if (Object.keys(e).length === 0) {
+      onNext()
+      return
+    }
+    // The required fields sit at the top of a long form and the submit button at
+    // the bottom, so scroll the first error into view instead of doing nothing.
+    const firstKey = Object.keys(FIELD_IDS).find((k) => k in e)
+    if (firstKey) {
+      const el = document.getElementById(FIELD_IDS[firstKey])
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      el?.focus({ preventScroll: true })
+    }
   }
 
   function handlePhotoSelect(e: React.ChangeEvent<HTMLInputElement>) {
@@ -375,6 +399,7 @@ export function DetailsForm({ state, onChange, onNext, onBack }: DetailsFormProp
                   style={inputStyle}
                   value={state.eventName}
                   onChange={e => onChange({ eventName: e.target.value })}
+                  maxLength={100}
                   placeholder="e.g. Bolu @ 80, Sarah's Graduation, NCMCC Sisters' Forum"
                 />
                 {errors.eventName && <p role="alert" style={{ color: 'var(--color-amber-light)', fontSize: '0.72rem', marginTop: '0.25rem' }}>{errors.eventName}</p>}

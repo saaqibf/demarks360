@@ -25,8 +25,10 @@ export function fmtDate(d: string): string {
 
 export function fmtTime(t: string): string {
   const [h, m] = t.split(':').map(Number)
-  const period = h >= 12 ? 'PM' : 'AM'
-  const hour = h > 12 ? h - 12 : h === 0 ? 12 : h
+  // Normalize a 24:00 end time (midnight) so it reads "12:00 AM", not "12:00 PM".
+  const hh = h % 24
+  const period = hh >= 12 ? 'PM' : 'AM'
+  const hour = hh % 12 === 0 ? 12 : hh % 12
   return `${hour}:${String(m).padStart(2, '0')} ${period}`
 }
 

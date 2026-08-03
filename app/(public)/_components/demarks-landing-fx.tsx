@@ -5,6 +5,8 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
+import { PRICING } from '@/lib/pricing/config'
+
 // One idle lap of the hero orbit takes ~11 seconds — visibly alive without being dizzying
 const IDLE_DEG_PER_SEC = 360 / 11
 // The hero orbit's resting start angle; the intro head lands here so the light never teleports
@@ -80,6 +82,12 @@ export function DemarksLandingFx() {
     const dateCta = document.getElementById('dm-check-cta')
     let onDateChange: (() => void) | null = null
     if (dateInput && dateCta) {
+      // Block past / too-soon dates in the native picker so a chosen date is never
+      // silently dropped when the booking wizard rejects it for lead time.
+      const earliest = new Date()
+      earliest.setDate(earliest.getDate() + PRICING.LEAD_TIME_DAYS)
+      const pad = (n: number) => String(n).padStart(2, '0')
+      dateInput.min = `${earliest.getFullYear()}-${pad(earliest.getMonth() + 1)}-${pad(earliest.getDate())}`
       onDateChange = () => {
         const v = dateInput.value
         dateCta.setAttribute('href', v ? `/book?date=${v}` : '/book')

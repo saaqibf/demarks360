@@ -49,8 +49,10 @@ function timeToMinutes(t: string): number {
 
 function formatTime(t: string): string {
   const [h, m] = t.split(':').map(Number)
-  const period = h >= 12 ? 'PM' : 'AM'
-  const hour = h > 12 ? h - 12 : h === 0 ? 12 : h
+  // Normalize a 24:00 end time (midnight) so it reads "12:00 AM", not "12:00 PM".
+  const hh = h % 24
+  const period = hh >= 12 ? 'PM' : 'AM'
+  const hour = hh % 12 === 0 ? 12 : hh % 12
   return `${hour}:${String(m).padStart(2, '0')} ${period}`
 }
 
@@ -88,8 +90,22 @@ export function RequestReviewStep({ state, onChange, onBack }: RequestReviewStep
         // If details changed since a previous submit, the server updates the requested booking in place
         body: JSON.stringify({ ...payload, bookingId: state.pendingBookingId ?? undefined }),
       })
-      const data: { bookingId?: string; error?: string } = await res.json().catch(() => ({}))
+      const data: {
+        bookingId?: string
+        error?: string
+        details?: { fieldErrors?: Record<string, string[]> }
+      } = await res.json().catch(() => ({}))
       if (!res.ok || !data.bookingId) {
+        // A validation rejection points at a specific field (usually contact
+        // details) — name it and send them to Back to fix, never a dead "Validation failed".
+        if (res.status === 422) {
+          const firstMsg = Object.values(data.details?.fieldErrors ?? {}).flat()[0]
+          setError(firstMsg
+            ? `${firstMsg}. Please tap Back to fix it, then resubmit.`
+            : 'Some of your details need fixing. Please tap Back and check your contact info.')
+          setSubmitting(false)
+          return
+        }
         setError(data.error ?? 'Failed to submit your request. Please try again.')
         setSubmitting(false)
         return
