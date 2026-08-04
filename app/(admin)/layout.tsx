@@ -1,4 +1,5 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
+import { ClerkProvider } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { ADMIN_EMAILS, isAdminEmail } from '@/lib/admin-emails'
@@ -23,11 +24,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="adm-shell" style={{ display: 'flex', minHeight: '100vh' }}>
-      <AdminSidebar />
-      <main style={{ flex: 1, overflow: 'auto', minHeight: '100vh' }}>
-        {children}
-      </main>
-    </div>
+    <ClerkProvider>
+      <div className="adm-shell" style={{ display: 'flex', minHeight: '100vh' }}>
+        <AdminSidebar />
+        <main style={{ flex: 1, overflow: 'auto', minHeight: '100vh' }}>
+          {children}
+        </main>
+      </div>
+    </ClerkProvider>
   )
 }

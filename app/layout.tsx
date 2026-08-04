@@ -1,5 +1,4 @@
 import { Great_Vibes } from 'next/font/google'
-import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 
 import type { Metadata } from 'next'
@@ -66,15 +65,18 @@ export const metadata: Metadata = {
   },
 }
 
+// Clerk (admin auth) is intentionally NOT provided here — only the admin
+// surfaces need it. Wrapping the root made every public marketing page load
+// clerk.browser.js (and error out when the prod Clerk domain isn't set), so
+// ClerkProvider now lives in the (admin), admin-login, sign-in, sign-up and
+// account layouts instead.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={greatVibes.variable}>
-          <div className="grain" aria-hidden="true" />
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={greatVibes.variable}>
+        <div className="grain" aria-hidden="true" />
+        {children}
+      </body>
+    </html>
   )
 }
