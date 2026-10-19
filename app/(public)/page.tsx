@@ -278,6 +278,7 @@ export default function HomePage() {
                 punctual and came on time. <em>I would 100% book with them again.</em>&rdquo;
               </blockquote>
               <div className="dm-rev-by">
+                <span>Demarks 360 client</span>
                 <span className="dm-stars">★★★★★</span>
               </div>
             </div>
