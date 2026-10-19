@@ -44,3 +44,19 @@ yarn-error.log*
 CLAUDE.local.md
 .claude/worktrees/
 media-masters/
+
+# local AI agent tooling and working notes (kept out of the public repo)
+.claude/
+.agents/
+.impeccable/
+.mcp.json
+skills-lock.json
+CLAUDE.md
+*.log
+CODEX_TASKS.md
+SESSION-STATE.md
+*-SPEC.md
+PRODUCT.md
+DESIGN.md
+docs/
+shots/
