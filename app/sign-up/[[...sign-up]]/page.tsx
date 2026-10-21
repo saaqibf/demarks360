@@ -14,15 +14,7 @@ export default function SignUpPage() {
         justifyContent: 'center',
         padding: '7rem 1.5rem 4rem',
       }}>
-        <SignUp appearance={{ variables: {
-          colorPrimary: 'var(--color-amber-light)',
-          colorBackground: 'var(--color-surface)',
-          colorText: 'var(--color-text-light)',
-          colorInputBackground: 'var(--color-ink)',
-          colorInputText: 'var(--color-text-light)',
-          colorNeutral: 'var(--color-muted-light)',
-          fontFamily: 'var(--font-body)',
-        } }} />
+        <SignUp />
       </main>
       <SiteFooter />
     </>
