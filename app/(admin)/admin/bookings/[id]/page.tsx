@@ -11,6 +11,7 @@ import { ClipCurator, type CuratorClip } from '@/components/admin/clip-curator'
 import { fetchTouchpixGallery } from '@/lib/touchpix'
 import { statusLabel } from '@/lib/admin-status'
 import { isPaidInFull } from '@/lib/pricing/paid-in-full'
+import { todayInEdmonton } from '@/lib/dates/edmonton'
 
 function fmt(t: string): string {
   const [h, m] = t.split(':').map(Number)
@@ -195,10 +196,12 @@ export default async function BookingDetailPage({ params }: Props) {
           balancePaid={!!b.balanceChargedAt}
           paidInFull={isPaidInFull(b)}
           nowMs={Date.now()}
+          isPastEvent={b.eventDate < todayInEdmonton()}
         />
       </div>
 
-      {/* After the event — connect Touchpix, then share the guest gallery */}
+      {/* After the event — only once there is a real booking to film */}
+      {(b.status === 'confirmed' || b.status === 'completed') && (
       <div className="adm-card" style={{ marginTop: '1rem' }}>
         <p className="adm-card-label" style={{ marginBottom: '0.4rem' }}>After the event</p>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--adm-text-2)', marginBottom: '1.5rem' }}>
@@ -250,6 +253,7 @@ export default async function BookingDetailPage({ params }: Props) {
           </div>
         </details>
       </div>
+      )}
     </div>
   )
 }

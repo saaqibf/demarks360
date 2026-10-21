@@ -5,7 +5,7 @@ import { isAdmin } from '@/lib/auth/roles'
 import { approveBooking, getBookingWithCustomer } from '@/lib/db/queries/bookings'
 import { checkBookingAvailability } from '@/lib/availability'
 import { balanceChargeDate, timeToMinutes } from '@/lib/pricing'
-import { depositExpiryFrom } from '@/lib/dates/edmonton'
+import { depositExpiryFrom, todayInEdmonton } from '@/lib/dates/edmonton'
 import { stripe } from '@/lib/stripe'
 import { APP_URL } from '@/lib/app-url'
 import { sendEmail } from '@/lib/email/send'
@@ -46,6 +46,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
   const isUpdate = fromStatus === 'approved'
 
+  if (booking.eventDate < todayInEdmonton()) {
+    return NextResponse.json({ error: 'This event date has already passed.' }, { status: 409 })
+  }
   const holdExpiresAt = depositExpiryFrom(new Date(), booking.eventDate)
   if (holdExpiresAt.getTime() - Date.now() < MIN_HOLD_MS) {
     return NextResponse.json({ error: 'This event is too close to hold online. Please call the customer instead.' }, { status: 409 })

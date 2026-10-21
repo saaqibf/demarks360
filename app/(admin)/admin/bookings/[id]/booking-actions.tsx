@@ -23,6 +23,7 @@ interface Props {
   paidInFull: boolean
   // Server render time, so the countdown is identical on server and client
   nowMs: number
+  isPastEvent: boolean
 }
 
 type SmsResult = { text: string; href: string | null; autoSent: boolean } | null
@@ -234,7 +235,16 @@ export function BookingActions(p: Props) {
   )
 
   let actions: React.ReactNode
-  if (p.currentStatus === 'requested' || p.currentStatus === 'expired') {
+  if ((p.currentStatus === 'requested' || p.currentStatus === 'expired') && p.isPastEvent) {
+    actions = mode === 'decline' ? declineForm : (
+      <>
+        <p className="adm-callout">This event date has already passed, so it can no longer be booked. You can delete it below if it was a test, or decline it so the customer hears back.</p>
+        <div className="adm-actions">
+          <button onClick={() => setMode('decline')} disabled={saving} className="btn-back">Decline the request</button>
+        </div>
+      </>
+    )
+  } else if (p.currentStatus === 'requested' || p.currentStatus === 'expired') {
     actions = (
       <>
         {p.currentStatus === 'expired' && (

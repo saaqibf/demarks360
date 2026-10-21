@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getAllBookings } from '@/lib/db/queries/bookings'
 import { statusLabel } from '@/lib/admin-status'
+import { todayInEdmonton } from '@/lib/dates/edmonton'
 
 const VALID_STATUSES = ['requested', 'approved', 'pending', 'confirmed', 'declined', 'expired', 'cancelled', 'completed'] as const
 const STATUS_TABS = [
@@ -33,7 +34,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const allRows = await getAllBookings()
   const rows = activeStatus ? allRows.filter(r => r.booking.status === activeStatus) : allRows
 
-  const today = new Date().toISOString().split('T')[0]
+  const today = todayInEdmonton()
   const in30 = new Date(Date.now() + 30 * 864e5).toISOString().split('T')[0]
 
   // Collected money only: deposit is always in by 'confirmed'; balance counts once charged
@@ -51,7 +52,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     (r.booking.status === 'confirmed' || r.booking.status === 'requested' || r.booking.status === 'approved')
   ).length
 
-  const requests = allRows.filter(r => r.booking.status === 'requested')
+  // A request whose date already passed can't be booked; it lives in the table, not the to-do list
+  const requests = allRows.filter(r => r.booking.status === 'requested' && r.booking.eventDate >= today)
   const needsReview = requests.length
   const awaitingDeposit = allRows.filter(r => r.booking.status === 'approved').length
 
