@@ -878,6 +878,22 @@ button, a, [role="button"] { min-height: 44px; }
 .adm-callout { font-family: var(--font-body); font-size: 0.88rem; line-height: 1.6; color: var(--adm-pending); background: var(--adm-pending-bg); border-radius: 10px; padding: 0.85rem 1rem; margin: 0 0 1rem; }
 .adm-done { background: var(--adm-success-bg); border: 1px solid color-mix(in srgb, var(--adm-success) 30%, transparent); border-radius: 12px; padding: 1rem 1.1rem; }
 .adm-done > p:first-child { font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; color: var(--adm-success); margin: 0 0 0.25rem; }
+/* Setup check (dashboard): one row per service, a coloured dot, plain words */
+.adm-setup { margin-top: 1.5rem; }
+.adm-setup ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+.adm-setup-row { display: grid; grid-template-columns: 0.75rem minmax(8.5rem, 11rem) 1fr; align-items: baseline; gap: 0.75rem; font-family: var(--font-body); font-size: 0.9rem; line-height: 1.5; }
+.adm-setup-dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--adm-muted); transform: translateY(0.05rem); }
+.adm-setup-row--ok .adm-setup-dot { background: var(--adm-success); }
+.adm-setup-row--warn .adm-setup-dot { background: var(--adm-pending); }
+.adm-setup-row--off .adm-setup-dot { background: var(--adm-danger); }
+.adm-setup-label { font-weight: 600; color: var(--adm-text); }
+.adm-setup-detail { color: var(--adm-text-2); overflow-wrap: anywhere; }
+.adm-setup-row--warn .adm-setup-detail { color: var(--adm-pending); }
+.adm-setup-row--off .adm-setup-detail { color: var(--adm-danger); }
+@media (max-width: 640px) {
+  .adm-setup-row { grid-template-columns: 0.75rem 1fr; }
+  .adm-setup-detail { grid-column: 2; }
+}
 .adm-error { font-family: var(--font-body); font-size: 0.88rem; color: var(--adm-danger); background: var(--adm-danger-bg); border-radius: 10px; padding: 0.75rem 1rem; margin: 0; }
 .adm-link-btn { background: none; border: 0; padding: 0.25rem 0; font: inherit; font-weight: 600; color: var(--adm-accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 44px; }
 .adm-link-btn:focus-visible { outline: 2px solid var(--adm-accent); outline-offset: 2px; border-radius: 4px; }

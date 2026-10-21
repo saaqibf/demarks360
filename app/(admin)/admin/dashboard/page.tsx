@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { getAllBookings } from '@/lib/db/queries/bookings'
 import { statusLabel } from '@/lib/admin-status'
 import { todayInEdmonton } from '@/lib/dates/edmonton'
+import { ADMIN_EMAILS } from '@/lib/admin-emails'
+import { setupCheck } from '@/lib/setup-check'
 
 const VALID_STATUSES = ['requested', 'approved', 'pending', 'confirmed', 'declined', 'expired', 'cancelled', 'completed'] as const
 const STATUS_TABS = [
@@ -56,6 +58,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const requests = allRows.filter(r => r.booking.status === 'requested' && r.booking.eventDate >= today)
   const needsReview = requests.length
   const awaitingDeposit = allRows.filter(r => r.booking.status === 'approved').length
+
+  const setup = setupCheck(process.env, ADMIN_EMAILS)
 
   const stats = [
     { label: 'Total Bookings', value: allRows.length, action: false },
@@ -202,6 +206,20 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </table>
           </div>
         )}
+      </div>
+
+      {/* What is switched on: plain words only, never a key */}
+      <div className="adm-card adm-setup">
+        <p className="adm-card-label">Setup check</p>
+        <ul>
+          {setup.map((item) => (
+            <li key={item.key} className={`adm-setup-row adm-setup-row--${item.state}`}>
+              <span className="adm-setup-dot" aria-hidden="true" />
+              <span className="adm-setup-label">{item.label}</span>
+              <span className="adm-setup-detail">{item.detail}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   )
