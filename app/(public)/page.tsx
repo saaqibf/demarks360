@@ -98,7 +98,7 @@ export default function HomePage() {
               <a className="btn-ghost" href="#dm-experience">See it in action</a>
             </div>
             <div className="dm-hero-proof">
-              <span><b>Unlimited</b> takes</span>
+              <span><b>Calgary</b> owned &amp; operated</span>
               <span><b>120fps</b> slow motion</span>
               <span><b>Same-day</b> gallery</span>
             </div>
@@ -326,11 +326,11 @@ export default function HomePage() {
           <div className="dm-reviews">
             <div className="dm-rev-main">
               <blockquote>
-                &ldquo;The videos were ready before the cake was cut. My cousins in Lagos were watching my mom&apos;s{' '}
-                <em>60th birthday spin</em>{' '}the same night.&rdquo;
+                &ldquo;Amazing employees, amazing service, always patient and explained what needed to happen, and they were very
+                punctual and came on time. <em>I would 100% book with them again.</em>&rdquo;
               </blockquote>
               <div className="dm-rev-by">
-                <span>Funmi · 60th birthday, Skyview</span>
+                <span>Demarks 360 client</span>
                 <span className="dm-stars" style={{ '--rating': 5 } as React.CSSProperties} aria-label="5 out of 5"><span className="dm-stars-fill" /></span>
               </div>
             </div>

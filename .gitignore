@@ -48,14 +48,17 @@ media-masters/
 # Internal tooling, AI agent config, session/planning notes and logs (not public)
 .claude/
 .agents/
+.impeccable/
+.superpowers/
 .mcp.json
 skills-lock.json
 docs/
+shots/
 SESSION-STATE.md
+RESUME-PROMPT.md
 CLAUDE.md
 CODEX_TASKS.md
+*-SPEC.md
+PRODUCT.md
+DESIGN.md
 *.log
-
-.superpowers/
-
-RESUME-PROMPT.md
