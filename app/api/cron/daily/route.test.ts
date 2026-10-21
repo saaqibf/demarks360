@@ -14,6 +14,7 @@ vi.mock('@/lib/stripe', () => ({
 
 const getBalanceDueBookings = vi.fn()
 const getExpiredApprovedBookings = vi.fn()
+const getHoldsEndingSoon = vi.fn()
 const markBalancePaid = vi.fn()
 const markChargeFailed = vi.fn()
 const markBalanceDueEmailSent = vi.fn()
@@ -21,6 +22,7 @@ const markBookingExpired = vi.fn()
 vi.mock('@/lib/db/queries/bookings', () => ({
   getBalanceDueBookings: (...args: unknown[]) => getBalanceDueBookings(...args),
   getExpiredApprovedBookings: (...args: unknown[]) => getExpiredApprovedBookings(...args),
+  getHoldsEndingSoon: (...args: unknown[]) => getHoldsEndingSoon(...args),
   markBalancePaid: (...args: unknown[]) => markBalancePaid(...args),
   markChargeFailed: (...args: unknown[]) => markChargeFailed(...args),
   markBalanceDueEmailSent: (...args: unknown[]) => markBalanceDueEmailSent(...args),
@@ -67,6 +69,7 @@ beforeEach(() => {
   process.env.CRON_SECRET = CRON_SECRET
   getBalanceDueBookings.mockResolvedValue([])
   getExpiredApprovedBookings.mockResolvedValue([])
+  getHoldsEndingSoon.mockResolvedValue([])
 })
 
 describe('daily cron auth', () => {
@@ -107,7 +110,7 @@ describe('daily cron balance pass', () => {
       { idempotencyKey: 'balance-bk_1' },
     )
     expect(markBalancePaid).toHaveBeenCalledWith('bk_1', 'pi_bal_1')
-    await expect(res.json()).resolves.toEqual({ charged: 1, linked: 0, failed: 0, expired: 0, redacted: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 1, linked: 0, failed: 0, reminded: 0, expired: 0, redacted: 0 })
   })
 
   it('sends no receipt and reports a failure when the balance was paid concurrently', async () => {
@@ -119,7 +122,7 @@ describe('daily cron balance pass', () => {
     const res = await GET(cronRequest(`Bearer ${CRON_SECRET}`))
 
     expect(sendEmail).not.toHaveBeenCalled()
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, expired: 0, redacted: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, reminded: 0, expired: 0, redacted: 0 })
   })
 
   it('falls back to the payment link once when the charge fails', async () => {
@@ -132,10 +135,10 @@ describe('daily cron balance pass', () => {
     expect(markChargeFailed).toHaveBeenCalledWith('bk_1')
     expect(sendEmail).toHaveBeenCalledWith(expect.objectContaining({
       to: 'ada@test.local',
-      subject: 'Your remaining balance is due today',
+      subject: 'Your second payment for Demarks 360 is due',
     }))
     expect(markBalanceDueEmailSent).toHaveBeenCalledWith('bk_1')
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, expired: 0, redacted: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 1, reminded: 0, expired: 0, redacted: 0 })
   })
 
   it('emails the payment link for bookings without auto-pay opt-in', async () => {
@@ -145,10 +148,10 @@ describe('daily cron balance pass', () => {
 
     expect(paymentIntentsCreate).not.toHaveBeenCalled()
     expect(sendEmail).toHaveBeenCalledWith(expect.objectContaining({
-      subject: 'Your remaining balance is due today',
+      subject: 'Your second payment for Demarks 360 is due',
     }))
     expect(markBalanceDueEmailSent).toHaveBeenCalledWith('bk_1')
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 1, failed: 0, expired: 0, redacted: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 1, failed: 0, reminded: 0, expired: 0, redacted: 0 })
   })
 
   it('never re-emails a link once the balance-due email was stamped', async () => {
@@ -178,9 +181,9 @@ describe('daily cron expiry pass', () => {
     expect(markBookingExpired).toHaveBeenCalledWith('bk_2')
     expect(sendEmail).toHaveBeenCalledWith(expect.objectContaining({
       to: 'ada@test.local',
-      subject: 'Your booking request has expired',
+      subject: 'The hold on your date has ended',
     }))
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, expired: 1, redacted: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, reminded: 0, expired: 1, redacted: 0 })
   })
 
   it('sends no expiry email when a deposit webhook confirmed the booking first', async () => {
@@ -195,6 +198,38 @@ describe('daily cron expiry pass', () => {
     const res = await GET(cronRequest(`Bearer ${CRON_SECRET}`))
 
     expect(sendEmail).not.toHaveBeenCalled()
-    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, expired: 0, redacted: 0 })
+    await expect(res.json()).resolves.toEqual({ charged: 0, linked: 0, failed: 0, reminded: 0, expired: 0, redacted: 0 })
   })
 })
+
+describe('daily cron expiry alerts', () => {
+  it('tells the operators a date was released', async () => {
+    getExpiredApprovedBookings.mockResolvedValue([
+      {
+        booking: { id: 'bk_2', eventDate: '2026-09-01' },
+        customer: { name: 'Ada Test', email: 'ada@test.local' },
+      },
+    ])
+    markBookingExpired.mockResolvedValue({ id: 'bk_2', status: 'expired' })
+
+    await GET(cronRequest(`Bearer ${CRON_SECRET}`))
+
+    expect(sendEmail).toHaveBeenCalledWith(expect.objectContaining({ to: ['admin@test.local'] }))
+  })
+})
+
+describe('daily cron hold reminders', () => {
+  it('emails the customer whose hold ends within a day', async () => {
+    getHoldsEndingSoon.mockResolvedValue([
+      {
+        booking: { id: 'bk_3', eventDate: '2026-09-05', payToken: 'tok_3', depositExpiresAt: new Date('2026-08-20T18:00:00Z') },
+        customer: { name: 'Ada Test', email: 'ada@test.local' },
+      },
+    ])
+
+    const res = await GET(cronRequest(`Bearer ${CRON_SECRET}`))
+
+    await expect(res.json()).resolves.toMatchObject({ reminded: 1 })
+  })
+})
+

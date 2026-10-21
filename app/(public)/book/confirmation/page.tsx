@@ -26,12 +26,12 @@ const STATUS_COPY: Record<string, { eyebrow: string; title: string; body: string
   approved: {
     eyebrow: 'Quote Ready',
     title: 'Your quote is on its way',
-    body: 'We reviewed your request. Check your email for your quote and a link to hold your date with a deposit whenever you are ready.',
+    body: 'Your quote is ready! Check your email. We are holding your date for 3 days, and you can pay in full or in two parts.',
   },
   confirmed: {
     eyebrow: 'Date Held',
     title: 'You’re booked',
-    body: 'Your deposit is in and your date is locked. Check your inbox for your event details.',
+    body: 'Your payment is in and your date is locked. Check your inbox for your event details.',
   },
   declined: {
     eyebrow: 'Request Declined',

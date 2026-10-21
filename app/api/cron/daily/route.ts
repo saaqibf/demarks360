@@ -4,6 +4,7 @@ import { todayInEdmonton } from '@/lib/dates/edmonton'
 import {
   getBalanceDueBookings,
   getExpiredApprovedBookings,
+  getHoldsEndingSoon,
   markBalanceDueEmailSent,
   markBalancePaid,
   markBookingExpired,
@@ -15,6 +16,10 @@ import { sendEmail } from '@/lib/email/send'
 import { balanceDueEmail } from '@/lib/email/templates/balance-due'
 import { balanceReceiptEmail } from '@/lib/email/templates/balance-receipt'
 import { requestExpiredEmail } from '@/lib/email/templates/request-expired'
+import { holdReminderEmail } from '@/lib/email/templates/hold-reminder'
+import { adminNoticeEmail } from '@/lib/email/templates/admin-notice'
+import { fmtDate } from '@/lib/email/templates/shared'
+import { ADMIN_EMAILS } from '@/lib/email/send'
 
 function isAuthorized(header: string | null): boolean {
   const secret = process.env.CRON_SECRET
@@ -34,6 +39,7 @@ export async function GET(req: NextRequest) {
   let linked = 0
   let failed = 0
   let expired = 0
+  let reminded = 0
 
   // Pass A: collect today's balances (auto-charge opted-in cards, email links otherwise)
   const dueRows = await getBalanceDueBookings(todayInEdmonton())
@@ -111,7 +117,29 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // Pass B: expire approved bookings whose deposit window closed, freeing their slots
+  // Pass B: remind customers whose hold ends within the next day (one run sees each hold once)
+  const now = new Date()
+  const remindRows = await getHoldsEndingSoon(now, new Date(now.getTime() + 24 * 60 * 60 * 1000))
+  for (const { booking, customer } of remindRows) {
+    try {
+      if (!customer || !booking.payToken || !booking.depositExpiresAt) continue
+      await sendEmail({
+        to: customer.email,
+        ...holdReminderEmail({
+          name: customer.name,
+          eventDate: booking.eventDate,
+          payToken: booking.payToken,
+          holdExpiresAt: booking.depositExpiresAt,
+        }),
+      })
+      reminded++
+    } catch (err) {
+      console.error(`[cron] hold reminder failed for booking ${booking.id}:`, err)
+      failed++
+    }
+  }
+
+  // Pass C: expire quotes whose hold ended, freeing their dates
   const expiredRows = await getExpiredApprovedBookings(new Date())
   for (const { booking, customer } of expiredRows) {
     try {
@@ -125,6 +153,18 @@ export async function GET(req: NextRequest) {
           ...requestExpiredEmail({ name: customer.name, eventDate: booking.eventDate }),
         })
       }
+      await sendEmail({
+        to: ADMIN_EMAILS,
+        ...adminNoticeEmail({
+          subject: `Hold ended: ${customer?.name ?? 'a customer'}, ${fmtDate(booking.eventDate)}`,
+          heading: 'A hold ended without payment',
+          lines: [
+            `${customer?.name ?? 'The customer'} did not pay before their hold ended, so ${fmtDate(booking.eventDate)} is open again on the calendar.`,
+            'If they still want it, open the booking and send the quote again.',
+          ],
+          bookingId: booking.id,
+        }),
+      })
       expired++
     } catch (err) {
       console.error(`[cron] expiry pass failed for booking ${booking.id}:`, err)
@@ -143,5 +183,5 @@ export async function GET(req: NextRequest) {
     console.error('[cron] PII retention pass failed:', err)
   }
 
-  return NextResponse.json({ charged, linked, failed, expired, redacted })
+  return NextResponse.json({ charged, linked, failed, reminded, expired, redacted })
 }

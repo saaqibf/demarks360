@@ -73,16 +73,16 @@ describe('smilecam scaled pricing', () => {
 })
 
 describe('balanceChargeDate', () => {
-  it('lands on the event day itself', () => {
-    expect(balanceChargeDate('2026-08-15')).toBe('2026-08-15')
+  it('lands on the day before the event', () => {
+    expect(balanceChargeDate('2026-08-15')).toBe('2026-08-14')
   })
 
-  it('does not shift across month boundaries', () => {
-    expect(balanceChargeDate('2026-08-01')).toBe('2026-08-01')
+  it('crosses month boundaries cleanly', () => {
+    expect(balanceChargeDate('2026-08-01')).toBe('2026-07-31')
   })
 
-  it('does not shift across year boundaries', () => {
-    expect(balanceChargeDate('2027-01-01')).toBe('2027-01-01')
+  it('crosses year boundaries cleanly', () => {
+    expect(balanceChargeDate('2027-01-01')).toBe('2026-12-31')
   })
 })
 

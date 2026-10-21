@@ -61,17 +61,25 @@ export default async function PaySuccessPage({ params, searchParams }: PageProps
 
   let panel: React.ReactNode
   if (session.payment_status === 'paid') {
-    panel = session.metadata?.purpose === 'balance' ? (
+    const purpose = session.metadata?.purpose
+    const total = Number(b.depositAmount ?? 0) + Number(b.balanceAmount ?? 0)
+    panel = purpose === 'balance' ? (
       <Panel
         eyebrow="Payment received"
         title="You are fully paid"
-        body={`Your balance of ${money(b.balanceAmount)} went through. Your ${fmtDate(b.eventDate)} booking is fully paid, see you there. A receipt is on its way to your inbox.`}
+        body={`Your second payment of ${money(b.balanceAmount)} went through, thank you! Your ${fmtDate(b.eventDate)} booking is fully paid and we will see you there. A receipt is on its way to your inbox.`}
+      />
+    ) : purpose === 'full' ? (
+      <Panel
+        eyebrow="Paid in full"
+        title="You are booked"
+        body={`Your payment of ${money(total)} went through and ${fmtDate(b.eventDate)} is officially yours. There is nothing left to pay. A confirmation email is on its way.`}
       />
     ) : (
       <Panel
-        eyebrow="Deposit received"
-        title="Date locked"
-        body={`Your deposit is in and ${fmtDate(b.eventDate)} is officially yours. The remaining balance of ${money(b.balanceAmount)} is due on your event day. A confirmation email is on its way.`}
+        eyebrow="First payment received"
+        title="Your date is locked in"
+        body={`Thank you! ${fmtDate(b.eventDate)} is officially yours. The second payment of ${money(b.balanceAmount)} is due the day before your event, and we will email you a reminder. A confirmation email is on its way.`}
       />
     )
   } else {

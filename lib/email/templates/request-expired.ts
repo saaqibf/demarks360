@@ -12,15 +12,16 @@ export function requestExpiredEmail(p: RequestExpiredParams): EmailContent {
       Hi ${firstName(p.name)},
     </p>
     <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-      The deposit window for your ${fmtDate(p.eventDate)} booking has closed, so the date
-      has been released for other customers. No charge was made.
+      The hold on ${fmtDate(p.eventDate)} has ended, so the date has been opened back up
+      for other bookings. No charge was made.
     </p>
     <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-      Still want the booth? You are welcome to submit a new request any time.
+      Still want the booth? Send us a new request, or just reply to this email, and if the
+      date is still free we will hold it for you again.
     </p>
     ${ctaButton(`${APP_URL}/book`, 'Submit a new request')}`
   return {
-    subject: 'Your booking request has expired',
-    html: emailShell('Your request expired', body),
+    subject: 'The hold on your date has ended',
+    html: emailShell('Your hold has ended', body),
   }
 }

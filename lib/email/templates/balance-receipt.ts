@@ -12,7 +12,7 @@ export function balanceReceiptEmail(p: BalanceReceiptParams): EmailContent {
       Hi ${firstName(p.name)},
     </p>
     <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-      Your balance of ${money(p.balanceAmount)} has been paid. Your booking for
+      We received your second payment of ${money(p.balanceAmount)}, thank you! Your booking for
       ${fmtDate(p.eventDate)} is now fully paid.
     </p>
     <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">

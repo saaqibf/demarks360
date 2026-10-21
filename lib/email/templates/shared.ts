@@ -61,6 +61,34 @@ export function moneyRow(label: string, value: string | number | null, opts: { g
     </tr>`
 }
 
+const BODY_P = 'font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;'
+
+export function para(html: string, opts: { last?: boolean; small?: boolean } = {}): string {
+  const style = opts.small
+    ? 'font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#9A917F;line-height:1.65;'
+    : BODY_P
+  return `<p style="margin:${opts.last ? '0' : '0 0 16px 0'};${style}">${html}</p>`
+}
+
+// The operator's own words, set apart so the customer reads it as a personal note
+export function personalNote(text: string): string {
+  return `
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:4px 0 20px 0;">
+      <tr><td style="border-left:3px solid ${GOLD};padding:4px 0 4px 16px;font-family:${SERIF};font-style:italic;font-size:16px;line-height:1.6;color:${INK};">
+        ${escapeHtml(text).replace(/\n/g, '<br>')}
+      </td></tr>
+    </table>`
+}
+
+export function holdUntilLabel(d: Date): string {
+  return d.toLocaleString('en-CA', {
+    timeZone: 'America/Edmonton', weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit',
+  })
+}
+
+export const CONTACT_LINE = 'Questions? Just reply to this email, or call or text us at '
+  + '<a href="tel:+14034020816" style="color:#B07E2F;text-decoration:none;font-weight:600;">403 402 0816</a>.'
+
 export function ctaButton(href: string, label: string): string {
   return `
     <table cellpadding="0" cellspacing="0" style="margin:32px 0 0 0;">

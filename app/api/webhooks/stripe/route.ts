@@ -7,11 +7,14 @@ import {
   getBookingWithCustomer,
   markBalancePaid,
   markDepositPaid,
+  markPaidInFull,
 } from '@/lib/db/queries/bookings'
 import * as Sentry from '@sentry/nextjs'
 import { sendBookingConfirmationEmail } from '@/lib/email/send-booking-confirmation'
 import { sendEmail, ADMIN_EMAILS } from '@/lib/email/send'
 import { balanceReceiptEmail } from '@/lib/email/templates/balance-receipt'
+import { adminNoticeEmail } from '@/lib/email/templates/admin-notice'
+import { fmtDate, money } from '@/lib/email/templates/shared'
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
@@ -60,14 +63,19 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   const booking = await getBookingById(bookingId)
   if (!booking) return
 
-  if (session.metadata?.purpose === 'deposit') {
+  const purpose = session.metadata?.purpose
+  if (purpose === 'deposit' || purpose === 'full') {
     // Stripe retries deliveries; an already-confirmed booking means this event was processed
     if (booking.status === 'confirmed') return
-    const confirmed = await markDepositPaid(bookingId, {
-      autoPayOptIn: session.metadata?.autoPay === 'true',
-      stripePaymentIntentId: typeof session.payment_intent === 'string' ? session.payment_intent : null,
-      stripeCustomerId: typeof session.customer === 'string' ? session.customer : null,
-    })
+    const stripePaymentIntentId = typeof session.payment_intent === 'string' ? session.payment_intent : null
+    const stripeCustomerId = typeof session.customer === 'string' ? session.customer : null
+    const confirmed = purpose === 'full'
+      ? await markPaidInFull(bookingId, { stripePaymentIntentId, stripeCustomerId })
+      : await markDepositPaid(bookingId, {
+        autoPayOptIn: session.metadata?.autoPay === 'true',
+        stripePaymentIntentId,
+        stripeCustomerId,
+      })
     // Null means the booking left 'approved' between the payment and this delivery
     // (cron expired it, or the admin cancelled). Money was taken for a booking that
     // cannot be confirmed, so never send "you're booked": flag it for manual refund.
@@ -79,8 +87,15 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       Sentry.captureMessage(msg, 'error')
       await sendEmail({
         to: ADMIN_EMAILS,
-        subject: 'ACTION NEEDED: deposit paid on a non-approved Demarks booking',
-        html: `<p>A deposit was paid but booking <strong>${bookingId}</strong> is '${booking.status}', not 'approved'. It cannot be confirmed, so it likely needs a manual refund. Please review in Stripe + admin.</p>`,
+        ...adminNoticeEmail({
+          subject: 'ACTION NEEDED: a payment came in for a booking that is no longer on hold',
+          heading: 'A payment needs a refund check',
+          lines: [
+            `A customer paid for the ${fmtDate(booking.eventDate)} booking, but it was already '${booking.status}' (for example, the hold had ended).`,
+            'It could not be confirmed automatically. Please check it in the admin and Stripe, and either re-book them or refund the payment.',
+          ],
+          bookingId,
+        }),
       })
       return
     }
@@ -89,6 +104,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     } catch (err) {
       console.error('[webhook] failed to send deposit confirmation email:', err)
     }
+    await notifyAdminsOfPayment(bookingId, purpose === 'full' ? 'Paid in full' : 'First payment received')
     return
   }
 
@@ -109,5 +125,31 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         }),
       })
     }
+    await notifyAdminsOfPayment(bookingId, 'Second payment received')
+  }
+}
+
+// Never let an alert failure bubble up: Stripe would retry the whole webhook
+async function notifyAdminsOfPayment(bookingId: string, what: string) {
+  try {
+    const row = await getBookingWithCustomer(bookingId)
+    if (!row) return
+    const { booking: b, customer: c } = row
+    const total = Number(b.depositAmount ?? 0) + Number(b.balanceAmount ?? 0)
+    const amount = what === 'Paid in full' ? total : what === 'Second payment received' ? Number(b.balanceAmount ?? 0) : Number(b.depositAmount ?? 0)
+    await sendEmail({
+      to: ADMIN_EMAILS,
+      ...adminNoticeEmail({
+        subject: `${what}: ${c?.name ?? 'A customer'}, ${fmtDate(b.eventDate)}`,
+        heading: what,
+        lines: [
+          `${c?.name ?? 'A customer'} paid ${money(amount)} for ${fmtDate(b.eventDate)}. The date is locked in.`,
+          what === 'First payment received' ? `The second payment of ${money(b.balanceAmount)} is due the day before the event.` : 'Nothing left to collect for this booking.',
+        ],
+        bookingId,
+      }),
+    })
+  } catch (err) {
+    console.error('[webhook] admin payment alert failed:', err)
   }
 }

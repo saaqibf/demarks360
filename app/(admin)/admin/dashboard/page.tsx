@@ -5,13 +5,13 @@ import { statusLabel } from '@/lib/admin-status'
 const VALID_STATUSES = ['requested', 'approved', 'pending', 'confirmed', 'declined', 'expired', 'cancelled', 'completed'] as const
 const STATUS_TABS = [
   { label: 'All', value: '' },
-  { label: 'Requested', value: 'requested' },
-  { label: 'Approved', value: 'approved' },
-  { label: 'Confirmed', value: 'confirmed' },
+  { label: 'New', value: 'requested' },
+  { label: 'Quote sent', value: 'approved' },
+  { label: 'Booked', value: 'confirmed' },
   { label: 'Declined', value: 'declined' },
-  { label: 'Expired', value: 'expired' },
+  { label: 'Hold ended', value: 'expired' },
   { label: 'Cancelled', value: 'cancelled' },
-  { label: 'Completed', value: 'completed' },
+  { label: 'Done', value: 'completed' },
 ]
 
 function fmt(t: string): string {
@@ -57,10 +57,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
 
   const stats = [
     { label: 'Total Bookings', value: allRows.length, action: false },
-    { label: 'Confirmed Revenue', value: `$${totalRevenue.toFixed(0)}`, action: false },
+    { label: 'Money Collected', value: `$${totalRevenue.toFixed(0)}`, action: false },
     { label: 'Next 30 Days', value: upcoming, action: false },
     { label: 'Needs Review', value: needsReview, action: needsReview > 0 },
-    { label: 'Awaiting Deposit', value: awaitingDeposit, action: awaitingDeposit > 0 },
+    { label: 'Quote Sent', value: awaitingDeposit, action: awaitingDeposit > 0 },
   ]
 
   return (
@@ -93,11 +93,11 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
                       {c?.name ?? 'New customer'}
                     </p>
                     <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: 'var(--adm-text-2)' }}>
-                      {fmtDate(b.eventDate)} · {b.eventType} · ${Number(b.depositAmount ?? 0).toFixed(0)} deposit
+                      {fmtDate(b.eventDate)} · {b.eventType} · {(b.durationMinutes / 60).toFixed(1).replace('.0', '')} hrs
                     </p>
                   </div>
                   <Link href={`/admin/bookings/${b.id}`} className="btn-primary btn--sm" style={{ flexShrink: 0 }}>
-                    Review →
+                    Reply →
                   </Link>
                 </div>
               ))}
@@ -157,7 +157,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           <table className="adm-table">
             <thead>
               <tr>
-                {['Date', 'Customer', 'Event Type', 'Time', 'Status', 'Deposit', ''].map(h => (
+                {['Date', 'Customer', 'Event Type', 'Time', 'Status', 'Price', ''].map(h => (
                   <th key={h}>
                     {h}
                   </th>
@@ -186,7 +186,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
                       </span>
                     </td>
                     <td>
-                      ${Number(b.depositAmount ?? 0).toFixed(2)}
+                      ${(Number(b.depositAmount ?? 0) + Number(b.balanceAmount ?? 0)).toFixed(2)}
                     </td>
                     <td>
                       <Link href={`/admin/bookings/${b.id}`} className="adm-link">

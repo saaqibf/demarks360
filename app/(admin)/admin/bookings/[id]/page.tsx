@@ -10,6 +10,7 @@ import { TouchpixConnect } from '@/components/admin/touchpix-connect'
 import { ClipCurator, type CuratorClip } from '@/components/admin/clip-curator'
 import { fetchTouchpixGallery } from '@/lib/touchpix'
 import { statusLabel } from '@/lib/admin-status'
+import { isPaidInFull } from '@/lib/pricing/paid-in-full'
 
 function fmt(t: string): string {
   const [h, m] = t.split(':').map(Number)
@@ -48,8 +49,10 @@ export default async function BookingDetailPage({ params }: Props) {
   const fmtTimestamp = (d: Date | null) =>
     d ? d.toLocaleString('en-CA', { timeZone: 'America/Edmonton', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : null
   const balanceDate = b.balanceChargeDate
-    ? new Date(b.balanceChargeDate + 'T00:00:00').toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' })
+    ? new Date(b.balanceChargeDate + 'T00:00:00').toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric' })
     : null
+  const phoneDigits = c?.phone?.replace(/\D/g, '') ?? ''
+  const telHref = phoneDigits.length === 10 ? `tel:+1${phoneDigits}` : phoneDigits ? `tel:+${phoneDigits}` : null
 
   return (
     <div className="adm-page" style={{ maxWidth: '900px' }}>
@@ -112,23 +115,29 @@ export default async function BookingDetailPage({ params }: Props) {
           ))}
         </div>
 
-        {/* Customer + payment info */}
+        {/* Customer: one tap to call, text or email from mom's phone */}
         <div className="adm-card">
-          <p className="adm-card-label">Customer &amp; Payment</p>
-          {[
-            { label: 'Name', value: c?.name ?? 'Not set' },
-            { label: 'Email', value: c?.email ?? 'Not set' },
-            { label: 'Phone', value: c?.phone ?? 'Not set' },
-            { label: 'Deposit Paid', value: `$${Number(b.depositAmount ?? 0).toFixed(2)}` },
-            { label: 'Balance Due', value: `$${Number(b.balanceAmount ?? 0).toFixed(2)}` },
-            { label: 'Balance Date', value: balanceDate ?? 'Not set' },
-            { label: 'Gallery Token', value: b.galleryToken ?? 'Not set' },
-          ].map(({ label, value }) => (
-            <div key={label} className="adm-row">
-              <span className="adm-row-label">{label}</span>
-              <span className="adm-row-value">{value}</span>
-            </div>
-          ))}
+          <p className="adm-card-label">Customer</p>
+          <div className="adm-row">
+            <span className="adm-row-label">Name</span>
+            <span className="adm-row-value">{c?.name ?? 'Not set'}</span>
+          </div>
+          <div className="adm-row">
+            <span className="adm-row-label">Phone</span>
+            <span className="adm-row-value">
+              {c?.phone && telHref ? <a href={telHref} className="adm-link">{c.phone}</a> : (c?.phone ?? 'Not set')}
+            </span>
+          </div>
+          <div className="adm-row">
+            <span className="adm-row-label">Email</span>
+            <span className="adm-row-value" style={{ wordBreak: 'break-all' }}>
+              {c?.email ? <a href={`mailto:${c.email}`} className="adm-link">{c.email}</a> : 'Not set'}
+            </span>
+          </div>
+          <div className="adm-row">
+            <span className="adm-row-label">Requested</span>
+            <span className="adm-row-value">{fmtTimestamp(b.createdAt)}</span>
+          </div>
         </div>
       </div>
 
@@ -167,7 +176,7 @@ export default async function BookingDetailPage({ params }: Props) {
       {/* Actions — read the essentials above, then decide here */}
       <div className="adm-card" style={{ marginTop: '1rem' }}>
         <p className="adm-card-label">
-          Actions
+          {b.status === 'requested' ? 'Reply to this request' : 'Quote and payment'}
         </p>
         <BookingActions
           bookingId={b.id}
@@ -175,12 +184,17 @@ export default async function BookingDetailPage({ params }: Props) {
           currentNotes={b.notes ?? ''}
           payUrl={payUrl}
           customerName={c?.name ?? null}
-          depositAmount={String(b.depositAmount ?? 0)}
-          balanceAmount={String(b.balanceAmount ?? 0)}
-          depositExpiresAt={fmtTimestamp(b.depositExpiresAt)}
+          customerPhone={c?.phone ?? null}
+          eventDate={b.eventDate}
+          depositAmount={Number(b.depositAmount ?? 0)}
+          balanceAmount={Number(b.balanceAmount ?? 0)}
+          holdExpiresAt={b.depositExpiresAt?.toISOString() ?? null}
           depositPaidAt={fmtTimestamp(b.depositPaidAt)}
+          balanceDueDate={balanceDate}
           autoPayOptIn={b.autoPayOptIn}
           balancePaid={!!b.balanceChargedAt}
+          paidInFull={isPaidInFull(b)}
+          nowMs={Date.now()}
         />
       </div>
 

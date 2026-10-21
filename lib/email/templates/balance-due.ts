@@ -12,7 +12,7 @@ export function balanceDueEmail(p: BalanceDueParams): EmailContent {
   const payUrl = `${APP_URL}/pay/${p.payToken}`
   const failedLine = p.cardFailed
     ? `<p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-        We tried your saved card but it did not go through, you can pay here instead.
+        We tried your saved card but it did not go through. No worries, you can pay here instead.
       </p>`
     : ''
   const body = `
@@ -20,15 +20,15 @@ export function balanceDueEmail(p: BalanceDueParams): EmailContent {
       Hi ${firstName(p.name)},
     </p>
     <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-      Tonight is the night. Your remaining balance of ${money(p.balanceAmount)} is due today.
+      We are so excited for your event! The second payment of ${money(p.balanceAmount)} is now due. You can pay it in a minute with the button below.
     </p>
     ${failedLine}
-    ${ctaButton(payUrl, 'Pay balance')}
+    ${ctaButton(payUrl, 'Pay second payment')}
     <p style="margin:20px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#9A917F;line-height:1.65;">
       Or copy this link: <a href="${payUrl}" style="color:#B07E2F;word-break:break-all;">${payUrl}</a>
     </p>`
   return {
-    subject: 'Your remaining balance is due today',
-    html: emailShell('Balance due today', body),
+    subject: 'Your second payment for Demarks 360 is due',
+    html: emailShell('Second payment due', body),
   }
 }

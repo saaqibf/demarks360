@@ -1,6 +1,7 @@
 import { sendEmail } from './send'
 import { bookingConfirmedEmail } from './templates/booking-confirmation'
 import { getBookingWithCustomer } from '@/lib/db/queries/bookings'
+import { isPaidInFull } from '@/lib/pricing/paid-in-full'
 
 export async function sendBookingConfirmationEmail(bookingId: string) {
   const row = await getBookingWithCustomer(bookingId)
@@ -18,6 +19,7 @@ export async function sendBookingConfirmationEmail(bookingId: string) {
     depositAmount: b.depositAmount,
     balanceAmount: b.balanceAmount,
     autoPayOptIn: b.autoPayOptIn,
+    paidInFull: isPaidInFull(b),
   })
   await sendEmail({ to: c.email, subject, html })
 }

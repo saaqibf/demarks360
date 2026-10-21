@@ -40,7 +40,7 @@ export function adminNewRequestEmail(p: AdminNewRequestParams): EmailContent {
 
   const body = `
     <p style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:16px;line-height:1.65;color:#5E5647;max-width:46ch;">
-      A new quote request is waiting for your review. Reply with a tailored quote, then send the deposit link when they are ready to hold the date.
+      A new quote request is waiting. Open it, type the price, and press Send quote. We email them the quote and hold the date for 3 days.
     </p>
 
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0;">
@@ -59,14 +59,12 @@ export function adminNewRequestEmail(p: AdminNewRequestParams): EmailContent {
 
     ${p.subtotal != null ? `
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:30px;">
-      ${moneyRow('Quote total', p.subtotal)}
-      ${moneyRow('Deposit on approval (50%)', p.depositAmount ?? null, { gold: true })}
-      ${moneyRow('Balance on event day', p.balanceAmount ?? null, { big: true })}
+      ${moneyRow('Suggested price (you can change it)', p.subtotal, { gold: true, big: true })}
     </table>` : ''}
 
-    ${ctaButton(`${APP_URL}/admin/bookings/${p.bookingId}`, 'Review & approve')}
+    ${ctaButton(`${APP_URL}/admin/bookings/${p.bookingId}`, 'Reply with a quote')}
     <p style="margin:14px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;color:#9A9080;">
-      Approving emails ${firstNameSafe(p.customerName)} their secure ${money(p.depositAmount ?? null)} deposit link.
+      If you cannot take it, you can decline from the same page and we let ${firstNameSafe(p.customerName)} know kindly.
     </p>`
 
   return {

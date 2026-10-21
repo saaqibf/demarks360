@@ -1,16 +1,22 @@
 'use client'
 import { useState } from 'react'
 
-interface PayPanelProps {
-  token: string
-  purpose: 'deposit' | 'balance'
-  amount: string
-}
+type PayPanelProps =
+  | { token: string; purpose: 'quote'; total: number; firstPayment: number; secondPayment: number }
+  | { token: string; purpose: 'balance'; amount: number }
 
-export function PayPanel({ token, purpose, amount }: PayPanelProps) {
+const money = (n: number) => `$${n.toFixed(2)}`
+
+export function PayPanel(props: PayPanelProps) {
+  const canSplit = props.purpose === 'quote' && props.secondPayment > 0
+  const [plan, setPlan] = useState<'full' | 'split'>('full')
   const [autoPay, setAutoPay] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const amountNow = props.purpose === 'balance'
+    ? props.amount
+    : plan === 'split' && canSplit ? props.firstPayment : props.total
 
   async function handlePay() {
     setSubmitting(true)
@@ -19,7 +25,9 @@ export function PayPanel({ token, purpose, amount }: PayPanelProps) {
       const res = await fetch('/api/pay/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, autoPay: purpose === 'deposit' ? autoPay : undefined }),
+        body: JSON.stringify(props.purpose === 'quote'
+          ? { token: props.token, plan: canSplit ? plan : 'full', autoPay: plan === 'split' ? autoPay : undefined }
+          : { token: props.token }),
       })
       const data: { url?: string; error?: string } = await res.json().catch(() => ({}))
       if (!res.ok || !data.url) {
@@ -36,38 +44,39 @@ export function PayPanel({ token, purpose, amount }: PayPanelProps) {
 
   return (
     <div>
-      {purpose === 'deposit' && (
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '1.5rem' }}>
-          <input
-            type="checkbox"
-            id="auto-pay"
-            checked={autoPay}
-            onChange={e => setAutoPay(e.target.checked)}
-            style={{ marginTop: '2px', width: '16px', height: '16px', accentColor: 'var(--color-amber-light)', flexShrink: 0, cursor: 'pointer' }}
-          />
-          <label htmlFor="auto-pay" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--color-muted-light)', lineHeight: 1.6, cursor: 'pointer' }}>
-            Save my card and charge the balance automatically on event day
+      {canSplit && props.purpose === 'quote' && (
+        <fieldset className="pay-plans">
+          <legend className="pay-plans-legend">How would you like to pay?</legend>
+          <label className={`pay-plan${plan === 'full' ? ' is-on' : ''}`}>
+            <input type="radio" name="plan" value="full" checked={plan === 'full'} onChange={() => setPlan('full')} />
+            <span>
+              <span className="pay-plan-title">Pay in full · {money(props.total)}</span>
+              <span className="pay-plan-sub">One payment today and you are all set.</span>
+            </span>
           </label>
-        </div>
+          <label className={`pay-plan${plan === 'split' ? ' is-on' : ''}`}>
+            <input type="radio" name="plan" value="split" checked={plan === 'split'} onChange={() => setPlan('split')} />
+            <span>
+              <span className="pay-plan-title">Pay in two parts · {money(props.firstPayment)} today</span>
+              <span className="pay-plan-sub">Then {money(props.secondPayment)} the day before your event.</span>
+            </span>
+          </label>
+        </fieldset>
       )}
-      {error && (
-        <p role="alert" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-amber-light)', marginBottom: '1rem' }}>
-          {error}
-        </p>
+
+      {canSplit && plan === 'split' && (
+        <label className="pay-autopay">
+          <input type="checkbox" checked={autoPay} onChange={(e) => setAutoPay(e.target.checked)} />
+          <span>Save my card and take the second payment automatically the day before my event</span>
+        </label>
       )}
-      <button
-        onClick={handlePay}
-        disabled={submitting}
-        className="btn-primary"
-        style={{ width: '100%', opacity: submitting ? 0.65 : 1, cursor: submitting ? 'not-allowed' : 'pointer' }}
-      >
-        {submitting
-          ? 'Redirecting to payment'
-          : purpose === 'deposit' ? `Pay Deposit ${amount}` : `Pay Balance ${amount}`}
+
+      {error && <p role="alert" className="pay-error">{error}</p>}
+
+      <button onClick={handlePay} disabled={submitting} className="btn-primary pay-submit">
+        {submitting ? 'Taking you to checkout…' : `Pay ${money(amountNow)} securely`}
       </button>
-      <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(245,240,234,0.35)', marginTop: '0.85rem', lineHeight: 1.6 }}>
-        You will be taken to a secure Stripe checkout page.
-      </p>
+      <p className="pay-fine">You will finish on Stripe&apos;s secure checkout page. We never see your card number.</p>
     </div>
   )
 }

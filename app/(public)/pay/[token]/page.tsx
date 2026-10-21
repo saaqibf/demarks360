@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getBookingByPayToken } from '@/lib/db/queries/bookings'
-import { ADDON_CATALOG, addOnPrice } from '@/lib/pricing'
+import { ADDON_CATALOG } from '@/lib/pricing'
 import { SiteNav } from '@/components/public/site-nav'
 import { SiteFooter } from '@/components/public/site-footer'
 import { PayPanel } from './pay-panel'
@@ -61,65 +61,60 @@ export default async function PayPage({ params }: PageProps) {
   let content: React.ReactNode
 
   if (b.status === 'approved' && windowOpen && !b.depositPaidAt) {
-    const subtotal = Number(b.depositAmount ?? 0) + Number(b.balanceAmount ?? 0)
-    const addOnItems = (b.addOns as string[])
-      .filter((id) => id in ADDON_CATALOG)
-      .map((id) => ({ label: ADDON_CATALOG[id].name, amount: `$${addOnPrice(id, b.durationMinutes / 60).toFixed(2)}` }))
-    const lineItems = [
-      { label: `${(b.durationMinutes / 60).toFixed(1).replace('.0', '')} hours of 360 booth`, amount: '' },
-      ...addOnItems,
-      ...(Number(b.travelSurcharge) > 0 ? [{ label: 'Travel surcharge', amount: money(b.travelSurcharge) }] : []),
+    const firstPayment = Number(b.depositAmount ?? 0)
+    const secondPayment = Number(b.balanceAmount ?? 0)
+    const total = firstPayment + secondPayment
+    const hours = (b.durationMinutes / 60).toFixed(1).replace('.0', '')
+    const included = [
+      `${hours} hours of the 360 booth`,
+      ...(b.addOns as string[]).filter((id) => id in ADDON_CATALOG).map((id) => ADDON_CATALOG[id].name),
     ]
+    const holdUntil = b.depositExpiresAt!.toLocaleString('en-CA', {
+      timeZone: 'America/Edmonton', weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit',
+    })
     content = (
-      <div style={{ maxWidth: '560px', margin: '0 auto', padding: '6rem 2rem 5rem' }}>
+      <div style={{ maxWidth: '560px', margin: '0 auto', padding: '6rem 1.5rem 5rem' }}>
         <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: '0.75rem' }}>
-          Lock in your date
+          Your quote
         </p>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 400, lineHeight: 1, color: 'var(--color-text-light)', marginBottom: '2rem' }}>
-          Pay your deposit
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 400, lineHeight: 1, color: 'var(--color-text-light)', marginBottom: '1rem' }}>
+          Lock in your date
         </h1>
+        <p className="pay-hold">
+          We are holding this date for you until <strong>{holdUntil}</strong>. After that it opens back up for other bookings.
+        </p>
 
-        <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', marginBottom: '2rem' }}>
+        <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', marginBottom: '2rem', borderRadius: '14px', overflow: 'hidden' }}>
           <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--color-text-light)' }}>
               {fmtDate(b.eventDate)}
             </p>
-            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.6)', marginTop: '0.25rem' }}>
-              {fmtTime(b.startTime)} → {fmtTime(b.endTime)} · {b.locationCity}
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9rem', color: 'rgba(245,240,234,0.7)', marginTop: '0.25rem' }}>
+              {fmtTime(b.startTime)} to {fmtTime(b.endTime)} · {b.locationCity}
             </p>
           </div>
-          {lineItems.map(({ label, amount }) => (
-            <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'rgba(245,240,234,0.55)' }}>{label}</span>
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)', fontWeight: 600 }}>{amount}</span>
+          {included.map((label) => (
+            <div key={label} style={{ padding: '0.85rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.92rem', color: 'rgba(245,240,234,0.75)' }}>✓ {label}</span>
             </div>
           ))}
-          <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'rgba(245,240,234,0.4)' }}>Subtotal</span>
-            <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', color: 'var(--color-text-light)' }}>${subtotal.toFixed(2)}</span>
-          </div>
           <div style={{ padding: '1.25rem 1.5rem', background: 'var(--color-ink)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>Deposit due now (50%)</p>
-              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.1rem' }}>
-                Balance of {money(b.balanceAmount)} (50%) due on your event day
-              </p>
-            </div>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)' }}>Total</p>
             <span style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', color: 'var(--color-amber-light)', fontWeight: 500 }}>
-              {money(b.depositAmount)}
+              {money(total)}
             </span>
           </div>
         </div>
 
-        <PayPanel token={token} purpose="deposit" amount={money(b.depositAmount)} />
+        <PayPanel token={token} purpose="quote" total={total} firstPayment={firstPayment} secondPayment={secondPayment} />
       </div>
     )
   } else if (b.status === 'expired' || (b.status === 'approved' && !b.depositPaidAt)) {
     content = (
       <StatusMessage
-        eyebrow="Link expired"
-        title="This payment link has expired"
-        body="This payment link has expired and the date was released. Reply to our email or submit a new request."
+        eyebrow="Hold ended"
+        title="The hold on this date has ended"
+        body="We could not keep the date held any longer, so it opened back up. It may still be free: reply to our email or call or text 403 402 0816 and we will check right away."
       />
     )
   } else if (b.status === 'confirmed' && !b.balanceChargedAt) {
@@ -129,7 +124,7 @@ export default async function PayPage({ params }: PageProps) {
           One payment left
         </p>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 400, lineHeight: 1, color: 'var(--color-text-light)', marginBottom: '2rem' }}>
-          Pay your balance
+          Your second payment
         </h1>
         <div style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', marginBottom: '2rem' }}>
           <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
@@ -142,9 +137,9 @@ export default async function PayPage({ params }: PageProps) {
           </div>
           <div style={{ padding: '1.25rem 1.5rem', background: 'var(--color-ink)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>Remaining balance</p>
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>Second payment</p>
               <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.1rem' }}>
-                Deposit of {money(b.depositAmount)} already paid
+                First payment of {money(b.depositAmount)} already received, thank you
               </p>
             </div>
             <span style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', color: 'var(--color-amber-light)', fontWeight: 500 }}>
@@ -152,7 +147,7 @@ export default async function PayPage({ params }: PageProps) {
             </span>
           </div>
         </div>
-        <PayPanel token={token} purpose="balance" amount={money(b.balanceAmount)} />
+        <PayPanel token={token} purpose="balance" amount={Number(b.balanceAmount ?? 0)} />
       </div>
     )
   } else if (b.status === 'confirmed') {
@@ -168,7 +163,7 @@ export default async function PayPage({ params }: PageProps) {
       <StatusMessage
         eyebrow="In review"
         title="Your request is still in review"
-        body="We review every request within 24 hours. Once approved, this page becomes your payment page and we will email you."
+        body="We reply to every request within 24 hours. When your quote is ready we will email you, and this page is where you can book."
       />
     )
   } else if (b.status === 'declined') {

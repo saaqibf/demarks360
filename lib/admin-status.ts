@@ -4,13 +4,13 @@
  */
 const STATUS_LABELS: Record<string, string> = {
   requested: 'New request',
-  approved: 'Waiting for deposit',
+  approved: 'Quote sent',
   pending: 'Waiting for deposit',
-  confirmed: 'Booked & paid',
+  confirmed: 'Booked',
   completed: 'Done',
   declined: 'Declined',
   cancelled: 'Cancelled',
-  expired: 'Expired',
+  expired: 'Hold ended',
 }
 
 export function statusLabel(s: string): string {

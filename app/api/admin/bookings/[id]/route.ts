@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAdmin } from '@/lib/auth/roles'
-import { updateBookingStatus, updateBookingNotes } from '@/lib/db/queries/bookings'
+import { BookingNotDeletableError, deleteBooking, updateBookingStatus, updateBookingNotes } from '@/lib/db/queries/bookings'
 
 // Approve/decline only via their dedicated endpoints so emails and Stripe side effects cannot be skipped
 const BOOKING_STATUSES = ['cancelled', 'completed'] as const
@@ -38,4 +38,20 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   }
 
   return NextResponse.json({ ok: true })
+}
+
+// Erases test and spam requests; paid bookings are refused inside deleteBooking
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAdmin())) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+  const { id } = await params
+  try {
+    const deleted = await deleteBooking(id)
+    if (!deleted) return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+    return NextResponse.json({ ok: true })
+  } catch (err) {
+    if (err instanceof BookingNotDeletableError) {
+      return NextResponse.json({ error: err.message }, { status: 409 })
+    }
+    throw err
+  }
 }

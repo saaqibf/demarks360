@@ -1,27 +1,22 @@
 import { APP_URL } from '@/lib/app-url'
-import { ctaButton, emailShell, firstName, fmtDate, type EmailContent } from './shared'
+import { CONTACT_LINE, ctaButton, emailShell, firstName, fmtDate, para, personalNote, type EmailContent } from './shared'
 
 interface RequestDeclinedParams {
   name: string
   eventDate: string
+  message?: string | null
 }
 
 export function requestDeclinedEmail(p: RequestDeclinedParams): EmailContent {
   const body = `
-    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-      Hi ${firstName(p.name)},
-    </p>
-    <p style="margin:0 0 16px 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-      Thank you so much for thinking of us for ${fmtDate(p.eventDate)}. We are really sorry,
-      we are not able to take this date and time. No charge was made.
-    </p>
-    <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#5A5142;line-height:1.65;">
-      We would still love to be part of your event. If another date could work, send us a new
-      request and we will do our best to make it happen.
-    </p>
+    ${para(`Hi ${firstName(p.name)},`)}
+    ${para(`Thank you so much for thinking of us for ${fmtDate(p.eventDate)}. We are really sorry, but we are not able to take this booking. No charge was made.`)}
+    ${p.message?.trim() ? personalNote(p.message.trim()) : ''}
+    ${para('We would still love to be part of your celebration. If another date could work, send us a new request and we will do our best to make it happen.')}
+    ${para(CONTACT_LINE, { last: true })}
     ${ctaButton(`${APP_URL}/book`, 'Request another date')}`
   return {
-    subject: 'About your booking request',
+    subject: 'About your Demarks 360 request',
     html: emailShell('About your request', body),
   }
 }

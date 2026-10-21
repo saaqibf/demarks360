@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
-import { bookings, customers } from '@/lib/db/schema'
-import { eq, desc, and, isNull, lt, ne, inArray } from 'drizzle-orm'
+import { bookings, customers, galleryItems } from '@/lib/db/schema'
+import { eq, desc, and, isNull, lt, lte, gte, gt, ne, inArray } from 'drizzle-orm'
 import { createId } from '@paralleldrive/cuid2'
 
 export interface CreateBookingParams {
@@ -186,12 +186,20 @@ export async function setClipCuration(id: string, clipCuration: { hidden?: strin
   await db.update(bookings).set({ clipCuration }).where(eq(bookings.id, id))
 }
 
+// Sends (or re-sends) a quote: the admin's price is split into the first payment and
+// the remainder, and the date is held until depositExpiresAt. The WHERE pins the status
+// the caller read, so of two racing clicks on a new request only one wins and emails.
 export async function approveBooking(
   id: string,
-  params: { stripeCustomerId: string; depositExpiresAt: Date },
+  params: {
+    stripeCustomerId: string
+    depositExpiresAt: Date
+    depositAmount: number
+    balanceAmount: number
+    balanceChargeDate: string
+    fromStatus: 'requested' | 'expired' | 'approved'
+  },
 ) {
-  // Status guard in the WHERE makes concurrent double-approves lose the race atomically,
-  // so only one deposit-link email can ever go out
   const [booking] = await db
     .update(bookings)
     .set({
@@ -199,8 +207,20 @@ export async function approveBooking(
       approvedAt: new Date(),
       depositExpiresAt: params.depositExpiresAt,
       stripeCustomerId: params.stripeCustomerId,
+      depositAmount: params.depositAmount.toFixed(2),
+      balanceAmount: params.balanceAmount.toFixed(2),
+      balanceChargeDate: params.balanceChargeDate,
     })
-    .where(and(eq(bookings.id, id), inArray(bookings.status, ['requested', 'expired'])))
+    .where(and(eq(bookings.id, id), eq(bookings.status, params.fromStatus)))
+    .returning()
+  return booking ?? null
+}
+
+export async function extendHold(id: string, depositExpiresAt: Date) {
+  const [booking] = await db
+    .update(bookings)
+    .set({ depositExpiresAt })
+    .where(and(eq(bookings.id, id), eq(bookings.status, 'approved')))
     .returning()
   return booking ?? null
 }
@@ -209,7 +229,7 @@ export async function declineBooking(id: string) {
   const [booking] = await db
     .update(bookings)
     .set({ status: 'declined' })
-    .where(and(eq(bookings.id, id), eq(bookings.status, 'requested')))
+    .where(and(eq(bookings.id, id), inArray(bookings.status, ['requested', 'expired'])))
     .returning()
   return booking ?? null
 }
@@ -239,6 +259,29 @@ export async function markDepositPaid(
       depositPaidAt: new Date(),
       autoPayOptIn: params.autoPayOptIn,
       ...(params.stripePaymentIntentId ? { stripePaymentIntentId: params.stripePaymentIntentId } : {}),
+      ...(params.stripeCustomerId ? { stripeCustomerId: params.stripeCustomerId } : {}),
+    })
+    .where(and(eq(bookings.id, id), eq(bookings.status, 'approved')))
+    .returning()
+  return booking ?? null
+}
+
+// Pay-in-full settles both halves with one payment intent, so the booking is
+// confirmed and the balance recorded in a single guarded write
+export async function markPaidInFull(
+  id: string,
+  params: { stripePaymentIntentId: string | null; stripeCustomerId: string | null },
+) {
+  const now = new Date()
+  const [booking] = await db
+    .update(bookings)
+    .set({
+      status: 'confirmed',
+      depositPaidAt: now,
+      balanceChargedAt: now,
+      autoPayOptIn: false,
+      stripePaymentIntentId: params.stripePaymentIntentId,
+      stripeBalancePaymentIntentId: params.stripePaymentIntentId,
       ...(params.stripeCustomerId ? { stripeCustomerId: params.stripeCustomerId } : {}),
     })
     .where(and(eq(bookings.id, id), eq(bookings.status, 'approved')))
@@ -276,7 +319,9 @@ export async function markBookingExpired(id: string) {
   return booking ?? null
 }
 
-export async function getBalanceDueBookings(eventDate: string) {
+// Due from balanceChargeDate (the day before) through event day, so a deposit paid
+// after the charge date still gets collected, but never after the event has passed
+export async function getBalanceDueBookings(today: string) {
   return db
     .select({ booking: bookings, customer: customers })
     .from(bookings)
@@ -284,7 +329,22 @@ export async function getBalanceDueBookings(eventDate: string) {
     .where(and(
       eq(bookings.status, 'confirmed'),
       isNull(bookings.balanceChargedAt),
-      eq(bookings.eventDate, eventDate),
+      lte(bookings.balanceChargeDate, today),
+      gte(bookings.eventDate, today),
+    ))
+}
+
+// Holds ending within the next day: the daily cron runs every 24h, so each hold is
+// seen by exactly one run inside this window and gets exactly one reminder
+export async function getHoldsEndingSoon(now: Date, within: Date) {
+  return db
+    .select({ booking: bookings, customer: customers })
+    .from(bookings)
+    .leftJoin(customers, eq(bookings.customerId, customers.id))
+    .where(and(
+      eq(bookings.status, 'approved'),
+      gt(bookings.depositExpiresAt, now),
+      lte(bookings.depositExpiresAt, within),
     ))
 }
 
@@ -343,3 +403,22 @@ export async function getOrCreateCustomer(name: string, email: string, phone: st
     .returning()
   return customer
 }
+
+export class BookingNotDeletableError extends Error {
+  readonly code = 'BOOKING_NOT_DELETABLE'
+}
+
+// For test and spam requests. Anything money touched, or with event videos, stays:
+// those need a cancel (and possibly a refund), not an erase.
+export async function deleteBooking(id: string) {
+  const [booking] = await db.select().from(bookings).where(eq(bookings.id, id))
+  if (!booking) return null
+  if (booking.depositPaidAt || booking.balanceChargedAt || booking.status === 'confirmed' || booking.status === 'completed') {
+    throw new BookingNotDeletableError('Paid or completed bookings cannot be deleted')
+  }
+  const [clip] = await db.select({ id: galleryItems.id }).from(galleryItems).where(eq(galleryItems.bookingId, id)).limit(1)
+  if (clip) throw new BookingNotDeletableError('This booking has event videos attached')
+  const [deleted] = await db.delete(bookings).where(eq(bookings.id, id)).returning()
+  return deleted ?? null
+}
+

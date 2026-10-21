@@ -76,6 +76,6 @@ export const FAQS: LandingFaq[] = [
   },
   {
     q: 'How does pricing work?',
-    a: 'You request a quote with your event details and we reply with tailored pricing for your date, hours, and any add-ons. Once you are happy with it, a deposit holds your date. The rest is due the week of the event. Cancel 7 or more days out and the deposit moves to a new date, no questions.',
+    a: 'You request a quote with your event details and we reply with tailored pricing for your date, hours, and any add-ons. We hold the date for you for 3 days while you decide. Pay in full, or pay a deposit to lock it in and the rest the day before your event. Cancel 7 or more days out and the deposit moves to a new date, no questions.',
   },
 ]

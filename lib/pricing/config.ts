@@ -4,8 +4,8 @@ export const PRICING = {
   DEPOSIT_PERCENT: 0.50,
   BALANCE_PERCENT: 0.50,
   TRAVEL_SURCHARGE: 50,
-  // 0 means the balance is due on event day itself
-  BALANCE_CHARGE_DAYS_BEFORE_EVENT: 0,
+  // The second payment is collected the day before the event (link or saved card)
+  BALANCE_CHARGE_DAYS_BEFORE_EVENT: 1,
   CARD_DELETE_DAYS_AFTER_EVENT: 7,
   MAX_BOOKINGS_PER_DAY: 2,
   LEAD_TIME_DAYS: 5,

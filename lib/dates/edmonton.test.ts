@@ -24,8 +24,8 @@ describe('depositExpiryFrom', () => {
     expect(depositExpiryFrom(now, '2026-08-15').toISOString()).toBe('2026-08-15T06:00:00.000Z')
   })
 
-  it('gives the full 7-day window when approval is 30 days before the event', () => {
+  it('gives the full 3-day hold when the quote goes out 30 days before the event', () => {
     const now = new Date('2026-07-16T18:00:00Z')
-    expect(depositExpiryFrom(now, '2026-08-15').toISOString()).toBe('2026-07-23T18:00:00.000Z')
+    expect(depositExpiryFrom(now, '2026-08-15').toISOString()).toBe('2026-07-19T18:00:00.000Z')
   })
 })

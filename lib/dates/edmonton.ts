@@ -2,7 +2,8 @@
 // while servers run in UTC; every wall-clock decision must go through these helpers.
 
 const DAY_MS = 24 * 60 * 60 * 1000
-export const DEPOSIT_WINDOW_DAYS = 7
+// A sent quote holds the date this long; unpaid, the date goes back on the calendar
+export const HOLD_DAYS = 3
 
 export function todayInEdmonton(): string {
   // en-CA yields YYYY-MM-DD
@@ -18,8 +19,8 @@ export function eventDayStartEdmonton(eventDate: string): Date {
 }
 
 export function depositExpiryFrom(now: Date, eventDate: string): Date {
-  // The payment link must die before the event day begins, even if that is sooner than 7 days
-  const windowEnd = new Date(now.getTime() + DEPOSIT_WINDOW_DAYS * DAY_MS)
+  // The hold must end before the event day begins, even if that is sooner than HOLD_DAYS
+  const windowEnd = new Date(now.getTime() + HOLD_DAYS * DAY_MS)
   const eventStart = eventDayStartEdmonton(eventDate)
   return windowEnd.getTime() < eventStart.getTime() ? windowEnd : eventStart
 }
