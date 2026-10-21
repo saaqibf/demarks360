@@ -13,6 +13,9 @@ const isPublicRoute = createRouteMatcher([
   '/pay(.*)',
   '/privacy',
   '/terms',
+  // Crawlers are signed out; without these, Clerk 404s robots and the sitemap
+  '/robots.txt',
+  '/sitemap.xml',
   '/api/availability(.*)',
   '/api/bookings(.*)',
   '/api/clip-download(.*)',

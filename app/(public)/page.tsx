@@ -81,6 +81,8 @@ export default function HomePage() {
               preload="metadata"
               poster="/media/hero-still.jpg"
             >
+              {/* Phones get a 720p cut (3 MB vs 9.6 MB); the 1440p master is wasted on a small screen */}
+              <source src="/media/hero-loop-720.mp4" type="video/mp4" media="(max-width: 900px)" />
               <source src="/media/hero-loop.mp4" type="video/mp4" />
             </video>
             <div className="dm-hero-scrim" />
